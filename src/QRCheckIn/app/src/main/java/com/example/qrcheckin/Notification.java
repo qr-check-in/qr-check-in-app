@@ -5,7 +5,7 @@ public class Notification {
     private AttendeeList<Attendee> recipients;
 
 
-    public sendMessage(){
-
+    public int sendMessage(){
+        return 0;
     }
 }
