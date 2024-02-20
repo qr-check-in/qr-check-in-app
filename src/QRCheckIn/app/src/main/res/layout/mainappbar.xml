@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:orientation="horizontal"
     android:layout_width="match_parent"
-    android:layout_height="55dp"
+    android:layout_height="45dp"
     android:background="@color/Blue">
 
 
@@ -16,7 +16,7 @@
         android:scaleType="fitCenter"
         android:paddingHorizontal="10dp"
         android:paddingVertical="10dp"
-        android:background="@null"
+        android:background="@drawable/buttonselect"
         app:srcCompat="@drawable/qrcode"
         android:tint="@android:color/white"
         />
@@ -27,7 +27,7 @@
         android:layout_height="match_parent"
         android:layout_weight="1"
         android:scaleType="fitCenter"
-        android:background="@null"
+        android:background="@drawable/buttonselect"
         android:paddingHorizontal="10dp"
         android:paddingVertical="10dp"
         app:srcCompat="@drawable/calender"
@@ -42,8 +42,8 @@
         android:scaleType="fitCenter"
         android:paddingHorizontal="10dp"
         android:paddingVertical="10dp"
-        android:background="@null"
-        app:srcCompat="@drawable/addCalender"
+        android:background="@drawable/buttonselect"
+        app:srcCompat="@drawable/addcalender"
         android:tint="@android:color/white"
         />
 
@@ -55,7 +55,7 @@
         android:scaleType="fitCenter"
         android:paddingHorizontal="10dp"
         android:paddingVertical="10dp"
-        android:background="@null"
+        android:background="@drawable/buttonselect"
         app:srcCompat="@drawable/profile"
         android:tint="@android:color/white"
         />
