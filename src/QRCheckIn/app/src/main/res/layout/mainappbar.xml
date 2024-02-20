@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:orientation="horizontal"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="55dp"
     android:background="@color/Blue">
 
 
@@ -24,7 +24,7 @@
     <ImageButton
         android:id="@+id/calenderButton"
         android:layout_width="120dp"
-        android:layout_height="70dp"
+        android:layout_height="match_parent"
         android:layout_weight="1"
         android:scaleType="fitCenter"
         android:background="@null"
@@ -37,7 +37,7 @@
     <ImageButton
         android:id="@+id/addCalenderButton"
         android:layout_width="120dp"
-        android:layout_height="70dp"
+        android:layout_height="match_parent"
         android:layout_weight="1"
         android:scaleType="fitCenter"
         android:paddingHorizontal="10dp"
@@ -46,10 +46,11 @@
         app:srcCompat="@drawable/addCalender"
         android:tint="@android:color/white"
         />
+
     <ImageButton
         android:id="@+id/profileButton"
         android:layout_width="120dp"
-        android:layout_height="70dp"
+        android:layout_height="match_parent"
         android:layout_weight="1"
         android:scaleType="fitCenter"
         android:paddingHorizontal="10dp"
