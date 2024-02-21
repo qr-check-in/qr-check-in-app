@@ -6,4 +6,10 @@
     android:layout_height="match_parent"
     tools:context=".createNewEventScreen2">
 
+    <include
+        layout="@layout/mainappbar"
+        tools:layout_editor_absoluteX="0dp"
+        tools:layout_editor_absoluteY="234dp" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
+

@@ -14,11 +14,11 @@
         android:layout_height="match_parent"
         android:layout_weight="1"
         android:scaleType="fitCenter"
-        android:paddingHorizontal="10dp"
-        android:paddingVertical="10dp"
+        android:paddingHorizontal="5dp"
+        android:paddingVertical="5dp"
         android:background="@drawable/buttonselect"
-        app:srcCompat="@drawable/qrcode"
         android:tint="@android:color/white"
+        app:srcCompat="@drawable/qrcode"
         />
 
     <ImageButton
@@ -30,8 +30,8 @@
         android:background="@drawable/buttonselect"
         android:paddingHorizontal="10dp"
         android:paddingVertical="10dp"
-        app:srcCompat="@drawable/calender"
         android:tint="@android:color/white"
+        app:srcCompat="@drawable/calender"
         />
 
     <ImageButton
@@ -43,8 +43,8 @@
         android:paddingHorizontal="10dp"
         android:paddingVertical="10dp"
         android:background="@drawable/buttonselect"
-        app:srcCompat="@drawable/addcalender"
         android:tint="@android:color/white"
+        app:srcCompat="@drawable/addcalender"
         />
 
     <ImageButton
@@ -56,8 +56,8 @@
         android:paddingHorizontal="10dp"
         android:paddingVertical="10dp"
         android:background="@drawable/buttonselect"
-        app:srcCompat="@drawable/profile"
         android:tint="@android:color/white"
+        app:srcCompat="@drawable/profile"
         />
 
 </LinearLayout>
