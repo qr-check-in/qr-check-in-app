@@ -27,8 +27,8 @@ public class eventListAdapter extends ArrayAdapter<Event> {
         View view = convertView;
 
         if (view == null) {
-            view = LayoutInflater.from(context).inflate(R.layout.list_item, parent, false);
+            view = LayoutInflater.from(context).inflate(R.layout.eventlistitem, parent, false);
         }
-
+        return view;
     }
 }
