@@ -8,4 +8,15 @@
     android:theme="@style/ThemeOverlay.AppCompat.Dark"
     app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
 
+    <TextView
+        android:id="@+id/mainHeader"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Centered Title"
+        android:textColor="@android:color/white"
+        android:textSize="32sp"
+        android:layout_gravity="center">
+    </TextView>
+
+
 </androidx.appcompat.widget.Toolbar>

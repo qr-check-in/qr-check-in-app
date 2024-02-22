@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import android.os.Bundle;
+import android.widget.TextView;
 
 import com.google.firebase.firestore.FirebaseFirestore;
 
@@ -15,14 +16,15 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_event_list_view);
+        setContentView(R.layout.activity_main);
 
         db = FirebaseFirestore.getInstance();
 
-//        Delete this later
-        Toolbar toolbar = findViewById(R.id.eventListToolbar);
+//        Set the Header of the App
+        Toolbar toolbar = findViewById(R.id.Toolbar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setTitle("Ongoing Events");
-
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
+        TextView header = findViewById(R.id.mainHeader);
+        header.setText("QRCheckIN");
     }
 }
