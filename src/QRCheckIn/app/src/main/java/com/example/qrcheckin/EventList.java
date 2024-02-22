@@ -3,13 +3,17 @@ package com.example.qrcheckin;
 import java.util.ArrayList;
 
 public class EventList{
-    private ArrayList<Event> Events;
+    private ArrayList<Event> events;
+
+    public EventList() {
+        this.events = new ArrayList<>();
+    }
 
     public ArrayList<Event> getEvents() {
-        return Events;
+        return events;
     }
 
     public void setEvents(ArrayList<Event> events) {
-        Events = events;
+        this.events = events;
     }
 }

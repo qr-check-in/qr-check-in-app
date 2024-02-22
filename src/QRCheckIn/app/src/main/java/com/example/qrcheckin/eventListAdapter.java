@@ -15,10 +15,10 @@ public class eventListAdapter extends ArrayAdapter<Event> {
     private ArrayList<Event> events;
     private Context context;
 
-    public eventListAdapter(@NonNull Context context, int resource, ArrayList<Event> events, Context context1) {
+    public eventListAdapter(@NonNull Context context, int resource, ArrayList<Event> events) {
         super(context, resource);
         this.events = events;
-        this.context = context1;
+        this.context = context;
     }
 
     @NonNull

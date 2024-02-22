@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageButton;
+import android.widget.TextView;
 
 public class EventListView extends AppCompatActivity {
     ImageButton qrButton;
@@ -32,7 +33,9 @@ public class EventListView extends AppCompatActivity {
 
         Toolbar toolbar = findViewById(R.id.eventListToolbar);
         setSupportActionBar(toolbar);
-//        getSupportActionBar().setTitle("Ongoing Events");
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
+        TextView header = findViewById(R.id.mainHeader);
+        header.setText("Ongoing Events");
 
         qrButton.setOnClickListener(new View.OnClickListener() {
             @Override
