@@ -3,8 +3,13 @@
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+import android.widget.ImageButton;
 
-public class createNewEventScreen2 extends AppCompatActivity {
+ public class createNewEventScreen2 extends AppCompatActivity {
+     ImageButton qrButton;
+     ImageButton eventButton;
+     ImageButton addEventButton;
+     ImageButton profileButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

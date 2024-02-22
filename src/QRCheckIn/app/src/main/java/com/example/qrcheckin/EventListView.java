@@ -44,5 +44,13 @@ public class EventListView extends AppCompatActivity {
                 startActivity(event);
             }
         });
+
+        addEventButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent event = new Intent(getApplicationContext(), createNewEventScreen1.class);
+                startActivity(event);
+            }
+        });
     }
 }

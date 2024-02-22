@@ -6,10 +6,18 @@
     android:layout_height="match_parent"
     tools:context=".createNewEventScreen2">
 
+
+
     <include
         layout="@layout/mainappbar"
-        tools:layout_editor_absoluteX="0dp"
-        tools:layout_editor_absoluteY="234dp" />
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/eventListView"
+        app:layout_constraintVertical_bias="1.0" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
 
