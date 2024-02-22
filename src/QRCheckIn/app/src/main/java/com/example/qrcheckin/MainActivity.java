@@ -28,6 +28,7 @@ public class MainActivity extends AppCompatActivity {
 
         qrButton = findViewById(R.id.qrButton);
         qrButton.setPressed(true);
+
         eventButton = findViewById(R.id.calenderButton);
         addEventButton = findViewById(R.id.addCalenderButton);
         profileButton = findViewById(R.id.profileButton);
@@ -48,5 +49,21 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(event);
             }
         });
+
+//        addEventButton.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Intent event = new Intent(getApplicationContext(), EventListView.class);
+//                startActivity(event);
+//            }
+//        });
+//
+//        profileButton.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Intent event = new Intent(getApplicationContext(), EventListView.class);
+//                startActivity(event);
+//            }
+//        });
     }
 }
