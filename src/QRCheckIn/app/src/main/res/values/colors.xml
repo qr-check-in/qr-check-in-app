@@ -140,4 +140,10 @@
     <color name="DarkBlue">#00008B</color>
     <color name="Navy">#000080</color>
     <color name="Black">#000000</color>
+    <color name="SelectedBlue">#0056FF</color>
+    <color name="ChryslerBlue">#3B28CC</color>
+    <color name="NeonBlue">#2667FF</color>
+    <color name="ChefBlue">#3F8EFC</color>
+    <color name="JordyBlue">#87BFFF</color>
+    <color name="UranianBlue">#ADD7F6</color>
 </resources>
