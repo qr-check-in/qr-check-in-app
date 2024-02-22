@@ -2,7 +2,7 @@ package com.example.qrcheckin;
 
 import java.util.ArrayList;
 
-public class EventList{
+public class EventList {
     private ArrayList<Event> events;
 
     public EventList() {
