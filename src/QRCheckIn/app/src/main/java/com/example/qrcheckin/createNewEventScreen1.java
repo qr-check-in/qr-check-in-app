@@ -6,6 +6,7 @@ import androidx.appcompat.widget.Toolbar;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
@@ -15,6 +16,7 @@ public class createNewEventScreen1 extends AppCompatActivity {
     ImageButton addEventButton;
     ImageButton profileButton;
 
+    Button nextPageButton;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -26,12 +28,13 @@ public class createNewEventScreen1 extends AppCompatActivity {
         addEventButton = findViewById(R.id.addCalenderButton);
         addEventButton.setPressed(true);
         profileButton = findViewById(R.id.profileButton);
+        nextPageButton = findViewById(R.id.nextButton);
 
         Toolbar toolbar = findViewById(R.id.addEventToolBar1);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
         TextView header = findViewById(R.id.mainHeader);
-        header.setText("Create an Evenet");
+        header.setText("Create an Event");
 
         eventButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -45,6 +48,22 @@ public class createNewEventScreen1 extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent event = new Intent(getApplicationContext(), MainActivity.class);
+                startActivity(event);
+            }
+        });
+
+        nextPageButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent event = new Intent(getApplicationContext(), createNewEventScreen2.class);
+                startActivity(event);
+            }
+        });
+
+        profileButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent event = new Intent(getApplicationContext(), test.class);
                 startActivity(event);
             }
         });
