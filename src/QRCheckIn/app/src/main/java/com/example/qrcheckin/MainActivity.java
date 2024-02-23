@@ -57,13 +57,13 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(event);
             }
         });
-//
-//        profileButton.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Intent event = new Intent(getApplicationContext(), EventListView.class);
-//                startActivity(event);
-//            }
-//        });
+
+        profileButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent event = new Intent(getApplicationContext(), test.class);
+                startActivity(event);
+            }
+        });
     }
 }

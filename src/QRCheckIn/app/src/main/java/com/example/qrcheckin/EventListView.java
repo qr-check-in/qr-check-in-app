@@ -29,7 +29,6 @@ public class EventListView extends AppCompatActivity {
         eventListView = findViewById(R.id.eventListView);
 
         eventButton.setPressed(true);       // https://stackoverflow.com/questions/9318331/keep-android-button-selected-state, 2024, Prompt: how  to keep a button selected
-        eventButton.setEnabled(false);
 
         Toolbar toolbar = findViewById(R.id.eventListToolbar);
         setSupportActionBar(toolbar);

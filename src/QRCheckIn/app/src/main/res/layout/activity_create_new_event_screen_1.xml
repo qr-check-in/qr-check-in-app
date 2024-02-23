@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -26,83 +27,111 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintVertical_bias="1.0"></include>
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/eventNameLayout"
-        android:layout_width="300dp"
-        android:layout_height="wrap_content"
-        app:layout_constraintBottom_toTopOf="@+id/mainbar"
-        app:layout_constraintEnd_toEndOf="parent"
+    <ScrollView
+        android:id="@+id/scrollView2"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintTop_toBottomOf="@id/addEventToolBar1"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/addEventToolBar1"
-        app:layout_constraintVertical_bias="0.01999998">
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/mainbar">
 
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/eventNameText"
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Event Name"
-            tools:layout_editor_absoluteX="30dp"
-            tools:layout_editor_absoluteY="78dp">
+            android:layout_height="match_parent">
 
-        </com.google.android.material.textfield.TextInputEditText>
-    </com.google.android.material.textfield.TextInputLayout>
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/eventNameLayout"
+                android:layout_width="300dp"
+                android:layout_height="wrap_content"
+                android:paddingTop="5dp"
+                app:layout_constraintBottom_toTopOf="@+id/mainbar"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/addEventToolBar1"
+                app:layout_constraintVertical_bias="0.64">
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/eventTimeLayout"
-        android:layout_width="300dp"
-        android:layout_height="wrap_content"
-        app:layout_constraintBottom_toTopOf="@+id/mainbar"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/eventNameLayout"
-        app:layout_constraintVertical_bias="0.01999998">
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/eventNameText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Event Name"
+                    tools:layout_editor_absoluteX="30dp"
+                    tools:layout_editor_absoluteY="78dp"
+                    android:drawableLeft="@drawable/arrowresized"
+                    android:drawablePadding="15dp"
+                    android:paddingStart="10dp">
 
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/eventTimeText"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Event Date"
-            tools:layout_editor_absoluteX="30dp"
-            tools:layout_editor_absoluteY="78dp">
+                </com.google.android.material.textfield.TextInputEditText>
+            </com.google.android.material.textfield.TextInputLayout>
 
-        </com.google.android.material.textfield.TextInputEditText>
-    </com.google.android.material.textfield.TextInputLayout>
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/eventTimeLayout"
+                android:paddingTop="5dp"
+                android:layout_width="300dp"
+                android:layout_height="wrap_content"
+                app:layout_constraintBottom_toTopOf="@+id/mainbar"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/eventNameLayout"
+                app:layout_constraintVertical_bias="0.01999998">
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/eventLocationLayout"
-        android:layout_width="300dp"
-        android:layout_height="wrap_content"
-        app:layout_constraintBottom_toTopOf="@+id/mainbar"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/eventTimeLayout"
-        app:layout_constraintVertical_bias="0.01999998">
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/eventTimeText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Event Date"
+                    tools:layout_editor_absoluteX="30dp"
+                    tools:layout_editor_absoluteY="78dp"
+                    android:drawableLeft="@drawable/calenderresize"
+                    android:drawablePadding="5dp"
+                    android:paddingStart="10dp">
+                </com.google.android.material.textfield.TextInputEditText>
+            </com.google.android.material.textfield.TextInputLayout>
 
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/eventLocationText"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Event Location"
-            tools:layout_editor_absoluteX="30dp"
-            tools:layout_editor_absoluteY="78dp">
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/eventLocationLayout"
+                android:layout_width="300dp"
+                android:layout_height="wrap_content"
+                android:paddingTop="5dp"
+                app:layout_constraintBottom_toTopOf="@+id/mainbar"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/eventTimeLayout"
+                app:layout_constraintVertical_bias="0.01999998">
 
-        </com.google.android.material.textfield.TextInputEditText>
-    </com.google.android.material.textfield.TextInputLayout>
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/eventLocationText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Event Location"
+                    tools:layout_editor_absoluteX="30dp"
+                    tools:layout_editor_absoluteY="78dp"
+                    android:drawableLeft="@drawable/locationresize"
+                    android:drawablePadding="5dp"
+                    android:paddingStart="10dp">
+                </com.google.android.material.textfield.TextInputEditText>
+            </com.google.android.material.textfield.TextInputLayout>
 
-    <Switch
-        android:id="@+id/switch1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Check-in Location Verification"
-        android:textSize="20dp"
-        app:layout_constraintBottom_toTopOf="@+id/mainbar"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/eventLocationLayout"
-        app:layout_constraintVertical_bias="0.029999971"
-        android:switchPadding="20dp"
-        android:thumbTint="@color/ChryslerBlue"
-        android:trackTint="@drawable/buttonselect"/>
+            <Switch
+                android:id="@+id/switch1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:switchPadding="20dp"
+                android:paddingTop="10dp"
+                android:text="Check-in Location Verification"
+                android:textSize="20dp"
+                android:thumbTint="@color/ChryslerBlue"
+                android:trackTint="@drawable/buttonselect"
+                app:layout_constraintBottom_toTopOf="@+id/mainbar"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/eventLocationLayout"
+                app:layout_constraintVertical_bias="0.029999971"></Switch>
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
 
     <Button
         android:id="@+id/button"
