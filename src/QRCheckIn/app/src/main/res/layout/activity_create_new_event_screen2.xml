@@ -57,9 +57,13 @@
 
             <Button
                 android:id="@+id/makeQRCI"
-                android:layout_width="165dp"
+                android:paddingHorizontal="8dp"
+                android:layout_width="170dp"
                 android:layout_height="wrap_content"
                 android:backgroundTint="@color/NeonBlue"
+                android:drawableEnd="@drawable/qrresize"
+                android:drawableTint="@color/White"
+                android:textSize="11dp"
                 android:text="Generate check-in QRCode" />
 
             <TextView
@@ -73,7 +77,10 @@
             <Button
                 android:id="@+id/uploadQR"
                 android:layout_width="165dp"
+                android:textSize="11dp"
                 android:layout_height="wrap_content"
+                android:drawableEnd="@drawable/imageresize"
+                android:drawableTint="@color/White"
                 android:backgroundTint="@color/NeonBlue"
                 android:text="Upload from Camera Roll" />
         </LinearLayout>
@@ -99,10 +106,14 @@
 
             <Button
                 android:id="@+id/promoQR"
-                android:layout_width="200dp"
+                android:layout_width="185dp"
                 android:layout_height="wrap_content"
                 android:backgroundTint="@color/NeonBlue"
-                android:text="Generate Promotional QRCode" />
+                android:paddingHorizontal="8dp"
+                android:text="Generate Promotional QRCode"
+                android:textSize="11dp"
+                android:drawableEnd="@drawable/qrresize"
+                android:drawableTint="@color/White"/>
 
             <TextView
                 android:layout_width="wrap_content"
