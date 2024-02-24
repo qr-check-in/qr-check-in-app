@@ -107,10 +107,6 @@ public class Event implements Serializable {
     public void setEventDescription(String eventDescription) {
         this.eventDescription = eventDescription;}
 
-    public ArrayList<notification> getNotifications() {
-        return notifications;
-    }
-
     public void setNotifications(ArrayList<notification> notifications) {
         this.notifications = notifications;
     }
