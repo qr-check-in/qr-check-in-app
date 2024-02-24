@@ -1,3 +1,7 @@
+package com.example.qrcheckin;
+
+public class EventPoster {
+}
 //package com.example.qrcheckin;
 //
 //import android.media.Image;

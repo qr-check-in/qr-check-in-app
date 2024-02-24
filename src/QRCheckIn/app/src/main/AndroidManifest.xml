@@ -13,8 +13,12 @@
         android:theme="@style/Theme.QRCheckIn"
         tools:targetApi="31">
         <activity
-            android:name=".createNewEventScreen2"
+            android:name=".test"
             android:exported="false" />
+        <activity
+            android:name=".createNewEventScreen2"
+            android:exported="false"
+            android:parentActivityName=".createNewEventScreen1"/>
         <activity
             android:name=".createNewEventScreen1"
             android:exported="false" />
