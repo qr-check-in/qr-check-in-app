@@ -1,5 +1,10 @@
 package com.example.qrcheckin;
 
+import android.location.Location;
+
+import java.io.FileNotFoundException;
+import java.util.ArrayList;
+
 /**
  * A class that defines an app user as an Attendee
  */
@@ -9,7 +14,7 @@ public class Attendee {
     private Profile profile;
     private Location location;
 
-    public Attendee() {
+    public Attendee() throws FileNotFoundException {
         this.attendedEvents = new ArrayList<Event>();
         this.signupEvents = new ArrayList<Event>();
         this.profile = new Profile(this);

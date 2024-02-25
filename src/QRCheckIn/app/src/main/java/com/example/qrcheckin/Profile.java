@@ -1,50 +1,46 @@
 package com.example.qrcheckin;
 
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Canvas;
-import android.os.Environment;
-
-import com.google.firebase.firestore.AggregateQuerySnapshot;
-import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.FirebaseFirestore;
-
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStream;
 
+import android.graphics.Picture;
+import android.location.Location;
 public class Profile {
     private Attendee attendee;
-    private ProfilePicture picture;
+    //private ProfilePicture picture;
     private Boolean trackGeolocation;
     private String firstName;
     private String lastName;
+    private String name;
     private String homepage;
     private String contact;
-
-    // not sure if these should be here
-    private FirebaseFirestore db;
-
+    private ProfilePicture picture;
+    private Location location;
+    /**
+     * Constructs a Profile for and Attendee
+     * @param attendee Attendee the Profile is for
+     */
     public Profile(Attendee attendee) {
         this.attendee = attendee;
         // default geolocation sharing permission set to false
         this.trackGeolocation = false;
 
         // need to initialize firstName and lastName, could be based on FID if we want new users to have a variety of profile pics
-
-        generatePicture(this.firstName, this.lastName);
+        // generate picture based on name
+        //generatePicture(this.firstName, this.lastName);
     }
 
-    public void makeProfile(String firstName, String lastName){
-
-    }
-
+    /**
+     * In progress
+     * @param firstName
+     * @param lastName
+     * @throws FileNotFoundException
+     */
+    /*
     public void generatePicture(String firstName, String lastName) throws FileNotFoundException {
         int firstHash = firstName.hashCode();
         int lastHash = lastName.hashCode();
 
+        FirebaseFirestore db;
         db = FirebaseFirestore.getInstance();
 
         // access collection of icons from db
@@ -82,7 +78,7 @@ public class Profile {
         //this.picture = new ProfilePicture();
 
     }
-
+    */
     /**
      * Returns the Attendee that the Profile belongs to
      * @return Attendee that the Profile belongs to
@@ -210,3 +206,8 @@ public class Profile {
     public void setContact(String contact) {
         this.contact = contact;
     }
+
+    public String getName() {
+        return name;
+    }
+}
