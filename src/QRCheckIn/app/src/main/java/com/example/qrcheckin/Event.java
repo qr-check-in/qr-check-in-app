@@ -2,10 +2,12 @@ package com.example.qrcheckin;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.UUID;
 
 public class Event implements Serializable {
-    private AttendeeList Attendee;
-    private AttendeeList signups;
+    private ArrayList<Attendee> attendees;
+    private ArrayList<Attendee> signups;
+    private final UUID eventId;
     private QRCode checkInQRCode;
     private PromoQRCode promoQRCode;
     private EventPoster poster;
@@ -15,34 +17,53 @@ public class Event implements Serializable {
     private String eventLocation;
     private String eventDescription;
 
-    public Event(AttendeeList attendee, AttendeeList signups, QRCode checkInQRCode, PromoQRCode promoQRCode, EventPoster poster, ArrayList<Notification> notifications, String eventName, String eventTime, String eventLocation, String eventDescription) {
-        Attendee = attendee;
-        this.signups = signups;
+    /**
+     * Constructs a new Event
+     * @param eventId UUID to identify the Event
+     * @param checkInQRCode the check-in QRCode
+     * @param promoQRCode the promotional PromoQRCode
+     * @param poster the Event's EventPoster
+     * @param eventName the Event's name String
+     * @param eventTime the Event's time String
+     * @param eventLocation the Event's location String
+     * @param eventDescription the Event's description String
+     */
+    public Event(UUID eventId, QRCode checkInQRCode, PromoQRCode promoQRCode, EventPoster poster, String eventName, String eventTime, String eventLocation, String eventDescription) {
+
+        this.eventId = eventId;
         this.checkInQRCode = checkInQRCode;
         this.promoQRCode = promoQRCode;
         this.poster = poster;
-        this.notifications = notifications;
         this.eventName = eventName;
         this.eventTime = eventTime;
         this.eventLocation = eventLocation;
         this.eventDescription = eventDescription;
     }
 
-    public AttendeeList getAttendee() {
-        return Attendee;
+    /**
+     * Returns the Event's unique ID
+     * @return eventId the UUID of the Event
+     */
+    public UUID getEventId(){
+        return eventId;
     }
 
-    public void setAttendee(AttendeeList attendee) {
-        Attendee = attendee;
+    /**
+     * Returns the ArrayList of Attendees who have checked into the Event
+     * @return attendees ArrayList of Attendees
+     */
+    public ArrayList<Attendee> getAttendee() {
+        return attendees;
     }
 
-    public AttendeeList getSignups() {
+    /**
+     * Returns the ArrayList of signups who have signed-up for the Event
+     * @return signups ArrayList of Attendees
+     */
+    public ArrayList<Attendee> getSignups() {
         return signups;
     }
 
-    public void setSignups(AttendeeList signups) {
-        this.signups = signups;
-    }
 
     public QRCode getCheckInQRCode() {
         return checkInQRCode;

@@ -1,15 +1,19 @@
  package com.example.qrcheckin;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
+ import android.os.Bundle;
+ import android.view.View;
+ import android.widget.Button;
+ import android.widget.ImageButton;
+ import android.widget.TextView;
+ import android.widget.Toast;
 
-import android.content.Intent;
-import android.os.Bundle;
-import android.view.View;
-import android.widget.Button;
-import android.widget.ImageButton;
-import android.widget.TextView;
-import android.widget.Toast;
+ import androidx.appcompat.app.AppCompatActivity;
+ import androidx.appcompat.widget.Toolbar;
+
+ import com.google.firebase.firestore.CollectionReference;
+ import com.google.firebase.firestore.FirebaseFirestore;
+
+ import java.util.UUID;
 
  public class createNewEventScreen2 extends AppCompatActivity {
      ImageButton qrButton;
@@ -17,6 +21,9 @@ import android.widget.Toast;
      ImageButton addEventButton;
      ImageButton profileButton;
      Button finishButton;
+
+     private FirebaseFirestore db;
+     private CollectionReference eventsRef;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,6 +44,32 @@ import android.widget.Toast;
 
         TextView header = findViewById(R.id.mainHeader);
         header.setText("Create an Event");
+
+        db = FirebaseFirestore.getInstance();
+        eventsRef = db.collection("Events");
+
+        /**
+         * Creates a new Event upon the finish button being clicked
+         */
+        finishButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                UUID eventId = UUID.randomUUID();
+
+                // TEMPORARY: initializing event attributes to null to create a new Event
+                // should actually be initialized to the users' inputs
+                QRCode checkInQRCode = null;
+                PromoQRCode promoQRCode = null;
+                EventPoster eventPoster = null;
+                String eventName = "testname3";
+                String eventTime = "testtime3";
+                String eventLocation = null;
+                String eventDescription = null;
+
+                Event event = new Event(eventId, checkInQRCode, promoQRCode, eventPoster, eventName, eventTime, eventLocation, eventDescription);
+                eventsRef.document().set(event);
+            }
+        });
 
         eventButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -59,4 +92,16 @@ import android.widget.Toast;
             }
         });
     }
+
+    /* may be needed for storing custom object attributes, for now
+    eventsRef.document().set(event);
+    in the finishButton click listener is enough to add the event object to the db
+
+    public void addNewEvent(Event event){
+        //HashMap<String, String> eventData = new HashMap<>();
+        //eventData.put("eventName", event.getEventName());
+        //eventsRef.document(event.getEventId().toString()).set(eventData);
+        eventsRef.document().set(event);
+    }
+     */
 }
