@@ -1,34 +1,68 @@
 package com.example.qrcheckin;
 
-import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
+import android.widget.TextView;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
+import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 
-public class eventListAdapter extends ArrayAdapter<Event> {
-    private ArrayList<Event> events;
-    private Context context;
+/**
+ * Links the data stored in the array of Event objects to the RecyclerView in EventListView
+ * https://developer.android.com/develop/ui/views/layout/recyclerview#next-steps , 2024
+ */
 
-    public eventListAdapter(@NonNull Context context, int resource, ArrayList<Event> events) {
-        super(context, resource);
-        this.events = events;
-        this.context = context;
-    }
+public class eventListAdapter extends RecyclerView.Adapter<eventListAdapter.ViewHolder> {
+    private ArrayList<Event> localDataSet;
 
-    @NonNull
-    @Override
-    public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
-        View view = convertView;
-
-        if (view == null) {
-            view = LayoutInflater.from(context).inflate(R.layout.eventlistitem, parent, false);
+    /**
+     * Reference the views for an Event item
+     */
+    public static class ViewHolder extends RecyclerView.ViewHolder{
+        private final TextView eventName;
+        public ViewHolder(View view){
+            super(view);
+            // TODO: get other views for an Event item that are displayed by an eventlistitem
+            eventName = (TextView) view.findViewById(R.id.event_name_text);
         }
-        return view;
+        public TextView getEventNameView(){
+            return eventName;
+        }
     }
+
+    /**
+     * Initialize the dataset of the adapter
+     * @param dataSet ArrayList of Events to display
+     */
+    public eventListAdapter(ArrayList<Event> dataSet){
+        localDataSet = dataSet;
+    }
+
+    // Create new views (invoked by the layout manager)
+    @Override
+    public ViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
+        // Create a new view, which defines the UI of the list item
+        View view = LayoutInflater.from(viewGroup.getContext())
+                .inflate(R.layout.eventlistitem, viewGroup, false);
+
+        return new ViewHolder(view);
+    }
+
+    // Replace the contents of a view (invoked by the layout manager)
+    @Override
+    public void onBindViewHolder(ViewHolder viewHolder, final int position) {
+
+        // Get element from your dataset at this position and replace the
+        // contents of the view with that element
+        viewHolder.getEventNameView().setText(localDataSet.get(position).getEventName());
+    }
+
+    // Return the size of your dataset (invoked by the layout manager)
+    @Override
+    public int getItemCount() {
+        return localDataSet.size();
+    }
+
 }
