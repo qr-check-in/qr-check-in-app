@@ -1,6 +1,10 @@
 package com.example.qrcheckin;
 
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.content.Intent;
+import android.graphics.Color;
+import android.os.Build;
 import android.util.Log;
 import java.util.Random;
 
@@ -40,7 +44,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
         // Check if the message contains data
         if (message.getData().size() > 0) {
-            // TODO: Process data
+            //TODO: Process data
             Log.d(Utils.TAG, "Message data payload: " + message.getData());
         }
 
@@ -61,12 +65,40 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         Intent intent = new Intent(this, MainActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 
-        // Use the MyNotificationManager to send the notification
+        // Create the "Event Updates" channel (if necessary)
+        String channelId = getString(R.string.notification_channel_event_updates_id);
+        String channelName = getString(R.string.notification_channel_event_updates_name);
+        int importance = NotificationManager.IMPORTANCE_DEFAULT;
+        createNotificationChannel(channelId, channelName, importance);
+
+        // Send the notification
         MyNotificationManager.getInstance(this).sendNotification(
                 new Random().nextInt(), // Generate a random ID for the notification to ensure they are unique
-                getString(R.string.default_notification_channel_id), // Use default notification channel ID
+                channelId,
                 title,
                 messageBody,
                 intent);
+    }
+
+    /**
+     * Creates a notification channel with the specified fields.
+     *
+     * @param channelId             The channel ID you want to send the notification to.
+     * @param channelName           The channel name matching the ID
+     * @param channelImportance     The integer importance of the channel [0-4]
+     */
+    public void createNotificationChannel(String channelId, String channelName, int channelImportance) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            NotificationChannel channel = new NotificationChannel(channelId, channelName, channelImportance);
+            channel.enableLights(true);
+            channel.setLightColor(Color.RED);
+            channel.enableVibration(true);
+
+            // Create manager
+            NotificationManager manager = this.getSystemService(NotificationManager.class);
+            manager.createNotificationChannel(channel);
+        } else {
+            Log.w(Utils.TAG, "API 26+ required to use NotificationChannel class");
+        }
     }
 }

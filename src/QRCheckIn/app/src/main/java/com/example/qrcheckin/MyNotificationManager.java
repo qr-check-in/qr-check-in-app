@@ -1,15 +1,14 @@
 package com.example.qrcheckin;
 
-import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
 import android.media.RingtoneManager;
 import android.net.Uri;
-import android.os.Build;
+
 import androidx.core.app.NotificationCompat;
+
 public class MyNotificationManager {
 
     private final Context mContext;
@@ -23,28 +22,27 @@ public class MyNotificationManager {
 
     public static synchronized MyNotificationManager getInstance(Context context) {
         if (mInstance == null) {
-            mInstance = new MyNotificationManager(context);
+            mInstance = new MyNotificationManager(context.getApplicationContext());  // getApplicationContext() prevents memory leaks, ignore the warning
         }
         return mInstance;
     }
 
-    public void createNotificationChannel(String channelId, String channelName, String channelDescription) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            NotificationChannel channel = new NotificationChannel(channelId, channelName, NotificationManager.IMPORTANCE_DEFAULT);
-            channel.setDescription(channelDescription);
-            channel.enableLights(true);
-            channel.setLightColor(Color.RED);
-            channel.enableVibration(true);
-            mManager.createNotificationChannel(channel);
-        }
-    }
-
+    /**
+     * Build a notification with the mentioned title and body, then send it in the specified channel.
+     *      - Creating a notification with an identical ID to another will cause it to be
+     *          overwritten/updated by the new one. You can generate a random one with {@link java.util.Random}
+     *      - Use channel IDs imported from strings.xml or some other resource file to ensure they
+     *          actually initialized
+     *      - See {@link Intent#addFlags(int)} for intent creation, use the flag
+     *          "FLAG_ACTIVITY_CLEAR_TOP" by default
+     *
+     * @param id        An ID associated with this specific notification which can be used to track it
+     * @param channelId The channel ID you want to send the notification to.
+     * @param title     The string title of the notification
+     * @param body      The string body text of the notification
+     * @param intent    The activity you intend the user to open when they click the notification.
+     */
     public void sendNotification(int id, String channelId, String title, String body, Intent intent) {
-
-        // Create channel
-        createNotificationChannel(channelId,
-                mContext.getString(R.string.notification_channel_event_updates_name),
-                mContext.getString(R.string.notification_channel_event_updates_description));
 
         // Build notification
         PendingIntent pendingIntent = PendingIntent.getActivity(mContext, 0, intent, PendingIntent.FLAG_IMMUTABLE);
