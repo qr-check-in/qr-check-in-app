@@ -1,41 +1,32 @@
 package com.example.qrcheckin;
 
+import static com.example.qrcheckin.R.layout.show_profile;
+
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
-import android.widget.TextView;
 
-public class createNewEventScreen1 extends AppCompatActivity {
+public class profileFragment extends AppCompatActivity {
     ImageButton qrButton;
     ImageButton eventButton;
     ImageButton addEventButton;
     ImageButton profileButton;
-
-    Button nextPageButton;
+    Button updatePicture;
+    Button removePicture;
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_create_new_event_screen_1);
-
-
+        setContentView(show_profile);
         qrButton = findViewById(R.id.qrButton);
         eventButton = findViewById(R.id.calenderButton);
         addEventButton = findViewById(R.id.addCalenderButton);
-        addEventButton.setPressed(true);
         profileButton = findViewById(R.id.profileButton);
-        nextPageButton = findViewById(R.id.nextButton);
-
-        Toolbar toolbar = findViewById(R.id.addEventToolBar1);
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayShowTitleEnabled(false);
-        TextView header = findViewById(R.id.mainHeader);
-        header.setText("Create an Event");
-
+        profileButton.setPressed(true);
+        updatePicture = findViewById(R.id.btnUpdatePicture);
         eventButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -51,22 +42,15 @@ public class createNewEventScreen1 extends AppCompatActivity {
                 startActivity(event);
             }
         });
-
-        nextPageButton.setOnClickListener(new View.OnClickListener() {
+        addEventButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent event = new Intent(getApplicationContext(), createNewEventScreen2.class);
+                Intent event = new Intent(getApplicationContext(), createNewEventScreen1.class);
                 startActivity(event);
             }
         });
-
-        profileButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent event = new Intent(getApplicationContext(), profileFragment.class);
-                startActivity(event);
-            }
+        updatePicture.setOnClickListener(v -> {
+                new updatePictureFragment().show(getSupportFragmentManager(), "Update Picture");
         });
-
     }
 }
