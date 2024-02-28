@@ -24,7 +24,6 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_event_list_view);
 
         db = FirebaseFirestore.getInstance();
-        getToken();
     }
 
     private void getToken() {

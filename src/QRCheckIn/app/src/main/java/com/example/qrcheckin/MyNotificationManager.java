@@ -18,7 +18,7 @@ public class MyNotificationManager {
 
     private MyNotificationManager(Context context) {
         mContext = context;
-        mManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+        mManager = context.getSystemService(NotificationManager.class);
     }
 
     public static synchronized MyNotificationManager getInstance(Context context) {
@@ -42,12 +42,12 @@ public class MyNotificationManager {
     public void sendNotification(int id, String channelId, String title, String body, Intent intent) {
 
         // Create channel
-        createNotificationChannel(mContext.getString(R.string.notification_channel_event_updates_id),
+        createNotificationChannel(channelId,
                 mContext.getString(R.string.notification_channel_event_updates_name),
                 mContext.getString(R.string.notification_channel_event_updates_description));
 
         // Build notification
-        PendingIntent pendingIntent = PendingIntent.getActivity(mContext, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        PendingIntent pendingIntent = PendingIntent.getActivity(mContext, 0, intent, PendingIntent.FLAG_IMMUTABLE);
         Uri defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
         NotificationCompat.Builder builder = new NotificationCompat.Builder(mContext, channelId)
                 .setSmallIcon(R.drawable.ic_launcher_foreground) // TODO: Replace this with the notification image
