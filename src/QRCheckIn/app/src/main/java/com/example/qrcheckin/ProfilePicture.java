@@ -1,6 +1,4 @@
 package com.example.qrcheckin;
-
-
 import java.io.File;
 
 public abstract class ProfilePicture extends Image {

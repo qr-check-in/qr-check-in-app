@@ -42,6 +42,7 @@
         <activity
             android:name=".EventListView"
             android:exported="false" />
+
         <activity
             android:name=".MainActivity"
             android:exported="true">
