@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="45dp"
+    android:background="@color/JordyBlue">
+
+
+    <ImageButton
+        android:id="@+id/qrButton"
+        android:layout_width="118dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:scaleType="fitCenter"
+        android:paddingHorizontal="5dp"
+        android:paddingVertical="5dp"
+        android:background="@drawable/buttonselect"
+        android:tint="@android:color/black"
+        app:srcCompat="@drawable/qrcode"
+        />
+
+    <ImageButton
+        android:id="@+id/calenderButton"
+        android:layout_width="120dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:scaleType="fitCenter"
+        android:background="@drawable/buttonselect"
+        android:paddingHorizontal="10dp"
+        android:paddingVertical="10dp"
+        android:tint="@android:color/black"
+        app:srcCompat="@drawable/calender"
+        />
+
+    <ImageButton
+        android:id="@+id/addCalenderButton"
+        android:layout_width="120dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:scaleType="fitCenter"
+        android:paddingHorizontal="10dp"
+        android:paddingVertical="10dp"
+        android:background="@drawable/buttonselect"
+        android:tint="@android:color/black"
+        app:srcCompat="@drawable/addcalender"
+        />
+
+    <ImageButton
+        android:id="@+id/profileButton"
+        android:layout_width="120dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:scaleType="fitCenter"
+        android:paddingHorizontal="5dp"
+        android:paddingVertical="5dp"
+        android:background="@drawable/buttonselect"
+        android:tint="@android:color/black"
+        app:srcCompat="@drawable/profile"
+        />
+
+</LinearLayout>
