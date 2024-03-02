@@ -21,6 +21,8 @@
      Button finishButton;
 
      private Database db;
+     private String inputEventName;
+     private String inputEventDate;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,25 +46,33 @@
 
         db = new Database();
 
-        /**
-         * Creates a new Event upon the finish button being clicked
-         */
+        // Fetch the user's inputs from createNewEventSceen1
+        Bundle extras = getIntent().getExtras();
+        if (extras != null) {
+            inputEventName = extras.getString("eventName");
+            inputEventDate = extras.getString("eventDate");
+            //Log.d("event", String.format("passed event %s %s", inputEventName, inputEventDate));
+        }
+
         finishButton.setOnClickListener(new View.OnClickListener() {
+            /**
+             * Creates a new Event upon the finish button being clicked
+             * @param v The view that was clicked.
+             */
             @Override
             public void onClick(View v) {
                 UUID eventId = UUID.randomUUID();
 
                 // TEMPORARY: initializing event attributes to null to create a new Event
-                // should actually be initialized to the users' inputs
+                // TODO: set all event attributes to user's inputs
                 QRCode checkInQRCode = null;
                 PromoQRCode promoQRCode = null;
                 EventPoster eventPoster = null;
-                String eventName = "testname2";
-                String eventTime = "testtime2";
                 String eventLocation = null;
+                String eventTime = null;
                 String eventDescription = null;
 
-                Event event = new Event(eventId, checkInQRCode, promoQRCode, eventPoster, eventName, eventTime, eventLocation, eventDescription);
+                Event event = new Event(eventId, checkInQRCode, promoQRCode, eventPoster, inputEventName, inputEventDate, eventTime, eventLocation, eventDescription);
                 Log.d("event", String.format("storing event %s", event.getEventName()));
                 db.storeEvent(event);
             }

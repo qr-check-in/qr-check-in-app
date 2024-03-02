@@ -30,8 +30,6 @@ public class EventListView extends AppCompatActivity {
     RecyclerView eventListView;
     ArrayList<Event> eventDataList;
     eventListAdapter eventListAdapter;
-    private FirebaseFirestore db;
-    private CollectionReference eventsRef;
 
 
     @Override
@@ -54,8 +52,8 @@ public class EventListView extends AppCompatActivity {
         header.setText("Ongoing Events");
 
         // Access the Events collection
-        db = FirebaseFirestore.getInstance();
-        eventsRef = db.collection("Events");
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        CollectionReference eventsRef = db.collection("Events");
 
         // Initialize array of Events to display and Adapter to link to the recycler view
         eventDataList = new ArrayList<>();
@@ -81,9 +79,9 @@ public class EventListView extends AppCompatActivity {
                     for (QueryDocumentSnapshot doc: querySnapshots) {
                         // TODO: get other attributes for an Event item that are displayed by an eventlistitem
                         String eventName = doc.getString("eventName");
-                        String eventTime = doc.getString("eventTime");
-                        //Log.d("Firestore", String.format("City(%s, %s) fetched", eventName, eventTime));
-                        eventDataList.add(new Event(null, null, null, null, eventName, eventTime, null, null));
+                        String eventDate = doc.getString("eventDate");
+                        //Log.d("Firestore", String.format("event (%s, %s) fetched", eventName, eventTime));
+                        eventDataList.add(new Event(null, null, null, null, eventName, eventDate,null,  null, null));
                     }
                 }
                 eventListAdapter.notifyDataSetChanged();

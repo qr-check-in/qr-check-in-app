@@ -51,7 +51,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/addEventToolBar1">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/eventNameText"
+                    android:id="@+id/eventNameInput"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="Event Name"
@@ -64,29 +64,7 @@
                 </com.google.android.material.textfield.TextInputEditText>
             </com.google.android.material.textfield.TextInputLayout>
 
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/eventTimeLayout"
-                android:paddingTop="10dp"
-                android:layout_width="350dp"
-                android:layout_height="wrap_content"
-                app:layout_constraintBottom_toTopOf="@+id/mainbar"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/eventNameLayout"
-                app:layout_constraintVertical_bias="0.01999998">
 
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/eventTimeText"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="Event Date"
-                    tools:layout_editor_absoluteX="30dp"
-                    tools:layout_editor_absoluteY="78dp"
-                    android:drawableLeft="@drawable/calenderresize"
-                    android:drawablePadding="5dp"
-                    android:paddingStart="10dp">
-                </com.google.android.material.textfield.TextInputEditText>
-            </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/eventLocationLayout"
@@ -96,7 +74,7 @@
                 app:layout_constraintBottom_toTopOf="@+id/mainbar"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/eventTimeLayout"
+                app:layout_constraintTop_toBottomOf="@+id/eventNameLayout"
                 app:layout_constraintVertical_bias="0.01999998">
 
                 <com.google.android.material.textfield.TextInputEditText
@@ -112,6 +90,20 @@
                 </com.google.android.material.textfield.TextInputEditText>
             </com.google.android.material.textfield.TextInputLayout>
 
+            <Button
+                android:id="@+id/selectDateButton"
+                android:layout_width="350dp"
+                android:layout_height="wrap_content"
+                android:drawablePadding="15dp"
+                android:backgroundTint="@color/NeonBlue"
+                android:drawableEnd="@drawable/calenderresize"
+                android:drawableTint="@color/White"
+                android:text="Select Date"
+                app:layout_constraintBottom_toTopOf="@id/mainbar"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/eventLocationLayout"></Button>
+
             <Switch
                 android:id="@+id/checkInSwitch"
                 android:layout_width="wrap_content"
@@ -125,7 +117,7 @@
                 app:layout_constraintBottom_toTopOf="@+id/mainbar"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/eventLocationLayout"
+                app:layout_constraintTop_toBottomOf="@+id/selectDateButton"
                 app:layout_constraintVertical_bias="0.0"></Switch>
 
             <androidx.cardview.widget.CardView

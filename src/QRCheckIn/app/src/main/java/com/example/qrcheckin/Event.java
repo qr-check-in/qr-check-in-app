@@ -4,6 +4,9 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.UUID;
 
+/**
+ * Event represents an event created by a user
+ */
 public class Event implements Serializable {
     private ArrayList<Attendee> attendees;
     private ArrayList<Attendee> signups;
@@ -13,6 +16,7 @@ public class Event implements Serializable {
     private EventPoster poster;
     private ArrayList<Notification> notifications;
     private String eventName;
+    private String eventDate;
     private String eventTime;
     private String eventLocation;
     private String eventDescription;
@@ -24,17 +28,19 @@ public class Event implements Serializable {
      * @param promoQRCode the promotional PromoQRCode
      * @param poster the Event's EventPoster
      * @param eventName the Event's name String
+     * @param eventDate the Event's date String
      * @param eventTime the Event's time String
      * @param eventLocation the Event's location String
      * @param eventDescription the Event's description String
      */
-    public Event(UUID eventId, QRCode checkInQRCode, PromoQRCode promoQRCode, EventPoster poster, String eventName, String eventTime, String eventLocation, String eventDescription) {
+    public Event(UUID eventId, QRCode checkInQRCode, PromoQRCode promoQRCode, EventPoster poster, String eventName, String eventDate, String eventTime, String eventLocation, String eventDescription) {
 
         this.eventId = eventId;
         this.checkInQRCode = checkInQRCode;
         this.promoQRCode = promoQRCode;
         this.poster = poster;
         this.eventName = eventName;
+        this.eventDate = eventDate;
         this.eventTime = eventTime;
         this.eventLocation = eventLocation;
         this.eventDescription = eventDescription;
@@ -103,6 +109,22 @@ public class Event implements Serializable {
 
     public void setEventName(String eventName) {
         this.eventName = eventName;
+    }
+
+    /**
+     * gets the Event's date
+     * @return string in the format "yyyy-mm-dd"
+     */
+    public String getEventDate() {
+        return eventDate;
+    }
+
+    /**
+     * sets the Event's date
+     * @param eventDate String in the format "yyyy-mm-dd"
+     */
+    public void setEventDate(String eventDate) {
+        this.eventTime = eventDate;
     }
 
     public String getEventTime() {
