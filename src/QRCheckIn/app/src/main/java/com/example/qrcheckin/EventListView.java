@@ -82,8 +82,7 @@ public class EventListView extends AppCompatActivity {
                         // TODO: get other attributes for an Event item that are displayed by an eventlistitem
                         String eventName = doc.getString("eventName");
                         String eventTime = doc.getString("eventTime");
-                        Log.d("Firestore", String.format("City(%s, %s) fetched", eventName,
-                                eventTime));
+                        //Log.d("Firestore", String.format("City(%s, %s) fetched", eventName, eventTime));
                         eventDataList.add(new Event(null, null, null, null, eventName, eventTime, null, null));
                     }
                 }
