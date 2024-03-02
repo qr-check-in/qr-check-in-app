@@ -1,5 +1,6 @@
 package com.example.qrcheckin;
 
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
@@ -9,8 +10,10 @@ import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.util.Log;
 
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.messaging.FirebaseMessaging;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -34,6 +37,7 @@ public class MainActivity extends AppCompatActivity {
         profileButton = findViewById(R.id.profileButton);
 
         db = FirebaseFirestore.getInstance();
+    }
 
 //        Set the Header of the App
         Toolbar toolbar = findViewById(R.id.Toolbar);
@@ -65,5 +69,20 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(event);
             }
         });
+    /**
+     * Retrieves and logs the Firebase Cloud Messaging (FCM) token for this app's installation
+     */
+    private void getFcmToken() {
+        FirebaseMessaging.getInstance().getToken()
+                .addOnCompleteListener(task -> {
+                    if (!task.isSuccessful()) {
+                        Log.w(Utils.TAG, "Fetching FCM registration token failed", task.getException());
+                        return;
+                    }
+
+                    // Get and log the new FCM registration token
+                    String token = task.getResult();
+                    Log.d(Utils.TAG, token);
+                });
     }
 }
