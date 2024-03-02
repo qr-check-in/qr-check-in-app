@@ -1,16 +1,15 @@
 package com.example.qrcheckin;
 
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.TextView;
-import android.util.Log;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.messaging.FirebaseMessaging;
@@ -37,7 +36,7 @@ public class MainActivity extends AppCompatActivity {
         profileButton = findViewById(R.id.profileButton);
 
         db = FirebaseFirestore.getInstance();
-    }
+
 
 //        Set the Header of the App
         Toolbar toolbar = findViewById(R.id.Toolbar);
@@ -69,6 +68,7 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(event);
             }
         });
+    }
     /**
      * Retrieves and logs the Firebase Cloud Messaging (FCM) token for this app's installation
      */
