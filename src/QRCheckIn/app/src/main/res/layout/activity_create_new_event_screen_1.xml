@@ -243,6 +243,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/tempPosterCard">
             </Button>
+
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/eventDescription"
                 android:layout_width="350dp"
@@ -283,7 +284,8 @@
         app:layout_constraintBottom_toTopOf="@+id/mainbar"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.95"
-        app:layout_constraintStart_toStartOf="parent"></Button>
+        app:layout_constraintStart_toStartOf="parent">
+    </Button>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

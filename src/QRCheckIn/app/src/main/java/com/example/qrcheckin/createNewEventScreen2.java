@@ -79,6 +79,7 @@
                 // Move the info of the new
                 checkInQRCode = incomingEvent.getCheckInQRCode();
                 promoQRCode = incomingEvent.getPromoQRCode();
+                // Info from the previous page
                 eventPoster = incomingEvent.getPoster();
                 eventLocation = incomingEvent.getEventLocation();
                 eventTime = incomingEvent.getEventTime();
@@ -93,8 +94,6 @@
                 Intent activity = new Intent(getApplicationContext(), EventListView.class);
                 startActivity(activity);
             }
-
-
         });
 
         eventButton.setOnClickListener(new View.OnClickListener() {

@@ -6,7 +6,9 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.Switch;
 import android.widget.TextView;
+import android.widget.TimePicker;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -22,6 +24,8 @@ public class createNewEventScreen1 extends AppCompatActivity implements SelectDa
 
     // Acitvity Widgets and text declarations
     Button nextPageButton;
+    Button uploadPoster;
+    Switch checkInSwitch;
     EditText eventNameEditText;
     EditText eventLocation;
     EditText eventDate;
@@ -30,7 +34,6 @@ public class createNewEventScreen1 extends AppCompatActivity implements SelectDa
     ImageButton selectTimeButton;
 
 
-    boolean ifDateSelected = false;
     private String inputEventName;
     private String inputEventDate;
     private String inputEventLocation;
@@ -55,6 +58,8 @@ public class createNewEventScreen1 extends AppCompatActivity implements SelectDa
         header.setText("Create an Event");
 
         // Initialize Event textbox and widgets
+        uploadPoster = findViewById(R.id.uploadPosterButton);
+        checkInSwitch = findViewById(R.id.checkInSwitch);
         eventNameEditText = findViewById(R.id.eventNameText);
         eventLocation = findViewById(R.id.eventLocationText);
         eventDate = findViewById(R.id.eventDateText);
@@ -65,7 +70,11 @@ public class createNewEventScreen1 extends AppCompatActivity implements SelectDa
         // Listener to show a DatePicker fragment when selectDateButton is clicked
         selectDateButton.setOnClickListener(v -> {
             new SelectDateFragment().show(getSupportFragmentManager(), "Select Date");
-            ifDateSelected = true;
+        });
+
+        // Lisner to show a TimePicker fragment when selectTimeButton is clicked
+        selectTimeButton.setOnClickListener(v -> {
+            new TimePickerFragment().show(getSupportFragmentManager(), "timePicker");
         });
 
         eventButton.setOnClickListener(new View.OnClickListener() {
