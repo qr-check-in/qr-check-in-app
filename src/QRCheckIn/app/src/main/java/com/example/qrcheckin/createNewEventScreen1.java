@@ -11,17 +11,25 @@ import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+import com.google.android.material.textfield.TextInputEditText;
+
 public class createNewEventScreen1 extends AppCompatActivity implements SelectDateFragment.DatePickerDialogListener{
+    // Mainbar declarations
     ImageButton qrButton;
     ImageButton eventButton;
     ImageButton addEventButton;
     ImageButton profileButton;
 
+    // Acitvity Widgets and text declarations
+    Button nextPageButton;
     EditText eventNameEditText;
     EditText eventLocation;
-    Button selectDateButton;
+    EditText eventDate;
+    EditText eventTime;
+    ImageButton selectDateButton;
+    ImageButton selectTimeButton;
 
-    Button nextPageButton;
+
     boolean ifDateSelected = false;
     private String inputEventName;
     private String inputEventDate;
@@ -31,7 +39,7 @@ public class createNewEventScreen1 extends AppCompatActivity implements SelectDa
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_new_event_screen_1);
 
-
+        // Initialize Mainbar Attributes
         qrButton = findViewById(R.id.qrButton);
         eventButton = findViewById(R.id.calenderButton);
         addEventButton = findViewById(R.id.addCalenderButton);
@@ -39,27 +47,27 @@ public class createNewEventScreen1 extends AppCompatActivity implements SelectDa
         profileButton = findViewById(R.id.profileButton);
         nextPageButton = findViewById(R.id.nextButton);
 
-        // initialize Event attribute input views
-        eventNameEditText = findViewById(R.id.eventNameText);
-        eventLocation = findViewById(R.id.eventLocationText);
-
-//        selectDateButton = findViewById(R.id.selectDateButton);
-
+        // Initialize Toolbar
         Toolbar toolbar = findViewById(R.id.addEventToolBar1);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
         TextView header = findViewById(R.id.mainHeader);
         header.setText("Create an Event");
 
+        // Initialize Event textbox and widgets
+        eventNameEditText = findViewById(R.id.eventNameText);
+        eventLocation = findViewById(R.id.eventLocationText);
+        eventDate = findViewById(R.id.eventDateText);
+        eventTime = findViewById(R.id.eventTimeText);
+        selectTimeButton = findViewById(R.id.eventTimePicker);
+        selectDateButton = findViewById(R.id.eventDatePicker);
+
         // Listener to show a DatePicker fragment when selectDateButton is clicked
-//        selectDateButton.setOnClickListener(v -> {
-//            new SelectDateFragment().show(getSupportFragmentManager(), "Select Date");
-//            ifDateSelected = true;
-//        });
-//
-//        if (ifDateSelected == true){
-//
-//        }
+        selectDateButton.setOnClickListener(v -> {
+            new SelectDateFragment().show(getSupportFragmentManager(), "Select Date");
+            ifDateSelected = true;
+        });
+
         eventButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -122,5 +130,8 @@ public class createNewEventScreen1 extends AppCompatActivity implements SelectDa
                 .append(month + 1).append("-")
                 .append(dayOfMonth).append("");
         inputEventDate = dateBuilder.toString();
+
+        // Set the textbox to the selected date
+        eventDate.setText(inputEventDate);
     }
 }

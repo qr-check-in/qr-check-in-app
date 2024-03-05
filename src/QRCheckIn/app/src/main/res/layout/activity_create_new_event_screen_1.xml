@@ -88,6 +88,7 @@
                         android:layout_weight="1">
 
                         <ImageButton
+                            android:id="@+id/eventDatePicker"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             app:srcCompat="@drawable/calenderresize"
@@ -129,9 +130,10 @@
                         android:layout_weight="1">
 
                         <ImageButton
+                            android:id="@+id/eventTimePicker"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            app:srcCompat="@drawable/calenderresize"
+                            app:srcCompat="@drawable/clockresize"
                             android:layout_gravity="center_vertical"                    android:background="@android:color/transparent"
                             android:paddingHorizontal="5dp">
                         </ImageButton>
