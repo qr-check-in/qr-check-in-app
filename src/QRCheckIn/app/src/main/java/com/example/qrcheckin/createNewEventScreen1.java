@@ -43,7 +43,7 @@ public class createNewEventScreen1 extends AppCompatActivity implements SelectDa
         eventNameEditText = findViewById(R.id.eventNameText);
         eventLocation = findViewById(R.id.eventLocationText);
 
-        selectDateButton = findViewById(R.id.selectDateButton);
+//        selectDateButton = findViewById(R.id.selectDateButton);
 
         Toolbar toolbar = findViewById(R.id.addEventToolBar1);
         setSupportActionBar(toolbar);
@@ -52,14 +52,14 @@ public class createNewEventScreen1 extends AppCompatActivity implements SelectDa
         header.setText("Create an Event");
 
         // Listener to show a DatePicker fragment when selectDateButton is clicked
-        selectDateButton.setOnClickListener(v -> {
-            new SelectDateFragment().show(getSupportFragmentManager(), "Select Date");
-            ifDateSelected = true;
-        });
-
-        if (ifDateSelected == true){
-
-        }
+//        selectDateButton.setOnClickListener(v -> {
+//            new SelectDateFragment().show(getSupportFragmentManager(), "Select Date");
+//            ifDateSelected = true;
+//        });
+//
+//        if (ifDateSelected == true){
+//
+//        }
         eventButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

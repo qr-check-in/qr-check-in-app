@@ -69,7 +69,6 @@
 
                 // TEMPORARY: initializing event attributes to null to create a new Event
                 // TODO: set all event attributes to user's inputs
-//                Here we could probably just add onto the new Event object
                 QRCode checkInQRCode = null;
                 PromoQRCode promoQRCode = null;
                 EventPoster eventPoster = null;
@@ -77,10 +76,19 @@
                 String eventTime = null;
                 String eventDescription = null;
 
-//                Event event = new Event(eventId, checkInQRCode, promoQRCode, eventPoster, inputEventName, inputEventDate, eventTime, eventLocation, eventDescription);
-//                What I've done here is that instead of taking
-                Log.d("event", String.format("storing event %s", incomingEvent.getEventName()));
-                db.storeEvent(incomingEvent);
+                // Move the info of the new
+                checkInQRCode = incomingEvent.getCheckInQRCode();
+                promoQRCode = incomingEvent.getPromoQRCode();
+                eventPoster = incomingEvent.getPoster();
+                eventLocation = incomingEvent.getEventLocation();
+                eventTime = incomingEvent.getEventTime();
+                eventDescription = incomingEvent.getEventDescription();
+                inputEventName = incomingEvent.getEventName();
+                inputEventDate = incomingEvent.getEventDate();
+
+                Event newEvent = new Event(eventId, checkInQRCode, promoQRCode, eventPoster, incomingEvent.getEventName(), incomingEvent.getEventDate(), eventTime, eventLocation, eventDescription);
+                Log.d("event", String.format("storing event %s", newEvent.getEventName()));
+                db.storeEvent(newEvent);
 
                 Intent activity = new Intent(getApplicationContext(), EventListView.class);
                 startActivity(activity);
