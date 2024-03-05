@@ -88,6 +88,7 @@ public class EventListView extends AppCompatActivity {
             }
         });
 
+        // Set listener for "Scan QR code" toolbar button
         qrButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -96,6 +97,7 @@ public class EventListView extends AppCompatActivity {
             }
         });
 
+        // Set listener for "Add event" toolbar button
         addEventButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -103,5 +105,7 @@ public class EventListView extends AppCompatActivity {
                 startActivity(event);
             }
         });
+
+        
     }
 }
