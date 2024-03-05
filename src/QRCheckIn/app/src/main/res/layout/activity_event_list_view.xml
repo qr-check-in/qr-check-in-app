@@ -14,13 +14,13 @@
     </include>
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/eventListView"
+        android:id="@+id/event_recycler_view"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/eventListToolbar"
-        tools:listitem="@layout/eventlistitem" />
+        tools:listitem="@layout/event_list_item"/>
 
     <include
         layout="@layout/mainappbar"
@@ -30,7 +30,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/eventListView"
+        app:layout_constraintTop_toBottomOf="@id/event_recycler_view"
         app:layout_constraintVertical_bias="1.0" />
 
 
