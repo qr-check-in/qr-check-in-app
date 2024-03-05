@@ -143,4 +143,6 @@ public class createNewEventScreen1 extends AppCompatActivity implements SelectDa
         // Set the textbox to the selected date
         eventDate.setText(inputEventDate);
     }
+
+    public void buildTime()
 }
