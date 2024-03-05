@@ -4,6 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="8dp"
+    app:cardBackgroundColor="@color/Surface"
     app:cardCornerRadius="12dp"
     app:cardElevation="6dp">
 
@@ -14,37 +15,38 @@
         android:padding="16dp">
 
         <ImageView
-            android:id="@+id/event_poster"
+            android:id="@+id/image_event_poster"
             android:layout_width="match_parent"
             android:layout_height="200dp"
             android:contentDescription="@string/description_event_poster"
-            android:scaleType="centerCrop" />
+            android:scaleType="centerCrop"
+            app:srcCompat="@drawable/fest1" />
 
         <TextView
-            android:id="@+id/event_title"
+            android:id="@+id/text_event_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
+            android:text="@string/description_event_name"
             android:textColor="@color/OnPrimary"
             android:textSize="18sp"
-            android:textStyle="bold"
-            android:text="@string/description_event_name" />
+            android:textStyle="bold" />
 
         <TextView
-            android:id="@+id/event_location"
+            android:id="@+id/text_event_location"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:text="@string/description_event_location"
             android:textColor="@color/OnSecondary"
-            android:textSize="14sp"
-            android:text="@string/description_event_location" />
+            android:textSize="14sp" />
 
         <TextView
-            android:id="@+id/event_date"
+            android:id="@+id/text_event_date"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="8dp"
+            android:text="@string/description_event_date"
             android:textColor="@color/OnTertiary"
-            android:textSize="14sp"
-            android:text="@string/description_event_date" />
+            android:textSize="14sp" />
     </LinearLayout>
 </androidx.cardview.widget.CardView>

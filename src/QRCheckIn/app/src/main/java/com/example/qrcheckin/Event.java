@@ -10,7 +10,7 @@ import java.util.UUID;
 public class Event implements Serializable {
     private ArrayList<Attendee> attendees;
     private ArrayList<Attendee> signups;
-    private final UUID eventId;
+    private UUID eventId;
     private QRCode checkInQRCode;
     private PromoQRCode promoQRCode;
     private EventPoster poster;
@@ -20,6 +20,13 @@ public class Event implements Serializable {
     private String eventTime;
     private String eventLocation;
     private String eventDescription;
+
+    /**
+     * No argument constructor used by firebase
+     */
+    public Event() {
+
+    }
 
     /**
      * Constructs a new Event

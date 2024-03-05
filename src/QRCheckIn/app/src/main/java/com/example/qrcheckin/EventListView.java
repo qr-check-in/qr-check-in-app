@@ -13,10 +13,12 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
@@ -30,18 +32,27 @@ public class EventListView extends AppCompatActivity {
     RecyclerView eventListView;
     ArrayList<Event> eventDataList;
     eventListAdapter eventListAdapter;
-
+    private EventAdapter adapter;
+    FirebaseFirestore db = FirebaseFirestore.getInstance();
+    CollectionReference eventsRef = db.collection("events");
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_event_list_view);
 
+        // Access the Events collection
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        CollectionReference eventsRef = db.collection("events");
+        Log.d("Firestore", "Connected to firestore");
+        setUpRecyclerView();
+        Log.d("Firestore", "Set up recycler view");
+
         qrButton = findViewById(R.id.qrButton);
         eventButton = findViewById(R.id.calenderButton);
         addEventButton = findViewById(R.id.addCalenderButton);
         profileButton = findViewById(R.id.profileButton);
-        eventListView = findViewById(R.id.eventListView);
+        eventListView = findViewById(R.id.event_recycler_view);
 
         eventButton.setPressed(true);       // https://stackoverflow.com/questions/9318331/keep-android-button-selected-state, 2024, Prompt: how  to keep a button selected
 
@@ -51,42 +62,7 @@ public class EventListView extends AppCompatActivity {
         TextView header = findViewById(R.id.mainHeader);
         header.setText("Ongoing Events");
 
-        // Access the Events collection
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
-        CollectionReference eventsRef = db.collection("Events");
-
-        // Initialize array of Events to display and Adapter to link to the recycler view
-        eventDataList = new ArrayList<>();
-        eventListAdapter = new eventListAdapter(eventDataList);    // not sure what resource is, just chose 0 bc it was used in labs
-        eventListView.setAdapter(eventListAdapter);
-        eventListView.setLayoutManager(new LinearLayoutManager(this));
-
-
-        eventsRef.addSnapshotListener(new EventListener<QuerySnapshot>() {
-            /**
-             * Gets events from the Events collection and adds their relevant attributes to eventDataList to be displayed by the recycler view
-             * @param querySnapshots The value of the event. {@code null} if there was an error.
-             * @param error The error if there was error. {@code null} otherwise.
-             */
-            @Override
-            public void onEvent(@Nullable QuerySnapshot querySnapshots, @Nullable FirebaseFirestoreException error) {
-                if (error != null) {
-                    Log.e("Firestore", error.toString());
-                    return;
-                }
-                if (querySnapshots != null) {
-                    eventDataList.clear();
-                    for (QueryDocumentSnapshot doc: querySnapshots) {
-                        // TODO: get other attributes for an Event item that are displayed by an eventlistitem
-                        String eventName = doc.getString("eventName");
-                        String eventDate = doc.getString("eventDate");
-                        //Log.d("Firestore", String.format("event (%s, %s) fetched", eventName, eventTime));
-                        eventDataList.add(new Event(null, null, null, null, eventName, eventDate,null,  null, null));
-                    }
-                }
-                eventListAdapter.notifyDataSetChanged();
-            }
-        });
+        // TODO: Restore if db fails
 
         // Set listener for "Scan QR code" toolbar button
         qrButton.setOnClickListener(new View.OnClickListener() {
@@ -107,5 +83,38 @@ public class EventListView extends AppCompatActivity {
         });
 
         
+    }
+
+    private void setUpRecyclerView() {
+        // Set up a general query that returns "event" items from the database
+        Query query = eventsRef.orderBy("eventName", Query.Direction.DESCENDING);
+
+        // Put this query into the adapter so it can use it
+        FirestoreRecyclerOptions<Event> options = new FirestoreRecyclerOptions.Builder<Event>()
+                .setQuery(query, Event.class)
+                .build();
+
+        adapter = new EventAdapter(options);
+
+        // Connect the recycler view to it's adapter and layout manager
+        RecyclerView recyclerView = findViewById(R.id.event_recycler_view);
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        recyclerView.setAdapter(adapter);
+        Log.d("Firestore", "Set adapter");
+    }
+
+    /**
+     * Ensure recycler view doesn't update if the app is in the background
+     */
+    @Override
+    protected void onStart() {
+        super.onStart();
+        adapter.startListening();
+    }
+    @Override
+    protected void onStop() {
+        super.onStop();
+        adapter.stopListening();
     }
 }

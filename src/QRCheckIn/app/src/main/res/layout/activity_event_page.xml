@@ -34,7 +34,7 @@
             android:layout_height="wrap_content">
 
             <ImageView
-                android:id="@+id/event_poster"
+                android:id="@+id/image_event_poster"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
@@ -51,21 +51,21 @@
                 app:layout_constraintVertical_chainStyle="packed" />
 
             <TextView
-                android:id="@+id/event_date"
+                android:id="@+id/text_event_date"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
                 android:layout_marginEnd="8dp"
                 android:maxHeight="42dp"
                 android:text="@string/description_event_date"
-                app:layout_constraintEnd_toStartOf="@+id/event_location"
+                app:layout_constraintEnd_toStartOf="@+id/text_event_location"
                 app:layout_constraintHorizontal_chainStyle="packed"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/event_poster"
+                app:layout_constraintTop_toBottomOf="@+id/image_event_poster"
                 app:layout_constraintVertical_chainStyle="packed" />
 
             <TextView
-                android:id="@+id/event_location"
+                android:id="@+id/text_event_location"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
@@ -73,8 +73,8 @@
                 android:text="@string/description_event_location"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_chainStyle="packed"
-                app:layout_constraintStart_toEndOf="@+id/event_date"
-                app:layout_constraintTop_toBottomOf="@+id/event_poster"
+                app:layout_constraintStart_toEndOf="@+id/text_event_date"
+                app:layout_constraintTop_toBottomOf="@+id/image_event_poster"
                 app:layout_constraintVertical_chainStyle="packed" />
 
             <TextView
@@ -85,7 +85,7 @@
                 android:text="@string/description_event_description"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/event_date"
+                app:layout_constraintTop_toBottomOf="@+id/text_event_date"
                 app:layout_constraintVertical_chainStyle="packed" />
 
             <ImageView
