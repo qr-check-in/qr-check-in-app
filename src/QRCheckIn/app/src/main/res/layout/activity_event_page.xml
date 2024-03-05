@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/event_name_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:text="@string/header_event_details"
+        android:textColor="@android:color/black"
+        android:textSize="28sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+    </TextView>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toTopOf="@+id/main_app_bar"
+
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/event_name_text"
+        app:layout_constraintVertical_bias="0.0"
+        app:layout_constraintVertical_chainStyle="packed">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:id="@+id/image_event_poster"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:adjustViewBounds="true"
+                android:background="@drawable/rounded_image"
+                android:contentDescription="@string/description_event_poster"
+                android:maxWidth="300dp"
+                android:maxHeight="300dp"
+                android:scaleType="fitCenter"
+                android:src="@drawable/image"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_chainStyle="packed" />
+
+            <TextView
+                android:id="@+id/text_event_date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="8dp"
+                android:maxHeight="42dp"
+                android:text="@string/description_event_date"
+                app:layout_constraintEnd_toStartOf="@+id/text_event_location"
+                app:layout_constraintHorizontal_chainStyle="packed"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/image_event_poster"
+                app:layout_constraintVertical_chainStyle="packed" />
+
+            <TextView
+                android:id="@+id/text_event_location"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="16dp"
+                android:text="@string/description_event_location"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_chainStyle="packed"
+                app:layout_constraintStart_toEndOf="@+id/text_event_date"
+                app:layout_constraintTop_toBottomOf="@+id/image_event_poster"
+                app:layout_constraintVertical_chainStyle="packed" />
+
+            <TextView
+                android:id="@+id/event_description"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="@string/description_event_description"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/text_event_date"
+                app:layout_constraintVertical_chainStyle="packed" />
+
+            <ImageView
+                android:id="@+id/promoQR"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:adjustViewBounds="true"
+                android:maxWidth="100dp"
+                android:maxHeight="100dp"
+                android:scaleType="fitCenter"
+                android:contentDescription="@string/description_promo_qrcode"
+                android:src="@drawable/qr2"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/event_description" />
+
+            <TextView
+                android:id="@+id/promo_qr_description"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="16dp"
+                android:text="@string/description_promo_qrcode"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/promoQR" />
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
+
+    <include
+        android:id="@+id/main_app_bar"
+        layout="@layout/mainappbar"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+</androidx.constraintlayout.widget.ConstraintLayout>
