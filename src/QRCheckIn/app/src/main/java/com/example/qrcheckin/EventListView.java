@@ -2,7 +2,6 @@ package com.example.qrcheckin;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.TextView;
@@ -14,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 
@@ -67,7 +67,20 @@ public class EventListView extends AppCompatActivity {
                 startActivity(event);
             }
         });
-        
+
+        // If an event is clicked, open its event page
+        adapter.setOnItemClickListener(new EventAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(DocumentSnapshot documentSnapshot, int position) {
+                String id = documentSnapshot.getId();
+
+                // Send the document snapshot of the event to the Event Page before opening it
+                Intent intent = new Intent(getApplicationContext(), EventPage.class);
+                intent.putExtra("DOCUMENT_ID", id);
+                startActivity(intent);
+
+            }
+        });
     }
 
     /**
@@ -89,7 +102,6 @@ public class EventListView extends AppCompatActivity {
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(adapter);
-        Log.d("Firestore", "Set adapter");
     }
 
     /**
