@@ -7,7 +7,6 @@ import android.view.View;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -15,14 +14,9 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.Query;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.google.firebase.firestore.QuerySnapshot;
 
-import java.util.ArrayList;
 
 public class EventListView extends AppCompatActivity {
     ImageButton qrButton;
@@ -30,8 +24,6 @@ public class EventListView extends AppCompatActivity {
     ImageButton addEventButton;
     ImageButton profileButton;
     RecyclerView eventListView;
-    ArrayList<Event> eventDataList;
-    eventListAdapter eventListAdapter;
     private EventAdapter adapter;
     FirebaseFirestore db = FirebaseFirestore.getInstance();
     CollectionReference eventsRef = db.collection("events");
@@ -41,13 +33,9 @@ public class EventListView extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_event_list_view);
 
-        // Access the Events collection
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
-        CollectionReference eventsRef = db.collection("events");
-        Log.d("Firestore", "Connected to firestore");
         setUpRecyclerView();
-        Log.d("Firestore", "Set up recycler view");
 
+        // Set up tool bar
         qrButton = findViewById(R.id.qrButton);
         eventButton = findViewById(R.id.calenderButton);
         addEventButton = findViewById(R.id.addCalenderButton);
@@ -61,8 +49,6 @@ public class EventListView extends AppCompatActivity {
         getSupportActionBar().setDisplayShowTitleEnabled(false);
         TextView header = findViewById(R.id.mainHeader);
         header.setText("Ongoing Events");
-
-        // TODO: Restore if db fails
 
         // Set listener for "Scan QR code" toolbar button
         qrButton.setOnClickListener(new View.OnClickListener() {
@@ -81,10 +67,12 @@ public class EventListView extends AppCompatActivity {
                 startActivity(event);
             }
         });
-
         
     }
 
+    /**
+     * Sets up an EventAdapter on the recycler view and sends it the required query
+     */
     private void setUpRecyclerView() {
         // Set up a general query that returns "event" items from the database
         Query query = eventsRef.orderBy("eventName", Query.Direction.DESCENDING);

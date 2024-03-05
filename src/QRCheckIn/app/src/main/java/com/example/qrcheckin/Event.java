@@ -131,7 +131,7 @@ public class Event implements Serializable {
      * @param eventDate String in the format "yyyy-mm-dd"
      */
     public void setEventDate(String eventDate) {
-        this.eventTime = eventDate;
+        this.eventDate = eventDate;
     }
 
     public String getEventTime() {

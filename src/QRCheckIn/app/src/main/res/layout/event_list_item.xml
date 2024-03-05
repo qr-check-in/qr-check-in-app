@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="8dp"
-    app:cardBackgroundColor="@color/Surface"
+    app:cardBackgroundColor="@color/SecondaryContainer"
     app:cardCornerRadius="12dp"
     app:cardElevation="6dp">
 
@@ -18,6 +18,7 @@
             android:id="@+id/image_event_poster"
             android:layout_width="match_parent"
             android:layout_height="200dp"
+            android:background="@drawable/rounded_image"
             android:contentDescription="@string/description_event_poster"
             android:scaleType="centerCrop"
             app:srcCompat="@drawable/fest1" />
