@@ -1,5 +1,6 @@
  package com.example.qrcheckin;
 
+ import android.content.Intent;
  import android.os.Bundle;
  import android.util.Log;
  import android.view.View;
@@ -23,6 +24,7 @@
      private Database db;
      private String inputEventName;
      private String inputEventDate;
+     Event incomingEvent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,8 +51,10 @@
         // Fetch the user's inputs from createNewEventSceen1
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
-            inputEventName = extras.getString("eventName");
-            inputEventDate = extras.getString("eventDate");
+//            inputEventName = extras.getString("eventName");
+//            inputEventDate = extras.getString("eventDate");
+//            Get the incoming event object
+            incomingEvent = (Event) getIntent().getSerializableExtra("newEvent");
             //Log.d("event", String.format("passed event %s %s", inputEventName, inputEventDate));
         }
 
@@ -65,6 +69,7 @@
 
                 // TEMPORARY: initializing event attributes to null to create a new Event
                 // TODO: set all event attributes to user's inputs
+//                Here we could probably just add onto the new Event object
                 QRCode checkInQRCode = null;
                 PromoQRCode promoQRCode = null;
                 EventPoster eventPoster = null;
@@ -72,10 +77,16 @@
                 String eventTime = null;
                 String eventDescription = null;
 
-                Event event = new Event(eventId, checkInQRCode, promoQRCode, eventPoster, inputEventName, inputEventDate, eventTime, eventLocation, eventDescription);
-                Log.d("event", String.format("storing event %s", event.getEventName()));
-                db.storeEvent(event);
+//                Event event = new Event(eventId, checkInQRCode, promoQRCode, eventPoster, inputEventName, inputEventDate, eventTime, eventLocation, eventDescription);
+//                What I've done here is that instead of taking
+                Log.d("event", String.format("storing event %s", incomingEvent.getEventName()));
+                db.storeEvent(incomingEvent);
+
+                Intent activity = new Intent(getApplicationContext(), EventListView.class);
+                startActivity(activity);
             }
+
+
         });
 
         eventButton.setOnClickListener(new View.OnClickListener() {
