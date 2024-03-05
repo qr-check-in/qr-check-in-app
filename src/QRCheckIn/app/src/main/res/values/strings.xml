@@ -4,4 +4,15 @@
     <string name="notification_channel_event_updates_name">Event Updates</string>
     <string name="notification_channel_event_updates_description">Receive important updates sent by an event organizer</string>
     <string name="default_notification_channel_id">default_notification_channel</string>
+    <string name="header_event_details">Event Details</string>
+
+
+    <!-- Default placeholder text-->
+    <string name="description_event_date">Event poster</string>
+    <string name="description_event_description">Event description</string>
+    <string name="description_event_location">Event location</string>
+    <string name="description_event_poster">Event poster</string>
+    <string name="description_promo_qrcode">Share this event by scanning the QR code</string>
+
+
 </resources>
