@@ -74,7 +74,7 @@ public class EventListView extends AppCompatActivity {
             public void onItemClick(DocumentSnapshot documentSnapshot, int position) {
                 String id = documentSnapshot.getId();
 
-                // Send the document snapshot of the event to the Event Page before opening it
+                // Send the document id of the event to the Event Page before opening it
                 Intent intent = new Intent(getApplicationContext(), EventPage.class);
                 intent.putExtra("DOCUMENT_ID", id);
                 startActivity(intent);
