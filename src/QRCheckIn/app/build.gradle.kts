@@ -46,6 +46,7 @@ dependencies {
     implementation("androidx.camera:camera-camera2:1.0.0")
     implementation("androidx.camera:camera-lifecycle:1.0.0")
     implementation("androidx.camera:camera-view:1.0.0-alpha24")
+    implementation ("com.google.api:api-common:2.2.1")
 
     // If you need additional functionality, consider adding extensions
     // implementation "androidx.camera:camera-extensions:1.0.0-alpha24"

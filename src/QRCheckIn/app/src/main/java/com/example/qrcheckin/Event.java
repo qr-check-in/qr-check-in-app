@@ -157,12 +157,4 @@ public class Event implements Serializable {
     public void setEventDescription(String eventDescription) {
         this.eventDescription = eventDescription;}
 
-    public Event(AttendeeList attendee, AttendeeList signups, QRCode checkInQRCode, PromoQRCode promoQRCode, EventPoster poster, ArrayList<Notification> notifications) {
-        Attendee = attendee;
-        this.signups = signups;
-        this.checkInQRCode = checkInQRCode;
-        this.promoQRCode = promoQRCode;
-        this.poster = poster;
-        this.notifications = notifications;
-    }
 }

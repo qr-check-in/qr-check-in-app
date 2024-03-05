@@ -46,7 +46,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="28dp"
-        android:background="@drawable/baseline_circle_24"
         android:contentDescription="@string/profile_picture"
         app:layout_constraintTop_toBottomOf="@+id/linear1"
         app:srcCompat="@drawable/profile"

@@ -12,7 +12,8 @@ import java.util.UUID;
  */
 public class Database {
     private final FirebaseFirestore db = FirebaseFirestore.getInstance();;
-    private final CollectionReference eventsRef = db.collection("Events");;
+    private final CollectionReference eventsRef = db.collection("events");
+    private final CollectionReference profilesRef = db.collection("Profiles");
 
 
     /**
@@ -26,6 +27,13 @@ public class Database {
 
     public void getEvent(UUID eventID){
 
+    }
+
+
+    public void checkExistingProfiles(String token){
+        // in progress
+        //Query query = profilesRef.whereEqualTo("FcmToken", token);
+        //ApiFuture<QuerySnapshot> querySnapshot = query.get();
     }
 
 }
