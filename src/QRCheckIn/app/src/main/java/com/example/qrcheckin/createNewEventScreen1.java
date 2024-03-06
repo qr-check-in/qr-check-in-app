@@ -30,6 +30,7 @@ public class createNewEventScreen1 extends AppCompatActivity implements SelectDa
     EditText eventLocation;
     EditText eventDate;
     EditText eventTime;
+    EditText eventDescription;
     ImageButton selectDateButton;
     ImageButton selectTimeButton;
 
@@ -65,8 +66,10 @@ public class createNewEventScreen1 extends AppCompatActivity implements SelectDa
         eventLocation = findViewById(R.id.eventLocationText);
         eventDate = findViewById(R.id.eventDateText);
         eventTime = findViewById(R.id.eventTimeText);
+        eventDescription = findViewById(R.id.eventDescriptionText);
         selectTimeButton = findViewById(R.id.eventTimePicker);
         selectDateButton = findViewById(R.id.eventDatePicker);
+
 
         // Listener to show a DatePicker fragment when selectDateButton is clicked
         selectDateButton.setOnClickListener(v -> {
@@ -106,7 +109,9 @@ public class createNewEventScreen1 extends AppCompatActivity implements SelectDa
                 inputEventName = eventNameEditText.getText().toString();
                 Intent event = new Intent(getApplicationContext(), createNewEventScreen2.class);
 //                Instead of passing particular values, set the values to a new event and pass the event object, more convienent
-                Event newEvent = new Event(null, null, null, null, inputEventName, inputEventDate, inputEventTime, null, null);
+                Event newEvent = new Event(null, null, null, null,
+                        inputEventName, inputEventDate, inputEventTime,
+                        eventLocation.getText().toString(), eventDescription.getText().toString());
                 // Store Event attributes to pass to createNewEventScreen2
                 // https://stackoverflow.com/questions/2091465/how-do-i-pass-data-between-activities-in-android-application , 2011, user914425
 //                event.putExtra("eventDate", inputEventDate);
