@@ -3,6 +3,8 @@ package com.example.qrcheckin;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -29,7 +31,7 @@ public class updatePictureFragment extends DialogFragment {
     private Uri currentPhotoUri;
     private String currentPhotoPath;
 
-
+    private ImageView profileImageView;
     private final ActivityResultLauncher<String> selectImageLauncher = registerForActivityResult(
             new ActivityResultContracts.GetContent(),
             uri -> {
@@ -93,5 +95,29 @@ public class updatePictureFragment extends DialogFragment {
         currentPhotoPath = image.getAbsolutePath();
         return image;
     }
+    private void setPic() {
+        // Get the dimensions of the View
+        int targetW = profileImageView.getWidth();
+        int targetH = profileImageView.getHeight();
+
+        // Get the dimensions of the bitmap
+        BitmapFactory.Options bmOptions = new BitmapFactory.Options();
+        bmOptions.inJustDecodeBounds = true;
+        BitmapFactory.decodeFile(currentPhotoPath, bmOptions);
+        int photoW = bmOptions.outWidth;
+        int photoH = bmOptions.outHeight;
+
+        // Determine how much to scale down the image
+        int scaleFactor = Math.max(1, Math.min(photoW/targetW, photoH/targetH));
+
+        // Decode the image file into a Bitmap sized to fill the View
+        bmOptions.inJustDecodeBounds = false;
+        bmOptions.inSampleSize = scaleFactor;
+        bmOptions.inPurgeable = true;
+
+        Bitmap bitmap = BitmapFactory.decodeFile(currentPhotoPath, bmOptions);
+        profileImageView.setImageBitmap(bitmap);
+    }
+
 
 }
