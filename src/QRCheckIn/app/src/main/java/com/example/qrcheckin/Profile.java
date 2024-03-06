@@ -1,28 +1,27 @@
 package com.example.qrcheckin;
 
-import java.io.FileNotFoundException;
-
-import android.graphics.Picture;
 import android.location.Location;
+
+import java.io.FileNotFoundException;
 public class Profile {
-    private Attendee attendee;
+    //private Attendee attendee;
     //private ProfilePicture picture;
     private Boolean trackGeolocation;
-    private String firstName;
-    private String lastName;
     private String name;
     private String homepage;
     private String contact;
     private ProfilePicture picture;
     private Location location;
     /**
-     * Constructs a Profile for and Attendee
-     * @param attendee Attendee the Profile is for
+     * Constructs a Profile for an Attendee
      */
-    public Profile(Attendee attendee) {
-        this.attendee = attendee;
+    public Profile(){
+        //this.attendee = attendee;
         // default geolocation sharing permission set to false
         this.trackGeolocation = false;
+
+        // TODO: randomize initial names in some way so that more unique profile pictures are generated.
+        this.name = "user";
 
         // need to initialize firstName and lastName, could be based on FID if we want new users to have a variety of profile pics
         // generate picture based on name
@@ -83,17 +82,17 @@ public class Profile {
      * Returns the Attendee that the Profile belongs to
      * @return Attendee that the Profile belongs to
      */
-    public Attendee getAttendee() {
-        return attendee;
-    }
+//    public Attendee getAttendee() {
+//        return attendee;
+//    }
 
     /**
      * Sets the Attendee that the Profile belongs to
      * @param attendee Attendee that the Profile belongs to
      */
-    public void setAttendee(Attendee attendee) {
-        this.attendee = attendee;
-    }
+//    public void setAttendee(Attendee attendee) {
+ //       this.attendee = attendee;
+ //   }
 
     /**
      * Returns the ProfilePicture of the Profile
@@ -141,38 +140,6 @@ public class Profile {
      */
     public void setTrackGeolocation(Boolean trackGeolocation) {
         this.trackGeolocation = trackGeolocation;
-    }
-
-    /**
-     * Returns the Profile's first name
-     * @return String of the Profile's first name
-     */
-    public String getFirstName() {
-        return firstName;
-    }
-
-    /**
-     * Sets the Profile's first name
-     * @param firstName String of the Profile's first name
-     */
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-
-    /**
-     * Returns the Profile's last name
-     * @return String of the Profile's last name
-     */
-    public String getLastName() {
-        return lastName;
-    }
-
-    /**
-     * Sets the Profile's last name
-     * @param lastName String of the Profile's last name
-     */
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
     }
 
     /**

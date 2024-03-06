@@ -12,34 +12,36 @@ import java.util.concurrent.atomic.AtomicReference;
  */
 // https://stackoverflow.com/questions/19415006/how-to-run-method-once-per-app-start , 2013, Adam S
 public class OpenApp extends Application{
+    private final AtomicReference<String> reference = new AtomicReference<>();
     @Override
     public void onCreate(){
         super.onCreate();
-        // Get the app's FcmToken, call checkExistingProfiles on it
+        // Get the app's FcmToken,
         Database db = new Database();
-        db.checkExistingProfiles(getFcmToken());
-
+        getFcmToken();
+        Log.d("Firestore", String.format("IN OPENAPP token is (%s) ", reference.get()));
+        // Check if an Attendee object associated with this app installation exists
+        db.checkExistingAttendees(reference.get());
 
     }
     /**
      * Retrieves and logs the Firebase Cloud Messaging (FCM) token for this app's installation
-     * @return String of the app's token
      */
-    public String getFcmToken() {
-        final AtomicReference<String> reference = new AtomicReference<>();
+    public void getFcmToken() {
+        // TEMPORARY
+        reference.set("token-789");
+        //
+
         FirebaseMessaging.getInstance().getToken()
                 .addOnCompleteListener(task -> {
                     if (!task.isSuccessful()) {
                         Log.w(Utils.TAG, "Fetching FCM registration token failed", task.getException());
                         return;
                     }
-
                     // Get and log the new FCM registration token
                     String token = task.getResult();
                     reference.set(token);
                     Log.d(Utils.TAG, token);
-
                 });
-        return reference.get();
     }
 }

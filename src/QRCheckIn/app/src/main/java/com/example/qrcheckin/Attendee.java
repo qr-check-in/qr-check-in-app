@@ -2,7 +2,6 @@ package com.example.qrcheckin;
 
 import android.location.Location;
 
-import java.io.FileNotFoundException;
 import java.util.ArrayList;
 
 /**
@@ -14,15 +13,14 @@ public class Attendee {
     private Profile profile;
     private Location location;
 
-    public Attendee() throws FileNotFoundException {
+    public Attendee(){
         this.attendedEvents = new ArrayList<Event>();
         this.signupEvents = new ArrayList<Event>();
-        this.profile = new Profile(this);
+        this.profile = new Profile();
     }
 
     /**
      * Returns a list of Events the Attendee has checked-in to
-     * 
      * @return EventList of attended Events
      */
     public ArrayList<Event> getAttendedEvents() {
