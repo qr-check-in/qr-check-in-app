@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.TimePicker;
@@ -39,6 +40,8 @@ public class createNewEventScreen1 extends AppCompatActivity implements SelectDa
     EditText eventDescription;
     ImageButton selectDateButton;
     ImageButton selectTimeButton;
+    ImageView poster;
+    TextView posterTempText;
 
 
     private String inputEventName;
@@ -68,6 +71,8 @@ public class createNewEventScreen1 extends AppCompatActivity implements SelectDa
 
         // Initialize Event textbox and widgets
         uploadPoster = findViewById(R.id.uploadPosterButton);
+        poster = findViewById(R.id.posterImageView);
+        posterTempText = findViewById(R.id.posterTempText);
         checkInSwitch = findViewById(R.id.checkInSwitch);
         eventNameEditText = findViewById(R.id.eventNameText);
         eventLocation = findViewById(R.id.eventLocationText);
@@ -77,6 +82,8 @@ public class createNewEventScreen1 extends AppCompatActivity implements SelectDa
         selectTimeButton = findViewById(R.id.eventTimePicker);
         selectDateButton = findViewById(R.id.eventDatePicker);
 
+
+        poster.setVisibility(View.GONE);
 
         // Listener to show a DatePicker fragment when selectDateButton is clicked
         selectDateButton.setOnClickListener(v -> {
@@ -191,6 +198,13 @@ public class createNewEventScreen1 extends AppCompatActivity implements SelectDa
                 // Callback is invoked after the user selects a media item or closes the
                 // photo picker.
                 if (uri != null) {
+                    // Load the selected image into the ImageView using Glide
+                    // openai, 2024, chatgpt, how to display the image
+                    Glide.with(this)
+                            .load(uri)
+                            .into(poster);
+                    poster.setVisibility(View.VISIBLE);
+                    posterTempText.setVisibility(View.GONE);
                     Log.d("PhotoPicker", "Selected URI: " + uri);
                 } else {
                     Log.d("PhotoPicker", "No media selected");
