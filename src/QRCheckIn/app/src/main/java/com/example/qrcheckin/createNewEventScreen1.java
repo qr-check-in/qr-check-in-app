@@ -86,6 +86,7 @@ public class createNewEventScreen1 extends AppCompatActivity implements SelectDa
             new TimePickerFragment().show(getSupportFragmentManager(), "timePicker");
         });
 
+        // Listener to go to event list page
         eventButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -94,6 +95,7 @@ public class createNewEventScreen1 extends AppCompatActivity implements SelectDa
             }
         });
 
+        // Listener to go to scanQR page
         qrButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -102,6 +104,8 @@ public class createNewEventScreen1 extends AppCompatActivity implements SelectDa
             }
         });
 
+        // Listener to add/upload a poster from gallery
+        // https://developer.android.com/jetpack/androidx/releases/activity#1.7.0, 2024, how to select a picture from gallery
         uploadPoster.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -174,6 +178,7 @@ public class createNewEventScreen1 extends AppCompatActivity implements SelectDa
         eventTime.setText(inputEventTime);
     }
 
+    // https://developer.android.com/jetpack/androidx/releases/activity#1.7.0, 2024, how to select a picture from gallery
     // Registers a photo picker activity launcher in single-select mode.
     ActivityResultLauncher<PickVisualMediaRequest> pickMedia =
             registerForActivityResult(new ActivityResultContracts.PickVisualMedia(), uri -> {
