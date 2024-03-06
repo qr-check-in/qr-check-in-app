@@ -285,6 +285,7 @@
         android:drawableEnd="@drawable/arrowresized"
         android:drawableTint="@color/White"
         android:text="Next"
+        app:layout_constraintTop_toBottomOf="@+id/eventDescription"
         app:layout_constraintBottom_toTopOf="@+id/mainbar"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.95"
