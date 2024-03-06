@@ -16,6 +16,8 @@ import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
 
 public class EventListView extends AppCompatActivity {
@@ -102,6 +104,29 @@ public class EventListView extends AppCompatActivity {
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(adapter);
+
+        eventsRef.get().addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                QuerySnapshot querySnapshot = task.getResult();
+                if (querySnapshot != null) {
+                    for (QueryDocumentSnapshot document : querySnapshot) {
+                        // Access each document's data and print it
+                        String eventName = document.getString("eventName");
+                        String eventDescription = document.getString("eventDescription");
+                        // Access other fields as needed
+
+                        // Print the data
+                        System.out.println("Event Name: " + eventName);
+                        System.out.println("Event Description: " + eventDescription);
+                        // Print other fields as needed
+                    }
+                } else {
+                    System.out.println("No documents found in the collection.");
+                }
+            } else {
+                System.out.println("Failed to fetch documents: " + task.getException());
+            }
+        });
     }
 
     /**

@@ -2,6 +2,7 @@ package com.example.qrcheckin;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -10,10 +11,14 @@ import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.PickVisualMediaRequest;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import com.google.android.material.textfield.TextInputEditText;
+
 
 public class createNewEventScreen1 extends AppCompatActivity implements SelectDateFragment.DatePickerDialogListener, TimePickerFragment.TimePickerDialogListner{
     // Mainbar declarations
@@ -76,7 +81,7 @@ public class createNewEventScreen1 extends AppCompatActivity implements SelectDa
             new SelectDateFragment().show(getSupportFragmentManager(), "Select Date");
         });
 
-        // Lisner to show a TimePicker fragment when selectTimeButton is clicked
+        // Listener to show a TimePicker fragment when selectTimeButton is clicked
         selectTimeButton.setOnClickListener(v -> {
             new TimePickerFragment().show(getSupportFragmentManager(), "timePicker");
         });
@@ -96,6 +101,17 @@ public class createNewEventScreen1 extends AppCompatActivity implements SelectDa
                 startActivity(event);
             }
         });
+
+        uploadPoster.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Launch the photo picker and let the user choose only images.
+                pickMedia.launch(new PickVisualMediaRequest.Builder()
+                        .setMediaType(ActivityResultContracts.PickVisualMedia.ImageOnly.INSTANCE)
+                        .build());
+            }
+        });
+
 
         nextPageButton.setOnClickListener(new View.OnClickListener() {
             /**
@@ -157,4 +173,16 @@ public class createNewEventScreen1 extends AppCompatActivity implements SelectDa
 
         eventTime.setText(inputEventTime);
     }
+
+    // Registers a photo picker activity launcher in single-select mode.
+    ActivityResultLauncher<PickVisualMediaRequest> pickMedia =
+            registerForActivityResult(new ActivityResultContracts.PickVisualMedia(), uri -> {
+                // Callback is invoked after the user selects a media item or closes the
+                // photo picker.
+                if (uri != null) {
+                    Log.d("PhotoPicker", "Selected URI: " + uri);
+                } else {
+                    Log.d("PhotoPicker", "No media selected");
+                }
+            });
 }
