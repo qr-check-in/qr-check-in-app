@@ -15,7 +15,7 @@ import androidx.appcompat.widget.Toolbar;
 
 import com.google.android.material.textfield.TextInputEditText;
 
-public class createNewEventScreen1 extends AppCompatActivity implements SelectDateFragment.DatePickerDialogListener{
+public class createNewEventScreen1 extends AppCompatActivity implements SelectDateFragment.DatePickerDialogListener, TimePickerFragment.TimePickerDialogListner{
     // Mainbar declarations
     ImageButton qrButton;
     ImageButton eventButton;
@@ -36,6 +36,7 @@ public class createNewEventScreen1 extends AppCompatActivity implements SelectDa
 
     private String inputEventName;
     private String inputEventDate;
+    private String inputEventTime;
     private String inputEventLocation;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -105,7 +106,7 @@ public class createNewEventScreen1 extends AppCompatActivity implements SelectDa
                 inputEventName = eventNameEditText.getText().toString();
                 Intent event = new Intent(getApplicationContext(), createNewEventScreen2.class);
 //                Instead of passing particular values, set the values to a new event and pass the event object, more convienent
-                Event newEvent = new Event(null, null, null, null, inputEventName, inputEventDate, null, null, null);
+                Event newEvent = new Event(null, null, null, null, inputEventName, inputEventDate, inputEventTime, null, null);
                 // Store Event attributes to pass to createNewEventScreen2
                 // https://stackoverflow.com/questions/2091465/how-do-i-pass-data-between-activities-in-android-application , 2011, user914425
 //                event.putExtra("eventDate", inputEventDate);
@@ -144,5 +145,11 @@ public class createNewEventScreen1 extends AppCompatActivity implements SelectDa
         eventDate.setText(inputEventDate);
     }
 
-    public void buildTime()
+    public void buildTime(int hour, int minute){
+        StringBuilder timeBuilder = new StringBuilder()
+                .append(hour).append(":").append(minute);
+        inputEventTime = timeBuilder.toString();
+
+        eventTime.setText(inputEventTime);
+    }
 }
