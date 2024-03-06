@@ -20,6 +20,15 @@ public class Event implements Serializable {
     private String eventTime;
     private String eventLocation;
     private String eventDescription;
+    private boolean checkInStatus;
+
+    public boolean isCheckInStatus() {
+        return checkInStatus;
+    }
+
+    public void setCheckInStatus(boolean checkInStatus) {
+        this.checkInStatus = checkInStatus;
+    }
 
     /**
      * No argument constructor used by firebase
@@ -40,7 +49,7 @@ public class Event implements Serializable {
      * @param eventLocation the Event's location String
      * @param eventDescription the Event's description String
      */
-    public Event(UUID eventId, QRCode checkInQRCode, PromoQRCode promoQRCode, EventPoster poster, String eventName, String eventDate, String eventTime, String eventLocation, String eventDescription) {
+    public Event(UUID eventId, QRCode checkInQRCode, PromoQRCode promoQRCode, EventPoster poster, String eventName, String eventDate, String eventTime, String eventLocation, String eventDescription, boolean checkInStatus) {
 
         this.eventId = eventId;
         this.checkInQRCode = checkInQRCode;
@@ -51,6 +60,7 @@ public class Event implements Serializable {
         this.eventTime = eventTime;
         this.eventLocation = eventLocation;
         this.eventDescription = eventDescription;
+        this.checkInStatus = checkInStatus;
     }
 
     /**

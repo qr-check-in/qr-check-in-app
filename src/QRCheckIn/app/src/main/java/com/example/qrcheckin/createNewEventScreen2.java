@@ -87,7 +87,7 @@
                 inputEventName = incomingEvent.getEventName();
                 inputEventDate = incomingEvent.getEventDate();
 
-                Event newEvent = new Event(eventId, checkInQRCode, promoQRCode, eventPoster, incomingEvent.getEventName(), incomingEvent.getEventDate(), eventTime, eventLocation, eventDescription);
+                Event newEvent = new Event(eventId, checkInQRCode, promoQRCode, eventPoster, incomingEvent.getEventName(), incomingEvent.getEventDate(), eventTime, eventLocation, eventDescription, incomingEvent.isCheckInStatus());
                 Log.d("event", String.format("storing event %s", newEvent.getEventName()));
                 db.storeEvent(newEvent);
 
