@@ -13,6 +13,9 @@ public class Attendee {
     private Profile profile;
     private Location location;
 
+    /**
+     * Constructs a new Attendee
+     */
     public Attendee(){
         this.attendedEvents = new ArrayList<Event>();
         this.signupEvents = new ArrayList<Event>();

@@ -36,7 +36,8 @@ public class Database {
 
     /**
      * Searches Attendee collection for an Attendee whose docID matches fcmToken
-     * Calls storeAttendee to create a new attendee object if none exist
+     * Does nothing if attendee document is found
+     * Calls storeAttendee to create a new attendee object if attendee document does not exist
      * @param fcmToken the fcmToken of the Attendee we're searching for
      */
     public void checkExistingAttendees(String fcmToken){
@@ -64,15 +65,16 @@ public class Database {
      */
     public void storeAttendee(String fcmToken){
         Attendee attendee = new Attendee();
+        // The docID of the attendee object is the associated user's fcmToken string
         attendeesRef.document(fcmToken).set(attendee);
         Log.d("Firestore", String.format("Attendee for token (%s) stored", fcmToken));
     }
 
     /**
      * Retrieves and logs the Firebase Cloud Messaging (FCM) token for this app's installation
+     * @param editor a SharedPreferences.Editor from the calling activity to save the token string value
      */
-    public void getFcmToken(SharedPreferences prefs, SharedPreferences.Editor editor) {
-        //String testToken = prefs.getString("token", "");
+    public void getFcmToken(SharedPreferences.Editor editor) {
         FirebaseMessaging.getInstance().getToken()
                 .addOnCompleteListener(task -> {
                     if (!task.isSuccessful()) {
@@ -82,6 +84,7 @@ public class Database {
                     // Get and log the new FCM registration token
                     String token = task.getResult();
                     Log.d(Utils.TAG, token);
+                    // save token string
                     editor.putString("token", token);
                     editor.apply();
                 });

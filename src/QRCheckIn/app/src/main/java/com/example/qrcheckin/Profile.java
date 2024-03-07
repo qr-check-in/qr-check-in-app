@@ -4,27 +4,23 @@ import android.location.Location;
 
 import java.io.FileNotFoundException;
 public class Profile {
-    //private Attendee attendee;
-    //private ProfilePicture picture;
     private Boolean trackGeolocation;
     private String name;
     private String homepage;
     private String contact;
-    private ProfilePicture picture;
+    private ProfilePicture profilePicture;
     private Location location;
     /**
      * Constructs a Profile for an Attendee
      */
     public Profile(){
-        //this.attendee = attendee;
         // default geolocation sharing permission set to false
         this.trackGeolocation = false;
 
         // TODO: randomize initial names in some way so that more unique profile pictures are generated.
-        this.name = "user";
+        this.name = "new user";
 
-        // need to initialize firstName and lastName, could be based on FID if we want new users to have a variety of profile pics
-        // generate picture based on name
+        // TODO: generate a profile picture based on the profile name
         //generatePicture(this.firstName, this.lastName);
     }
 
@@ -78,28 +74,13 @@ public class Profile {
 
     }
     */
-    /**
-     * Returns the Attendee that the Profile belongs to
-     * @return Attendee that the Profile belongs to
-     */
-//    public Attendee getAttendee() {
-//        return attendee;
-//    }
-
-    /**
-     * Sets the Attendee that the Profile belongs to
-     * @param attendee Attendee that the Profile belongs to
-     */
-//    public void setAttendee(Attendee attendee) {
- //       this.attendee = attendee;
- //   }
 
     /**
      * Returns the ProfilePicture of the Profile
      * @return the ProfilePicture of the Profile
      */
     public ProfilePicture getPicture() {
-        return picture;
+        return profilePicture;
     }
 
     /**
@@ -107,7 +88,7 @@ public class Profile {
      * @param picture the ProfilePicture of the Profile
      */
     public void setPicture(ProfilePicture picture) {
-        this.picture = picture;
+        this.profilePicture = picture;
     }
 
     /**
@@ -174,7 +155,19 @@ public class Profile {
         this.contact = contact;
     }
 
+    /**
+     * Returns the Profile's name
+     * @return name String of the Profile's name
+     */
     public String getName() {
         return name;
+    }
+
+    /**
+     * Sets the Profile's name
+     * @param name String the of the Profile's name
+     */
+    public void setName(String name){
+        this.name = name;
     }
 }
