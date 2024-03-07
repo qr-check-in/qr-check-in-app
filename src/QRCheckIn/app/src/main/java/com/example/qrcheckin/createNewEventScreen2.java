@@ -15,6 +15,7 @@
  import java.util.UUID;
 
  public class createNewEventScreen2 extends AppCompatActivity {
+     // Main Bar buttons
      ImageButton qrButton;
      ImageButton eventButton;
      ImageButton addEventButton;
