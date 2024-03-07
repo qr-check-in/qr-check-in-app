@@ -24,7 +24,4 @@
     <string name="homepage">Homepage</string>
     <string name="profile_picture">Profile Picture</string>
 
-    <string name="profile_name_text">Name\t\t\t\t%1$s</string>
-    <string name="profile_contact_text">Contact\t\t\t\t%1$s</string>
-    <string name="profile_homepage_text">Homepage\t\t\t\t%1$s</string>
 </resources>

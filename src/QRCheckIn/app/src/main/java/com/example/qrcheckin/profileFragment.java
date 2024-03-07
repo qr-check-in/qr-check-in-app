@@ -45,9 +45,9 @@ public class profileFragment extends AppCompatActivity {
         profileButton.setPressed(true);
         updatePicture = findViewById(R.id.btnUpdatePicture);
 
-        tvName = findViewById(R.id.name);
-        tvContact = findViewById(R.id.contact);
-        tvHomepage = findViewById(R.id.homepage);
+        tvName = findViewById(R.id.profileName1);
+        tvContact = findViewById(R.id.contact1);
+        tvHomepage = findViewById(R.id.homepage1);
         switchGeolocation = findViewById(R.id.geoswitch);
 
         // Get the fcmToken of the Attendee
@@ -108,14 +108,10 @@ public class profileFragment extends AppCompatActivity {
                 else{
                     Log.d("Firestore", String.format("Attendee with name (%s) retrieved", attendee.getProfile().getName()));
                     Profile profile = attendee.getProfile();
-                    // Construct strings, should probably restructure textviews so the field values are right-aligned
-                    String nameText = getResources().getString(R.string.profile_name_text, profile.getName());
-                    String contactText = getResources().getString(R.string.profile_contact_text, profile.getContact());
-                    String homepageText = getResources().getString(R.string.profile_homepage_text, profile.getHomepage());
                     // set fields for profile
-                    tvName.setText(nameText);
-                    tvContact.setText(contactText);
-                    tvHomepage.setText(homepageText);
+                    tvName.setText(profile.getName());
+                    tvContact.setText(profile.getContact());
+                    tvHomepage.setText(profile.getHomepage());
                     switchGeolocation.setChecked(profile.getTrackGeolocation());
                 }
             }
