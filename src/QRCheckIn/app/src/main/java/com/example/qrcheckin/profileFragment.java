@@ -2,21 +2,13 @@ package com.example.qrcheckin;
 
 import static com.example.qrcheckin.R.layout.show_profile;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.lifecycle.ViewModelProvider;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 
-import com.squareup.picasso.Picasso;
-
-import java.io.File;
+import androidx.appcompat.app.AppCompatActivity;
 
 public class profileFragment extends AppCompatActivity {
     ImageButton qrButton;
@@ -25,27 +17,10 @@ public class profileFragment extends AppCompatActivity {
     ImageButton profileButton;
     Button updatePicture;
     Button removePicture;
-    private ImageView profileImageView;
-    private SharedViewModel sharedViewModel;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(show_profile);
-
-        sharedViewModel = new ViewModelProvider(this).get(SharedViewModel.class);
-        sharedViewModel.getSelectedImageUri().observe(this, new androidx.lifecycle.Observer<Uri>() {
-            @Override
-            public void onChanged(Uri uri) {
-                profileImageView.setImageURI(uri);
-            }
-        });
-        profileImageView = findViewById(R.id.profile_image);
-
-        sharedViewModel.getSelectedImageUri().observe(this, uri -> {
-            // Use Picasso, Glide, or similar library to load the image efficiently
-            Picasso.get().load(uri).into(profileImageView);
-        });
-
         qrButton = findViewById(R.id.qrButton);
         eventButton = findViewById(R.id.calenderButton);
         addEventButton = findViewById(R.id.addCalenderButton);
@@ -78,5 +53,4 @@ public class profileFragment extends AppCompatActivity {
             new updatePictureFragment().show(getSupportFragmentManager(), "Update Picture");
         });
     }
-
 }
