@@ -17,6 +17,7 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 public class EventPage extends AppCompatActivity {
+    // Mainbar
     ImageButton qrButton;
     ImageButton eventButton;
     ImageButton addEventButton;
@@ -27,7 +28,7 @@ public class EventPage extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_event_page);
 
-        // Set and display the toolbar
+        // Set and display the main bar
         qrButton = findViewById(R.id.qrButton);
         eventButton = findViewById(R.id.calenderButton);
         addEventButton = findViewById(R.id.addCalenderButton);
