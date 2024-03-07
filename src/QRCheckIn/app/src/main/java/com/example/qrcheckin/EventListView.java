@@ -107,5 +107,4 @@ public class EventListView extends AppCompatActivity {
         recyclerView.setAdapter(eventAdapter);
     }
 
-
 }
