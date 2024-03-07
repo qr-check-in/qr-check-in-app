@@ -5,7 +5,7 @@ public abstract class ProfilePicture extends Image {
     private Profile profile; // Reference to the associated profile
 
     public ProfilePicture(File imageFile, Attendee uploader) {
-        super();
+        super(imageFile, uploader);
         this.profile = profile;
     }
 
