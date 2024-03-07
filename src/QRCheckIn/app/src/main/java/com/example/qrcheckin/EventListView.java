@@ -25,8 +25,8 @@ public class EventListView extends AppCompatActivity {
     ImageButton eventButton;
     ImageButton addEventButton;
     ImageButton profileButton;
-    RecyclerView eventListView;
-    private EventAdapter adapter;
+    RecyclerView recyclerView;
+    private EventAdapter eventAdapter;
     FirebaseFirestore db = FirebaseFirestore.getInstance();
     CollectionReference eventsRef = db.collection("events");
 
@@ -42,7 +42,7 @@ public class EventListView extends AppCompatActivity {
         eventButton = findViewById(R.id.calenderButton);
         addEventButton = findViewById(R.id.addCalenderButton);
         profileButton = findViewById(R.id.profileButton);
-        eventListView = findViewById(R.id.event_recycler_view);
+        recyclerView = findViewById(R.id.event_recycler_view);
 
         eventButton.setPressed(true);       // https://stackoverflow.com/questions/9318331/keep-android-button-selected-state, 2024, Prompt: how  to keep a button selected
 
@@ -71,7 +71,7 @@ public class EventListView extends AppCompatActivity {
         });
 
         // If an event is clicked, open its event page
-        adapter.setOnItemClickListener(new EventAdapter.OnItemClickListener() {
+        eventAdapter.setOnItemClickListener(new EventAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(DocumentSnapshot documentSnapshot, int position) {
                 String id = documentSnapshot.getId();
@@ -95,51 +95,16 @@ public class EventListView extends AppCompatActivity {
         // Put this query into the adapter so it can use it
         FirestoreRecyclerOptions<Event> options = new FirestoreRecyclerOptions.Builder<Event>()
                 .setQuery(query, Event.class)
+                .setLifecycleOwner(this)
                 .build();
 
-        adapter = new EventAdapter(options);
+        eventAdapter = new EventAdapter(options);
 
         // Connect the recycler view to it's adapter and layout manager
-        RecyclerView recyclerView = findViewById(R.id.event_recycler_view);
-        recyclerView.setHasFixedSize(true);
+        recyclerView = findViewById(R.id.event_recycler_view);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        recyclerView.setAdapter(adapter);
-
-        eventsRef.get().addOnCompleteListener(task -> {
-            if (task.isSuccessful()) {
-                QuerySnapshot querySnapshot = task.getResult();
-                if (querySnapshot != null) {
-                    for (QueryDocumentSnapshot document : querySnapshot) {
-                        // Access each document's data and print it
-                        String eventName = document.getString("eventName");
-                        String eventDescription = document.getString("eventDescription");
-                        // Access other fields as needed
-
-                        // Print the data
-                        System.out.println("Event Name: " + eventName);
-                        System.out.println("Event Description: " + eventDescription);
-                        // Print other fields as needed
-                    }
-                } else {
-                    System.out.println("No documents found in the collection.");
-                }
-            } else {
-                System.out.println("Failed to fetch documents: " + task.getException());
-            }
-        });
+        recyclerView.setAdapter(eventAdapter);
     }
 
-    /**
-     * Ensure recycler view doesn't update if the app is in the background
-     */
-    @Override
-    protected void onStart() {
-        super.onStart();
-        adapter.startListening();
-    }
-    @Override
-    protected void onStop() {
-        super.onStop();
-        adapter.stopListening();
-    }
+
 }
