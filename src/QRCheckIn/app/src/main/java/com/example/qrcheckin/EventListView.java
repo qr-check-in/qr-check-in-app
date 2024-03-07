@@ -101,7 +101,8 @@ public class EventListView extends AppCompatActivity {
         eventAdapter = new EventAdapter(options);
 
         // Connect the recycler view to it's adapter and layout manager
-        recyclerView = findViewById(R.id.event_recycler_view);
+        RecyclerView recyclerView = findViewById(R.id.event_recycler_view);
+        recyclerView.setItemAnimator(null);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(eventAdapter);
     }
