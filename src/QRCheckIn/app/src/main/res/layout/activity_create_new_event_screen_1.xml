@@ -225,6 +225,7 @@
                     android:paddingVertical="20dp"
                     android:text="Create a poster to attract attendees">
                 </TextView>
+
                 <ImageView
                     android:id="@+id/posterImageView"
                     android:layout_width="250dp"
