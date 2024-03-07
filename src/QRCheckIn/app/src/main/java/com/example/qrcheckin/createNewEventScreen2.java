@@ -72,7 +72,7 @@
                 String eventTime = null;
                 String eventDescription = null;
 
-                Event event = new Event(eventId, checkInQRCode, promoQRCode, eventPoster, inputEventName, inputEventDate, eventTime, eventLocation, eventDescription);
+                Event event = new Event(checkInQRCode, promoQRCode, eventPoster, inputEventName, inputEventDate, eventTime, eventLocation, eventDescription);
                 Log.d("event", String.format("storing event %s", event.getEventName()));
                 db.storeEvent(event);
             }
