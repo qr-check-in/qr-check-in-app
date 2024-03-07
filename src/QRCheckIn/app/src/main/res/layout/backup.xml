@@ -92,7 +92,7 @@
             android:orientation="horizontal">
 
             <Button
-                android:id="@+id/promoQR"
+                android:id="@+id/image_event_promo_qr"
                 android:layout_width="165dp"
                 android:layout_height="wrap_content"
                 android:backgroundTint="@color/NeonBlue"

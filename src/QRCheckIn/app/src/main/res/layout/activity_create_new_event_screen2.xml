@@ -98,8 +98,8 @@
             android:layout_weight="1">
 
             <Button
-                android:id="@+id/promoQR"
-                android:layout_width="200dp"
+                android:id="@+id/image_event_promo_qr"
+                android:layout_width="185dp"
                 android:layout_height="wrap_content"
                 android:backgroundTint="@color/NeonBlue"
                 android:text="Generate Promotional QRCode" />
