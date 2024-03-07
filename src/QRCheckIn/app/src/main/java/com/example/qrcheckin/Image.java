@@ -6,7 +6,7 @@ public class Image {
     private File imageFile;
     private Attendee uploader;
 
-    public Image(File imageFile, Attendee uploader) {
+    public Image() {
         this.imageFile = imageFile;
         this.uploader = uploader;
     }

@@ -144,6 +144,6 @@ public class Event implements Serializable {
     }
 
     public void setEventDescription(String eventDescription) {
-        this.eventDescription = eventDescription;
-    }
+        this.eventDescription = eventDescription;}
+
 }
