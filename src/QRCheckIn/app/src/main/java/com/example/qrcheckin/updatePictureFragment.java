@@ -59,7 +59,7 @@ public class updatePictureFragment extends DialogFragment {
 
         ImageView cancelImageView = view.findViewById(R.id.cancel);
         TextView chooseGallery = view.findViewById(R.id.gallery);
-        TextView takePhoto = view.findViewById(R.id.textView_takePhoto);
+        //TextView takePhoto = view.findViewById(R.id.textView_takePhoto);
 
         sharedViewModel = new ViewModelProvider(requireActivity()).get(SharedViewModel.class);
 
@@ -67,56 +67,56 @@ public class updatePictureFragment extends DialogFragment {
 
         chooseGallery.setOnClickListener(v -> selectImageLauncher.launch("image/*"));
 
-        takePhoto.setOnClickListener(v -> {
-            try {
-                File photoFile = createImageFile();
-                currentPhotoUri = FileProvider.getUriForFile(getContext(), getContext().getApplicationContext().getPackageName() + ".fileprovider", photoFile);
-                takePictureLauncher.launch(currentPhotoUri);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        });
+//        takePhoto.setOnClickListener(v -> {
+//            try {
+//                File photoFile = createImageFile();
+//                currentPhotoUri = FileProvider.getUriForFile(getContext(), getContext().getApplicationContext().getPackageName() + ".fileprovider", photoFile);
+//                takePictureLauncher.launch(currentPhotoUri);
+//            } catch (IOException e) {
+//                e.printStackTrace();
+//            }
+//        });
+//
+     return builder.setView(view).create();
+//    }
 
-        return builder.setView(view).create();
-    }
-
-    private File createImageFile() throws IOException {
-        // Create an image file name
-        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(new Date());
-        String imageFileName = "JPEG_" + timeStamp + "_";
-        File storageDir = getActivity().getExternalFilesDir(Environment.DIRECTORY_PICTURES);
-        File image = File.createTempFile(
-                imageFileName,  /* prefix */
-                ".jpg",         /* suffix */
-                storageDir      /* directory */
-        );
-
-        // Save a file: path for use with ACTION_VIEW intents
-        currentPhotoPath = image.getAbsolutePath();
-        return image;
-    }
-    private void setPic() {
-        // Get the dimensions of the View
-        int targetW = profileImageView.getWidth();
-        int targetH = profileImageView.getHeight();
-
-        // Get the dimensions of the bitmap
-        BitmapFactory.Options bmOptions = new BitmapFactory.Options();
-        bmOptions.inJustDecodeBounds = true;
-        BitmapFactory.decodeFile(currentPhotoPath, bmOptions);
-        int photoW = bmOptions.outWidth;
-        int photoH = bmOptions.outHeight;
-
-        // Determine how much to scale down the image
-        int scaleFactor = Math.max(1, Math.min(photoW/targetW, photoH/targetH));
-
-        // Decode the image file into a Bitmap sized to fill the View
-        bmOptions.inJustDecodeBounds = false;
-        bmOptions.inSampleSize = scaleFactor;
-        bmOptions.inPurgeable = true;
-
-        Bitmap bitmap = BitmapFactory.decodeFile(currentPhotoPath, bmOptions);
-        profileImageView.setImageBitmap(bitmap);
+//    private File createImageFile() throws IOException {
+//        // Create an image file name
+//        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(new Date());
+//        String imageFileName = "JPEG_" + timeStamp + "_";
+//        File storageDir = getActivity().getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+//        File image = File.createTempFile(
+//                imageFileName,  /* prefix */
+//                ".jpg",         /* suffix */
+//                storageDir      /* directory */
+//        );
+//
+//        // Save a file: path for use with ACTION_VIEW intents
+//        currentPhotoPath = image.getAbsolutePath();
+//        return image;
+//    }
+//    private void setPic() {
+//        // Get the dimensions of the View
+//        int targetW = profileImageView.getWidth();
+//        int targetH = profileImageView.getHeight();
+//
+//        // Get the dimensions of the bitmap
+//        BitmapFactory.Options bmOptions = new BitmapFactory.Options();
+//        bmOptions.inJustDecodeBounds = true;
+//        BitmapFactory.decodeFile(currentPhotoPath, bmOptions);
+//        int photoW = bmOptions.outWidth;
+//        int photoH = bmOptions.outHeight;
+//
+//        // Determine how much to scale down the image
+//        int scaleFactor = Math.max(1, Math.min(photoW/targetW, photoH/targetH));
+//
+//        // Decode the image file into a Bitmap sized to fill the View
+//        bmOptions.inJustDecodeBounds = false;
+//        bmOptions.inSampleSize = scaleFactor;
+//        bmOptions.inPurgeable = true;
+//
+//        Bitmap bitmap = BitmapFactory.decodeFile(currentPhotoPath, bmOptions);
+//        profileImageView.setImageBitmap(bitmap);
     }
 
 
