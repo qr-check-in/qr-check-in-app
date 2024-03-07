@@ -40,7 +40,7 @@ public class EventPage extends AppCompatActivity {
         }
         eventButton.setPressed(true);
 
-        // Find the text views
+        // Find the text views on the event page xml
         TextView tvEventName = findViewById(R.id.text_event_name);
         TextView tvEventDate = findViewById(R.id.text_event_date);
         TextView tvEventLocation = findViewById(R.id.text_event_location);
@@ -48,10 +48,10 @@ public class EventPage extends AppCompatActivity {
         ImageView ivEventPoster = findViewById(R.id.image_event_poster);
         ImageView ivEventPromoQr = findViewById(R.id.image_event_promo_qr);
 
-        // Retrieve the event that was clicked
+        // Connect to firebase
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         CollectionReference eventsRef = db.collection("events");
-
+        // Retrieve the event passed from the previous activity
         String documentId = getIntent().getStringExtra("DOCUMENT_ID");
         DocumentReference docRef = eventsRef.document(documentId);
         docRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
