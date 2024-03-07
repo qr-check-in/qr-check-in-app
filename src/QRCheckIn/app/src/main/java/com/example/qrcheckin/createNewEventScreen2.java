@@ -123,7 +123,7 @@
 
                 Event newEvent = new Event(eventId, checkInQRCode, promoQRCode, eventPoster, incomingEvent.getEventName(), incomingEvent.getEventDate(), eventTime, eventLocation, eventDescription, incomingEvent.isCheckInStatus());
                 Log.d("event", String.format("storing event %s", newEvent.getEventName()));
-//                db.storeEvent(newEvent);
+                db.storeEvent(newEvent);
 
                 Intent activity = new Intent(getApplicationContext(), EventListView.class);
                 startActivity(activity);
