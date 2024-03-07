@@ -157,7 +157,7 @@ public class createNewEventScreen1 extends AppCompatActivity implements SelectDa
         profileButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent event = new Intent(getApplicationContext(), test.class);
+                Intent event = new Intent(getApplicationContext(), profileFragment.class);
                 startActivity(event);
             }
         });
