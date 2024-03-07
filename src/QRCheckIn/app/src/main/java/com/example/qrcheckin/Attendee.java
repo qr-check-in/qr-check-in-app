@@ -2,12 +2,13 @@ package com.example.qrcheckin;
 
 import android.location.Location;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
  * A class that defines an app user as an Attendee
  */
-public class Attendee {
+public class Attendee implements Serializable {
     private ArrayList<Event> attendedEvents;
     private ArrayList<Event> signupEvents;
     private Profile profile;

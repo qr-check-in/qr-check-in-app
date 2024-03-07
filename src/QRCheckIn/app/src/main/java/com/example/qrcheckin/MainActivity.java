@@ -47,7 +47,7 @@ public class MainActivity extends AppCompatActivity{
 
             // Check if an Attendee object associated with this fcm token already exists
             db.checkExistingAttendees(fcmToken);
-            Log.d("Firestore", String.format("TESTTOKEN STRING (%s) stored", fcmToken));
+            Log.d("Firestore", String.format("fcmToken STRING (%s) stored", fcmToken));
             app.hasCheckedFcmToken = true;
         }
 
