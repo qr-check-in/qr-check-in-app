@@ -73,7 +73,7 @@ public class Database {
      */
     public void updateAttendeeGeolocation(String fcmToken, Boolean isShared){
         DocumentReference attendeeRef = db.collection("Attendees").document(fcmToken);
-        attendeeRef.update("trackGeolocation", isShared).addOnSuccessListener(new OnSuccessListener<Void>() {
+        attendeeRef.update("profile.trackGeolocation", isShared).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void unused) {
                 Log.d("Firestore", "docsnapshot updated");
