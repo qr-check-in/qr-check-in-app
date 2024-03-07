@@ -16,8 +16,6 @@ import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.google.firebase.firestore.QuerySnapshot;
 
 
 public class EventListView extends AppCompatActivity {
@@ -67,6 +65,16 @@ public class EventListView extends AppCompatActivity {
             public void onClick(View v) {
                 Intent event = new Intent(getApplicationContext(), createNewEventScreen1.class);
                 startActivity(event);
+            }
+        });
+
+        // Set listenere for "Profile" toolbar button
+        profileButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent event = new Intent(getApplicationContext(), profileFragment.class);
+                startActivity(event);
+
             }
         });
 

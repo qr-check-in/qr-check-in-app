@@ -57,10 +57,12 @@ public class profileFragment extends AppCompatActivity {
         // set the profile attribute fields
         setProfileFields(fcmToken);
 
+        // Listener for the Geolocation tracking switch
         switchGeolocation.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 Database database = new Database();
+                // updates the Attendee's geolocation attribute
                 database.updateAttendeeGeolocation(fcmToken, isChecked);
             }
         });
@@ -92,6 +94,8 @@ public class profileFragment extends AppCompatActivity {
             new updatePictureFragment().show(getSupportFragmentManager(), "Update Picture");
         });
     }
+
+    // Sets the TextViews and Switch to the Attendee's Profile's attributes
     public void setProfileFields(String fcmToken){
         DocumentReference docRef = attendeesRef.document(fcmToken);
         docRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
@@ -102,12 +106,13 @@ public class profileFragment extends AppCompatActivity {
                     Log.e("Firestore", "Attendee doc not found");
                 }
                 else{
-                    // set fields for profile
                     Log.d("Firestore", String.format("Attendee with name (%s) retrieved", attendee.getProfile().getName()));
                     Profile profile = attendee.getProfile();
+                    // Construct strings, should probably restructure textviews so the field values are right-aligned
                     String nameText = getResources().getString(R.string.profile_name_text, profile.getName());
                     String contactText = getResources().getString(R.string.profile_contact_text, profile.getContact());
                     String homepageText = getResources().getString(R.string.profile_homepage_text, profile.getHomepage());
+                    // set fields for profile
                     tvName.setText(nameText);
                     tvContact.setText(contactText);
                     tvHomepage.setText(homepageText);
