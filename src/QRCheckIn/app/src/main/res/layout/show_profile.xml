@@ -30,7 +30,7 @@
             android:textColor="@color/Black"
             android:textSize="50sp" />
         <ImageView
-            android:id="@+id/imageView2"
+            android:id="@+id/edit_profile"
             android:layout_marginStart="75dp"
             android:layout_width="match_parent"
             android:layout_marginTop="10dp"
@@ -41,71 +41,63 @@
 
     </LinearLayout>
 
-    <ImageView
-        android:id="@+id/imageView6"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="28dp"
-        android:contentDescription="@string/profile_picture"
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/profile_image"
+        android:layout_width="130dp"
+        android:layout_height="130dp"
         app:layout_constraintTop_toBottomOf="@+id/linear1"
-        app:srcCompat="@drawable/profile"
-        tools:ignore="MissingConstraints"
-        tools:layout_editor_absoluteX="16dp" />
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginStart="15dp"
+        android:layout_marginTop="50dp"
+        android:src="@drawable/profile"
+        app:civ_border_color="@color/DarkGray"
+        app:civ_border_width="4dp"
+         />
 
     <TextView
         android:id="@+id/profileName"
         android:layout_width="100dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="108dp"
+        android:layout_marginTop="80dp"
         android:textAppearance="@style/TextAppearance.AppCompat.Large"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.726"
+        app:layout_constraintHorizontal_bias="0.803"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/linear1" />
-
-    <Button
-        android:id="@+id/btnUpdatePicture"
-        android:layout_width="164dp"
-        android:layout_height="41dp"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="36dp"
-        android:backgroundTint="#67A4EA"
-        android:text="Update Picture"
-        app:layout_constraintHorizontal_chainStyle="spread_inside"
-        app:layout_constraintTop_toBottomOf="@id/imageView6"
-        tools:ignore="MissingConstraints"
-        tools:layout_editor_absoluteX="32dp" />
 
     <Button
         android:id="@+id/btnRemovePicture"
         android:layout_width="164dp"
         android:layout_height="41dp"
-        android:layout_marginTop="124dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="40dp"
         android:backgroundTint="#67A4EA"
         android:text="Remove Picture"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.392"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toEndOf="@id/btnUpdatePicture"
-        app:layout_constraintTop_toBottomOf="@id/profileName" />
+        app:layout_constraintTop_toBottomOf="@id/profile_image" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/userInfoLayout"
         android:layout_width="350dp"
-        android:layout_height="250dp"
+        android:layout_height="270dp"
+        android:layout_marginTop="56dp"
         android:background="#B9B8B8"
         android:orientation="horizontal"
-        android:layout_marginTop="50dp"
-        app:layout_constraintTop_toBottomOf="@id/btnUpdatePicture"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.459"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
+        app:layout_constraintTop_toBottomOf="@id/btnUpdatePicture">
 
         <TextView
             android:id="@+id/user_info"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="sans-serif-black"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginStart="15dp"
             android:padding="5dp"
-            app:layout_constraintTop_toTopOf="@+id/linear1"
             android:text="@string/user_info"
             android:textColor="@color/Black"
             android:textSize="25dp"
@@ -118,6 +110,8 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="30dp"
             android:text="Name"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginStart="20dp"
             app:layout_constraintTop_toBottomOf="@+id/user_info"
             tools:layout_editor_absoluteX="25dp" />
 
@@ -137,6 +131,8 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
             android:text="Contact"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginStart="20dp"
             app:layout_constraintTop_toBottomOf="@+id/name"
             tools:layout_editor_absoluteX="25dp" />
 
@@ -151,14 +147,16 @@
             app:layout_constraintTop_toBottomOf="@+id/profileName1" />
 
         <TextView
+            android:id="@+id/geolocation"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/geolocation"
             android:layout_marginTop="20dp"
             android:text="Geolocation Track"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginStart="20dp"
             app:layout_constraintTop_toBottomOf="@+id/contact"
-            tools:layout_editor_absoluteX="25dp"
-            tools:ignore="MissingConstraints" />
+            tools:ignore="MissingConstraints"
+            tools:layout_editor_absoluteX="25dp" />
 
         <Switch
             android:id="@+id/geoswitch"
@@ -169,15 +167,18 @@
             app:layout_constraintLeft_toRightOf="@+id/geolocation"
             app:layout_constraintTop_toBottomOf="@+id/contact1"
             tools:ignore="UseSwitchCompatOrMaterialXml" />
+
         <TextView
             android:id="@+id/homepage"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
             android:text="@string/homepage"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginStart="20dp"
             app:layout_constraintTop_toBottomOf="@+id/geolocation"
-            tools:layout_editor_absoluteX="25dp"
-            tools:ignore="MissingConstraints" />
+            tools:ignore="MissingConstraints"
+            tools:layout_editor_absoluteX="25dp" />
 
         <TextView
             android:id="@+id/homepage1"
@@ -190,6 +191,7 @@
             app:layout_constraintTop_toBottomOf="@+id/geoswitch" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
+
     <include
         layout="@layout/mainappbar"
         android:layout_width="match_parent"
@@ -201,6 +203,18 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="1.0" />
 
+    <Button
+        android:id="@+id/btnUpdatePicture"
+        android:layout_width="164dp"
+        android:layout_height="41dp"
+        android:layout_marginTop="40dp"
+        android:backgroundTint="#67A4EA"
+        android:text="Update Picture"
+        android:layout_marginStart="20dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/profile_image"
+        tools:ignore="MissingConstraints"
+        tools:layout_editor_absoluteX="28dp" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
