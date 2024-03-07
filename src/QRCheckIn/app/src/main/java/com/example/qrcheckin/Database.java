@@ -1,9 +1,14 @@
 package com.example.qrcheckin;
 
+import android.content.SharedPreferences;
 import android.util.Log;
 
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.messaging.FirebaseMessaging;
 
 import java.util.UUID;
 
@@ -12,7 +17,8 @@ import java.util.UUID;
  */
 public class Database {
     private final FirebaseFirestore db = FirebaseFirestore.getInstance();;
-    private final CollectionReference eventsRef = db.collection("Events");;
+    private final CollectionReference eventsRef = db.collection("events");
+    private final CollectionReference attendeesRef = db.collection("Attendees");
 
 
     /**
@@ -28,4 +34,59 @@ public class Database {
 
     }
 
+    /**
+     * Searches Attendee collection for an Attendee whose docID matches fcmToken
+     * Does nothing if attendee document is found
+     * Calls storeAttendee to create a new attendee object if attendee document does not exist
+     * @param fcmToken the fcmToken of the Attendee we're searching for
+     */
+    public void checkExistingAttendees(String fcmToken){
+        DocumentReference docRef = attendeesRef.document(fcmToken);
+        docRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                Attendee attendee = documentSnapshot.toObject(Attendee.class);
+                if(attendee == null){
+                    // No such Attendee already exists
+                    storeAttendee(fcmToken);
+                }
+                else{
+                    Log.d("Firestore", "attendee already exists");
+                }
+            }
+        });
+
+
+    }
+
+    /**
+     * Creates a new Attendee object and stores it to the Attendee collection
+     * @param fcmToken the fcmToken of the user we're creating an Attendee object for
+     */
+    public void storeAttendee(String fcmToken){
+        Attendee attendee = new Attendee();
+        // The docID of the attendee object is the associated user's fcmToken string
+        attendeesRef.document(fcmToken).set(attendee);
+        Log.d("Firestore", String.format("Attendee for token (%s) stored", fcmToken));
+    }
+
+    /**
+     * Retrieves and logs the Firebase Cloud Messaging (FCM) token for this app's installation
+     * @param editor a SharedPreferences.Editor from the calling activity to save the token string value
+     */
+    public void getFcmToken(SharedPreferences.Editor editor) {
+        FirebaseMessaging.getInstance().getToken()
+                .addOnCompleteListener(task -> {
+                    if (!task.isSuccessful()) {
+                        Log.w(Utils.TAG, "Fetching FCM registration token failed", task.getException());
+                        return;
+                    }
+                    // Get and log the new FCM registration token
+                    String token = task.getResult();
+                    Log.d(Utils.TAG, token);
+                    // save token string
+                    editor.putString("token", token);
+                    editor.apply();
+                });
+    }
 }
