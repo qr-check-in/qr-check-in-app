@@ -2,6 +2,9 @@ package com.example.qrcheckin;
 
 import java.util.ArrayList;
 
+/**
+ * defines a list that holds event objects
+ */
 public class EventList {
     private ArrayList<Event> events;
 
