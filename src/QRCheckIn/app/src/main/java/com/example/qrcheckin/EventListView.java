@@ -23,6 +23,7 @@ public class EventListView extends AppCompatActivity {
     ImageButton eventButton;
     ImageButton addEventButton;
     ImageButton profileButton;
+    RecyclerView recyclerView;
     private EventAdapter eventAdapter;
     FirebaseFirestore db = FirebaseFirestore.getInstance();
     CollectionReference eventsRef = db.collection("events");
@@ -97,7 +98,7 @@ public class EventListView extends AppCompatActivity {
         eventAdapter = new EventAdapter(options);
 
         // Connect the recycler view to it's adapter and layout manager
-        RecyclerView recyclerView = findViewById(R.id.event_recycler_view);
+        recyclerView = findViewById(R.id.event_recycler_view);
         recyclerView.setItemAnimator(null);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(eventAdapter);
