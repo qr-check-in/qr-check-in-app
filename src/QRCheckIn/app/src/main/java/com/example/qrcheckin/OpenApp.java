@@ -7,14 +7,10 @@ import android.app.Application;
  */
 // https://stackoverflow.com/questions/19415006/how-to-run-method-once-per-app-start , 2013, Adam S
 public class OpenApp extends Application{
+    public boolean hasCheckedFcmToken;
     @Override
     public void onCreate(){
         super.onCreate();
-        // Get the app's FcmToken,
-        Database db = new Database();
-
-        // Check if an Attendee object associated with this app installation exists
-        db.getFcmToken();
-
+        hasCheckedFcmToken = false;
     }
 }

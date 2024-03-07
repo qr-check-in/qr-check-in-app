@@ -1,5 +1,6 @@
 package com.example.qrcheckin;
 
+import android.content.SharedPreferences;
 import android.util.Log;
 
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -70,7 +71,8 @@ public class Database {
     /**
      * Retrieves and logs the Firebase Cloud Messaging (FCM) token for this app's installation
      */
-    public void getFcmToken() {
+    public void getFcmToken(SharedPreferences prefs, SharedPreferences.Editor editor) {
+        //String testToken = prefs.getString("token", "");
         FirebaseMessaging.getInstance().getToken()
                 .addOnCompleteListener(task -> {
                     if (!task.isSuccessful()) {
@@ -80,7 +82,8 @@ public class Database {
                     // Get and log the new FCM registration token
                     String token = task.getResult();
                     Log.d(Utils.TAG, token);
-                    checkExistingAttendees(token);
+                    editor.putString("token", token);
+                    editor.apply();
                 });
     }
 }

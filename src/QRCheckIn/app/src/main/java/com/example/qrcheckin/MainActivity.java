@@ -2,7 +2,9 @@ package com.example.qrcheckin;
 
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.TextView;
@@ -16,6 +18,7 @@ public class MainActivity extends AppCompatActivity{
     ImageButton eventButton;
     ImageButton addEventButton;
     ImageButton profileButton;
+    private String fcmToken;
 
 
 
@@ -30,6 +33,23 @@ public class MainActivity extends AppCompatActivity{
         eventButton = findViewById(R.id.calenderButton);
         addEventButton = findViewById(R.id.addCalenderButton);
         profileButton = findViewById(R.id.profileButton);
+
+        OpenApp app = (OpenApp) this.getApplicationContext();
+        if (!app.hasCheckedFcmToken){
+            // Get the app's FcmToken,
+            Database db = new Database();
+
+            SharedPreferences prefs = getSharedPreferences("TOKEN_PREF", MODE_PRIVATE);
+            SharedPreferences.Editor editor = getSharedPreferences("TOKEN_PREF", MODE_PRIVATE).edit();
+
+            // Check if an Attendee object associated with this app installation exists
+            db.getFcmToken(prefs, editor);
+            fcmToken = prefs.getString("token", "missing token");
+            db.checkExistingAttendees(fcmToken);
+            Log.d("Firestore", String.format("TESTTOKEN STRING (%s) stored", fcmToken));
+            app.hasCheckedFcmToken = true;
+        }
+
 
 
 
