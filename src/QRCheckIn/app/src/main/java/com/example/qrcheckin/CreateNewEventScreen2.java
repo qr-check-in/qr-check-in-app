@@ -47,7 +47,7 @@
      private String inputEventDescription;
      private String inputEventLocation;
      private EventPoster inputEventPoster;
-     QRCode checkInQRCode = null;
+     QrCode checkInQRCode = null;
      PromoQRCode promoQRCode = null;
      Event incomingEvent;
 
@@ -204,6 +204,7 @@
              }
 
             checkInQR.setImageBitmap(bitmap);
+             checkInQR.setVisibility(View.VISIBLE);
 
          } catch (WriterException e) {
              e.printStackTrace();

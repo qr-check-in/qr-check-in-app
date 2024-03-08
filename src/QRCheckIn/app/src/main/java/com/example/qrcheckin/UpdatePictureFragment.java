@@ -1,9 +1,12 @@
 package com.example.qrcheckin;
+
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.provider.MediaStore;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
@@ -21,11 +24,27 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
-
+/**
+ * Fragment for updating the profile picture.
+ * Allows to select a new profile picture from the gallery.
+ * If picture selected, updates SharedViewModel with the new image URI,
+ * uploads the image to Firestore under "/ProfilePictures", and updates the user's profile picture.
+ */
 public class UpdatePictureFragment extends DialogFragment {
     private SharedViewModel sharedViewModel;
     private Uri currentPhotoUri;
     private String currentPhotoPath;
+    private String fcmToken;
+    /**
+     * Constructs a new instance of UpdatePictureFragment with the specified FCM Token.
+     * The FCM token is used to identify the user and update their profile picture information in the database.
+     *
+     * @param fcmToken The FCM token associated with the user.
+     */
+    public UpdatePictureFragment(String fcmToken){
+        this.fcmToken = fcmToken;
+    }
+
 
     // Permission request launcher
 
@@ -37,6 +56,13 @@ public class UpdatePictureFragment extends DialogFragment {
                 if (uri != null) {
                     sharedViewModel.setSelectedImageUri(uri);
                     dismiss();
+                    // Creates a ProfilePicture object and calls method to upload the image to firestore
+                    ProfilePicture profilePicture = new ProfilePicture(uri.toString(), null);
+                    profilePicture.uploadImage("/ProfilePictures", uri.toString());
+                    Database database = new Database();
+                    // Updates the profilePicture field
+                    database.updateProfilePicture(fcmToken, uri);
+
                 }
             });
 

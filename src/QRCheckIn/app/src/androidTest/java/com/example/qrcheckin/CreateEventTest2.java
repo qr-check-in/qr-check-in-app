@@ -1,4 +1,4 @@
 package com.example.qrcheckin;
 
-public class QRCode {
+public class CreateEventTest2 {
 }

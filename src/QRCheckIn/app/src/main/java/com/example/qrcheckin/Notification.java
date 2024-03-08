@@ -1,9 +1,19 @@
 package com.example.qrcheckin;
 
-public class Notification {
-    private String message;
+import java.util.ArrayList;
 
-    private AttendeeList recipients;
+/**
+ * Represents a notification message intended for multiple recipients.
+ */
+public class Notification {
+    /**
+     * The notification message.
+     */
+    private String message;
+    /**
+     * The list of recipients for the notification.
+     */
+    private ArrayList<Attendee> recipients;
 
 
 }
