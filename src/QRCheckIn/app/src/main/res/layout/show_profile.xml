@@ -11,9 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="70dp"
         android:id="@+id/linear1"
-        android:background="@color/ChryslerBlue"
-        android:theme="@style/ThemeOverlay.AppCompat.Dark"
-        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+        android:background="#87BFFF"
         android:orientation="horizontal"
         tools:ignore="MissingConstraints">
 <!--        <ImageView-->
@@ -27,7 +25,8 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_marginStart="125dp"
+            android:layout_marginStart="50dp"
+            android:fontFamily="sans-serif-black"
             android:id="@+id/profile1"
             android:text="@string/profile"
             android:layout_gravity="center"
@@ -38,8 +37,7 @@
             android:layout_marginStart="75dp"
             android:layout_width="match_parent"
             android:layout_marginTop="10dp"
-            android:layout_height="45dp"
-            app:tint="@color/White"
+            android:layout_height="50dp"
             app:srcCompat="@drawable/sharp_edit_square_24" />
 
 

@@ -20,7 +20,7 @@ import androidx.appcompat.widget.Toolbar;
 import com.bumptech.glide.Glide;
 
 
-public class createNewEventScreen1 extends AppCompatActivity implements SelectDateFragment.DatePickerDialogListener, TimePickerFragment.TimePickerDialogListner{
+public class CreateNewEventScreen1 extends AppCompatActivity implements SelectDateFragment.DatePickerDialogListener, TimePickerFragment.TimePickerDialogListner{
     // Mainbar declarations
     ImageButton qrButton;
     ImageButton eventButton;
@@ -135,7 +135,7 @@ public class createNewEventScreen1 extends AppCompatActivity implements SelectDa
             public void onClick(View v) {
                 // Get the Event attributes from the input fields
                 inputEventName = eventNameEditText.getText().toString();
-                Intent event = new Intent(getApplicationContext(), createNewEventScreen2.class);
+                Intent event = new Intent(getApplicationContext(), CreateNewEventScreen2.class);
 //                Instead of passing particular values, set the values to a new event and pass the event object, more convienent
                 if (checkInSwitch.isChecked()){
                     isChecked = true;

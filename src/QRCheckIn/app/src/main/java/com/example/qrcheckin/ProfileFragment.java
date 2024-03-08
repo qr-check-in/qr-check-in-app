@@ -124,7 +124,7 @@ public class ProfileFragment extends AppCompatActivity implements EditProfilefra
         addEventButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent event = new Intent(getApplicationContext(), createNewEventScreen1.class);
+                Intent event = new Intent(getApplicationContext(), CreateNewEventScreen1.class);
                 startActivity(event);
             }
         });
