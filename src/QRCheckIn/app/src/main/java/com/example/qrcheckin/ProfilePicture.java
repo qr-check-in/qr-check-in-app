@@ -1,11 +1,13 @@
 package com.example.qrcheckin;
+import android.net.Uri;
+
 import java.io.File;
 
 public abstract class ProfilePicture extends Image {
     private Profile profile; // Reference to the associated profile
 
-    public ProfilePicture(File imageFile, Attendee uploader) {
-        super(imageFile, uploader);
+    public ProfilePicture(Uri imageUri, Attendee uploader) {
+        super(imageUri, uploader);
         this.profile = profile;
     }
 
