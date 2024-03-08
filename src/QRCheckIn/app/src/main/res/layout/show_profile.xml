@@ -3,6 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
+
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".ProfileFragment">
@@ -11,7 +12,7 @@
         android:layout_width="match_parent"
         android:layout_height="70dp"
         android:id="@+id/linear1"
-        android:background="#87BFFF"
+        android:background="@color/ChryslerBlue"
         android:orientation="horizontal"
         tools:ignore="MissingConstraints">
 <!--        <ImageView-->
@@ -25,8 +26,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_marginStart="50dp"
-            android:fontFamily="sans-serif-black"
+            android:layout_marginStart="125dp"
             android:id="@+id/profile1"
             android:text="@string/profile"
             android:layout_gravity="center"
@@ -38,6 +38,7 @@
             android:layout_width="match_parent"
             android:layout_marginTop="10dp"
             android:layout_height="50dp"
+            android:tint="@color/White"
             app:srcCompat="@drawable/sharp_edit_square_24" />
 
 
