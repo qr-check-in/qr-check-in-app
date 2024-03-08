@@ -1,5 +1,6 @@
 package com.example.qrcheckin;
 
+import org.junit.Test;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -34,7 +35,7 @@ public class EventListTest {
     void testAddException(){
         EventList eventList = mockEventList();
 
-        Event event = new Event(null, null, null, null,
+        Event event = new Event(null, null, null,
                 "testEvent3", "2:00", "University of Alberta",
                 "Unit test for event3", false);
 
@@ -43,5 +44,18 @@ public class EventListTest {
         assertThrows(IllegalArgumentException.class,()->{
             eventList.add(event);
         });
+    }
+
+    @Test
+    void testGetEvent(){
+        EventList eventList = mockEventList();
+
+        assertEquals(0, mockEvent().compareTo(eventList.getEvents().get(0)));
+        Event event = new Event(null, null, null,
+                "testEvent4", "3:00", "University of Alberta", "Unit test for event 3", false);
+        eventList.add(event);
+
+        assertEquals(0, event.compareTo(eventList.getEvents().get(0)));
+        assertEquals(0, mockEvent().compareTo(eventList.getEvents().get(1)));
     }
 }
