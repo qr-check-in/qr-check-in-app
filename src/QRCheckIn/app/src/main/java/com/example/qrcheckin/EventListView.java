@@ -17,7 +17,10 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 
-
+/**
+ * An AppCompatActivity that displays a list view of events fetched from Firestore database.
+ * Provides navigation buttons in the toolbar.
+ */
 public class EventListView extends AppCompatActivity {
     ImageButton qrButton;
     ImageButton eventButton;
@@ -27,7 +30,14 @@ public class EventListView extends AppCompatActivity {
     private EventAdapter eventAdapter;
     FirebaseFirestore db = FirebaseFirestore.getInstance();
     CollectionReference eventsRef = db.collection("events");
-
+    /**
+     * Sets up RecyclerView with an adapter & configures the toolbar.
+     * Sets listeners for toolbar buttons to navigate to different parts of the app.
+     *
+     * @param savedInstanceState If the activity is being re-initialized after previously being shut down,
+     *                            contains data it most recently supplied.
+     *                           Otherwise, its null.
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

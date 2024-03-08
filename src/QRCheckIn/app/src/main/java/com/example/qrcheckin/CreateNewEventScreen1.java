@@ -27,7 +27,7 @@ import com.bumptech.glide.Glide;
  * Selecting dates & times through, navigating to other tabs, uploading image from gallery.
  */
 public class CreateNewEventScreen1 extends AppCompatActivity implements SelectDateFragment.DatePickerDialogListener, TimePickerFragment.TimePickerDialogListner{
-    // Mainbar declarations
+    // MainBar declarations
     ImageButton qrButton;
     ImageButton eventButton;
     ImageButton addEventButton;
