@@ -16,18 +16,18 @@
         app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
         android:orientation="horizontal"
         tools:ignore="MissingConstraints">
-        <ImageView
-            android:id="@+id/imageView"
-            android:layout_marginStart="10dp"
-            android:layout_width="50dp"
-            android:layout_height="match_parent"
-            app:srcCompat="@drawable/baseline_arrow_back_24"
-            app:tint="@color/White" />
+<!--        <ImageView-->
+<!--            android:id="@+id/imageView"-->
+<!--            android:layout_marginStart="10dp"-->
+<!--            android:layout_width="50dp"-->
+<!--            android:layout_height="match_parent"-->
+<!--            app:srcCompat="@drawable/baseline_arrow_back_24"-->
+<!--            app:tint="@color/White" />-->
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_marginStart="65dp"
+            android:layout_marginStart="125dp"
             android:id="@+id/profile1"
             android:text="@string/profile"
             android:layout_gravity="center"
