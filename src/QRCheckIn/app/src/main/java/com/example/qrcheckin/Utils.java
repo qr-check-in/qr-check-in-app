@@ -8,6 +8,10 @@ import androidx.core.app.NotificationCompat;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
+/**
+ * Utility class providing constants and utility methods related to FCM.
+ * Contains constants that are used throughout the app for consistency in FCM operations.
+ */
 public class Utils {
     // Tag used to identify the log message sent by MyFirebaseMessagingService
     public static final String TAG = "MyFirebaseMessagingService";

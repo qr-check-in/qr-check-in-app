@@ -1,12 +1,15 @@
 package com.example.qrcheckin;
 
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
 
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -36,20 +39,22 @@ public class Database {
      * Does nothing if attendee document is found
      * Calls storeAttendee to create a new attendee object if attendee document does not exist
      * @param fcmToken the fcmToken of the Attendee we're searching for
+     *
      */
     public void checkExistingAttendees(String fcmToken){
         DocumentReference docRef = attendeesRef.document(fcmToken);
-        docRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+        docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
-            public void onSuccess(DocumentSnapshot documentSnapshot) {
-                Attendee attendee = documentSnapshot.toObject(Attendee.class);
-                if(attendee == null){
-                    // No such Attendee already exists
-                    storeAttendee(fcmToken);
-                }
-                else{
-                    Log.d("Firestore", "attendee already exists");
-
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()){
+                    DocumentSnapshot document = task.getResult();
+                    if (!document.exists()){
+                        // no such document exists
+                        storeAttendee(fcmToken);
+                    }
+                    else{
+                        Log.d("Firestore", "attendee already exists");
+                    }
                 }
             }
         });
@@ -76,7 +81,7 @@ public class Database {
         attendeeRef.update("profile.trackGeolocation", isShared).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void unused) {
-                Log.d("Firestore", "docsnapshot updated");
+                Log.d("Firestore", "docsnapshot boolean updated");
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
@@ -104,5 +109,48 @@ public class Database {
                     editor.putString("token", token);
                     editor.apply();
                 });
+    }
+
+    /**
+     * Updates the profilePicture field in an Attendee's Profile
+     * @param fcmToken String of the Attendee's docID in firebase
+     * @param uri Uri of the ProfilePicture
+     */
+    public void updateProfilePicture(String fcmToken, Uri uri){
+        // Create doc reference for the Attendee
+        DocumentReference attendeeRef = db.collection("Attendees").document(fcmToken);
+        // Update the uriString field
+        attendeeRef.update("profile.profilePicture.uriString", uri.toString()).addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void unused) {
+                Log.d("Firestore", "docsnapshot updated");
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Log.w("Firestore", "error updating doc",e);
+            }
+        });
+    }
+
+    /**
+     * Updates a string field in an Attendee's Profile in firestore
+     * @param fcmToken String of the Attendee's docID in firebase
+     * @param field String of the field to be updated in Profile
+     * @param value String of the new value the field is set to
+     */
+    public void updateProfileString(String fcmToken, String field, String value){
+        DocumentReference attendeeRef = db.collection("Attendees").document(fcmToken);
+        attendeeRef.update("profile."+field, value).addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void unused) {
+                Log.d("Firestore", "docsnapshot string updated");
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Log.w("Firestore", "error updating doc",e);
+            }
+        });
     }
 }
