@@ -16,8 +16,6 @@ import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.google.firebase.firestore.QuerySnapshot;
 
 
 public class EventListView extends AppCompatActivity {
@@ -65,7 +63,7 @@ public class EventListView extends AppCompatActivity {
         addEventButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent event = new Intent(getApplicationContext(), createNewEventScreen1.class);
+                Intent event = new Intent(getApplicationContext(), CreateNewEventScreen1.class);
                 startActivity(event);
             }
         });

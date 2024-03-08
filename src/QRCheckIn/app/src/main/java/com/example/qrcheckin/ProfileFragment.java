@@ -10,7 +10,7 @@ import android.widget.ImageButton;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-public class profileFragment extends AppCompatActivity {
+public class ProfileFragment extends AppCompatActivity {
     ImageButton qrButton;
     ImageButton eventButton;
     ImageButton addEventButton;
@@ -45,12 +45,12 @@ public class profileFragment extends AppCompatActivity {
         addEventButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent event = new Intent(getApplicationContext(), createNewEventScreen1.class);
+                Intent event = new Intent(getApplicationContext(), CreateNewEventScreen1.class);
                 startActivity(event);
             }
         });
         updatePicture.setOnClickListener(v -> {
-            new updatePictureFragment().show(getSupportFragmentManager(), "Update Picture");
+            new UpdatePictureFragment().show(getSupportFragmentManager(), "Update Picture");
         });
     }
 }

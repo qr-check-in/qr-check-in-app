@@ -22,7 +22,7 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-public class updatePictureFragment extends DialogFragment {
+public class UpdatePictureFragment extends DialogFragment {
     private static final int REQUEST_IMAGE_CAPTURE = 1;
     private ImageView imageView;
     private String currentPhotoPath;

@@ -33,15 +33,15 @@
             android:name=".test"
             android:exported="false" />
         <activity
-            android:name=".createNewEventScreen2"
+            android:name=".CreateNewEventScreen2"
             android:exported="false"
-            android:parentActivityName=".createNewEventScreen1" />
+            android:parentActivityName=".CreateNewEventScreen1" />
         <activity
-            android:name=".createNewEventScreen1"
+            android:name=".CreateNewEventScreen1"
             android:exported="false" />
-        <activity android:name=".profileFragment"
+        <activity android:name=".ProfileFragment"
             android:exported="false"/>
-        <activity android:name=".updatePictureFragment"
+        <activity android:name=".UpdatePictureFragment"
             android:exported="false"/>
 
         <activity
