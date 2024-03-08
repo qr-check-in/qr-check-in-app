@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:id="@+id/topNavigation"
+        android:layout_width="match_parent"
+        android:layout_height="75dp"
+        android:background="#87BFFF"
+        android:gravity="top"
+        android:orientation="horizontal"
+        android:paddingHorizontal="5dp">
+
+        <ImageButton
+            android:id="@+id/back"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:scaleType="fitCenter"
+            android:src="@drawable/backarrow"
+            android:background="#87BFFF"/>
+
+        <TextView
+            android:id="@+id/topNavigationText"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="9"
+            android:gravity="center"
+            android:paddingLeft="10dp"
+            android:text="Event Name?"
+            android:textSize="30dp"
+            android:textStyle="bold" />
+
+        <ImageButton
+            android:id="@+id/notificationSound"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1.5"
+            android:background="#87BFFF"
+            android:padding="5dp"
+            android:scaleType="fitCenter"
+            android:src="@drawable/speaker" />
+
+    </LinearLayout>
+
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/topNavigation"
+        android:layout_above="@+id/bottomNavigation">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="650dp"
+            android:gravity="top"
+            android:orientation="vertical"
+            android:paddingTop="10dp"
+            android:paddingHorizontal="5dp">
+
+
+            <TextView
+                android:id="@+id/dateAndtime"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textStyle="bold"
+                android:textSize="20dp"
+                android:paddingTop="15dp"
+                android:paddingBottom="5dp"
+                android:layout_gravity="center_horizontal"
+                android:text="Date/Time" />
+
+            <TextView
+                android:id="@+id/location"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textStyle="bold"
+                android:textSize="20dp"
+                android:paddingTop="5dp"
+                android:paddingBottom="15dp"
+                android:layout_gravity="center_horizontal"
+                android:text="Location" />
+
+
+            <ImageView
+                android:id="@+id/posterImage"
+                android:layout_width="300dp"
+                android:layout_height="400dp"
+                android:layout_gravity="center_horizontal"
+                android:src="@drawable/imagenotfound" />
+
+            <TextView
+                android:id="@+id/eventDescription"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:scrollbars="vertical"
+                android:text="Event description"
+                android:paddingTop="15dp"
+                android:paddingBottom="25dp"
+                android:textSize="20dp"
+                android:textStyle="bold" />
+
+            <ImageView
+                android:id="@+id/shareEvent"
+                android:layout_width="150dp"
+                android:layout_height="150dp"
+                android:layout_gravity="center_horizontal"
+                android:src="@drawable/qrcode" />
+
+            <TextView
+                android:id="@+id/shareLink"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:scrollbars="vertical"
+                android:text="Tap on QRCode to share this event"
+                android:paddingTop="15dp"
+                android:paddingBottom="20dp"
+                android:textSize="20dp"
+                android:textStyle="bold" />
+
+
+        </LinearLayout>
+
+    </ScrollView>
+
+    <LinearLayout
+        android:id="@+id/bottomNavigation"
+        android:layout_width="wrap_content"
+        android:layout_height="75dp"
+        android:gravity="bottom"
+        android:orientation="horizontal"
+        android:paddingHorizontal="5dp"
+        android:layout_alignParentBottom="true"
+        android:background="#87BFFF">
+
+
+        <ImageButton
+            android:id="@+id/qrCode"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="#3F8EFC"
+            android:padding="5dp"
+            android:src="@drawable/qrcode"
+            android:scaleType="fitCenter"/>
+
+        <ImageButton
+            android:id="@+id/events"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:padding="10dp"
+            android:src="@drawable/calender"
+            android:background="#87BFFF"
+            android:scaleType="fitCenter"/>
+
+        <ImageButton
+            android:id="@+id/addEvent"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:padding="10dp"
+            android:src="@drawable/addcalender"
+            android:background="#87BFFF"
+            android:scaleType="fitCenter" />
+
+        <ImageButton
+            android:id="@+id/profile"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:src="@drawable/profile"
+            android:background="#87BFFF"
+            android:scaleType="fitCenter" />
+
+    </LinearLayout>
+
+</RelativeLayout>

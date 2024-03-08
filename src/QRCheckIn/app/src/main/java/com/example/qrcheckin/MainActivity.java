@@ -6,6 +6,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
@@ -19,6 +20,7 @@ public class MainActivity extends AppCompatActivity{
     ImageButton addEventButton;
     ImageButton profileButton;
     private String fcmToken;
+    Button scanButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,6 +33,7 @@ public class MainActivity extends AppCompatActivity{
         eventButton = findViewById(R.id.calenderButton);
         addEventButton = findViewById(R.id.addCalenderButton);
         profileButton = findViewById(R.id.profileButton);
+        scanButton = findViewById(R.id.scanButton);
 
         // Creates a sub applicaton. If app.hasCheckFcmToken is false, it means the app has just been opened
         OpenApp app = (OpenApp) this.getApplicationContext();
@@ -47,7 +50,7 @@ public class MainActivity extends AppCompatActivity{
 
             // Check if an Attendee object associated with this fcm token already exists
             db.checkExistingAttendees(fcmToken);
-            Log.d("Firestore", String.format("TESTTOKEN STRING (%s) stored", fcmToken));
+            Log.d("Firestore", String.format("fcmToken STRING (%s) stored", fcmToken));
             app.hasCheckedFcmToken = true;
         }
 
@@ -57,6 +60,23 @@ public class MainActivity extends AppCompatActivity{
         getSupportActionBar().setDisplayShowTitleEnabled(false);
         TextView header = findViewById(R.id.mainHeader);
         header.setText("QRCheckIN");
+
+
+        scanButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent event = new Intent(getApplicationContext(), QRCodeScan.class);
+                startActivity(event);
+            }
+        });
+
+        qrButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent event = new Intent(getApplicationContext(), QRCodeScan.class);
+                startActivity(event);
+            }
+        });
 
         eventButton.setOnClickListener(new View.OnClickListener() {
             @Override

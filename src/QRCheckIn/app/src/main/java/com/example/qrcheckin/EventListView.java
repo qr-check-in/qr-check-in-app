@@ -68,6 +68,16 @@ public class EventListView extends AppCompatActivity {
             }
         });
 
+        // Set listenere for "Profile" toolbar button
+        profileButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent event = new Intent(getApplicationContext(), ProfileFragment.class);
+                startActivity(event);
+
+            }
+        });
+
         // If an event is clicked, open its event page
         eventAdapter.setOnItemClickListener(new EventAdapter.OnItemClickListener() {
             @Override
