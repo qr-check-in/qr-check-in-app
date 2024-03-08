@@ -53,7 +53,7 @@ public class CheckoutFragment extends DialogFragment {
 
         builder.setView(view)
                 .setTitle("Confirm Checkout")
-                .setMessage("Are you sure you want to CHECK OUT " + title + "?")
+                .setMessage("Are you sure you want to CHECKOUT " + title + "?")
                 .setNegativeButton("NO", null)
                 .setPositiveButton("YES", (dialog, which) -> {
                     listener.onCheckOutConfirmed();

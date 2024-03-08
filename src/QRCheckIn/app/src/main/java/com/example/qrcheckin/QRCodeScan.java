@@ -22,18 +22,23 @@ import java.util.Locale;
 
 public class QRCodeScan extends AppCompatActivity implements CheckoutFragment.CheckOutDialogListener{
 
-    private TextView description;
-    private TextView title;
-    private TextView location;
-    private TextView dateAndtime;
-    private ImageButton goBack;
-    private boolean hasScanned = false; // Boolean flag to track whether a scan has been performed
+    TextView description;
+    TextView title;
+    TextView location;
+    TextView dateAndtime;
+    ImageButton goBack;
+    ImageButton qrButton;
+    ImageButton eventButton;
+    ImageButton addEventButton;
+    ImageButton profileButton;
+    private boolean hasScanned = false;   // Boolean flag to track whether a scan has been performed
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_qrcode_scan);
+
 
         title = findViewById(R.id.topNavigationText);
         location = findViewById(R.id.location);
@@ -42,9 +47,8 @@ public class QRCodeScan extends AppCompatActivity implements CheckoutFragment.Ch
         goBack = findViewById(R.id.back);
 
 
-        //Opens the scanner to scan the QRCode
+        // Opens the scanner to scan the QRCode
         startScanner();
-
 
         goBack.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -71,7 +75,6 @@ public class QRCodeScan extends AppCompatActivity implements CheckoutFragment.Ch
 
     // Open the Scanner to scan QR code
     private void startScanner() {
-
         IntentIntegrator integrator = new IntentIntegrator(this);
         integrator.setOrientationLocked(true);
         integrator.setDesiredBarcodeFormats(IntentIntegrator.ALL_CODE_TYPES);
@@ -81,6 +84,12 @@ public class QRCodeScan extends AppCompatActivity implements CheckoutFragment.Ch
     }
 
 
+    /**
+     * In order to get data embedded in the QR code
+     * @param resultCode An integer code that identifies the request
+     * @param requestCode An integer result code returned by the child activity
+     * @param data An Intent object that contains additional data returned by the child activity.
+     */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         if (!hasScanned) { // Only proceed if scanning hasn't been performed yet
@@ -89,12 +98,15 @@ public class QRCodeScan extends AppCompatActivity implements CheckoutFragment.Ch
                 if (result.getContents() == null) {
                     Toast.makeText(this, "Scan Cancelled", Toast.LENGTH_SHORT).show();
                     finish();
-                } else {
+                }
+                else
+                {
                     // Separate the scanned data into different variables
                     String scannedData = result.getContents();
                     String[] lines = scannedData.split("\n");
                     String summary = null, detail = null, destination = null, dtstart = null;
 
+                    // Retrieve the Title, description, location, time and date form QR code data
                     for (String line : lines) {
                         if (line.startsWith("TITLE:")) {
                             summary = line.substring("TITLE:".length()).trim();
@@ -107,7 +119,7 @@ public class QRCodeScan extends AppCompatActivity implements CheckoutFragment.Ch
                         }
                     }
 
-                    // Format date and time
+                    // get the date and time formatted
                     String formattedDateTime = null;
                     try {
                         SimpleDateFormat inputFormat = new SimpleDateFormat("yyyyMMdd'T'HHmm'Z'");
@@ -121,6 +133,7 @@ public class QRCodeScan extends AppCompatActivity implements CheckoutFragment.Ch
                     // Display or use the separated variables as needed
                     Toast.makeText(this, "CHECKED IN " + summary, Toast.LENGTH_SHORT).show();
 
+                    // set the event details on the event page
                     description.setText(detail);
                     title.setText(summary);
                     location.setText(destination);
@@ -134,7 +147,10 @@ public class QRCodeScan extends AppCompatActivity implements CheckoutFragment.Ch
         }
     }
 
-    //CheckOutDialogListener for yes OR no confirmation of CheckOut?
+    /**
+     * Asks the user to checkout of the event? yes or no
+     * If yes then finishes the activity Otherwise stays on the same page
+     */
     @Override
     public void onCheckOutConfirmed() {
         Toast.makeText(QRCodeScan.this, "CHECKED OUT OF " + title.getText().toString(), Toast.LENGTH_SHORT).show();
