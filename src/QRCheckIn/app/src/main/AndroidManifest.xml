@@ -42,9 +42,9 @@
         <activity
             android:name=".createNewEventScreen1"
             android:exported="false" />
-        <activity android:name=".profileFragment"
+        <activity android:name=".ProfileFragment"
             android:exported="false"/>
-        <activity android:name=".updatePictureFragment"
+        <activity android:name=".UpdatePictureFragment"
             android:exported="false"/>
         <activity android:name=".SharedViewModel"
             android:exported="false"/>

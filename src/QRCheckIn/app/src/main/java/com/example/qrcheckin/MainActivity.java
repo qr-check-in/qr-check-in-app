@@ -97,7 +97,7 @@ public class MainActivity extends AppCompatActivity{
         profileButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent event = new Intent(getApplicationContext(), profileFragment.class);
+                Intent event = new Intent(getApplicationContext(), ProfileFragment.class);
                 startActivity(event);
 
             }
