@@ -231,9 +231,9 @@ public class ProfileFragment extends AppCompatActivity implements EditProfileFra
                     contact = profile.getContact();
                     homepage = profile.getHomepage();
                     // set fields for profile
-                    tvName.setText(profile.getName());
-                    tvContact.setText(profile.getContact());
-                    tvHomepage.setText(profile.getHomepage());
+                    tvName.setText(name);
+                    tvContact.setText(contact);
+                    tvHomepage.setText(homepage);
                     switchGeolocation.setChecked(profile.getTrackGeolocation());
                     // Display profilePicutre if the profile has one
                     if(profile.getProfilePicture() != null){

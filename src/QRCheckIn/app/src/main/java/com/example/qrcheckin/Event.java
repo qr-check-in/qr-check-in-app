@@ -10,7 +10,7 @@ import java.util.ArrayList;
 public class Event implements Serializable {
     private ArrayList<Attendee> attendees;
     private ArrayList<Attendee> signups;
-    private QRCode checkInQRCode;
+    private QrCode checkInQRCode;
     private PromoQRCode promoQRCode;
     private EventPoster poster;
     private ArrayList<Notification> notifications;
@@ -48,7 +48,7 @@ public class Event implements Serializable {
      * @param eventLocation the Event's location String
      * @param eventDescription the Event's description String
      */
-    public Event(QRCode checkInQRCode, PromoQRCode promoQRCode, EventPoster poster, String eventName, String eventDate, String eventTime, String eventLocation, String eventDescription, boolean checkInStatus) {
+    public Event(QrCode checkInQRCode, PromoQRCode promoQRCode, EventPoster poster, String eventName, String eventDate, String eventTime, String eventLocation, String eventDescription, boolean checkInStatus) {
 
         this.checkInQRCode = checkInQRCode;
         this.promoQRCode = promoQRCode;
@@ -78,11 +78,11 @@ public class Event implements Serializable {
     }
 
 
-    public QRCode getCheckInQRCode() {
+    public QrCode getCheckInQRCode() {
         return checkInQRCode;
     }
 
-    public void setCheckInQRCode(QRCode checkInQRCode) {
+    public void setCheckInQRCode(QrCode checkInQRCode) {
         this.checkInQRCode = checkInQRCode;
     }
 

@@ -1,11 +1,7 @@
 package com.example.qrcheckin;
 
-import android.net.Uri;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 
-
-public class QRCode extends Image {
+public class QrCode extends Image {
     private String hashedContent;
 
     /**
@@ -14,7 +10,7 @@ public class QRCode extends Image {
      * @param uploader  Attendee object that uploaded the image
      * @param unhashedContent Event details string in the form of [name][date][time][location]
      */
-    public QRCode(Uri uriString, Attendee uploader, String unhashedContent) {
+    public QrCode(String uriString, Attendee uploader, String unhashedContent) {
         super(uriString, uploader);
         this.hashedContent = Utils.hashString(unhashedContent);
     }
