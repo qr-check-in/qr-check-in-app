@@ -10,7 +10,6 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Switch;
 import android.widget.TextView;
-import android.widget.TimePicker;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.PickVisualMediaRequest;
@@ -19,17 +18,22 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import com.bumptech.glide.Glide;
-import com.google.android.material.textfield.TextInputEditText;
 
-
-public class createNewEventScreen1 extends AppCompatActivity implements SelectDateFragment.DatePickerDialogListener, TimePickerFragment.TimePickerDialogListner{
+/**
+ * Creates new event.
+ * Allows user to input details for a new event; name, location, date, time, description.
+ * Supports uploading a poster image for the event and specifies whether check-in is required.
+ *
+ * Selecting dates & times through, navigating to other tabs, uploading image from gallery.
+ */
+public class CreateNewEventScreen1 extends AppCompatActivity implements SelectDateFragment.DatePickerDialogListener, TimePickerFragment.TimePickerDialogListner{
     // Mainbar declarations
     ImageButton qrButton;
     ImageButton eventButton;
     ImageButton addEventButton;
     ImageButton profileButton;
 
-    // Acitvity Widgets and text declarations
+    // Activity Widgets and text declarations
     Button nextPageButton;
     Button uploadPoster;
     Switch checkInSwitch;
@@ -49,6 +53,14 @@ public class createNewEventScreen1 extends AppCompatActivity implements SelectDa
     private String inputEventTime;
     private String inputEventLocation;
     private boolean isChecked;
+
+    /**
+     * Initializes activity, sets up user interface for create event.
+     * Initializes toolbar buttons for navigation, setting up listeners
+     * for date & time selection, configuring upload poster.
+     *
+     * @param savedInstanceState contains data supplied in onSaveInstanceState if activity is re-initialized.
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -137,7 +149,7 @@ public class createNewEventScreen1 extends AppCompatActivity implements SelectDa
             public void onClick(View v) {
                 // Get the Event attributes from the input fields
                 inputEventName = eventNameEditText.getText().toString();
-                Intent event = new Intent(getApplicationContext(), createNewEventScreen2.class);
+                Intent event = new Intent(getApplicationContext(), CreateNewEventScreen2.class);
 //                Instead of passing particular values, set the values to a new event and pass the event object, more convienent
                 if (checkInSwitch.isChecked()){
                     isChecked = true;
@@ -147,8 +159,9 @@ public class createNewEventScreen1 extends AppCompatActivity implements SelectDa
                         eventLocation.getText().toString(), eventDescription.getText().toString(), isChecked);
                 // Store Event attributes to pass to createNewEventScreen2
                 // https://stackoverflow.com/questions/2091465/how-do-i-pass-data-between-activities-in-android-application , 2011, user914425
-//                event.putExtra("eventDate", inputEventDate);
-                event.putExtra("newEvent", newEvent);
+
+                event.putExtra("EVENT", newEvent);
+
                 //Log.d("event", String.format("going to pass %s %s", inputEventName, inputEventDate));
                 startActivity(event);
             }
@@ -157,7 +170,7 @@ public class createNewEventScreen1 extends AppCompatActivity implements SelectDa
         profileButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent event = new Intent(getApplicationContext(), profileFragment.class);
+                Intent event = new Intent(getApplicationContext(), ProfileFragment.class);
                 startActivity(event);
             }
         });

@@ -1,6 +1,7 @@
  package com.example.qrcheckin;
 
  import android.content.Intent;
+ import android.graphics.Bitmap;
  import android.os.Bundle;
  import android.util.Log;
  import android.view.View;
@@ -17,10 +18,14 @@
  import androidx.appcompat.widget.Toolbar;
 
  import com.bumptech.glide.Glide;
+ import com.google.zxing.BarcodeFormat;
+ import com.google.zxing.WriterException;
+ import com.google.zxing.common.BitMatrix;
+ import com.journeyapps.barcodescanner.BarcodeEncoder;
 
  import java.util.UUID;
 
- public class createNewEventScreen2 extends AppCompatActivity {
+ public class CreateNewEventScreen2 extends AppCompatActivity {
      // Main Bar buttons
      ImageButton qrButton;
      ImageButton eventButton;
@@ -38,6 +43,12 @@
      private Database db;
      private String inputEventName;
      private String inputEventDate;
+     private String inputEventTime;
+     private String inputEventDescription;
+     private String inputEventLocation;
+     private EventPoster inputEventPoster;
+     QRCode checkInQRCode = null;
+     PromoQRCode promoQRCode = null;
      Event incomingEvent;
 
     @Override
@@ -57,6 +68,7 @@
         checkInQR = findViewById(R.id.checkInQR);
         promotionalQR = findViewById(R.id.promotionalQR);
         uploadQR = findViewById(R.id.uploadQRCR);
+        genCheckInQR = findViewById(R.id.makeQRCI);
 
         // ToolBar
         Toolbar toolbar = findViewById(R.id.addEventToolBar2);
@@ -71,13 +83,31 @@
 
         // Fetch the user's inputs from createNewEventSceen1
         Bundle extras = getIntent().getExtras();
+        checkInQRCode = null;
+        promoQRCode = null;
+        inputEventPoster = null;
+        inputEventLocation = null;
+        inputEventTime = null;
+        inputEventDescription = null;
+
         if (extras != null) {
-//            inputEventName = extras.getString("eventName");
-//            inputEventDate = extras.getString("eventDate");
-//            Get the incoming event object
-            incomingEvent = (Event) getIntent().getSerializableExtra("newEvent");
+//          Get the incoming event object
+            incomingEvent = (Event) getIntent().getSerializableExtra("EVENT");
+            // Move the info of the new
+//        checkInQRCode = incomingEvent.getCheckInQRCode();
+//        promoQRCode = incomingEvent.getPromoQRCode();
+            // Info from the previous page
+            inputEventPoster = incomingEvent.getPoster();
+            inputEventLocation = incomingEvent.getEventLocation();
+            inputEventTime = incomingEvent.getEventTime();
+            inputEventDescription = incomingEvent.getEventDescription();
+            inputEventName = incomingEvent.getEventName();
+            inputEventDate = incomingEvent.getEventDate();
             //Log.d("event", String.format("passed event %s %s", inputEventName, inputEventDate));
         }
+
+
+
 
         // Listener to add/upload a QR from gallery
         // https://developer.android.com/jetpack/androidx/releases/activity#1.7.0, 2024, how to select a picture from gallery
@@ -103,25 +133,8 @@
 
                 // TEMPORARY: initializing event attributes to null to create a new Event
                 // TODO: set all event attributes to user's inputs
-                QRCode checkInQRCode = null;
-                PromoQRCode promoQRCode = null;
-                EventPoster eventPoster = null;
-                String eventLocation = null;
-                String eventTime = null;
-                String eventDescription = null;
 
-                // Move the info of the new
-                checkInQRCode = incomingEvent.getCheckInQRCode();
-                promoQRCode = incomingEvent.getPromoQRCode();
-                // Info from the previous page
-                eventPoster = incomingEvent.getPoster();
-                eventLocation = incomingEvent.getEventLocation();
-                eventTime = incomingEvent.getEventTime();
-                eventDescription = incomingEvent.getEventDescription();
-                inputEventName = incomingEvent.getEventName();
-                inputEventDate = incomingEvent.getEventDate();
-
-                Event newEvent = new Event(checkInQRCode, promoQRCode, eventPoster, incomingEvent.getEventName(), incomingEvent.getEventDate(), eventTime, eventLocation, eventDescription, incomingEvent.isCheckInStatus());
+                Event newEvent = new Event(checkInQRCode, promoQRCode, inputEventPoster, inputEventName, inputEventDate, inputEventTime, inputEventLocation, inputEventDescription, incomingEvent.isCheckInStatus());
                 Log.d("event", String.format("storing event %s", newEvent.getEventName()));
                 db.storeEvent(newEvent);
 
@@ -150,6 +163,14 @@
                 Toast.makeText(getApplicationContext(), "Please Finish Adding Event", Toast.LENGTH_LONG).show();
             }
         });
+
+        genCheckInQR.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String combinedContent = "TITLE:" + inputEventName + "\n" + "DTSTART:" + inputEventDate + "T" + inputEventTime + "Z" + "\n" + "LOCATION:" + inputEventLocation;
+                generateQRCode(combinedContent);
+            }
+        });
     }
      // https://developer.android.com/jetpack/androidx/releases/activity#1.7.0, 2024, how to select a picture from gallery
      // Registers a photo picker activity launcher in single-select mode.
@@ -169,4 +190,23 @@
                      Log.d("PhotoPicker", "No media selected");
                  }
              });
+
+     private void generateQRCode(String combinedContent) {
+         try {
+             BarcodeEncoder barcodeEncoder = new BarcodeEncoder();
+             BitMatrix bitMatrix = barcodeEncoder.encode(combinedContent, BarcodeFormat.QR_CODE, 200, 175);
+
+             Bitmap bitmap = Bitmap.createBitmap(bitMatrix.getWidth(), bitMatrix.getHeight(), Bitmap.Config.RGB_565);
+             for (int x = 0; x < bitMatrix.getWidth(); x++) {
+                 for (int y = 0; y < bitMatrix.getHeight(); y++) {
+                     bitmap.setPixel(x, y, bitMatrix.get(x, y) ? getResources().getColor(R.color.Black) : getResources().getColor(R.color.White));
+                 }
+             }
+
+            checkInQR.setImageBitmap(bitmap);
+
+         } catch (WriterException e) {
+             e.printStackTrace();
+         }
+     }
 }
