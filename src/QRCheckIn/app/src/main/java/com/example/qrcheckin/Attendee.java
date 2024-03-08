@@ -1,14 +1,11 @@
 package com.example.qrcheckin;
-
 import android.location.Location;
-
-import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
  * A class that defines an app user as an Attendee
  */
-public class Attendee implements Serializable {
+public class Attendee {
     private ArrayList<Event> attendedEvents;
     private ArrayList<Event> signupEvents;
     private Profile profile;
@@ -33,7 +30,6 @@ public class Attendee implements Serializable {
 
     /**
      * Returns a list of Events the Attendee has signed up for
-     * 
      * @return EventList of signed up Events
      */
     public ArrayList<Event> getSignupEvents() {
@@ -42,7 +38,6 @@ public class Attendee implements Serializable {
 
     /**
      * Returns the Profile of the Attendee
-     * 
      * @return Profile of the Attendee
      */
     public Profile getProfile() {
@@ -60,7 +55,6 @@ public class Attendee implements Serializable {
 
     /**
      * Returns the Location of the Attendee
-     * 
      * @return Location of the Attendee
      */
     public Location getLocation() {
@@ -69,7 +63,6 @@ public class Attendee implements Serializable {
 
     /**
      * Sets the Location of the Attendee
-     * 
      * @param location Location of the Attendee
      */
     public void setLocation(Location location) {
