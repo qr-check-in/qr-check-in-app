@@ -10,7 +10,6 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Switch;
 import android.widget.TextView;
-import android.widget.TimePicker;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.PickVisualMediaRequest;
@@ -19,10 +18,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import com.bumptech.glide.Glide;
-import com.google.android.material.textfield.TextInputEditText;
 
 
-public class createNewEventScreen1 extends AppCompatActivity implements SelectDateFragment.DatePickerDialogListener, TimePickerFragment.TimePickerDialogListner{
+public class CreateNewEventScreen1 extends AppCompatActivity implements SelectDateFragment.DatePickerDialogListener, TimePickerFragment.TimePickerDialogListner{
     // Mainbar declarations
     ImageButton qrButton;
     ImageButton eventButton;
@@ -137,7 +135,7 @@ public class createNewEventScreen1 extends AppCompatActivity implements SelectDa
             public void onClick(View v) {
                 // Get the Event attributes from the input fields
                 inputEventName = eventNameEditText.getText().toString();
-                Intent event = new Intent(getApplicationContext(), createNewEventScreen2.class);
+                Intent event = new Intent(getApplicationContext(), CreateNewEventScreen2.class);
 //                Instead of passing particular values, set the values to a new event and pass the event object, more convienent
                 if (checkInSwitch.isChecked()){
                     isChecked = true;
@@ -158,7 +156,7 @@ public class createNewEventScreen1 extends AppCompatActivity implements SelectDa
         profileButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent event = new Intent(getApplicationContext(), profileFragment.class);
+                Intent event = new Intent(getApplicationContext(), ProfileFragment.class);
                 startActivity(event);
             }
         });

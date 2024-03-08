@@ -63,7 +63,7 @@ public class EventListView extends AppCompatActivity {
         addEventButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent event = new Intent(getApplicationContext(), createNewEventScreen1.class);
+                Intent event = new Intent(getApplicationContext(), CreateNewEventScreen1.class);
                 startActivity(event);
             }
         });
@@ -72,7 +72,7 @@ public class EventListView extends AppCompatActivity {
         profileButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent event = new Intent(getApplicationContext(), profileFragment.class);
+                Intent event = new Intent(getApplicationContext(), ProfileFragment.class);
                 startActivity(event);
 
             }
