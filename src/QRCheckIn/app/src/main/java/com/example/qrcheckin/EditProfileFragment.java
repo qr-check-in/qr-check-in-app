@@ -12,7 +12,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 
-public class EditProfilefragment extends DialogFragment {
+public class EditProfileFragment extends DialogFragment {
 
     // Interface for communication between the dialog fragment and its owner
     public interface EditProfileDialogListener {

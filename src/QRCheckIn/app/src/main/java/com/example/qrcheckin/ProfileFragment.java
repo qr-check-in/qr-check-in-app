@@ -26,7 +26,7 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.squareup.picasso.Picasso;
 
-public class ProfileFragment extends AppCompatActivity implements EditProfilefragment.EditProfileDialogListener {
+public class ProfileFragment extends AppCompatActivity implements EditProfileFragment.EditProfileDialogListener {
     ImageButton qrButton;
     ImageButton eventButton;
     ImageButton addEventButton;
@@ -156,7 +156,7 @@ public class ProfileFragment extends AppCompatActivity implements EditProfilefra
                 bundle.putString("homepage", homepage);
 
                 // Create a new instance of AddCityFragment
-                EditProfilefragment fragment = new EditProfilefragment();
+                EditProfileFragment fragment = new EditProfileFragment();
 
                 // Set the bundle as arguments for the fragment
                 fragment.setArguments(bundle);
