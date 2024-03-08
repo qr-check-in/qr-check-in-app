@@ -3,6 +3,9 @@ package com.example.qrcheckin;
 import android.content.SharedPreferences;
 import android.util.Log;
 
+import androidx.annotation.NonNull;
+
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
@@ -10,13 +13,11 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.messaging.FirebaseMessaging;
 
-import java.util.UUID;
-
 /**
  * A class that controls storing data to the firestore database collections
  */
 public class Database {
-    private final FirebaseFirestore db = FirebaseFirestore.getInstance();;
+    private final FirebaseFirestore db = FirebaseFirestore.getInstance();
     private final CollectionReference eventsRef = db.collection("events");
     private final CollectionReference attendeesRef = db.collection("Attendees");
 
@@ -28,10 +29,6 @@ public class Database {
     public void storeEvent(Event event){
         eventsRef.document().set(event);
         Log.d("Firestore", String.format("Event(%s) stored", event.getEventName()));
-    }
-
-    public void getEvent(UUID eventID){
-
     }
 
     /**
@@ -52,11 +49,10 @@ public class Database {
                 }
                 else{
                     Log.d("Firestore", "attendee already exists");
+
                 }
             }
         });
-
-
     }
 
     /**
@@ -68,6 +64,26 @@ public class Database {
         // The docID of the attendee object is the associated user's fcmToken string
         attendeesRef.document(fcmToken).set(attendee);
         Log.d("Firestore", String.format("Attendee for token (%s) stored", fcmToken));
+    }
+
+    /**
+     * Updates the trackGeolocation field of the Attendee with the docID fcmToken
+     * @param fcmToken String ocID of the attendee to be updated
+     * @param isShared Boolean value trackGeolocation is set to
+     */
+    public void updateAttendeeGeolocation(String fcmToken, Boolean isShared){
+        DocumentReference attendeeRef = db.collection("Attendees").document(fcmToken);
+        attendeeRef.update("profile.trackGeolocation", isShared).addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void unused) {
+                Log.d("Firestore", "docsnapshot updated");
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Log.w("Firestore", "error updating doc",e);
+            }
+        });
     }
 
     /**

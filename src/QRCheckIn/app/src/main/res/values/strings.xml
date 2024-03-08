@@ -1,3 +1,27 @@
 <resources>
     <string name="app_name">QRCheckIn</string>
+    <string name="notification_channel_event_updates_id">event_updates</string>
+    <string name="notification_channel_event_updates_name">Event Updates</string>
+    <string name="notification_channel_event_updates_description">Receive important updates sent by an event organizer</string>
+    <string name="default_notification_channel_id">default_notification_channel</string>
+    <string name="header_event_details">Event Details</string>
+
+
+    <!-- Default placeholder text-->
+    <string name="description_event_name">Event name</string>
+    <string name="description_event_date">Event poster</string>
+    <string name="description_event_description">Event description</string>
+    <string name="description_event_location">Event location</string>
+    <string name="description_event_poster">Event poster</string>
+    <string name="description_promo_qrcode">Share this event by scanning the QR code</string>
+
+
+    <string name="add_photo">   Add Profile Picture!</string>
+    <string name="take_photo">Take Photo</string>
+    <string name="choose_from_photos">Choose from Photos</string>
+    <string name="profile">Profile</string>
+    <string name="user_info">User Info</string>
+    <string name="homepage">Homepage</string>
+    <string name="profile_picture">Profile Picture</string>
+
 </resources>

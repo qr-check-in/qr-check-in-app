@@ -1,9 +1,297 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".createNewEventScreen1">
+
+
+
+    <include
+        layout="@layout/toolbar"
+        android:id="@+id/addEventToolBar1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"></include>
+
+
+    <include
+        android:id="@+id/mainbar"
+        layout="@layout/mainappbar"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintVertical_bias="1.0"></include>
+
+    <ScrollView
+        android:id="@+id/scrollView2"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintTop_toBottomOf="@id/addEventToolBar1"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/mainbar">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <LinearLayout
+                android:id="@+id/linear"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintTop_toBottomOf="@id/addEventToolBar1"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintBottom_toTopOf="@id/mainbar">
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/eventNameLayout"
+                    android:layout_width="350dp"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="10dp"
+                    android:layout_gravity="center"
+                    app:boxCornerRadiusTopStart="30dp"
+                    app:boxCornerRadiusTopEnd="30dp"
+                    app:boxCornerRadiusBottomStart="30dp"
+                    app:boxCornerRadiusBottomEnd="30dp">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/eventNameText"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Event Name"
+                        tools:layout_editor_absoluteX="30dp"
+                        tools:layout_editor_absoluteY="78dp"
+                        android:drawableLeft="@drawable/arrowresized"
+                        android:drawablePadding="15dp"
+                        android:paddingStart="30dp">
+
+                    </com.google.android.material.textfield.TextInputEditText>
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <LinearLayout
+                    android:layout_width="350dp"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_gravity="center_horizontal">
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:orientation="horizontal"
+                        android:layout_weight="1">
+
+                        <ImageButton
+                            android:id="@+id/eventDatePicker"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            app:srcCompat="@drawable/calenderresize"
+                            android:layout_gravity="center_vertical"
+                            android:background="@android:color/transparent"
+                            android:paddingHorizontal="5dp">
+                        </ImageButton>
+
+                        <com.google.android.material.textfield.TextInputLayout
+                            android:id="@+id/eventDateLayout"
+                            android:layout_width="170dp"
+                            android:layout_height="wrap_content"
+                            android:paddingTop="10dp"
+                            android:layout_weight="5"
+                            app:boxCornerRadiusTopStart="30dp"
+                            app:boxCornerRadiusTopEnd="30dp"
+                            app:boxCornerRadiusBottomStart="30dp"
+                            app:boxCornerRadiusBottomEnd="30dp">
+
+                            <com.google.android.material.textfield.TextInputEditText
+                                android:id="@+id/eventDateText"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:drawablePadding="5dp"
+                                android:hint="Event Date"
+                                android:paddingStart="10dp"
+                                android:gravity="center_horizontal"
+                                tools:layout_editor_absoluteX="30dp"
+                                tools:layout_editor_absoluteY="78dp">
+
+                            </com.google.android.material.textfield.TextInputEditText>
+                        </com.google.android.material.textfield.TextInputLayout>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:orientation="horizontal"
+                        android:layout_weight="1">
+
+                        <ImageButton
+                            android:id="@+id/eventTimePicker"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            app:srcCompat="@drawable/clockresize"
+                            android:layout_gravity="center_vertical"                    android:background="@android:color/transparent"
+                            android:paddingHorizontal="5dp">
+                        </ImageButton>
+
+                        <com.google.android.material.textfield.TextInputLayout
+                            android:id="@+id/eventTimeLayout"
+                            android:layout_width="170dp"
+                            android:layout_height="wrap_content"
+                            android:paddingTop="10dp"
+                            android:layout_weight="1"
+                            app:boxCornerRadiusTopStart="30dp"
+                            app:boxCornerRadiusTopEnd="30dp"
+                            app:boxCornerRadiusBottomStart="30dp"
+                            app:boxCornerRadiusBottomEnd="30dp">
+
+                            <com.google.android.material.textfield.TextInputEditText
+                                android:id="@+id/eventTimeText"
+                                android:gravity="center_horizontal"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:drawablePadding="5dp"
+                                android:hint="Event Time"
+                                android:paddingStart="10dp"
+                                tools:layout_editor_absoluteX="30dp"
+                                tools:layout_editor_absoluteY="78dp"></com.google.android.material.textfield.TextInputEditText>
+                        </com.google.android.material.textfield.TextInputLayout>
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/eventLocationLayout"
+                    android:layout_width="350dp"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="10dp"
+                    android:layout_gravity="center"
+                    app:boxCornerRadiusTopStart="30dp"
+                    app:boxCornerRadiusTopEnd="30dp"
+                    app:boxCornerRadiusBottomStart="30dp"
+                    app:boxCornerRadiusBottomEnd="30dp">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/eventLocationText"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Event Location"
+                        tools:layout_editor_absoluteX="30dp"
+                        tools:layout_editor_absoluteY="78dp"
+                        android:drawableLeft="@drawable/locationresize"
+                        android:drawablePadding="5dp"
+                        android:paddingStart="30dp">
+                    </com.google.android.material.textfield.TextInputEditText>
+                </com.google.android.material.textfield.TextInputLayout>
+            </LinearLayout>
+
+            <Switch
+                android:id="@+id/checkInSwitch"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:switchPadding="20dp"
+                android:text="Check-in Location Verification"
+                android:textSize="20dp"
+                android:thumbTint="@color/ChryslerBlue"
+                android:trackTint="@drawable/buttonselect"
+                app:layout_constraintBottom_toTopOf="@+id/mainbar"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/linear"
+                app:layout_constraintVertical_bias="0.0"></Switch>
+            <androidx.cardview.widget.CardView
+                android:id="@+id/tempPosterCard"
+                android:layout_width="250dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="32dp"
+                android:elevation="25dp"
+                app:cardCornerRadius="15dp"
+                app:cardBackgroundColor="@color/UranianBlue"
+                app:layout_constraintBottom_toTopOf="@+id/uploadPosterButton"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/checkInSwitch">
+                <TextView
+                    android:id="@+id/posterTempText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingHorizontal="30dp"
+                    android:paddingVertical="20dp"
+                    android:text="Create a poster to attract attendees">
+                </TextView>
+
+                <ImageView
+                    android:id="@+id/posterImageView"
+                    android:layout_width="250dp"
+                    android:layout_height="350dp"
+                    android:scaleType="fitXY">
+                </ImageView>
+            </androidx.cardview.widget.CardView>
+
+            <Button
+                android:id="@+id/uploadPosterButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:backgroundTint="@color/NeonBlue"
+                android:drawableEnd="@drawable/imageresize"
+                android:drawableTint="@color/White"
+                android:text="Upload Poster"
+                app:layout_constraintBottom_toTopOf="@+id/mainbar"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tempPosterCard">
+            </Button>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/eventDescription"
+                android:layout_width="350dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="32dp"
+                app:layout_constraintBottom_toTopOf="@+id/mainbar"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/uploadPosterButton"
+                app:layout_constraintVertical_bias="0.01999998"
+                app:boxCornerRadiusTopStart="30dp"
+                app:boxCornerRadiusTopEnd="30dp"
+                app:boxCornerRadiusBottomStart="30dp"
+                app:boxCornerRadiusBottomEnd="30dp">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/eventDescriptionText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Event Description(Optional)"
+                    android:gravity="center_horizontal"
+                    android:textSize="15dp">
+                </com.google.android.material.textfield.TextInputEditText>
+            </com.google.android.material.textfield.TextInputLayout>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
+
+    <Button
+        android:id="@+id/nextButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:backgroundTint="@color/NeonBlue"
+        android:drawableEnd="@drawable/arrowresized"
+        android:drawableTint="@color/White"
+        android:text="Next"
+        app:layout_constraintTop_toBottomOf="@+id/eventDescription"
+        app:layout_constraintBottom_toTopOf="@+id/mainbar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.95"
+        app:layout_constraintStart_toStartOf="parent">
+    </Button>
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
