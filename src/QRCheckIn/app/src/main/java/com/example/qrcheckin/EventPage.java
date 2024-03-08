@@ -15,14 +15,25 @@ import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-
+/**
+ * Display detailed info about specific event.
+ * Retrieves & displays event details from Firestore database.
+ * Provide users with information about event; name, date, location, description, images.
+ */
 public class EventPage extends AppCompatActivity {
     // Mainbar
     ImageButton qrButton;
     ImageButton eventButton;
     ImageButton addEventButton;
     ImageButton profileButton;
-
+    /**
+     * Init activity, sets content view, and configures the toolbar with navigation buttons.
+     * Retrieves & displays event details from Firestore based on the passed document ID.
+     *
+     * @param savedInstanceState If activity re-initialized after previously being shut down,
+     *                           contains data most recently supplied.
+     *                           Otherwise its null.
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -68,8 +79,7 @@ public class EventPage extends AppCompatActivity {
                 } else {
                     Log.d("Firestore", String.format("No such document with id %s", documentId));
                 }
-                //ivEventPoster.setImageURI(event.getPoster()); TODO: Make event.getPoster() return a URI
-                //ivEventPromoQr.setImageURI(event.getPromoQRCode());
+
             }
         });
 

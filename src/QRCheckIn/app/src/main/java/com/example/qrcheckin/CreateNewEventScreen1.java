@@ -19,15 +19,21 @@ import androidx.appcompat.widget.Toolbar;
 
 import com.bumptech.glide.Glide;
 
-
+/**
+ * Creates new event.
+ * Allows user to input details for a new event; name, location, date, time, description.
+ * Supports uploading a poster image for the event and specifies whether check-in is required.
+ *
+ * Selecting dates & times through, navigating to other tabs, uploading image from gallery.
+ */
 public class CreateNewEventScreen1 extends AppCompatActivity implements SelectDateFragment.DatePickerDialogListener, TimePickerFragment.TimePickerDialogListner{
-    // Mainbar declarations
+    // MainBar declarations
     ImageButton qrButton;
     ImageButton eventButton;
     ImageButton addEventButton;
     ImageButton profileButton;
 
-    // Acitvity Widgets and text declarations
+    // Activity Widgets and text declarations
     Button nextPageButton;
     Button uploadPoster;
     Switch checkInSwitch;
@@ -47,6 +53,14 @@ public class CreateNewEventScreen1 extends AppCompatActivity implements SelectDa
     private String inputEventTime;
     private String inputEventLocation;
     private boolean isChecked;
+
+    /**
+     * Initializes activity, sets up user interface for create event.
+     * Initializes toolbar buttons for navigation, setting up listeners
+     * for date & time selection, configuring upload poster.
+     *
+     * @param savedInstanceState contains data supplied in onSaveInstanceState if activity is re-initialized.
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -204,7 +218,7 @@ public class CreateNewEventScreen1 extends AppCompatActivity implements SelectDa
                             .into(poster);
                     poster.setVisibility(View.VISIBLE);
                     posterTempText.setVisibility(View.GONE);
-                    EventPoster eventPoster = new EventPoster(uri, null);
+                    EventPoster eventPoster = new EventPoster(uri.toString(), null);
                     eventPoster.uploadImage("/EventPosters", uri.toString());
                     Log.d("PhotoPicker", "Selected URI: " + uri);
                 } else {
