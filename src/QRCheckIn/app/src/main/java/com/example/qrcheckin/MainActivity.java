@@ -13,7 +13,11 @@ import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
-
+/**
+ * Entry point of the app, hosts main interface.
+ * Provides buttons for; scanning QR codes, viewing event list, adding a new event, accessing the user profile.
+ * It initializes fetching and storing the FCM token.
+ */
 public class MainActivity extends AppCompatActivity{
     ImageButton qrButton;
     ImageButton eventButton;
@@ -21,6 +25,15 @@ public class MainActivity extends AppCompatActivity{
     ImageButton profileButton;
     private String fcmToken;
     Button scanButton;
+
+    /**
+     * Sets up UI and initializes application settings.
+     * Sets up toolbar buttons & one-time setup of fetching the FCM token.
+     *
+     * @param savedInstanceState If activity is re-initialized after previously being shut down, contains
+     *                          most recent data.
+     *                          Otherwise, it is null.
+     */
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
