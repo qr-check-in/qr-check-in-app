@@ -64,6 +64,7 @@ public class ProfileFragment extends AppCompatActivity implements EditProfileFra
     Switch switchGeolocation;
     FirebaseFirestore db = FirebaseFirestore.getInstance();
     CollectionReference attendeesRef = db.collection("Attendees");
+    private String fcmToken;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -103,9 +104,9 @@ public class ProfileFragment extends AppCompatActivity implements EditProfileFra
 
         // Get the fcmToken of the Attendee
         SharedPreferences prefs = getSharedPreferences("TOKEN_PREF", MODE_PRIVATE);
-        String fcmToken = prefs.getString("token", "missing token");
+        fcmToken = prefs.getString("token", "missing token");
         Log.d("Firestore", String.format("TEST TOKEN STRING '%s'", fcmToken));
-        // set the profile attribute fields
+        // set the profile attribute fields and string attributes like name, contact, homepage
         setProfileFields(fcmToken);
 
         // Listener for the Geolocation tracking switch
@@ -182,17 +183,18 @@ public class ProfileFragment extends AppCompatActivity implements EditProfileFra
 
     @Override
     public void editDetails(String nameUpdated, String contactUpdated, String homepageUpdated) {
-        name = nameUpdated;
-        contact = contactUpdated;
-        homepage = homepageUpdated;
-        userNameBesidePic.setText(nameUpdated);
-        userName.setText(nameUpdated);
-        userContact.setText(contactUpdated);
-        userHomepage.setText(homepageUpdated);
+        Database database = new Database();
+        database.updateProfileString(fcmToken, "name", nameUpdated);
+        database.updateProfileString(fcmToken, "contact", contactUpdated);
+        database.updateProfileString(fcmToken, "homepage", homepageUpdated);
+        setProfileFields(fcmToken);
 
     }
 
-    // Sets the TextViews and Switch to the Attendee's Profile's attributes
+    /**
+     * Sets the TextViews, Switch, and ImageView to the Attendee's Profile's attributes
+     * @param fcmToken String of the Attendee's docID in firestore
+     */
     public void setProfileFields(String fcmToken) {
         DocumentReference docRef = attendeesRef.document(fcmToken);
         docRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
@@ -205,10 +207,14 @@ public class ProfileFragment extends AppCompatActivity implements EditProfileFra
                     Log.d("Firestore",
                             String.format("Attendee with name (%s) retrieved", attendee.getProfile().getName()));
                     Profile profile = attendee.getProfile();
+                    // sets strings for profile fragment
+                    name = profile.getName();
+                    contact = profile.getContact();
+                    homepage = profile.getHomepage();
                     // set fields for profile
-                    tvName.setText(profile.getName());
-                    tvContact.setText(profile.getContact());
-                    tvHomepage.setText(profile.getHomepage());
+                    tvName.setText(name);
+                    tvContact.setText(contact);
+                    tvHomepage.setText(homepage);
                     switchGeolocation.setChecked(profile.getTrackGeolocation());
                     // Display profilePicutre if the profile has one
                     if(profile.getProfilePicture() != null){

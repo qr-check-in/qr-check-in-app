@@ -81,7 +81,7 @@ public class Database {
         attendeeRef.update("profile.trackGeolocation", isShared).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void unused) {
-                Log.d("Firestore", "docsnapshot updated");
+                Log.d("Firestore", "docsnapshot boolean updated");
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
@@ -124,6 +124,27 @@ public class Database {
             @Override
             public void onSuccess(Void unused) {
                 Log.d("Firestore", "docsnapshot updated");
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Log.w("Firestore", "error updating doc",e);
+            }
+        });
+    }
+
+    /**
+     * Updates a string field in an Attendee's Profile in firestore
+     * @param fcmToken String of the Attendee's docID in firebase
+     * @param field String of the field to be updated in Profile
+     * @param value String of the new value the field is set to
+     */
+    public void updateProfileString(String fcmToken, String field, String value){
+        DocumentReference attendeeRef = db.collection("Attendees").document(fcmToken);
+        attendeeRef.update("profile."+field, value).addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void unused) {
+                Log.d("Firestore", "docsnapshot string updated");
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
