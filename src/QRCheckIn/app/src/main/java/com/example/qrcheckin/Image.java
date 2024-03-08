@@ -18,6 +18,8 @@ public class Image {
     public Attendee getUploader() {
         return uploader;
     }
+
     public void deleteImage() {
+        // Implement image deletion logic here
     }
 }
