@@ -1,25 +1,16 @@
 package com.example.qrcheckin;
 
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
-import android.util.Base64;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.progressindicator.LinearProgressIndicator;
-import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
-
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
 
 /**
  * Represents an image associated with an event or attendee within the QR Code Event Check-In system.
@@ -27,7 +18,7 @@ import java.io.IOException;
 public class Image {
     //private File imageFile;
     private Attendee uploader;
-    private Uri imageUri;
+    private String uriString;
     private final FirebaseStorage storage = FirebaseStorage.getInstance();
 
     StorageReference storageReference = storage.getReference();
@@ -35,21 +26,26 @@ public class Image {
     /**
      * Constructs an Image instance with specified image file and uploader.
      *
-     * @param imageUri Uri of the image
+     * @param uriString Uri of the image
      * @param uploader the attendee who uploaded the image.
      */
-    public Image(Uri imageUri, Attendee uploader) {
-        this.imageUri = imageUri;
+    public Image(String uriString, Attendee uploader) {
+        this.uriString = uriString;
         this.uploader = uploader;
     }
+
+    /**
+     * Empty constructor for firebase
+     */
+    public Image(){}
 
     /**
      * Gets the image file.
      *
      * @return the image file.
      */
-    public Uri getImageUri() {
-        return imageUri;
+    public String getUriString() {
+        return uriString;
     }
 
     /**
@@ -74,9 +70,15 @@ public class Image {
      * @return a Base64 encoded string representing the image, or null if an error occurs.
      */
 
+    /**
+     * Uploads a Uri to firestorage
+     * @param folderName String folder the file is saved to in format "/FolderName"
+     * @param fileName String name of the file
+     */
     public void uploadImage(String folderName, String fileName){
-        StorageReference reference = storageReference.child(folderName+fileName);
-        reference.putFile(imageUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+        StorageReference reference = storageReference.child(folderName+"/"+fileName);
+        Uri uri = Uri.parse(uriString);
+        reference.putFile(uri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
             @Override
             public void onSuccess (UploadTask.TaskSnapshot taskSnapshot){
 
@@ -90,25 +92,7 @@ public class Image {
         }
     }
 
-//    public String encodeImageToBase64() {
-//        try (FileInputStream imageInputStream = new FileInputStream(imageFile)) {
-//            Bitmap bitmap = BitmapFactory.decodeStream(imageInputStream);
-//            ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-//            bitmap.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
-//            byte[] byteArray = byteArrayOutputStream.toByteArray();
-//            return Base64.encodeToString(byteArray, Base64.DEFAULT);
-//        } catch (FileNotFoundException e) {
-//            e.printStackTrace();
-//            return null;
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//            return null;
-//        }
-//    }
 
-    /**
-     *  Pending:
-     *      uploading image to Firebase Storage
-     *      updating  database with the image metadata
-     */
+
+
 

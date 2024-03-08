@@ -11,7 +11,10 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
-
+/**
+ * Used for editing the profile details of a user (name, contact information, and homepage).
+ * It uses an EditProfileDialogListener interface to communicate the updated details back to host.
+ */
 public class EditProfileFragment extends DialogFragment {
 
     // Interface for communication between the dialog fragment and its owner
@@ -25,7 +28,10 @@ public class EditProfileFragment extends DialogFragment {
     private String homepage;
     private Boolean emptyProfile = false;
 
-
+    /**
+     * Attaches fragment to its context. makes sure host context implements required listener interface.
+     * @param context The context to attach this fragment to.
+     */
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
@@ -36,7 +42,11 @@ public class EditProfileFragment extends DialogFragment {
         }
     }
 
-
+    /**
+     * Dialog for editing profile details. Populates dialog views with existing user details if available.
+     * @param savedInstanceState If the fragment is being re-created from previous saved state, this is the state.
+     * @return A new dialog instance to be displayed by the fragment.
+     */
     @NonNull
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {

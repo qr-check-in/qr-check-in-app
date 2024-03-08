@@ -20,9 +20,7 @@ import java.util.Date;
 import java.util.Locale;
 
 
-public class QRCodeScan extends AppCompatActivity implements CheckoutFragment.CheckOutDialogListener{
-
-    TextView description;
+public class QRCodeScan extends AppCompatActivity{
     TextView title;
     TextView location;
     TextView dateAndtime;
@@ -43,37 +41,55 @@ public class QRCodeScan extends AppCompatActivity implements CheckoutFragment.Ch
         title = findViewById(R.id.topNavigationText);
         location = findViewById(R.id.location);
         dateAndtime = findViewById(R.id.dateAndtime);
-        description = findViewById(R.id.eventDescription);
         goBack = findViewById(R.id.back);
 
+        qrButton = findViewById(R.id.qrCode);
+        eventButton = findViewById(R.id.events);
+        addEventButton = findViewById(R.id.addEvent);
+        profileButton = findViewById(R.id.profile);
 
-        // Opens the scanner to scan the QRCode
+
+        // uses the ZXing library to open the camera and proceed scanning
         startScanner();
 
-        goBack.setOnClickListener(new View.OnClickListener() {
+
+        qrButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Intent event = new Intent(getApplicationContext(), QRCodeScan.class);
+                startActivity(event);
+            }
+        });
 
-                // Create a new Bundle to hold the data
-                Bundle bundle = new Bundle();
+        eventButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent event = new Intent(getApplicationContext(), EventListView.class);
+                startActivity(event);
+            }
+        });
 
-                // Put different types of data into the bundle
-                bundle.putString("title", title.getText().toString());
+        addEventButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent event = new Intent(getApplicationContext(), CreateNewEventScreen1.class);
+                startActivity(event);
+            }
+        });
 
-                // Create a new instance of AddCityFragment
-                CheckoutFragment fragment = new CheckoutFragment();
-
-                // Set the bundle as arguments for the fragment
-                fragment.setArguments(bundle);
-
-                // Show the fragment
-                fragment.show(getSupportFragmentManager(), "Confirming Checkout");
-
+        profileButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent event = new Intent(getApplicationContext(), ProfileFragment.class);
+                startActivity(event);
             }
         });
     }
 
-    // Open the Scanner to scan QR code
+    /**
+     * using the IntentIntegrator class from the ZXing library to integrate barcode scanning functionality into your Android application
+     * The ZXing library will return the scanned barcode data to your activity once the scanning is complete.
+     */
     private void startScanner() {
         IntentIntegrator integrator = new IntentIntegrator(this);
         integrator.setOrientationLocked(true);
@@ -104,14 +120,12 @@ public class QRCodeScan extends AppCompatActivity implements CheckoutFragment.Ch
                     // Separate the scanned data into different variables
                     String scannedData = result.getContents();
                     String[] lines = scannedData.split("\n");
-                    String summary = null, detail = null, destination = null, dtstart = null;
+                    String summary = null, destination = null, dtstart = null;
 
                     // Retrieve the Title, description, location, time and date form QR code data
                     for (String line : lines) {
                         if (line.startsWith("TITLE:")) {
                             summary = line.substring("TITLE:".length()).trim();
-                        } else if (line.startsWith("DESCRIPTION:")) {
-                            detail = line.substring("DESCRIPTION:".length()).trim();
                         } else if (line.startsWith("LOCATION:")) {
                             destination = line.substring("LOCATION:".length()).trim();
                         } else if (line.startsWith("DTSTART:")) {
@@ -122,7 +136,7 @@ public class QRCodeScan extends AppCompatActivity implements CheckoutFragment.Ch
                     // get the date and time formatted
                     String formattedDateTime = null;
                     try {
-                        SimpleDateFormat inputFormat = new SimpleDateFormat("yyyyMMdd'T'HHmm'Z'");
+                        SimpleDateFormat inputFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm'Z'");
                         SimpleDateFormat outputFormat = new SimpleDateFormat("MMM dd, yyyy 'at' hh:mm a", Locale.US);
                         Date date = inputFormat.parse(dtstart);
                         formattedDateTime = outputFormat.format(date);
@@ -134,7 +148,6 @@ public class QRCodeScan extends AppCompatActivity implements CheckoutFragment.Ch
                     Toast.makeText(this, "CHECKED IN " + summary, Toast.LENGTH_SHORT).show();
 
                     // set the event details on the event page
-                    description.setText(detail);
                     title.setText(summary);
                     location.setText(destination);
                     dateAndtime.setText(formattedDateTime);
@@ -145,15 +158,5 @@ public class QRCodeScan extends AppCompatActivity implements CheckoutFragment.Ch
                 super.onActivityResult(requestCode, resultCode, data);
             }
         }
-    }
-
-    /**
-     * Asks the user to checkout of the event? yes or no
-     * If yes then finishes the activity Otherwise stays on the same page
-     */
-    @Override
-    public void onCheckOutConfirmed() {
-        Toast.makeText(QRCodeScan.this, "CHECKED OUT OF " + title.getText().toString(), Toast.LENGTH_SHORT).show();
-        finish();
     }
 }

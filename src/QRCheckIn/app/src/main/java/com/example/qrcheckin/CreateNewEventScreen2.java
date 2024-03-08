@@ -203,7 +203,8 @@
                  }
              }
 
-            checkInQR.setImageBitmap(bitmap);
+             checkInQR.setImageBitmap(bitmap);
+             checkInQR.setVisibility(View.VISIBLE);
 
          } catch (WriterException e) {
              e.printStackTrace();
