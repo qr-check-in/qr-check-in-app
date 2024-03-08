@@ -217,11 +217,11 @@ public class profileFragment extends AppCompatActivity implements editProfilefra
      * @param uriString name of the file in FireStorage
      */
     public void displayProfilePicture(String uriString){
-        // TEMPORARY: HARD CODING FILE PATH AND NAME
-        String filePath = "/ProfilePicturescontent:/media/picker/0/com.android.providers.media.photopicker/media/1000000034";
+        // Create string of the path to the image file in firestorage
+        String filePath = "/ProfilePictures/"+uriString;
+        // Get the file
         FirebaseStorage storage = FirebaseStorage.getInstance();
         StorageReference storageReference = storage.getReference();
-        // ISSUE: file name is not getting saved as its uri string, so we can't find the file in storage
         storageReference = FirebaseStorage.getInstance().getReference().child(filePath);
         try{
             final File localFile = File.createTempFile("tempProfilePic", "jpg");
@@ -229,6 +229,7 @@ public class profileFragment extends AppCompatActivity implements editProfilefra
                 @Override
                 public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
                     Log.d("Firestore", "picture retrieved");
+                    // Convert local file to bitmap and set the imageview
                     Bitmap bitmap = BitmapFactory.decodeFile(localFile.getAbsolutePath());
                     profileImageView.setImageBitmap(bitmap);
                 }

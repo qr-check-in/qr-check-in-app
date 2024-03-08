@@ -1,6 +1,7 @@
 package com.example.qrcheckin;
 
 import android.net.Uri;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 
@@ -69,9 +70,13 @@ public class Image {
      * @return a Base64 encoded string representing the image, or null if an error occurs.
      */
 
+    /**
+     * Uploads a Uri to firestorage
+     * @param folderName String folder the file is saved to in format "/FolderName"
+     * @param fileName String name of the file
+     */
     public void uploadImage(String folderName, String fileName){
-        // ISSUE: pathString argument does not rename file
-        StorageReference reference = storageReference.child(folderName+fileName);
+        StorageReference reference = storageReference.child(folderName+"/"+fileName);
         Uri uri = Uri.parse(uriString);
         reference.putFile(uri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
             @Override
