@@ -136,7 +136,7 @@ public class profileFragment extends AppCompatActivity implements editProfilefra
             }
         });
         updatePicture.setOnClickListener(v -> {
-            new updatePictureFragment().show(getSupportFragmentManager(), "Update Picture");
+            new updatePictureFragment(fcmToken).show(getSupportFragmentManager(), "Update Picture");
         });
         removePicture.setOnClickListener(new View.OnClickListener() {
             @Override

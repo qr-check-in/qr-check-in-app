@@ -1,4 +1,5 @@
 package com.example.qrcheckin;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -33,6 +34,11 @@ public class updatePictureFragment extends DialogFragment {
     private SharedViewModel sharedViewModel;
     private Uri currentPhotoUri;
     private String currentPhotoPath;
+    private String fcmToken;
+
+    public updatePictureFragment(String fcmToken){
+        this.fcmToken = fcmToken;
+    }
 
     // Permission request launcher
 
@@ -44,6 +50,11 @@ public class updatePictureFragment extends DialogFragment {
                 if (uri != null) {
                     sharedViewModel.setSelectedImageUri(uri);
                     dismiss();
+                    ProfilePicture profilePicture = new ProfilePicture(uri, null);
+                    profilePicture.uploadImage("/ProfilePictures", uri.toString());
+                    Database database = new Database();
+                    database.updateProfilePicture(fcmToken, uri);
+
                 }
             });
 

@@ -1,6 +1,7 @@
 package com.example.qrcheckin;
 
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
@@ -104,5 +105,20 @@ public class Database {
                     editor.putString("token", token);
                     editor.apply();
                 });
+    }
+
+    public void updateProfilePicture(String fcmToken, Uri uri){
+        DocumentReference attendeeRef = db.collection("Attendees").document(fcmToken);
+        attendeeRef.update("profile.picture", uri).addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void unused) {
+                Log.d("Firestore", "docsnapshot updated");
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Log.w("Firestore", "error updating doc",e);
+            }
+        });
     }
 }
