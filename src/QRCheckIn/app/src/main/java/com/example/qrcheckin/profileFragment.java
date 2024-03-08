@@ -4,6 +4,8 @@ import static com.example.qrcheckin.R.layout.show_profile;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
+
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -69,11 +71,12 @@ public class profileFragment extends AppCompatActivity implements editProfilefra
         addEventButton = findViewById(R.id.addCalenderButton);
         profileButton = findViewById(R.id.profileButton);
         profileButton.setPressed(true);
+        removePicture = findViewById(R.id.btnRemovePicture);
         editProfile = findViewById(R.id.edit_profile);
         updatePicture = findViewById(R.id.btnUpdatePicture);
-        userName = findViewById(R.id.name);
-        userContact = findViewById(R.id.contact);
-        userHomepage = findViewById(R.id.homepage);
+        userName = findViewById(R.id.edit_name);
+        userContact = findViewById(R.id.edit_contact);
+        userHomepage = findViewById(R.id.edit_homepage);
         userNameBesidePic = findViewById(R.id.profileName);
 
         eventButton.setOnClickListener(new View.OnClickListener() {
@@ -101,7 +104,16 @@ public class profileFragment extends AppCompatActivity implements editProfilefra
         updatePicture.setOnClickListener(v -> {
             new updatePictureFragment().show(getSupportFragmentManager(), "Update Picture");
         });
-        Log.d("ProfileFragment", "Edit profile button clicked");
+        removePicture.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Set the CircleImageView to show the default profile image
+                profileImageView.setImageResource(R.drawable.profile); // Assuming 'profile' is your default/placeholder image
+
+                // If you have logic that stores the current profile image (e.g., in Shared Preferences or a database),
+                // ensure to update that as well to reflect the removal/resetting of the profile picture.
+            }
+        });
         editProfile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
