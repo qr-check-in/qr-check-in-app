@@ -46,6 +46,8 @@
             android:exported="false"/>
         <activity android:name=".updatePictureFragment"
             android:exported="false"/>
+        <activity android:name=".SharedViewModel"
+            android:exported="false"/>
 
         <activity
             android:name=".EventListView"

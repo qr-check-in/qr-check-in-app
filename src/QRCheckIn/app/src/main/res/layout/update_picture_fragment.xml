@@ -11,41 +11,45 @@
         android:layout_height="wrap_content"
         android:background="@color/DarkGray"
         android:orientation="horizontal">
+
         <TextView
-            android:layout_width="325dp"
+            android:layout_width="wrap_content"
+            android:layout_height="70dp"
             android:layout_marginStart="5dp"
-            android:layout_height="match_parent"
+            android:layout_marginTop="20dp"
             android:text="@string/add_photo"
             android:textColor="@color/Black"
-            android:textSize="27sp"/>
+            android:textSize="35sp" />
+
         <ImageView
             android:id="@+id/cancel"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="47dp"
+            android:layout_height="53dp"
+            android:layout_marginTop="20dp"
             app:srcCompat="@android:drawable/ic_menu_close_clear_cancel"
             app:tint="@color/Black" />
     </LinearLayout>
 
-    <TextView
-        android:id="@+id/textView_takePhoto"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="10dp"
-        android:textColor="@color/MediumBlue"
-        android:drawablePadding="5dp"
-        android:drawableLeft="@android:drawable/ic_menu_camera"
-        android:drawableTint="@color/Black"
-        android:text="@string/take_photo"
-        android:textSize="25sp"/>
+<!--    <TextView-->
+<!--        android:id="@+id/textView_takePhoto"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_marginStart="10dp"-->
+<!--        android:textColor="@color/MediumBlue"-->
+<!--        android:drawablePadding="5dp"-->
+<!--        android:drawableLeft="@android:drawable/ic_menu_camera"-->
+<!--        android:drawableTint="@color/Black"-->
+<!--        android:text="@string/take_photo"-->
+<!--        android:textSize="25sp"/>-->
     <TextView
         android:id="@+id/gallery"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="10dp"
-        android:textColor="@color/MediumBlue"
-        android:text="@string/choose_from_photos"
+        android:layout_height="52dp"
+        android:layout_marginStart="5dp"
         android:drawableLeft="@drawable/imageresize"
         android:drawablePadding="5dp"
-        android:textSize="25sp"/>
+        android:text="@string/choose_from_photos"
+        android:textColor="@color/MediumBlue"
+        android:textSize="30sp" />
 
 </LinearLayout>

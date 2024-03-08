@@ -1,16 +1,17 @@
 package com.example.qrcheckin;
 
+import android.net.Uri;
+
 import java.io.File;
 
 public class EventPoster extends Image {
-    private File imageFile;
     private Attendee uploader;
 
-    public EventPoster(File imageFile, Attendee uploader, File imageFile1, Attendee uploader1) {
-        super(imageFile, uploader);
-        this.imageFile = imageFile1;
-        this.uploader = uploader1;
+    public EventPoster(Uri imageUri, Attendee uploader) {
+        super(imageUri, uploader);
     }
+
+
 }
 
 //package com.example.qrcheckin;
