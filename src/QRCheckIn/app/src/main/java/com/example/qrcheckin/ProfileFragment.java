@@ -44,7 +44,6 @@ public class ProfileFragment extends AppCompatActivity implements EditProfilefra
     private String contact = "";
     private String homepage = "";
 
-
     ImageView editProfile;
 
     TextView tvName;
@@ -53,6 +52,7 @@ public class ProfileFragment extends AppCompatActivity implements EditProfilefra
     Switch switchGeolocation;
     FirebaseFirestore db = FirebaseFirestore.getInstance();
     CollectionReference attendeesRef = db.collection("Attendees");
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -62,6 +62,7 @@ public class ProfileFragment extends AppCompatActivity implements EditProfilefra
         addEventButton = findViewById(R.id.addCalenderButton);
         profileButton = findViewById(R.id.profileButton);
         profileButton.setPressed(true);
+        updatePicture = findViewById(R.id.btnUpdatePicture);
         removePicture = findViewById(R.id.btnRemovePicture);
         editProfile = findViewById(R.id.edit_profile);
         updatePicture = findViewById(R.id.btnUpdatePicture);
@@ -105,7 +106,6 @@ public class ProfileFragment extends AppCompatActivity implements EditProfilefra
             }
         });
 
-
         eventButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -135,10 +135,13 @@ public class ProfileFragment extends AppCompatActivity implements EditProfilefra
             @Override
             public void onClick(View v) {
                 // Set the CircleImageView to show the default profile image
-                profileImageView.setImageResource(R.drawable.profile); // Assuming 'profile' is your default/placeholder image
+                profileImageView.setImageResource(R.drawable.profile); // Assuming 'profile' is your default/placeholder
+                                                                       // image
 
-                // If you have logic that stores the current profile image (e.g., in Shared Preferences or a database),
-                // ensure to update that as well to reflect the removal/resetting of the profile picture.
+                // If you have logic that stores the current profile image (e.g., in Shared
+                // Preferences or a database),
+                // ensure to update that as well to reflect the removal/resetting of the profile
+                // picture.
             }
         });
         editProfile.setOnClickListener(new View.OnClickListener() {
@@ -176,18 +179,19 @@ public class ProfileFragment extends AppCompatActivity implements EditProfilefra
         userHomepage.setText(homepageUpdated);
 
     }
+
     // Sets the TextViews and Switch to the Attendee's Profile's attributes
-    public void setProfileFields(String fcmToken){
+    public void setProfileFields(String fcmToken) {
         DocumentReference docRef = attendeesRef.document(fcmToken);
         docRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
                 Attendee attendee = documentSnapshot.toObject(Attendee.class);
-                if(attendee == null){
+                if (attendee == null) {
                     Log.e("Firestore", "Attendee doc not found");
-                }
-                else{
-                    Log.d("Firestore", String.format("Attendee with name (%s) retrieved", attendee.getProfile().getName()));
+                } else {
+                    Log.d("Firestore",
+                            String.format("Attendee with name (%s) retrieved", attendee.getProfile().getName()));
                     Profile profile = attendee.getProfile();
                     // set fields for profile
                     tvName.setText(profile.getName());
