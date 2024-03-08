@@ -218,7 +218,7 @@ public class CreateNewEventScreen1 extends AppCompatActivity implements SelectDa
                             .into(poster);
                     poster.setVisibility(View.VISIBLE);
                     posterTempText.setVisibility(View.GONE);
-                    EventPoster eventPoster = new EventPoster(uri, null);
+                    EventPoster eventPoster = new EventPoster(uri.toString(), null);
                     eventPoster.uploadImage("/EventPosters", uri.toString());
                     Log.d("PhotoPicker", "Selected URI: " + uri);
                 } else {

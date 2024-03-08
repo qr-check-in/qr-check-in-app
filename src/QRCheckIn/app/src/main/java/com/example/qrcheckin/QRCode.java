@@ -7,8 +7,8 @@ import java.security.NoSuchAlgorithmException;
 public class QRCode extends Image {
     private String hashedContent;
 
-    public QRCode(Uri imageUri, Attendee uploader, String unhashedContent) {
-        super(imageUri, uploader);
+    public QRCode(String uriString, Attendee uploader, String unhashedContent) {
+        super(uriString, uploader);
         this.hashedContent = hashString(unhashedContent);
     }
 

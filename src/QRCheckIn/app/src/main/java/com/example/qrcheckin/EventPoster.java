@@ -8,16 +8,16 @@ import java.io.File;
  */
 public class EventPoster extends Image {
     private Attendee uploader;
+
     /**
      * Makes EventPoster specifying URI and uploader.
      *
-     * @param imageUri The URI of the image for the event poster.
+     * @param uriString The URI of the image for the event poster.
      * @param uploader The attendee who uploaded the event poster.
      */
-    public EventPoster(Uri imageUri, Attendee uploader) {
-        super(imageUri, uploader);
+    public EventPoster(String uriString, Attendee uploader) {
+        super(uriString, uploader);
     }
-
 
 }
 
