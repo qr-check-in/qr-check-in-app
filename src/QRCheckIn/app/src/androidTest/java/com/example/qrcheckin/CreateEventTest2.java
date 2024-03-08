@@ -58,6 +58,11 @@ public class CreateEventTest2 {
         onView(withId(R.id.profileButton)).perform(click());
     }
 
+    @Test
+    public void testGenerateQR(){
+        onView(withId(R.id.makeQRCI)).perform(click());
+        onView(withId(R.id.checkInQR)).check(matches(isDisplayed()));
+    }
 
 
     @Test
@@ -65,4 +70,6 @@ public class CreateEventTest2 {
         // Check if the button works
         onView(withId(R.id.uploadQRCR)).perform(click());
     }
+
+
 }
