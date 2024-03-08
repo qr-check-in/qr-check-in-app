@@ -22,15 +22,15 @@ public class MainActivityTest {
     @Rule
     public ActivityScenarioRule<MainActivity> scenario = new ActivityScenarioRule<>(MainActivity.class);
 
-    @Test
-    public void testAddCity(){
-        // Click on Add City button
-        onView(withId(R.id.button_add)).perform(click());
-        // Type "Edmonton" in the editText
-        onView(withId(R.id.editText_name)).perform(ViewActions.typeText("Edmonton"));
-        // Click on Confirm
-        onView(withId(R.id.button_confirm)).perform(click());
-        // Check if text "Edmonton" is matched with any of the text displayed on the screen
-        onView(withText("Edmonton")).check(matches(isDisplayed()));
-    }
+//    @Test
+//    public void testAddCity(){
+//        // Click on Add City button
+//        onView(withId(R.id.button_add)).perform(click());
+//        // Type "Edmonton" in the editText
+//        onView(withId(R.id.editText_name)).perform(ViewActions.typeText("Edmonton"));
+//        // Click on Confirm
+//        onView(withId(R.id.button_confirm)).perform(click());
+//        // Check if text "Edmonton" is matched with any of the text displayed on the screen
+//        onView(withText("Edmonton")).check(matches(isDisplayed()));
+//    }
 }

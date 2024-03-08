@@ -58,6 +58,8 @@ public class CreateEventTest2 {
         onView(withId(R.id.profileButton)).perform(click());
     }
 
+
+
     @Test
     public void testUploadFromGallery(){
         // Check if the button works
