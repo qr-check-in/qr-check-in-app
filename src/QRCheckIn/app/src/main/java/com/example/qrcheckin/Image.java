@@ -90,25 +90,7 @@ public class Image {
         }
     }
 
-//    public String encodeImageToBase64() {
-//        try (FileInputStream imageInputStream = new FileInputStream(imageFile)) {
-//            Bitmap bitmap = BitmapFactory.decodeStream(imageInputStream);
-//            ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-//            bitmap.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
-//            byte[] byteArray = byteArrayOutputStream.toByteArray();
-//            return Base64.encodeToString(byteArray, Base64.DEFAULT);
-//        } catch (FileNotFoundException e) {
-//            e.printStackTrace();
-//            return null;
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//            return null;
-//        }
-//    }
 
-    /**
-     *  Pending:
-     *      uploading image to Firebase Storage
-     *      updating  database with the image metadata
-     */
+
+
 
