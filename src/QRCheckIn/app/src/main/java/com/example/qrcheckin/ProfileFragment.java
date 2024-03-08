@@ -40,9 +40,9 @@ public class ProfileFragment extends AppCompatActivity implements EditProfilefra
     Button removePicture;
     private ImageView profileImageView;
     private SharedViewModel sharedViewModel;
-    private String name = "";
-    private String contact = "";
-    private String homepage = "";
+    private String name;
+    private String contact;
+    private String homepage;
 
 
     ImageView editProfile;
@@ -191,8 +191,12 @@ public class ProfileFragment extends AppCompatActivity implements EditProfilefra
                     Profile profile = attendee.getProfile();
                     // set fields for profile
                     tvName.setText(profile.getName());
+                    name = profile.getName();
+                    userNameBesidePic.setText(profile.getName());
                     tvContact.setText(profile.getContact());
+                    contact = profile.getContact();
                     tvHomepage.setText(profile.getHomepage());
+                    homepage = profile.getHomepage();
                     switchGeolocation.setChecked(profile.getTrackGeolocation());
                 }
             }
