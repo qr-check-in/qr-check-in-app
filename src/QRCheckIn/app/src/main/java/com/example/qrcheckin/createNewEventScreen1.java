@@ -147,8 +147,9 @@ public class createNewEventScreen1 extends AppCompatActivity implements SelectDa
                         eventLocation.getText().toString(), eventDescription.getText().toString(), isChecked);
                 // Store Event attributes to pass to createNewEventScreen2
                 // https://stackoverflow.com/questions/2091465/how-do-i-pass-data-between-activities-in-android-application , 2011, user914425
-//                event.putExtra("eventDate", inputEventDate);
-                event.putExtra("newEvent", newEvent);
+
+                event.putExtra("EVENT", newEvent);
+
                 //Log.d("event", String.format("going to pass %s %s", inputEventName, inputEventDate));
                 startActivity(event);
             }
