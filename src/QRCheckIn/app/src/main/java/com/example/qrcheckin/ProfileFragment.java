@@ -69,6 +69,7 @@ public class ProfileFragment extends AppCompatActivity implements EditProfileFra
     TextView tvContact;
     TextView tvHomepage;
     Switch switchGeolocation;
+    TextView profileName;
     FirebaseFirestore db = FirebaseFirestore.getInstance();
     CollectionReference attendeesRef = db.collection("Attendees");
     private String fcmToken;
@@ -114,6 +115,7 @@ public class ProfileFragment extends AppCompatActivity implements EditProfileFra
         tvContact = findViewById(R.id.contact1);
         tvHomepage = findViewById(R.id.homepage1);
         switchGeolocation = findViewById(R.id.geoswitch);
+        profileName = findViewById(R.id.profileName);
 
         // Get the fcmToken of the Attendee
         SharedPreferences prefs = getSharedPreferences("TOKEN_PREF", MODE_PRIVATE);
@@ -232,6 +234,7 @@ public class ProfileFragment extends AppCompatActivity implements EditProfileFra
                     homepage = profile.getHomepage();
                     // set fields for profile
                     tvName.setText(name);
+                    profileName.setText(name);
                     tvContact.setText(contact);
                     tvHomepage.setText(homepage);
                     switchGeolocation.setChecked(profile.getTrackGeolocation());
