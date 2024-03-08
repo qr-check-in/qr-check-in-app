@@ -1,9 +1,12 @@
 package com.example.qrcheckin;
+
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.provider.MediaStore;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;

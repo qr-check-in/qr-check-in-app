@@ -11,20 +11,11 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
-/**
- * DialogFragment used for editing user profile details.
- * EditProfilefragment shows dialog to user so they can update their profile information.
- */
-public class EditProfilefragment extends DialogFragment {
+
+public class EditProfileFragment extends DialogFragment {
 
     // Interface for communication between the dialog fragment and its owner
     public interface EditProfileDialogListener {
-        /**
-         * When the user confirms their profile edits.
-         * @param nameUpdated Updated name of the user.
-         * @param contactUpdated Updated contact info of the user.
-         * @param homepageUpdated Updated homepage URL of the user.
-         */
         void editDetails(String nameUpdated, String contactUpdated, String homepageUpdated);
     }
 
@@ -33,13 +24,7 @@ public class EditProfilefragment extends DialogFragment {
     private String contact;
     private String homepage;
     private Boolean emptyProfile = false;
-    /**
-     * Lifecycle method called when fragment is first attached to its context.
-     * makes sure that context implements EditProfileDialogListener.
-     *
-     * @param context The context to which the fragment is attached.
-     * @throws RuntimeException If the activity has not implemented the listener interface.
-     */
+
 
     @Override
     public void onAttach(@NonNull Context context) {
@@ -51,13 +36,7 @@ public class EditProfilefragment extends DialogFragment {
         }
     }
 
-    /**
-     * Dialog for editing profile details.
-     * Initializes dialog view with current profile details & sets up action buttons.
-     *
-     * @param savedInstanceState If non-null this dialog fragment is re-constructed from a previous saved state.
-     * @return A new Dialog instance for editing profile details.
-     */
+
     @NonNull
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {

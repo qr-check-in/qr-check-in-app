@@ -1,9 +1,11 @@
 package com.example.qrcheckin;
 
+import java.util.ArrayList;
+
 public class Notification {
     private String message;
 
-    private AttendeeList recipients;
+    private ArrayList<Attendee> recipients;
 
 
 }
