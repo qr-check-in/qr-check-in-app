@@ -2,6 +2,21 @@
 <project version="4">
   <component name="deploymentTargetDropDown">
     <value>
+      <entry key="AttendeeTest">
+        <State />
+      </entry>
+      <entry key="DatabaseTest">
+        <State />
+      </entry>
+      <entry key="EventTest">
+        <State />
+      </entry>
+      <entry key="ProfilePictureTest">
+        <State />
+      </entry>
+      <entry key="QRCodeScanTest">
+        <State />
+      </entry>
       <entry key="app">
         <State>
           <targetSelectedWithDropDown>
@@ -28,9 +43,6 @@
             </Target>
           </targetsSelectedWithDialog>
         </State>
-      </entry>
-      <entry key="testDatePicker()">
-        <State />
       </entry>
     </value>
   </component>
