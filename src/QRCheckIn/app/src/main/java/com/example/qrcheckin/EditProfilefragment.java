@@ -6,17 +6,13 @@ import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.EditText;
-import android.widget.Spinner;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 
-import org.w3c.dom.Text;
-
-public class editProfilefragment extends DialogFragment {
+public class EditProfilefragment extends DialogFragment {
 
     // Interface for communication between the dialog fragment and its owner
     public interface EditProfileDialogListener {

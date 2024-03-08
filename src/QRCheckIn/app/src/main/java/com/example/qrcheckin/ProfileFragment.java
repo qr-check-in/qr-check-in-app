@@ -5,16 +5,12 @@ import static com.example.qrcheckin.R.layout.show_profile;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 
-import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.AdapterView;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
 
 import android.widget.Button;
 import android.widget.CompoundButton;
@@ -22,9 +18,6 @@ import android.widget.ImageButton;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.ImageView;
-import android.widget.TextView;
-
-import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.CollectionReference;
@@ -33,7 +26,7 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.squareup.picasso.Picasso;
 
-public class profileFragment extends AppCompatActivity implements editProfilefragment.EditProfileDialogListener {
+public class ProfileFragment extends AppCompatActivity implements EditProfilefragment.EditProfileDialogListener {
     ImageButton qrButton;
     ImageButton eventButton;
     ImageButton addEventButton;
@@ -131,12 +124,12 @@ public class profileFragment extends AppCompatActivity implements editProfilefra
         addEventButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent event = new Intent(getApplicationContext(), createNewEventScreen1.class);
+                Intent event = new Intent(getApplicationContext(), CreateNewEventScreen1.class);
                 startActivity(event);
             }
         });
         updatePicture.setOnClickListener(v -> {
-            new updatePictureFragment().show(getSupportFragmentManager(), "Update Picture");
+            new UpdatePictureFragment().show(getSupportFragmentManager(), "Update Picture");
         });
         removePicture.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -160,7 +153,7 @@ public class profileFragment extends AppCompatActivity implements editProfilefra
                 bundle.putString("homepage", homepage);
 
                 // Create a new instance of AddCityFragment
-                editProfilefragment fragment = new editProfilefragment();
+                EditProfilefragment fragment = new EditProfilefragment();
 
                 // Set the bundle as arguments for the fragment
                 fragment.setArguments(bundle);
