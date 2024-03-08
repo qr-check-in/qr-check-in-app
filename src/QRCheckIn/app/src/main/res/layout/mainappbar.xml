@@ -11,15 +11,14 @@
     <ImageButton
         android:id="@+id/qrButton"
         android:layout_width="118dp"
-        android:layout_height="match_parent"
+        android:layout_height="34dp"
         android:layout_weight="1"
-        android:scaleType="fitCenter"
+        android:background="@drawable/buttonselect"
         android:paddingHorizontal="5dp"
         android:paddingVertical="5dp"
-        android:background="@drawable/buttonselect"
+        android:scaleType="fitCenter"
         android:tint="@android:color/black"
-        app:srcCompat="@drawable/qrcode"
-        />
+        app:srcCompat="@drawable/qrcode" />
 
     <ImageButton
         android:id="@+id/calenderButton"

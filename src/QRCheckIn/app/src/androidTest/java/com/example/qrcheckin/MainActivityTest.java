@@ -7,6 +7,8 @@ import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 
+import android.content.Intent;
+
 import androidx.test.espresso.action.ViewActions;
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
@@ -23,14 +25,24 @@ public class MainActivityTest {
     public ActivityScenarioRule<MainActivity> scenario = new ActivityScenarioRule<>(MainActivity.class);
 
     @Test
-    public void testScanButton(){
-        // Click on Add City button
-        onView(withId(R.id.)).perform(click());
-        // Type "Edmonton" in the editText
-        onView(withId(R.id.editText_name)).perform(ViewActions.typeText("Edmonton"));
-        // Click on Confirm
-        onView(withId(R.id.button_confirm)).perform(click());
-        // Check if text "Edmonton" is matched with any of the text displayed on the screen
-        onView(withText("Edmonton")).check(matches(isDisplayed()));
+    public void testMainBarScan() {
+        onView(withId(R.id.calenderButton)).perform(click());
+        try {
+            Thread.sleep(5000); // Adjust the sleep duration as needed
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        onView(withId(R.id.profileButton)).perform(click());
+        try {
+            Thread.sleep(5000); // Adjust the sleep duration as needed
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        onView(withId(R.id.addCalenderButton)).perform(click());
+        try {
+            Thread.sleep(5000); // Adjust the sleep duration as needed
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 }

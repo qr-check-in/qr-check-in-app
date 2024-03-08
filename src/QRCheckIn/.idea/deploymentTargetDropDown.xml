@@ -2,15 +2,6 @@
 <project version="4">
   <component name="deploymentTargetDropDown">
     <value>
-      <entry key="CreateEventTest1">
-        <State />
-      </entry>
-      <entry key="CreateEventTest2">
-        <State />
-      </entry>
-      <entry key="EventListTest">
-        <State />
-      </entry>
       <entry key="app">
         <State>
           <targetSelectedWithDropDown>
@@ -38,10 +29,10 @@
           </targetsSelectedWithDialog>
         </State>
       </entry>
-      <entry key="testButtonsAndTextboxes()">
+      <entry key="testMainBarScan()">
         <State />
       </entry>
-      <entry key="testListItem()">
+      <entry key="testScanButton()">
         <State />
       </entry>
     </value>
