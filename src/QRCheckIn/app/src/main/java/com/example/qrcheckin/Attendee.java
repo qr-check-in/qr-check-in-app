@@ -1,5 +1,5 @@
 package com.example.qrcheckin;
-
+import android.location.Location;
 import java.util.ArrayList;
 
 /**
@@ -8,7 +8,7 @@ import java.util.ArrayList;
 public class Attendee {
     private ArrayList<Event> attendedEvents;
     private ArrayList<Event> signupEvents;
-//    private Profile profile;
+    private Profile profile;
     private Location location;
 
     /**

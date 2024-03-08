@@ -166,6 +166,7 @@ tools:context=".profileFragment">
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
+                        android:id="@+id/contact1"
                         android:layout_marginLeft="93dp"
                         android:hint="(587) XXX XXXX"
                         android:textSize="17dp" />

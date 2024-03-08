@@ -1,5 +1,7 @@
 package com.example.qrcheckin;
-
+import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Intent;
@@ -12,6 +14,8 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.core.content.ContextCompat;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
@@ -23,27 +27,22 @@ import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
 
 public class updatePictureFragment extends DialogFragment {
-    private static final int REQUEST_IMAGE_CAPTURE = 1;
-    private ImageView imageView;
+    private SharedViewModel sharedViewModel;
+    private Uri currentPhotoUri;
     private String currentPhotoPath;
 
-    private ImageView profileImageView;
+    // Permission request launcher
+
+
+    // ActivityResultLaunchers for taking a picture and picking from the gallery
+
     private final ActivityResultLauncher<String> selectImageLauncher = registerForActivityResult(
-            new ActivityResultContracts.GetContent(),
-            uri -> {
+            new ActivityResultContracts.GetContent(), uri -> {
                 if (uri != null) {
                     sharedViewModel.setSelectedImageUri(uri);
-                    dismiss();
-                }
-            });
-
-    private final ActivityResultLauncher<Uri> takePictureLauncher = registerForActivityResult(
-            new ActivityResultContracts.TakePicture(),
-            result -> {
-                if (result) {
-                    sharedViewModel.setSelectedImageUri(currentPhotoUri);
                     dismiss();
                 }
             });
@@ -51,65 +50,39 @@ public class updatePictureFragment extends DialogFragment {
     @NonNull
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-        View view = LayoutInflater.from(getContext()).inflate(R.layout.update_picture_fragment, null);
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        LayoutInflater inflater = getActivity().getLayoutInflater();
+        View view = inflater.inflate(R.layout.update_picture_fragment, null);
 
-        ImageView cancelImageView = view.findViewById(R.id.cancel);
-        TextView takePhotoTextView = view.findViewById(R.id.textView_takePhoto);
+        sharedViewModel = new ViewModelProvider(requireActivity()).get(SharedViewModel.class);
 
-        takePhotoTextView.setOnClickListener(v -> dispatchTakePictureIntent());
-        cancelImageView.setOnClickListener(v -> dismiss());
-
-        chooseGallery.setOnClickListener(v -> selectImageLauncher.launch("image/*"));
-
-
-     return builder.setView(view).create();
+        setupViews(view);
 
         return builder.setView(view).create();
     }
 
+    private void setupViews(View view) {
+        ImageView cancelImageView = view.findViewById(R.id.cancel);
+        TextView chooseGallery = view.findViewById(R.id.gallery);
+        //TextView takePhoto = view.findViewById(R.id.textView_takePhoto);
+
+        cancelImageView.setOnClickListener(v -> dismiss());
+
+        chooseGallery.setOnClickListener(v -> selectImageLauncher.launch("image/*"));
+
+        //takePhoto.setOnClickListener(v -> checkCameraPermissionAndOpen());
+    }
+
+
+
+
+
     private File createImageFile() throws IOException {
-        // Create an image file name
-        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(new Date());
         String imageFileName = "JPEG_" + timeStamp + "_";
         File storageDir = getActivity().getExternalFilesDir(Environment.DIRECTORY_PICTURES);
         File image = File.createTempFile(imageFileName, ".jpg", storageDir);
-
-        // Save a file: path for use with ACTION_VIEW intents
         currentPhotoPath = image.getAbsolutePath();
         return image;
-    }
-
-    private void dispatchTakePictureIntent() {
-        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        if (takePictureIntent.resolveActivity(getActivity().getPackageManager()) != null) {
-            File photoFile = null;
-            try {
-                photoFile = createImageFile();
-            } catch (IOException ex) {
-                // Error occurred while creating the File
-            }
-            if (photoFile != null) {
-                Uri photoURI = FileProvider.getUriForFile(getActivity(),
-                        "com.example.android.fileprovider",
-                        photoFile);
-                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
-                startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
-            }
-        }
-    }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == getActivity().RESULT_OK) {
-            // If the photo was saved to the file, you don't receive 'data', use the file path instead
-            File imgFile = new  File(currentPhotoPath);
-            if(imgFile.exists()) {
-                // Use Uri to load the image
-                Uri imageUri = Uri.fromFile(imgFile);
-                imageView.setImageURI(imageUri);
-            }
-        }
     }
 }

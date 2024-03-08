@@ -8,6 +8,7 @@ import androidx.lifecycle.ViewModelProvider;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -30,6 +31,7 @@ import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.squareup.picasso.Picasso;
 
 public class profileFragment extends AppCompatActivity implements editProfilefragment.EditProfileDialogListener {
     ImageButton qrButton;
@@ -74,7 +76,19 @@ public class profileFragment extends AppCompatActivity implements editProfilefra
         userContact = findViewById(R.id.edit_contact);
         userHomepage = findViewById(R.id.edit_homepage);
         userNameBesidePic = findViewById(R.id.profileName);
+        sharedViewModel = new ViewModelProvider(this).get(SharedViewModel.class);
+        sharedViewModel.getSelectedImageUri().observe(this, new androidx.lifecycle.Observer<Uri>() {
+            @Override
+            public void onChanged(Uri uri) {
+                profileImageView.setImageURI(uri);
+            }
+        });
+        profileImageView = findViewById(R.id.profile_image);
 
+        sharedViewModel.getSelectedImageUri().observe(this, uri -> {
+            // Use Picasso, Glide, or similar library to load the image efficiently
+            Picasso.get().load(uri).into(profileImageView);
+        });
 
         tvName = findViewById(R.id.profileName1);
         tvContact = findViewById(R.id.contact1);
