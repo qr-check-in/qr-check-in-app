@@ -1,5 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>  <!--https://stackoverflow.com/questions/3769762/web-colors-in-an-android-color-xml-resource-file, .xml file of colors-->
 <resources>
+    <color name="Surface">#F5FCFC</color>
+
+    <color name="Primary">#7EBFBF</color>
+    <color name="PrimaryContainer">#A0D0D0</color>
+    <color name="OnPrimary">#022424</color>
+
+    <color name="Secondary">#ACDCDC</color>
+    <color name="SecondaryContainer">#D0EBEB</color>
+    <color name="OnSecondary">#054444</color>
+
+    <color name="Tertiary">#8BDC8B</color>
+    <color name="TertiaryContainer">#B2E8B2</color>
+    <color name="OnTertiary">#003f00</color>
+
     <color name="White">#FFFFFF</color>
     <color name="Ivory">#FFFFF0</color>
     <color name="LightYellow">#FFFFE0</color>
@@ -140,4 +154,10 @@
     <color name="DarkBlue">#00008B</color>
     <color name="Navy">#000080</color>
     <color name="Black">#000000</color>
+    <color name="SelectedBlue">#0056FF</color>
+    <color name="ChryslerBlue">#3B28CC</color>
+    <color name="NeonBlue">#2667FF</color>
+    <color name="ChefBlue">#3F8EFC</color>
+    <color name="JordyBlue">#87BFFF</color>
+    <color name="UranianBlue">#ADD7F6</color>
 </resources>
