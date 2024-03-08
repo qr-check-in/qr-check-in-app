@@ -85,7 +85,6 @@ public class QRCodeScan extends AppCompatActivity implements CheckoutFragment.Ch
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         if (!hasScanned) { // Only proceed if scanning hasn't been performed yet
             IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
-
             if (result != null) {
                 if (result.getContents() == null) {
                     Toast.makeText(this, "Scan Cancelled", Toast.LENGTH_SHORT).show();
