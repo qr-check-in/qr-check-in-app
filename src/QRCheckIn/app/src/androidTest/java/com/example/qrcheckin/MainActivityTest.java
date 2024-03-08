@@ -23,9 +23,9 @@ public class MainActivityTest {
     public ActivityScenarioRule<MainActivity> scenario = new ActivityScenarioRule<>(MainActivity.class);
 
     @Test
-    public void testAddCity(){
+    public void testScanButton(){
         // Click on Add City button
-        onView(withId(R.id.button_add)).perform(click());
+        onView(withId(R.id.)).perform(click());
         // Type "Edmonton" in the editText
         onView(withId(R.id.editText_name)).perform(ViewActions.typeText("Edmonton"));
         // Click on Confirm
