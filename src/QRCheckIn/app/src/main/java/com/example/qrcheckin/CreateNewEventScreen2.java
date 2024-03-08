@@ -47,7 +47,7 @@
      private String inputEventDescription;
      private String inputEventLocation;
      private EventPoster inputEventPoster;
-     QRCode checkInQRCode = null;
+     QrCode checkInQRCode = null;
      PromoQRCode promoQRCode = null;
      Event incomingEvent;
 

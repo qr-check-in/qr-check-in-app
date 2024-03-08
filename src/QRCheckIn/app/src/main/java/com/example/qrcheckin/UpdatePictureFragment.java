@@ -24,13 +24,23 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
-
+/**
+ * Fragment for updating the profile picture.
+ * Allows to select a new profile picture from the gallery.
+ * If picture selected, updates SharedViewModel with the new image URI,
+ * uploads the image to Firestore under "/ProfilePictures", and updates the user's profile picture.
+ */
 public class UpdatePictureFragment extends DialogFragment {
     private SharedViewModel sharedViewModel;
     private Uri currentPhotoUri;
     private String currentPhotoPath;
     private String fcmToken;
-
+    /**
+     * Constructs a new instance of UpdatePictureFragment with the specified FCM Token.
+     * The FCM token is used to identify the user and update their profile picture information in the database.
+     *
+     * @param fcmToken The FCM token associated with the user.
+     */
     public UpdatePictureFragment(String fcmToken){
         this.fcmToken = fcmToken;
     }
