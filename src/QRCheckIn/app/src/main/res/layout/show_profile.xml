@@ -31,6 +31,7 @@ tools:context=".ProfileFragment">
             android:text="@string/profile"
             android:textColor="@color/Black"
             android:textSize="50sp" />
+
         <ImageView
             android:id="@+id/edit_profile"
             android:layout_marginStart="75dp"
