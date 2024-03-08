@@ -25,7 +25,12 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.squareup.picasso.Picasso;
-
+/**
+ * Manages user profile view within the app.
+ * User can view & edit their name, contact details, homepage, and profile picture.
+ * Can toggle geolocation tracking .
+ * Listens for updates from the EditProfileFragment dialog and updates the UI.
+ */
 public class ProfileFragment extends AppCompatActivity implements EditProfileFragment.EditProfileDialogListener {
     ImageButton qrButton;
     ImageButton eventButton;
@@ -52,7 +57,12 @@ public class ProfileFragment extends AppCompatActivity implements EditProfileFra
     Switch switchGeolocation;
     FirebaseFirestore db = FirebaseFirestore.getInstance();
     CollectionReference attendeesRef = db.collection("Attendees");
-
+    /**
+     * init profile activity sets UI components & loading user profile data.
+     * @param savedInstanceState If activity re-initialized after previously being shut down,
+     *                           most recent data saved.
+     *                           Otherwise, it is null.
+     */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -167,7 +177,14 @@ public class ProfileFragment extends AppCompatActivity implements EditProfileFra
         });
 
     }
-
+    /**
+     * Callback when profile details are updated via EditProfileFragment.
+     * Updates the displayed profile info.
+     *
+     * @param nameUpdated The updated name of the user.
+     * @param contactUpdated The updated contact information of the user.
+     * @param homepageUpdated The updated homepage URL of the user.
+     */
     @Override
     public void editDetails(String nameUpdated, String contactUpdated, String homepageUpdated) {
         name = nameUpdated;
@@ -179,7 +196,10 @@ public class ProfileFragment extends AppCompatActivity implements EditProfileFra
         userHomepage.setText(homepageUpdated);
 
     }
-
+    /**
+     * Fetches user profile details from Firestore & updates the UI.
+     * @param fcmToken used to identify the user's document in Firestore.
+     */
     // Sets the TextViews and Switch to the Attendee's Profile's attributes
     public void setProfileFields(String fcmToken) {
         DocumentReference docRef = attendeesRef.document(fcmToken);
