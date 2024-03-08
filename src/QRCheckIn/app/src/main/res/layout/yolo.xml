@@ -55,11 +55,7 @@
                     android:layout_width="350dp"
                     android:layout_height="wrap_content"
                     android:paddingTop="10dp"
-                    android:layout_gravity="center"
-                    app:boxCornerRadiusTopStart="30dp"
-                    app:boxCornerRadiusTopEnd="30dp"
-                    app:boxCornerRadiusBottomStart="30dp"
-                    app:boxCornerRadiusBottomEnd="30dp">
+                    android:layout_gravity="center">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/eventNameText"
@@ -70,7 +66,7 @@
                         tools:layout_editor_absoluteY="78dp"
                         android:drawableLeft="@drawable/arrowresized"
                         android:drawablePadding="15dp"
-                        android:paddingStart="30dp">
+                        android:paddingStart="10dp">
 
                     </com.google.android.material.textfield.TextInputEditText>
                 </com.google.android.material.textfield.TextInputLayout>
@@ -88,13 +84,10 @@
                         android:layout_weight="1">
 
                         <ImageButton
-                            android:id="@+id/eventDatePicker"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             app:srcCompat="@drawable/calenderresize"
-                            android:layout_gravity="center_vertical"
-                            android:background="@android:color/transparent"
-                            android:paddingHorizontal="5dp">
+                            android:layout_gravity="center_vertical">
                         </ImageButton>
 
                         <com.google.android.material.textfield.TextInputLayout
@@ -102,11 +95,7 @@
                             android:layout_width="170dp"
                             android:layout_height="wrap_content"
                             android:paddingTop="10dp"
-                            android:layout_weight="5"
-                            app:boxCornerRadiusTopStart="30dp"
-                            app:boxCornerRadiusTopEnd="30dp"
-                            app:boxCornerRadiusBottomStart="30dp"
-                            app:boxCornerRadiusBottomEnd="30dp">
+                            android:layout_weight="5">
 
                             <com.google.android.material.textfield.TextInputEditText
                                 android:id="@+id/eventDateText"
@@ -115,7 +104,6 @@
                                 android:drawablePadding="5dp"
                                 android:hint="Event Date"
                                 android:paddingStart="10dp"
-                                android:gravity="center_horizontal"
                                 tools:layout_editor_absoluteX="30dp"
                                 tools:layout_editor_absoluteY="78dp">
 
@@ -130,12 +118,10 @@
                         android:layout_weight="1">
 
                         <ImageButton
-                            android:id="@+id/eventTimePicker"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            app:srcCompat="@drawable/clockresize"
-                            android:layout_gravity="center_vertical"                    android:background="@android:color/transparent"
-                            android:paddingHorizontal="5dp">
+                            app:srcCompat="@drawable/calenderresize"
+                            android:layout_gravity="center_vertical">
                         </ImageButton>
 
                         <com.google.android.material.textfield.TextInputLayout
@@ -143,15 +129,10 @@
                             android:layout_width="170dp"
                             android:layout_height="wrap_content"
                             android:paddingTop="10dp"
-                            android:layout_weight="1"
-                            app:boxCornerRadiusTopStart="30dp"
-                            app:boxCornerRadiusTopEnd="30dp"
-                            app:boxCornerRadiusBottomStart="30dp"
-                            app:boxCornerRadiusBottomEnd="30dp">
+                            android:layout_weight="1">
 
                             <com.google.android.material.textfield.TextInputEditText
                                 android:id="@+id/eventTimeText"
-                                android:gravity="center_horizontal"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:drawablePadding="5dp"
@@ -170,11 +151,7 @@
                     android:layout_width="350dp"
                     android:layout_height="wrap_content"
                     android:paddingTop="10dp"
-                    android:layout_gravity="center"
-                    app:boxCornerRadiusTopStart="30dp"
-                    app:boxCornerRadiusTopEnd="30dp"
-                    app:boxCornerRadiusBottomStart="30dp"
-                    app:boxCornerRadiusBottomEnd="30dp">
+                    android:layout_gravity="center">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/eventLocationText"
@@ -185,7 +162,7 @@
                         tools:layout_editor_absoluteY="78dp"
                         android:drawableLeft="@drawable/locationresize"
                         android:drawablePadding="5dp"
-                        android:paddingStart="30dp">
+                        android:paddingStart="10dp">
                     </com.google.android.material.textfield.TextInputEditText>
                 </com.google.android.material.textfield.TextInputLayout>
             </LinearLayout>
@@ -207,31 +184,24 @@
                 app:layout_constraintVertical_bias="0.0"></Switch>
             <androidx.cardview.widget.CardView
                 android:id="@+id/tempPosterCard"
-                android:layout_width="250dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="32dp"
                 android:elevation="25dp"
-                app:cardCornerRadius="15dp"
-                app:cardBackgroundColor="@color/UranianBlue"
+                android:paddingVertical="20dp"
+                app:cardCornerRadius="1dp"
                 app:layout_constraintBottom_toTopOf="@+id/uploadPosterButton"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/checkInSwitch">
+
                 <TextView
-                    android:id="@+id/posterTempText"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:background="@color/UranianBlue"
                     android:paddingHorizontal="30dp"
                     android:paddingVertical="20dp"
-                    android:text="Create a poster to attract attendees">
-                </TextView>
-
-                <ImageView
-                    android:id="@+id/posterImageView"
-                    android:layout_width="250dp"
-                    android:layout_height="350dp"
-                    android:scaleType="fitXY">
-                </ImageView>
+                    android:text="Create a poster to attract attendees"></TextView>
             </androidx.cardview.widget.CardView>
 
             <Button
@@ -246,11 +216,10 @@
                 app:layout_constraintBottom_toTopOf="@+id/mainbar"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tempPosterCard">
-            </Button>
-
+                app:layout_constraintTop_toBottomOf="@+id/tempPosterCard"></Button>
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/eventDescription"
+
                 android:layout_width="350dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="32dp"
@@ -258,20 +227,15 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/uploadPosterButton"
-                app:layout_constraintVertical_bias="0.01999998"
-                app:boxCornerRadiusTopStart="30dp"
-                app:boxCornerRadiusTopEnd="30dp"
-                app:boxCornerRadiusBottomStart="30dp"
-                app:boxCornerRadiusBottomEnd="30dp">
+                app:layout_constraintVertical_bias="0.01999998">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/eventDescriptionText"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="Event Description(Optional)"
-                    android:gravity="center_horizontal"
-                    android:textSize="15dp">
-                </com.google.android.material.textfield.TextInputEditText>
+                    android:paddingStart="10dp"
+                    android:textSize="15dp"></com.google.android.material.textfield.TextInputEditText>
             </com.google.android.material.textfield.TextInputLayout>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
@@ -286,12 +250,10 @@
         android:drawableEnd="@drawable/arrowresized"
         android:drawableTint="@color/White"
         android:text="Next"
-        app:layout_constraintTop_toBottomOf="@+id/eventDescription"
         app:layout_constraintBottom_toTopOf="@+id/mainbar"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.95"
-        app:layout_constraintStart_toStartOf="parent">
-    </Button>
+        app:layout_constraintStart_toStartOf="parent"></Button>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

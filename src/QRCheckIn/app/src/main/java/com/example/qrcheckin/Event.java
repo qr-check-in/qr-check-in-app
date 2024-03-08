@@ -2,7 +2,7 @@ package com.example.qrcheckin;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.UUID;
+
 
 /**
  * Event represents an event created by a user
@@ -10,7 +10,6 @@ import java.util.UUID;
 public class Event implements Serializable {
     private ArrayList<Attendee> attendees;
     private ArrayList<Attendee> signups;
-    private UUID eventId;
     private QRCode checkInQRCode;
     private PromoQRCode promoQRCode;
     private EventPoster poster;
@@ -20,6 +19,15 @@ public class Event implements Serializable {
     private String eventTime;
     private String eventLocation;
     private String eventDescription;
+    private boolean checkInStatus;
+
+    public boolean isCheckInStatus() {
+        return checkInStatus;
+    }
+
+    public void setCheckInStatus(boolean checkInStatus) {
+        this.checkInStatus = checkInStatus;
+    }
 
     /**
      * No argument constructor used by firebase
@@ -28,9 +36,9 @@ public class Event implements Serializable {
 
     }
 
+    // force pushing 
     /**
      * Constructs a new Event
-     * @param eventId UUID to identify the Event
      * @param checkInQRCode the check-in QRCode
      * @param promoQRCode the promotional PromoQRCode
      * @param poster the Event's EventPoster
@@ -40,9 +48,8 @@ public class Event implements Serializable {
      * @param eventLocation the Event's location String
      * @param eventDescription the Event's description String
      */
-    public Event(UUID eventId, QRCode checkInQRCode, PromoQRCode promoQRCode, EventPoster poster, String eventName, String eventDate, String eventTime, String eventLocation, String eventDescription) {
+    public Event(QRCode checkInQRCode, PromoQRCode promoQRCode, EventPoster poster, String eventName, String eventDate, String eventTime, String eventLocation, String eventDescription, boolean checkInStatus) {
 
-        this.eventId = eventId;
         this.checkInQRCode = checkInQRCode;
         this.promoQRCode = promoQRCode;
         this.poster = poster;
@@ -51,14 +58,7 @@ public class Event implements Serializable {
         this.eventTime = eventTime;
         this.eventLocation = eventLocation;
         this.eventDescription = eventDescription;
-    }
-
-    /**
-     * Returns the Event's unique ID
-     * @return eventId the UUID of the Event
-     */
-    public UUID getEventId(){
-        return eventId;
+        this.checkInStatus = checkInStatus;
     }
 
     /**
@@ -157,4 +157,6 @@ public class Event implements Serializable {
     public void setEventDescription(String eventDescription) {
         this.eventDescription = eventDescription;
     }
+
+
 }

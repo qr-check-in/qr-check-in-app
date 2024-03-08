@@ -30,7 +30,7 @@ public class EventAdapter extends FirestoreRecyclerAdapter<Event, EventAdapter.V
     }
 
     /**
-     *
+     * Creates a view holder for a new Event item
      * @param parent   The ViewGroup into which the new View will be added after it is bound to
      *                 an adapter position.
      * @param viewType The view type of the new View.
@@ -45,7 +45,7 @@ public class EventAdapter extends FirestoreRecyclerAdapter<Event, EventAdapter.V
     }
 
     /**
-     * Replaces the contents of a view (invoked by the layout manager)
+     * Displays the Event in the appropriate view in the view holder (invoked by the layout manager)
      * @param holder    The ViewHolder which should be updated to represent the contents of the
      *                      item at the given position in the data set.
      * @param position  The position of the item within the adapter's data set.

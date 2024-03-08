@@ -2,6 +2,7 @@ package com.example.qrcheckin;
 
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -11,17 +12,13 @@ import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
-import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.messaging.FirebaseMessaging;
 
-
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity{
     ImageButton qrButton;
     ImageButton eventButton;
     ImageButton addEventButton;
     ImageButton profileButton;
-
-    private FirebaseFirestore db;
+    private String fcmToken;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,8 +32,24 @@ public class MainActivity extends AppCompatActivity {
         addEventButton = findViewById(R.id.addCalenderButton);
         profileButton = findViewById(R.id.profileButton);
 
-        db = FirebaseFirestore.getInstance();
+        // Creates a sub applicaton. If app.hasCheckFcmToken is false, it means the app has just been opened
+        OpenApp app = (OpenApp) this.getApplicationContext();
+        if (!app.hasCheckedFcmToken){
+            // here we can call any methods we only want to occur once upon opening the app
+            Database db = new Database();
 
+            // Get and store this app installation's fcm token string
+            // https://stackoverflow.com/questions/51834864/how-to-save-a-fcm-token-in-android , 2018, Whats Going On
+            SharedPreferences prefs = getSharedPreferences("TOKEN_PREF", MODE_PRIVATE);
+            SharedPreferences.Editor editor = getSharedPreferences("TOKEN_PREF", MODE_PRIVATE).edit();
+            db.getFcmToken(editor);
+            fcmToken = prefs.getString("token", "missing token");
+
+            // Check if an Attendee object associated with this fcm token already exists
+            db.checkExistingAttendees(fcmToken);
+            Log.d("Firestore", String.format("fcmToken STRING (%s) stored", fcmToken));
+            app.hasCheckedFcmToken = true;
+        }
 
 //        Set the Header of the App
         Toolbar toolbar = findViewById(R.id.Toolbar);
@@ -64,25 +77,11 @@ public class MainActivity extends AppCompatActivity {
         profileButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent event = new Intent(getApplicationContext(), test.class);
+                Intent event = new Intent(getApplicationContext(), profileFragment.class);
                 startActivity(event);
+
             }
         });
-    }
-    /**
-     * Retrieves and logs the Firebase Cloud Messaging (FCM) token for this app's installation
-     */
-    private void getFcmToken() {
-        FirebaseMessaging.getInstance().getToken()
-                .addOnCompleteListener(task -> {
-                    if (!task.isSuccessful()) {
-                        Log.w(Utils.TAG, "Fetching FCM registration token failed", task.getException());
-                        return;
-                    }
 
-                    // Get and log the new FCM registration token
-                    String token = task.getResult();
-                    Log.d(Utils.TAG, token);
-                });
     }
 }
