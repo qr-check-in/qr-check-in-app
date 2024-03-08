@@ -65,8 +65,12 @@ public class CreateEventTest1 {
     @Test
     public void testButtonsAndTextboxes(){
         onView(withId(R.id.eventNameText)).perform(ViewActions.typeText("Test Event1"));
-        onView(withId(R.id.eventNameText)).perform(ViewActions.typeText("Test Event1"));
+        onView(withId(R.id.eventDateText)).perform(ViewActions.typeText("2024-3-20"));
+        onView(withId(R.id.eventTimeText)).perform(ViewActions.typeText("15:30"));
+        onView(withId(R.id.eventLocationText)).perform(ViewActions.typeText("University of Alberta"));
+        onView(withId(R.id.eventDescriptionText)).perform(ViewActions.typeText("Testing description"));
         onView(withId(R.id.uploadPosterButton)).perform(click());
+
 
     }
 }
