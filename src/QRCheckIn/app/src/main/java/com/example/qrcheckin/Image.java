@@ -6,7 +6,7 @@ public class Image {
     private File imageFile;
     private Attendee uploader;
 
-    public Image() {
+    public Image(File imageFile, Attendee uploader) {
         this.imageFile = imageFile;
         this.uploader = uploader;
     }
@@ -18,6 +18,8 @@ public class Image {
     public Attendee getUploader() {
         return uploader;
     }
+
     public void deleteImage() {
+        // Implement image deletion logic here
     }
 }

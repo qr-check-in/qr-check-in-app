@@ -2,12 +2,8 @@ package com.example.qrcheckin;
 
 import static com.example.qrcheckin.R.layout.show_profile;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.lifecycle.ViewModelProvider;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.net.Uri;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -16,13 +12,20 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.ImageButton;
+import android.widget.Switch;
+import android.widget.TextView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.squareup.picasso.Picasso;
+import androidx.appcompat.app.AppCompatActivity;
 
-import java.io.File;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 public class profileFragment extends AppCompatActivity implements editProfilefragment.EditProfileDialogListener {
     ImageButton qrButton;
@@ -45,25 +48,16 @@ public class profileFragment extends AppCompatActivity implements editProfilefra
 
     ImageView editProfile;
 
+    TextView tvName;
+    TextView tvContact;
+    TextView tvHomepage;
+    Switch switchGeolocation;
+    FirebaseFirestore db = FirebaseFirestore.getInstance();
+    CollectionReference attendeesRef = db.collection("Attendees");
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(show_profile);
-
-        sharedViewModel = new ViewModelProvider(this).get(SharedViewModel.class);
-        sharedViewModel.getSelectedImageUri().observe(this, new androidx.lifecycle.Observer<Uri>() {
-            @Override
-            public void onChanged(Uri uri) {
-                profileImageView.setImageURI(uri);
-            }
-        });
-        profileImageView = findViewById(R.id.profile_image);
-
-        sharedViewModel.getSelectedImageUri().observe(this, uri -> {
-            // Use Picasso, Glide, or similar library to load the image efficiently
-            Picasso.get().load(uri).into(profileImageView);
-        });
-
         qrButton = findViewById(R.id.qrButton);
         eventButton = findViewById(R.id.calenderButton);
         addEventButton = findViewById(R.id.addCalenderButton);
@@ -75,6 +69,30 @@ public class profileFragment extends AppCompatActivity implements editProfilefra
         userContact = findViewById(R.id.contact);
         userHomepage = findViewById(R.id.homepage);
         userNameBesidePic = findViewById(R.id.profileName);
+
+
+        tvName = findViewById(R.id.profileName1);
+        tvContact = findViewById(R.id.contact1);
+        tvHomepage = findViewById(R.id.homepage1);
+        switchGeolocation = findViewById(R.id.geoswitch);
+
+        // Get the fcmToken of the Attendee
+        SharedPreferences prefs = getSharedPreferences("TOKEN_PREF", MODE_PRIVATE);
+        String fcmToken = prefs.getString("token", "missing token");
+        Log.d("Firestore", String.format("TEST TOKEN STRING '%s'", fcmToken));
+        // set the profile attribute fields
+        setProfileFields(fcmToken);
+
+        // Listener for the Geolocation tracking switch
+        switchGeolocation.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                Database database = new Database();
+                // updates the Attendee's geolocation attribute
+                database.updateAttendeeGeolocation(fcmToken, isChecked);
+            }
+        });
+
 
         eventButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -136,5 +154,27 @@ public class profileFragment extends AppCompatActivity implements editProfilefra
         userContact.setText(contactUpdated);
         userHomepage.setText(homepageUpdated);
 
+    }
+    // Sets the TextViews and Switch to the Attendee's Profile's attributes
+    public void setProfileFields(String fcmToken){
+        DocumentReference docRef = attendeesRef.document(fcmToken);
+        docRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                Attendee attendee = documentSnapshot.toObject(Attendee.class);
+                if(attendee == null){
+                    Log.e("Firestore", "Attendee doc not found");
+                }
+                else{
+                    Log.d("Firestore", String.format("Attendee with name (%s) retrieved", attendee.getProfile().getName()));
+                    Profile profile = attendee.getProfile();
+                    // set fields for profile
+                    tvName.setText(profile.getName());
+                    tvContact.setText(profile.getContact());
+                    tvHomepage.setText(profile.getHomepage());
+                    switchGeolocation.setChecked(profile.getTrackGeolocation());
+                }
+            }
+        });
     }
 }

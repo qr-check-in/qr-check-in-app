@@ -3,46 +3,80 @@ package com.example.qrcheckin;
 import java.io.Serializable;
 import java.util.ArrayList;
 
+
+/**
+ * Event represents an event created by a user
+ */
 public class Event implements Serializable {
-    private AttendeeList Attendee;
-    private AttendeeList signups;
+    private ArrayList<Attendee> attendees;
+    private ArrayList<Attendee> signups;
     private QRCode checkInQRCode;
     private PromoQRCode promoQRCode;
     private EventPoster poster;
     private ArrayList<Notification> notifications;
     private String eventName;
+    private String eventDate;
     private String eventTime;
     private String eventLocation;
     private String eventDescription;
+    private boolean checkInStatus;
 
-    public Event(AttendeeList attendee, AttendeeList signups, QRCode checkInQRCode, PromoQRCode promoQRCode, EventPoster poster, ArrayList<Notification> notifications, String eventName, String eventTime, String eventLocation, String eventDescription) {
-        Attendee = attendee;
-        this.signups = signups;
+    public boolean isCheckInStatus() {
+        return checkInStatus;
+    }
+
+    public void setCheckInStatus(boolean checkInStatus) {
+        this.checkInStatus = checkInStatus;
+    }
+
+    /**
+     * No argument constructor used by firebase
+     */
+    public Event() {
+
+    }
+
+    // force pushing 
+    /**
+     * Constructs a new Event
+     * @param checkInQRCode the check-in QRCode
+     * @param promoQRCode the promotional PromoQRCode
+     * @param poster the Event's EventPoster
+     * @param eventName the Event's name String
+     * @param eventDate the Event's date String
+     * @param eventTime the Event's time String
+     * @param eventLocation the Event's location String
+     * @param eventDescription the Event's description String
+     */
+    public Event(QRCode checkInQRCode, PromoQRCode promoQRCode, EventPoster poster, String eventName, String eventDate, String eventTime, String eventLocation, String eventDescription, boolean checkInStatus) {
+
         this.checkInQRCode = checkInQRCode;
         this.promoQRCode = promoQRCode;
         this.poster = poster;
-        this.notifications = notifications;
         this.eventName = eventName;
+        this.eventDate = eventDate;
         this.eventTime = eventTime;
         this.eventLocation = eventLocation;
         this.eventDescription = eventDescription;
+        this.checkInStatus = checkInStatus;
     }
 
-    public AttendeeList getAttendee() {
-        return Attendee;
+    /**
+     * Returns the ArrayList of Attendees who have checked into the Event
+     * @return attendees ArrayList of Attendees
+     */
+    public ArrayList<Attendee> getAttendee() {
+        return attendees;
     }
 
-    public void setAttendee(AttendeeList attendee) {
-        Attendee = attendee;
-    }
-
-    public AttendeeList getSignups() {
+    /**
+     * Returns the ArrayList of signups who have signed-up for the Event
+     * @return signups ArrayList of Attendees
+     */
+    public ArrayList<Attendee> getSignups() {
         return signups;
     }
 
-    public void setSignups(AttendeeList signups) {
-        this.signups = signups;
-    }
 
     public QRCode getCheckInQRCode() {
         return checkInQRCode;
@@ -84,6 +118,22 @@ public class Event implements Serializable {
         this.eventName = eventName;
     }
 
+    /**
+     * gets the Event's date
+     * @return string in the format "yyyy-mm-dd"
+     */
+    public String getEventDate() {
+        return eventDate;
+    }
+
+    /**
+     * sets the Event's date
+     * @param eventDate String in the format "yyyy-mm-dd"
+     */
+    public void setEventDate(String eventDate) {
+        this.eventDate = eventDate;
+    }
+
     public String getEventTime() {
         return eventTime;
     }
@@ -105,14 +155,8 @@ public class Event implements Serializable {
     }
 
     public void setEventDescription(String eventDescription) {
-        this.eventDescription = eventDescription;}
-
-    public Event(AttendeeList attendee, AttendeeList signups, QRCode checkInQRCode, PromoQRCode promoQRCode, EventPoster poster, ArrayList<Notification> notifications) {
-        Attendee = attendee;
-        this.signups = signups;
-        this.checkInQRCode = checkInQRCode;
-        this.promoQRCode = promoQRCode;
-        this.poster = poster;
-        this.notifications = notifications;
+        this.eventDescription = eventDescription;
     }
+
+
 }

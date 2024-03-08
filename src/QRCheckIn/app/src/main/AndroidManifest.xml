@@ -7,6 +7,7 @@
     <uses-feature android:name="android.hardware.camera"
         android:required="true" />
     <application
+        android:name=".OpenApp"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
@@ -26,12 +27,15 @@
                 android:resource="@xml/file_paths" />
         </provider>
         <activity
+            android:name=".EventPage"
+            android:exported="false" />
+        <activity
             android:name=".test"
             android:exported="false" />
         <activity
             android:name=".createNewEventScreen2"
             android:exported="false"
-            android:parentActivityName=".createNewEventScreen1"/>
+            android:parentActivityName=".createNewEventScreen1" />
         <activity
             android:name=".createNewEventScreen1"
             android:exported="false" />

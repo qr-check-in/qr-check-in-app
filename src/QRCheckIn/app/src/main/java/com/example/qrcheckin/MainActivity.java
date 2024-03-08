@@ -1,33 +1,16 @@
 package com.example.qrcheckin;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
 
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
-import android.Manifest;
-import android.app.Activity;
-import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.database.Cursor;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.net.Uri;
+import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.provider.MediaStore;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
-import java.util.ArrayList;
-import java.util.List;
 
-import com.google.firebase.firestore.FirebaseFirestore;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 
 public class MainActivity extends AppCompatActivity{
@@ -35,8 +18,7 @@ public class MainActivity extends AppCompatActivity{
     ImageButton eventButton;
     ImageButton addEventButton;
     ImageButton profileButton;
-
-    private FirebaseFirestore db;
+    private String fcmToken;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,7 +32,24 @@ public class MainActivity extends AppCompatActivity{
         addEventButton = findViewById(R.id.addCalenderButton);
         profileButton = findViewById(R.id.profileButton);
 
-        db = FirebaseFirestore.getInstance();
+        // Creates a sub applicaton. If app.hasCheckFcmToken is false, it means the app has just been opened
+        OpenApp app = (OpenApp) this.getApplicationContext();
+        if (!app.hasCheckedFcmToken){
+            // here we can call any methods we only want to occur once upon opening the app
+            Database db = new Database();
+
+            // Get and store this app installation's fcm token string
+            // https://stackoverflow.com/questions/51834864/how-to-save-a-fcm-token-in-android , 2018, Whats Going On
+            SharedPreferences prefs = getSharedPreferences("TOKEN_PREF", MODE_PRIVATE);
+            SharedPreferences.Editor editor = getSharedPreferences("TOKEN_PREF", MODE_PRIVATE).edit();
+            db.getFcmToken(editor);
+            fcmToken = prefs.getString("token", "missing token");
+
+            // Check if an Attendee object associated with this fcm token already exists
+            db.checkExistingAttendees(fcmToken);
+            Log.d("Firestore", String.format("fcmToken STRING (%s) stored", fcmToken));
+            app.hasCheckedFcmToken = true;
+        }
 
 //        Set the Header of the App
         Toolbar toolbar = findViewById(R.id.Toolbar);
