@@ -37,34 +37,54 @@ public class CreateEventTest1 {
     public ActivityScenarioRule<CreateNewEventScreen1> scenario = new
             ActivityScenarioRule<CreateNewEventScreen1>(CreateNewEventScreen1.class);
 
+    /**
+     * tests main bar scan
+     */
     @Test
     public void testMainBarScan(){
         onView(withId(R.id.qrButton)).perform(click());
         onView(withId(R.id.welcomeToAppTest)).check(matches(withText("Welcome to QRCheckIn")));
     }
+
+    /**
+     * tests main bar event navigation
+     */
     @Test
     public void testMainBarEvents(){
         onView(withId(R.id.calenderButton)).perform(click());
         onView(withId(R.id.eventListToolbar)).check(matches(isDisplayed()));
     }
 
+    /**
+     * tests main bar profile button navigation
+     */
     @Test
     public void testMainBarProfile(){
         onView(withId(R.id.profileButton)).perform(click());
         onView(withId(R.id.profile1)).check(matches(isDisplayed()));
     }
 
+    /**
+     * tests if the button to open the gallery works
+     */
     @Test
     public void testOpenGallery(){
         // Check if the button works
         onView(withId(R.id.uploadPosterButton)).perform(click());
     }
 
+    /**
+     * Tests if navigation to createNewEventScreen2
+     */
     @Test
     public void testNextButton(){
         onView(withId(R.id.nextButton)).perform(click());
         onView(withId(R.id.firstBox)).check(matches(isDisplayed()));
     }
+
+    /**
+     * Tests the text boxes and buttons on the page
+     */
     @Test
     public void testButtonsAndTextboxes(){
         // Test the textboxes
@@ -81,7 +101,6 @@ public class CreateEventTest1 {
 
         // Test the switch
         onView(withId(R.id.checkInSwitch)).perform(ViewActions.click());
-
 
     }
 }
