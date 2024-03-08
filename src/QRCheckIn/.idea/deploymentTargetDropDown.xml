@@ -29,7 +29,10 @@
           </targetsSelectedWithDialog>
         </State>
       </entry>
-      <entry key="testDatePicker()">
+      <entry key="testMainBarScan()">
+        <State />
+      </entry>
+      <entry key="testScanButton()">
         <State />
       </entry>
     </value>
