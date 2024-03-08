@@ -17,7 +17,7 @@ import com.google.firebase.storage.UploadTask;
 public class Image {
     //private File imageFile;
     private Attendee uploader;
-    private Uri imageUri;
+    private String uriString;
     private final FirebaseStorage storage = FirebaseStorage.getInstance();
 
     StorageReference storageReference = storage.getReference();
@@ -25,21 +25,26 @@ public class Image {
     /**
      * Constructs an Image instance with specified image file and uploader.
      *
-     * @param imageUri Uri of the image
+     * @param uriString Uri of the image
      * @param uploader the attendee who uploaded the image.
      */
-    public Image(Uri imageUri, Attendee uploader) {
-        this.imageUri = imageUri;
+    public Image(String uriString, Attendee uploader) {
+        this.uriString = uriString;
         this.uploader = uploader;
     }
+
+    /**
+     * Empty constructor for firebase
+     */
+    public Image(){}
 
     /**
      * Gets the image file.
      *
      * @return the image file.
      */
-    public Uri getImageUri() {
-        return imageUri;
+    public String getUriString() {
+        return uriString;
     }
 
     /**
@@ -67,7 +72,8 @@ public class Image {
     public void uploadImage(String folderName, String fileName){
         // ISSUE: pathString argument does not rename file
         StorageReference reference = storageReference.child(folderName+fileName);
-        reference.putFile(imageUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+        Uri uri = Uri.parse(uriString);
+        reference.putFile(uri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
             @Override
             public void onSuccess (UploadTask.TaskSnapshot taskSnapshot){
 

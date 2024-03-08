@@ -111,9 +111,16 @@ public class Database {
                 });
     }
 
+    /**
+     * Updates the profilePicture field in an Attendee's Profile
+     * @param fcmToken String of the Attendee's docID in firebase
+     * @param uri Uri of the ProfilePicture
+     */
     public void updateProfilePicture(String fcmToken, Uri uri){
+        // Create doc reference for the Attendee
         DocumentReference attendeeRef = db.collection("Attendees").document(fcmToken);
-        attendeeRef.update("profile.picture", uri).addOnSuccessListener(new OnSuccessListener<Void>() {
+        // Update the uriString field
+        attendeeRef.update("profile.profilePicture.uriString", uri.toString()).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void unused) {
                 Log.d("Firestore", "docsnapshot updated");

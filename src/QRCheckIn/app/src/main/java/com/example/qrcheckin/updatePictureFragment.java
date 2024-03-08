@@ -50,9 +50,11 @@ public class updatePictureFragment extends DialogFragment {
                 if (uri != null) {
                     sharedViewModel.setSelectedImageUri(uri);
                     dismiss();
-                    ProfilePicture profilePicture = new ProfilePicture(uri, null);
+                    // Creates a ProfilePicture object and calls method to upload the image to firestore
+                    ProfilePicture profilePicture = new ProfilePicture(uri.toString(), null);
                     profilePicture.uploadImage("/ProfilePictures", uri.toString());
                     Database database = new Database();
+                    // Updates the profilePicture field
                     database.updateProfilePicture(fcmToken, uri);
 
                 }

@@ -8,7 +8,7 @@ public class Profile {
     private String name;
     private String homepage;
     private String contact;
-    private String profilePicture;
+    private ProfilePicture profilePicture;
     private Location location;
     /**
      * Constructs a Profile for an Attendee
@@ -79,16 +79,16 @@ public class Profile {
      * Returns the ProfilePicture of the Profile
      * @return the ProfilePicture of the Profile
      */
-    public String getPicture() {
+    public ProfilePicture getProfilePicture() {
         return profilePicture;
     }
 
     /**
      * Sets the ProfilePicture of the Profile
-     * @param picture the ProfilePicture of the Profile
+     * @param profilePicture the ProfilePicture of the Profile
      */
-    public void setPicture(String picture) {
-        this.profilePicture = picture;
+    public void setProfilePicture(ProfilePicture profilePicture) {
+        this.profilePicture = profilePicture;
     }
 
     /**

@@ -202,14 +202,23 @@ public class profileFragment extends AppCompatActivity implements editProfilefra
                     tvContact.setText(profile.getContact());
                     tvHomepage.setText(profile.getHomepage());
                     switchGeolocation.setChecked(profile.getTrackGeolocation());
-                    displayProfilePicture(profile.getPicture());
+                    // Display profilePicutre if the profile has one
+                    if(profile.getProfilePicture() != null){
+                        Log.d("Firestore", "calling display profile pic");
+                        displayProfilePicture(profile.getProfilePicture().getUriString());
+                    }
                 }
             }
         });
     }
 
+    /**
+     * Retrieves a file from FireStorage, converts to a bitmap and sets the profileImageView to display it
+     * @param uriString name of the file in FireStorage
+     */
     public void displayProfilePicture(String uriString){
-        String filePath = "/content:/media/picker/0/com.android.providers.media.photopicker/media/1000000037";
+        // TEMPORARY: HARD CODING FILE PATH AND NAME
+        String filePath = "/ProfilePicturescontent:/media/picker/0/com.android.providers.media.photopicker/media/1000000034";
         FirebaseStorage storage = FirebaseStorage.getInstance();
         StorageReference storageReference = storage.getReference();
         // ISSUE: file name is not getting saved as its uri string, so we can't find the file in storage

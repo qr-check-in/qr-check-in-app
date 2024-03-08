@@ -7,8 +7,8 @@ import java.io.File;
 public class EventPoster extends Image {
     private Attendee uploader;
 
-    public EventPoster(Uri imageUri, Attendee uploader) {
-        super(imageUri, uploader);
+    public EventPoster(String uriString, Attendee uploader) {
+        super(uriString, uploader);
     }
 
 
