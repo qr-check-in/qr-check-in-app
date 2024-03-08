@@ -2,36 +2,37 @@ package com.example.qrcheckin;
 
 import static com.example.qrcheckin.R.layout.show_profile;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.lifecycle.ViewModelProvider;
-
-import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.AdapterView;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
-
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.Switch;
 import android.widget.TextView;
-import android.widget.ImageView;
-import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModelProvider;
 
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.squareup.picasso.Picasso;
+import com.google.firebase.storage.FileDownloadTask;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+
+import java.io.File;
+import java.io.IOException;
 
 public class profileFragment extends AppCompatActivity implements editProfilefragment.EditProfileDialogListener {
     ImageButton qrButton;
@@ -87,7 +88,7 @@ public class profileFragment extends AppCompatActivity implements editProfilefra
 
         sharedViewModel.getSelectedImageUri().observe(this, uri -> {
             // Use Picasso, Glide, or similar library to load the image efficiently
-            Picasso.get().load(uri).into(profileImageView);
+            // Picasso.get().load(uri).into(profileImageView);
         });
 
         tvName = findViewById(R.id.profileName1);
@@ -201,8 +202,35 @@ public class profileFragment extends AppCompatActivity implements editProfilefra
                     tvContact.setText(profile.getContact());
                     tvHomepage.setText(profile.getHomepage());
                     switchGeolocation.setChecked(profile.getTrackGeolocation());
+                    displayProfilePicture(profile.getPicture());
                 }
             }
         });
+    }
+
+    public void displayProfilePicture(String uriString){
+        String filePath = "/content:/media/picker/0/com.android.providers.media.photopicker/media/1000000037";
+        FirebaseStorage storage = FirebaseStorage.getInstance();
+        StorageReference storageReference = storage.getReference();
+        // ISSUE: file name is not getting saved as its uri string, so we can't find the file in storage
+        storageReference = FirebaseStorage.getInstance().getReference().child(filePath);
+        try{
+            final File localFile = File.createTempFile("tempProfilePic", "jpg");
+            storageReference.getFile(localFile).addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
+                @Override
+                public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
+                    Log.d("Firestore", "picture retrieved");
+                    Bitmap bitmap = BitmapFactory.decodeFile(localFile.getAbsolutePath());
+                    profileImageView.setImageBitmap(bitmap);
+                }
+            }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    Log.e("Firestore", "picture error");
+                }
+            });
+        } catch (IOException e){
+            e.printStackTrace();
+        }
     }
 }

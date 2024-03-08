@@ -11,6 +11,7 @@ public class Attendee {
     private Profile profile;
     private Location location;
 
+
     /**
      * Constructs a new Attendee
      */
