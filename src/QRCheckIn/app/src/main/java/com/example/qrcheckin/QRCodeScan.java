@@ -24,7 +24,6 @@ public class QRCodeScan extends AppCompatActivity{
     TextView title;
     TextView location;
     TextView dateAndtime;
-    ImageButton goBack;
     ImageButton qrButton;
     ImageButton eventButton;
     ImageButton addEventButton;
@@ -41,7 +40,6 @@ public class QRCodeScan extends AppCompatActivity{
         title = findViewById(R.id.topNavigationText);
         location = findViewById(R.id.location);
         dateAndtime = findViewById(R.id.dateAndtime);
-        goBack = findViewById(R.id.back);
 
         qrButton = findViewById(R.id.qrCode);
         eventButton = findViewById(R.id.events);
