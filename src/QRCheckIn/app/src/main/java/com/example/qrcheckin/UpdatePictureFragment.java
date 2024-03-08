@@ -35,6 +35,7 @@ public class UpdatePictureFragment extends DialogFragment {
         this.fcmToken = fcmToken;
     }
 
+
     // Permission request launcher
 
 
