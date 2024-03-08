@@ -79,8 +79,7 @@ public class EventPage extends AppCompatActivity {
                 } else {
                     Log.d("Firestore", String.format("No such document with id %s", documentId));
                 }
-                //ivEventPoster.setImageURI(event.getPoster()); TODO: Make event.getPoster() return a URI
-                //ivEventPromoQr.setImageURI(event.getPromoQRCode());
+
             }
         });
 
