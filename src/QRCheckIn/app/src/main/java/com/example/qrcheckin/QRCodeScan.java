@@ -117,19 +117,17 @@ public class QRCodeScan extends AppCompatActivity{
                 {
                     // Separate the scanned data into different variables
                     String scannedData = result.getContents();
-                    String[] lines = scannedData.split("\n");
+
+                    // Remove unwanted characters from the end using trim() and regular expression
+                    String hashedContent = scannedData.replaceAll("[\\n\\r]+$", "").trim();
+
+//                    String[] lines = scannedData.split("\n");
                     String summary = null, destination = null, dtstart = null;
 
-                    // Retrieve the Title, description, location, time and date form QR code data
-                    for (String line : lines) {
-                        if (line.startsWith("TITLE:")) {
-                            summary = line.substring("TITLE:".length()).trim();
-                        } else if (line.startsWith("LOCATION:")) {
-                            destination = line.substring("LOCATION:".length()).trim();
-                        } else if (line.startsWith("DTSTART:")) {
-                            dtstart = line.substring("DTSTART:".length()).trim();
-                        }
-                    }
+
+
+
+
 
                     // get the date and time formatted
                     String formattedDateTime = null;

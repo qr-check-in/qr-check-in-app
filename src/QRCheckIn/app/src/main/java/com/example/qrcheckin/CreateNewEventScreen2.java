@@ -23,6 +23,9 @@
  import com.google.zxing.common.BitMatrix;
  import com.journeyapps.barcodescanner.BarcodeEncoder;
 
+ import java.math.BigInteger;
+ import java.security.MessageDigest;
+ import java.security.NoSuchAlgorithmException;
  import java.util.UUID;
 
  public class CreateNewEventScreen2 extends AppCompatActivity {
@@ -167,8 +170,16 @@
         genCheckInQR.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String combinedContent = "TITLE:" + inputEventName + "\n" + "DTSTART:" + inputEventDate + "T" + inputEventTime + "Z" + "\n" + "LOCATION:" + inputEventLocation;
-                generateQRCode(combinedContent);
+                String combinedContent = inputEventName + inputEventLocation + inputEventDate + inputEventTime;
+                Log.d("CombinedContent", "CombinedContent: " + combinedContent);
+
+                // Create a new QrCode object with combinedContent as unhashed content
+                checkInQRCode = new QrCode(null, null, combinedContent);
+
+                String hashedContent = checkInQRCode.getHashedContent();
+                Log.d("HashedContent", "HashedContent: " + hashedContent);
+
+                generateQRCode(hashedContent);
             }
         });
     }
@@ -191,10 +202,11 @@
                  }
              });
 
-     private void generateQRCode(String combinedContent) {
+
+     private void generateQRCode(String hashedContent) {
          try {
              BarcodeEncoder barcodeEncoder = new BarcodeEncoder();
-             BitMatrix bitMatrix = barcodeEncoder.encode(combinedContent, BarcodeFormat.QR_CODE, 200, 175);
+             BitMatrix bitMatrix = barcodeEncoder.encode(hashedContent, BarcodeFormat.QR_CODE, 200, 175);
 
              Bitmap bitmap = Bitmap.createBitmap(bitMatrix.getWidth(), bitMatrix.getHeight(), Bitmap.Config.RGB_565);
              for (int x = 0; x < bitMatrix.getWidth(); x++) {

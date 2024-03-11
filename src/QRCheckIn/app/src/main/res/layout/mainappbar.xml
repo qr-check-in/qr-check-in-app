@@ -10,8 +10,8 @@
 
     <ImageButton
         android:id="@+id/qrButton"
-        android:layout_width="118dp"
-        android:layout_height="34dp"
+        android:layout_width="120dp"
+        android:layout_height="match_parent"
         android:layout_weight="1"
         android:background="@drawable/buttonselect"
         android:paddingHorizontal="5dp"
