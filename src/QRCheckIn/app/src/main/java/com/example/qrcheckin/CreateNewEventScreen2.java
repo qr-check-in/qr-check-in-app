@@ -1,6 +1,7 @@
  package com.example.qrcheckin;
 
  import android.content.Intent;
+ import android.content.SharedPreferences;
  import android.graphics.Bitmap;
  import android.os.Bundle;
  import android.util.Log;
@@ -23,9 +24,6 @@
  import com.google.zxing.common.BitMatrix;
  import com.journeyapps.barcodescanner.BarcodeEncoder;
 
- import java.math.BigInteger;
- import java.security.MessageDigest;
- import java.security.NoSuchAlgorithmException;
  import java.util.UUID;
 
  public class CreateNewEventScreen2 extends AppCompatActivity {
@@ -42,7 +40,6 @@
      Button genPromoQR;
      Button genCheckInQR;
      Button uploadQR;
-
      private Database db;
      private String inputEventName;
      private String inputEventDate;
@@ -81,6 +78,9 @@
 
         TextView header = findViewById(R.id.mainHeader);
         header.setText("Create an Event");
+
+        // get the unique event document id
+//        UUID eventId = UUID.randomUUID();
 
         db = new Database();
 
@@ -132,7 +132,6 @@
              */
             @Override
             public void onClick(View v) {
-                UUID eventId = UUID.randomUUID();
 
                 // TEMPORARY: initializing event attributes to null to create a new Event
                 // TODO: set all event attributes to user's inputs
@@ -183,6 +182,8 @@
             }
         });
     }
+
+
      // https://developer.android.com/jetpack/androidx/releases/activity#1.7.0, 2024, how to select a picture from gallery
      // Registers a photo picker activity launcher in single-select mode.
      ActivityResultLauncher<PickVisualMediaRequest> pickMedia =
@@ -203,10 +204,10 @@
              });
 
 
-     private void generateQRCode(String hashedContent) {
+     private void generateQRCode(String eventId) {
          try {
              BarcodeEncoder barcodeEncoder = new BarcodeEncoder();
-             BitMatrix bitMatrix = barcodeEncoder.encode(hashedContent, BarcodeFormat.QR_CODE, 200, 175);
+             BitMatrix bitMatrix = barcodeEncoder.encode(String.valueOf(eventId), BarcodeFormat.QR_CODE, 200, 175);
 
              Bitmap bitmap = Bitmap.createBitmap(bitMatrix.getWidth(), bitMatrix.getHeight(), Bitmap.Config.RGB_565);
              for (int x = 0; x < bitMatrix.getWidth(); x++) {

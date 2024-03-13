@@ -35,6 +35,7 @@ public class QRCodeScan extends AppCompatActivity{
     ImageButton addEventButton;
     ImageButton profileButton;
     private boolean hasScanned = false;   // Boolean flag to track whether a scan has been performed
+    String summary = null, destination = null, dateOfEvent = null, timeOfEvent = null, dtstart = null;
 
     // Get access to the Firestore instance
     FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -61,6 +62,8 @@ public class QRCodeScan extends AppCompatActivity{
 
         // uses the ZXing library to open the camera and proceed scanning
         startScanner();
+
+        Toast.makeText(this, "Buttons started!", Toast.LENGTH_SHORT).show();
 
 
         qrButton.setOnClickListener(new View.OnClickListener() {
@@ -94,6 +97,9 @@ public class QRCodeScan extends AppCompatActivity{
                 startActivity(event);
             }
         });
+
+        Toast.makeText(this, "Buttons Ended!", Toast.LENGTH_SHORT).show();
+
     }
 
     /**
@@ -118,6 +124,9 @@ public class QRCodeScan extends AppCompatActivity{
      */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+
+        Toast.makeText(this, "OnActivityResult started!", Toast.LENGTH_SHORT).show();
+
         if (!hasScanned) { // Only proceed if scanning hasn't been performed yet
             IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
             if (result != null) {
@@ -129,13 +138,6 @@ public class QRCodeScan extends AppCompatActivity{
                 {
                     // Separate the scanned data into different variables
                     String scannedData = result.getContents();
-
-                    final String[] summary = {null};
-                    final String[] destination = { null };
-                    final String[] dateOfEvent = { null };
-                    final String[] timeOfEvent = { null };
-                    final String[] dtstart = { null };
-
 
                     // Query Firestore to find the document with the matching hashedContent in the checkInQRCode field
                     Query query = eventsRef.whereEqualTo("checkInQRCode.hashedContent", scannedData);
@@ -152,13 +154,13 @@ public class QRCodeScan extends AppCompatActivity{
                                 DocumentSnapshot documentSnapshot = querySnapshot.getDocuments().get(0);
 
                                 // Extract relevant information from the document
-                                summary[0] = documentSnapshot.getString("eventName");
-                                destination[0] = documentSnapshot.getString("eventLocation");
-                                dateOfEvent[0] = documentSnapshot.getString("eventDate");
-                                timeOfEvent[0] = documentSnapshot.getString("eventTime");
+                                summary = documentSnapshot.getString("eventName");
+                                destination = documentSnapshot.getString("eventLocation");
+                                dateOfEvent = documentSnapshot.getString("eventDate");
+                                timeOfEvent = documentSnapshot.getString("eventTime");
 
                                 // make a string combined with date and time
-                                dtstart[0] = dateOfEvent[0] + 'T' + timeOfEvent[0] + 'Z';
+                                dtstart = dateOfEvent + 'T' + timeOfEvent + 'Z';
 
 
                             } else {
@@ -199,25 +201,30 @@ public class QRCodeScan extends AppCompatActivity{
                     try {
                         SimpleDateFormat inputFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm'Z'");
                         SimpleDateFormat outputFormat = new SimpleDateFormat("MMM dd, yyyy 'at' hh:mm a", Locale.US);
-                        Date date = inputFormat.parse(dtstart[0]);
+                        Date date = inputFormat.parse(dtstart);
                         formattedDateTime = outputFormat.format(date);
                     } catch (ParseException e) {
                         e.printStackTrace();
                     }
 
                     // Display or use the separated variables as needed
-                    Toast.makeText(this, "CHECKED IN " + summary[0], Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, "CHECKED IN " + summary, Toast.LENGTH_SHORT).show();
 
                     // set the event details on the event page
-                    title.setText(summary[0]);
-                    location.setText(destination[0]);
+                    title.setText(summary);
+                    location.setText(destination);
                     dateAndtime.setText(formattedDateTime);
 
                     hasScanned = true; // Set the flag to true after successful scan
+
+                    Toast.makeText(this, "OnActivityResult Finished!", Toast.LENGTH_SHORT).show();
+
+
                 }
             } else {
                 super.onActivityResult(requestCode, resultCode, data);
             }
         }
+        Toast.makeText(this, "OnActivityResult Finished!", Toast.LENGTH_SHORT).show();
     }
 }
