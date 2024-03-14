@@ -39,6 +39,9 @@ import com.google.firebase.storage.StorageReference;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * Manages user profile view within the app.
  * User can view & edit their name, contact details, homepage, and profile picture.
@@ -162,16 +165,28 @@ public class ProfileFragment extends AppCompatActivity implements EditProfileFra
         removePicture.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Set the CircleImageView to show the default profile image
-                profileImageView.setImageResource(R.drawable.profile); // Assuming 'profile' is your default/placeholder
-                                                                       // image
+                DocumentReference userProfileRef = attendeesRef.document(fcmToken);
 
-                // If you have logic that stores the current profile image (e.g., in Shared
-                // Preferences or a database),
-                // ensure to update that as well to reflect the removal/resetting of the profile
-                // picture.
+                // Directly set uriString to null without fetching the document first
+                userProfileRef.update("profile.profilePicture.uriString", null)
+                        .addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void aVoid) {
+                                Log.d("ProfileFragment", "Profile picture URI set to null successfully.");
+                                // Update UI with default profile image
+                                profileImageView.setImageResource(R.drawable.profile); // Adjust with your default image
+                            }
+                        })
+                        .addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                Log.e("ProfileFragment", "Failed to set profile picture URI to null.", e);
+                            }
+                        });
             }
         });
+
+
         editProfile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
