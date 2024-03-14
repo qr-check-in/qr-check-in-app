@@ -5,6 +5,11 @@ public class QrCode extends Image {
     private String hashedContent;
 
     /**
+     * empty constructor for firestore purposes
+     */
+    public QrCode(){}
+
+    /**
      * Store a QR code with a generated ID linked to an event
      * @param uriString String uri representation of an image
      * @param uploader  Attendee object that uploaded the image

@@ -54,6 +54,8 @@ public class CreateNewEventScreen1 extends AppCompatActivity implements SelectDa
     private String inputEventLocation;
     private boolean isChecked;
 
+    private String inputPosterString;
+
     /**
      * Initializes activity, sets up user interface for create event.
      * Initializes toolbar buttons for navigation, setting up listeners
@@ -161,6 +163,8 @@ public class CreateNewEventScreen1 extends AppCompatActivity implements SelectDa
                 // https://stackoverflow.com/questions/2091465/how-do-i-pass-data-between-activities-in-android-application , 2011, user914425
 
                 event.putExtra("EVENT", newEvent);
+                // Pass the uri for the Event poster as a string. This way an EventPoster is not created/stored until the event is sure to be created
+                event.putExtra("posterString", inputPosterString);
 
                 //Log.d("event", String.format("going to pass %s %s", inputEventName, inputEventDate));
                 startActivity(event);
@@ -218,8 +222,7 @@ public class CreateNewEventScreen1 extends AppCompatActivity implements SelectDa
                             .into(poster);
                     poster.setVisibility(View.VISIBLE);
                     posterTempText.setVisibility(View.GONE);
-                    EventPoster eventPoster = new EventPoster(uri.toString(), null);
-                    eventPoster.uploadImage("/EventPosters", uri.toString());
+                    inputPosterString = uri.toString();
                     Log.d("PhotoPicker", "Selected URI: " + uri);
                 } else {
                     Log.d("PhotoPicker", "No media selected");
