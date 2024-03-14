@@ -2,12 +2,18 @@ package com.example.qrcheckin;
 
 import static com.example.qrcheckin.R.layout.show_profile;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModelProvider;
+
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.ImageButton;
@@ -15,14 +21,27 @@ import android.widget.ImageView;
 import android.widget.Switch;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.squareup.picasso.Picasso;
+
+import com.google.firebase.storage.FileDownloadTask;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * Manages user profile view within the app.
  * User can view & edit their name, contact details, homepage, and profile picture.
@@ -146,16 +165,28 @@ public class ProfileFragment extends AppCompatActivity implements EditProfileFra
         removePicture.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Set the CircleImageView to show the default profile image
-                profileImageView.setImageResource(R.drawable.profile); // Assuming 'profile' is your default/placeholder
-                                                                       // image
+                DocumentReference userProfileRef = attendeesRef.document(fcmToken);
 
-                // If you have logic that stores the current profile image (e.g., in Shared
-                // Preferences or a database),
-                // ensure to update that as well to reflect the removal/resetting of the profile
-                // picture.
+                // Directly set uriString to null without fetching the document first
+                userProfileRef.update("profile.profilePicture.uriString", null)
+                        .addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void aVoid) {
+                                Log.d("ProfileFragment", "Profile picture URI set to null successfully.");
+                                // Update UI with default profile image
+                                profileImageView.setImageResource(R.drawable.profile); // Adjust with your default image
+                            }
+                        })
+                        .addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                Log.e("ProfileFragment", "Failed to set profile picture URI to null.", e);
+                            }
+                        });
             }
         });
+
+
         editProfile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -225,10 +256,42 @@ public class ProfileFragment extends AppCompatActivity implements EditProfileFra
                     // Display profilePicutre if the profile has one
                     if(profile.getProfilePicture() != null){
                         Log.d("Firestore", "calling display profile pic");
-                        profile.getProfilePicture().displayImage("/ProfilePictures/",profileImageView);
+                        displayProfilePicture(profile.getProfilePicture().getUriString());
                     }
                 }
             }
         });
+    }
+
+    /**
+     * Retrieves a file from FireStorage, converts to a bitmap and sets the profileImageView to display it
+     * @param uriString name of the file in FireStorage
+     */
+    public void displayProfilePicture(String uriString){
+        // Create string of the path to the image file in firestorage
+        String filePath = "/ProfilePictures/"+uriString;
+        // Get the file
+        FirebaseStorage storage = FirebaseStorage.getInstance();
+        StorageReference storageReference = storage.getReference();
+        storageReference = FirebaseStorage.getInstance().getReference().child(filePath);
+        try{
+            final File localFile = File.createTempFile("tempProfilePic", "jpg");
+            storageReference.getFile(localFile).addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
+                @Override
+                public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
+                    Log.d("Firestore", "picture retrieved");
+                    // Convert local file to bitmap and set the imageview
+                    Bitmap bitmap = BitmapFactory.decodeFile(localFile.getAbsolutePath());
+                    profileImageView.setImageBitmap(bitmap);
+                }
+            }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    Log.e("Firestore", "picture error");
+                }
+            });
+        } catch (IOException e){
+            e.printStackTrace();
+        }
     }
 }
