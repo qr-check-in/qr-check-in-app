@@ -1,13 +1,13 @@
 package com.example.qrcheckin;
 
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
-import android.view.View;
-import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
@@ -56,7 +56,10 @@ public class EventAdapter extends FirestoreRecyclerAdapter<Event, EventAdapter.V
         holder.tvTitle.setText(model.getEventName());
         holder.tvLocation.setText(model.getEventLocation());
         holder.tvDate.setText(model.getEventDate());
-        //holder.ivPoster.setImageURI(model.getPoster().getImage());
+        // Set the ImageView for the Event's poster
+        if (model.getPoster() != null){
+            model.getPoster().displayImage("/EventPosters/", holder.ivPoster);
+        }
         // TODO: Store images as URI files and store them in Image class. Image.getImage() should return a URI file
     }
 
