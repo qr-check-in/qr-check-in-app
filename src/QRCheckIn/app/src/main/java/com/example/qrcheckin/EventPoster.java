@@ -1,13 +1,17 @@
 package com.example.qrcheckin;
 
-import android.net.Uri;
+import java.io.Serializable;
 
-import java.io.File;
 /**
  * Represents a poster for an event includes specific details.
  */
-public class EventPoster extends Image {
+public class EventPoster extends Image implements Serializable {
     private Attendee uploader;
+
+    /**
+     * Empty constructor for firestore purposes
+     */
+    public EventPoster(){}
 
     /**
      * Makes EventPoster specifying URI and uploader.

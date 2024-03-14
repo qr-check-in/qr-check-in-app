@@ -1,7 +1,6 @@
 package com.example.qrcheckin;
 
 import android.net.Uri;
-import android.util.Log;
 
 import androidx.annotation.NonNull;
 
@@ -15,7 +14,7 @@ import com.google.firebase.storage.UploadTask;
 /**
  * Represents an image associated with an event or attendee within the QR Code Event Check-In system.
  */
-public class Image {
+public class Image{
     //private File imageFile;
     private Attendee uploader;
     private String uriString;

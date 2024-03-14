@@ -50,6 +50,7 @@
      QrCode checkInQRCode = null;
      PromoQRCode promoQRCode = null;
      Event incomingEvent;
+     private String incomingPosterString;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -104,6 +105,9 @@
             inputEventName = incomingEvent.getEventName();
             inputEventDate = incomingEvent.getEventDate();
             //Log.d("event", String.format("passed event %s %s", inputEventName, inputEventDate));
+
+            // Retrieve the uri string for the EventPoster
+            incomingPosterString = extras.getString("posterString");
         }
 
 
@@ -129,10 +133,11 @@
              */
             @Override
             public void onClick(View v) {
-                UUID eventId = UUID.randomUUID();
+                //UUID eventId = UUID.randomUUID();
 
-                // TEMPORARY: initializing event attributes to null to create a new Event
-                // TODO: set all event attributes to user's inputs
+                // Create and store an EventPoster to firestore storage
+                EventPoster inputEventPoster = new EventPoster(incomingPosterString, null);
+                inputEventPoster.uploadImage("/EventPosters", incomingPosterString);
 
                 Event newEvent = new Event(checkInQRCode, promoQRCode, inputEventPoster, inputEventName, inputEventDate, inputEventTime, inputEventLocation, inputEventDescription, incomingEvent.isCheckInStatus());
                 Log.d("event", String.format("storing event %s", newEvent.getEventName()));
