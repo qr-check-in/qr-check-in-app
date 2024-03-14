@@ -2,8 +2,15 @@
 
  import android.content.Intent;
  import android.content.SharedPreferences;
+ import android.content.pm.PackageManager;
+ import android.database.Cursor;
  import android.graphics.Bitmap;
+ import android.graphics.BitmapFactory;
+ import android.graphics.drawable.BitmapDrawable;
+ import android.net.Uri;
  import android.os.Bundle;
+ import android.os.Environment;
+ import android.provider.MediaStore;
  import android.util.Log;
  import android.view.View;
  import android.widget.Button;
@@ -15,8 +22,12 @@
  import androidx.activity.result.ActivityResultLauncher;
  import androidx.activity.result.PickVisualMediaRequest;
  import androidx.activity.result.contract.ActivityResultContracts;
+ import androidx.annotation.NonNull;
+ import androidx.annotation.Nullable;
  import androidx.appcompat.app.AppCompatActivity;
  import androidx.appcompat.widget.Toolbar;
+ import androidx.core.app.ActivityCompat;
+ import androidx.core.content.ContextCompat;
 
  import com.bumptech.glide.Glide;
  import com.google.zxing.BarcodeFormat;
@@ -24,7 +35,16 @@
  import com.google.zxing.common.BitMatrix;
  import com.journeyapps.barcodescanner.BarcodeEncoder;
 
+ import java.io.File;
+ import java.io.FileNotFoundException;
+ import java.io.FileOutputStream;
+ import java.io.IOException;
+ import java.io.OutputStream;
  import java.util.UUID;
+ import android.Manifest;
+ import java.security.Permission;
+
+ import org.jetbrains.annotations.NotNull;
 
  public class CreateNewEventScreen2 extends AppCompatActivity {
      // Main Bar buttons
@@ -50,6 +70,13 @@
      QrCode checkInQRCode = null;
      PromoQRCode promoQRCode = null;
      Event incomingEvent;
+
+     // To save image in device
+     Bitmap bitmap;
+     BitmapDrawable bitmapDrawable;
+     boolean qrCodeAvailable = false;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,9 +106,6 @@
         TextView header = findViewById(R.id.mainHeader);
         header.setText("Create an Event");
 
-        // get the unique event document id
-//        UUID eventId = UUID.randomUUID();
-
         db = new Database();
 
         // Fetch the user's inputs from createNewEventSceen1
@@ -110,6 +134,17 @@
         }
 
 
+        checkInQR.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (qrCodeAvailable){
+                    Intent activity = new Intent(getApplicationContext(), QrCodeImageView.class);
+                    activity.putExtra("QRCodeBitmap", bitmap); // Assuming 'bitmap' is the generated QR code bitmap
+                    activity.putExtra("EventName&Date", inputEventName + "_" + inputEventDate); // Assuming 'bitmap' is the generated QR code bitmap
+                    startActivity(activity);
+                }
+            }
+        });
 
 
         // Listener to add/upload a QR from gallery
@@ -132,6 +167,9 @@
              */
             @Override
             public void onClick(View v) {
+                genCheckInQR.performClick();
+
+                UUID eventId = UUID.randomUUID();
 
                 // TEMPORARY: initializing event attributes to null to create a new Event
                 // TODO: set all event attributes to user's inputs
@@ -169,6 +207,7 @@
         genCheckInQR.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                // Too make a combined string and convert into a hashed string (unique) so to generate QR code
                 String combinedContent = inputEventName + inputEventLocation + inputEventDate + inputEventTime;
                 Log.d("CombinedContent", "CombinedContent: " + combinedContent);
 
@@ -204,10 +243,10 @@
              });
 
 
-     private void generateQRCode(String eventId) {
+     private void generateQRCode(String hashedContent) {
          try {
              BarcodeEncoder barcodeEncoder = new BarcodeEncoder();
-             BitMatrix bitMatrix = barcodeEncoder.encode(String.valueOf(eventId), BarcodeFormat.QR_CODE, 200, 175);
+             BitMatrix bitMatrix = barcodeEncoder.encode(String.valueOf(hashedContent), BarcodeFormat.QR_CODE, 200, 175);
 
              Bitmap bitmap = Bitmap.createBitmap(bitMatrix.getWidth(), bitMatrix.getHeight(), Bitmap.Config.RGB_565);
              for (int x = 0; x < bitMatrix.getWidth(); x++) {
@@ -219,7 +258,45 @@
              checkInQR.setImageBitmap(bitmap);
              checkInQR.setVisibility(View.VISIBLE);
 
+             qrCodeAvailable = true;
+             saveImage();
+
          } catch (WriterException e) {
+             e.printStackTrace();
+         }
+     }
+
+    // To save image of QR Code generated in the device
+     private void saveImage(){
+         bitmapDrawable = (BitmapDrawable) checkInQR.getDrawable();
+         bitmap = bitmapDrawable.getBitmap();
+
+         FileOutputStream fileOutputStream = null;
+
+         File sdCard = Environment.getExternalStorageDirectory();
+         File Directory = new File(sdCard.getAbsolutePath() + "/Download");
+         Directory.mkdir();
+
+         String filename = String.format("%s_%s_%d.jpg", inputEventName, inputEventDate, System.currentTimeMillis());
+         File outfile = new File(Directory,filename);
+
+         Toast.makeText(CreateNewEventScreen2.this, "Image Saved Successfully", Toast.LENGTH_SHORT).show();
+
+         try {
+             fileOutputStream = new FileOutputStream(outfile);
+             bitmap.compress(Bitmap.CompressFormat.JPEG,100,fileOutputStream);
+             fileOutputStream.flush();
+             fileOutputStream.close();
+
+             Intent intent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
+             intent.setData(Uri.fromFile(outfile));
+             sendBroadcast(intent);
+
+         }
+         catch (FileNotFoundException e){
+             e.printStackTrace();
+         }
+         catch (IOException e){
              e.printStackTrace();
          }
      }

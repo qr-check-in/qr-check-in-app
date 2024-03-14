@@ -63,9 +63,6 @@ public class QRCodeScan extends AppCompatActivity{
         // uses the ZXing library to open the camera and proceed scanning
         startScanner();
 
-        Toast.makeText(this, "Buttons started!", Toast.LENGTH_SHORT).show();
-
-
         qrButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -97,9 +94,6 @@ public class QRCodeScan extends AppCompatActivity{
                 startActivity(event);
             }
         });
-
-        Toast.makeText(this, "Buttons Ended!", Toast.LENGTH_SHORT).show();
-
     }
 
     /**
@@ -125,8 +119,6 @@ public class QRCodeScan extends AppCompatActivity{
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
 
-        Toast.makeText(this, "OnActivityResult started!", Toast.LENGTH_SHORT).show();
-
         if (!hasScanned) { // Only proceed if scanning hasn't been performed yet
             IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
             if (result != null) {
@@ -145,11 +137,13 @@ public class QRCodeScan extends AppCompatActivity{
 
                     query.get().addOnCompleteListener(task -> {
                         if (task.isSuccessful()) {
+
                             // Check if any document matches the query
                             QuerySnapshot querySnapshot = task.getResult();
 
                             if (querySnapshot != null && !querySnapshot.isEmpty())
                             {
+
                                 // Retrieve the first matching document
                                 DocumentSnapshot documentSnapshot = querySnapshot.getDocuments().get(0);
 
@@ -159,8 +153,31 @@ public class QRCodeScan extends AppCompatActivity{
                                 dateOfEvent = documentSnapshot.getString("eventDate");
                                 timeOfEvent = documentSnapshot.getString("eventTime");
 
+                                Toast.makeText(this, "summary: " + summary, Toast.LENGTH_SHORT).show();
+
                                 // make a string combined with date and time
                                 dtstart = dateOfEvent + 'T' + timeOfEvent + 'Z';
+
+                                // get the date and time formatted
+                                String formattedDateTime = null;
+                                try {
+                                    SimpleDateFormat inputFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm'Z'");
+                                    SimpleDateFormat outputFormat = new SimpleDateFormat("MMM dd, yyyy 'at' hh:mm a", Locale.US);
+                                    Date date = inputFormat.parse(dtstart);
+                                    formattedDateTime = outputFormat.format(date);
+                                } catch (ParseException e) {
+                                    e.printStackTrace();
+                                }
+
+                                // Display or use the separated variables as needed
+                                Toast.makeText(this, "CHECKED IN " + summary, Toast.LENGTH_SHORT).show();
+
+                                // set the event details on the event page
+                                title.setText(summary);
+                                location.setText(destination);
+                                dateAndtime.setText(formattedDateTime);
+
+                                hasScanned = true; // Set the flag to true after successful scan
 
 
                             } else {
@@ -168,7 +185,8 @@ public class QRCodeScan extends AppCompatActivity{
                                 Toast.makeText(this, "No event found!", Toast.LENGTH_SHORT).show();
                             }
 
-                        } else
+                        }
+                          else
                         {
                             // An error occurred during the query execution, handle the error
                             Exception exception = task.getException(); // Retrieve the exception that occurred
@@ -193,38 +211,10 @@ public class QRCodeScan extends AppCompatActivity{
                             }
                         }
                     });
-
-
-
-                    // get the date and time formatted
-                    String formattedDateTime = null;
-                    try {
-                        SimpleDateFormat inputFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm'Z'");
-                        SimpleDateFormat outputFormat = new SimpleDateFormat("MMM dd, yyyy 'at' hh:mm a", Locale.US);
-                        Date date = inputFormat.parse(dtstart);
-                        formattedDateTime = outputFormat.format(date);
-                    } catch (ParseException e) {
-                        e.printStackTrace();
-                    }
-
-                    // Display or use the separated variables as needed
-                    Toast.makeText(this, "CHECKED IN " + summary, Toast.LENGTH_SHORT).show();
-
-                    // set the event details on the event page
-                    title.setText(summary);
-                    location.setText(destination);
-                    dateAndtime.setText(formattedDateTime);
-
-                    hasScanned = true; // Set the flag to true after successful scan
-
-                    Toast.makeText(this, "OnActivityResult Finished!", Toast.LENGTH_SHORT).show();
-
-
                 }
             } else {
                 super.onActivityResult(requestCode, resultCode, data);
             }
         }
-        Toast.makeText(this, "OnActivityResult Finished!", Toast.LENGTH_SHORT).show();
     }
 }
