@@ -22,8 +22,6 @@ import android.widget.Switch;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.lifecycle.ViewModelProvider;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -31,7 +29,6 @@ import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.squareup.picasso.Picasso;
 
 import com.google.firebase.storage.FileDownloadTask;
 import com.google.firebase.storage.FirebaseStorage;
@@ -39,8 +36,6 @@ import com.google.firebase.storage.StorageReference;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * Manages user profile view within the app.
@@ -48,7 +43,7 @@ import java.util.Map;
  * Can toggle geolocation tracking .
  * Listens for updates from the EditProfileFragment dialog and updates the UI.
  */
-public class ProfileFragment extends AppCompatActivity implements EditProfileFragment.EditProfileDialogListener {
+public class ProfileActivity extends AppCompatActivity implements EditProfileFragment.EditProfileDialogListener {
     ImageButton qrButton;
     ImageButton eventButton;
     ImageButton addEventButton;

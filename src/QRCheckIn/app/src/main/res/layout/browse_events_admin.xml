@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+    <include
+        android:id="@+id/events"
+        layout="@layout/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <include
+        layout="@layout/mainappbar"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        app:layout_constraintBottom_toBottomOf="parent"/>
+
+    <RelativeLayout
+        android:layout_width="370dp"
+        android:layout_height="50dp"
+        android:layout_margin="15dp"
+        android:layout_marginTop="12dp"
+        android:background="@color/NeonBlue"
+        android:orientation="horizontal"
+        app:layout_constraintTop_toBottomOf="@+id/events"
+        tools:layout_editor_absoluteX="11dp">
+
+        <ImageView
+            android:id="@+id/qrCodeImageView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/qrresize" />
+
+        <TextView
+            android:id="@+id/eventNameTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="15dp"
+            android:layout_toRightOf="@id/qrCodeImageView"
+            android:text="Event 1"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textColor="@color/White" />
+
+        <TextView
+            android:id="@+id/eventLocationTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/eventNameTextView"
+            android:layout_marginStart="15dp"
+            android:layout_toRightOf="@id/qrCodeImageView"
+            android:text="Location"
+            android:textColor="@color/White" />
+
+        <TextView
+            android:id="@+id/eventTimeTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginStart="25dp"
+            android:layout_toRightOf="@id/eventLocationTextView"
+            android:text="Time"
+            android:textColor="@color/White" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="169dp"
+            android:layout_marginTop="20dp"
+            android:layout_toRightOf="@id/eventTimeTextView"
+            android:src="@drawable/baseline_delete_outline_24" />
+
+    </RelativeLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

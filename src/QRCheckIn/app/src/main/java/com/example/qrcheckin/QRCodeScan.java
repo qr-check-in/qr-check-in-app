@@ -10,7 +10,6 @@ import android.widget.Toast;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.qrcheckin.R;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
@@ -78,7 +77,7 @@ public class QRCodeScan extends AppCompatActivity{
         profileButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent event = new Intent(getApplicationContext(), ProfileFragment.class);
+                Intent event = new Intent(getApplicationContext(), ProfileActivity.class);
                 startActivity(event);
             }
         });

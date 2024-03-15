@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+    <include
+        android:id="@+id/dashboard"
+        layout="@layout/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnEvent"
+        android:layout_width="300dp"
+        android:layout_height="80dp"
+        android:layout_marginTop="76dp"
+        android:text="EVENTS"
+        android:textSize="35dp"
+        android:drawableLeft="@drawable/calenderresize"
+        app:cornerRadius="5dp"
+        android:backgroundTint="@color/NeonBlue"
+        app:layout_constraintTop_toBottomOf="@+id/dashboard"
+        tools:layout_editor_absoluteX="55dp" />
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/profile_button"
+        android:layout_width="300dp"
+        android:layout_height="80dp"
+        android:layout_marginTop="76dp"
+        android:text="PROFILES"
+        android:textSize="35dp"
+        android:drawableLeft="@drawable/baseline_account_circle_24"
+        app:cornerRadius="5dp"
+        android:backgroundTint="@color/NeonBlue"
+        app:layout_constraintTop_toBottomOf="@+id/btnEvent"
+        tools:layout_editor_absoluteX="55dp" />
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/image_button"
+        android:layout_width="300dp"
+        android:layout_height="80dp"
+        android:layout_marginTop="76dp"
+        android:text="IMAGES"
+        android:textSize="35dp"
+        android:drawableLeft="@drawable/baseline_image_24"
+        android:drawableTint="@color/Black"
+        app:cornerRadius="5dp"
+        android:backgroundTint="@color/NeonBlue"
+        app:layout_constraintTop_toBottomOf="@+id/profile_button"
+        tools:layout_editor_absoluteX="55dp" />
+
+
+
+    <include
+        layout="@layout/mainappbar"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        app:layout_constraintBottom_toBottomOf="parent"/>
+
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

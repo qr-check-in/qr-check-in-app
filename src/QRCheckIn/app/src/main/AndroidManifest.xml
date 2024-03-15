@@ -42,7 +42,7 @@
         <activity
             android:name=".CreateNewEventScreen1"
             android:exported="false" />
-        <activity android:name=".ProfileFragment"
+        <activity android:name=".ProfileActivity"
             android:exported="false"/>
         <activity android:name=".UpdatePictureFragment"
             android:exported="false"/>

@@ -82,7 +82,7 @@ public class EventListView extends AppCompatActivity {
         profileButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent event = new Intent(getApplicationContext(), ProfileFragment.class);
+                Intent event = new Intent(getApplicationContext(), ProfileActivity.class);
                 startActivity(event);
 
             }
