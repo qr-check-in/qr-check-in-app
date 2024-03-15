@@ -14,6 +14,7 @@ public class EventTest {
         // Create a QrCode object with required parameters
         String qrCodeValue = "SampleQRCodeValue";
         String qrCodeAdditionalInfo = "SampleAdditionalInfo";
+        String organizer = "OrganiserMockString";
         QrCode checkInQRCode = new QrCode(qrCodeValue, attendeeExample, qrCodeAdditionalInfo);
 
         // Create a PromoQRCode object
@@ -26,7 +27,7 @@ public class EventTest {
         boolean checkInStatus = true; // Example value
 
         // Create an Event object with all required parameters
-        Event event = new Event(checkInQRCode, promoQRCode, poster, "Event1", "2024-01-01", "12:00", "Location1", "Description of Event1", checkInStatus);
+        Event event = new Event(organizer, checkInQRCode, promoQRCode, poster, "Event1", "2024-01-01", "12:00", "Location1", "Description of Event1", checkInStatus);
 
         // Assert the event properties
         assertEquals("Event1", event.getEventName());

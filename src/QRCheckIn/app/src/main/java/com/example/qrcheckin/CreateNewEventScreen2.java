@@ -1,6 +1,7 @@
  package com.example.qrcheckin;
 
  import android.content.Intent;
+ import android.content.SharedPreferences;
  import android.graphics.Bitmap;
  import android.os.Bundle;
  import android.util.Log;
@@ -22,8 +23,6 @@
  import com.google.zxing.WriterException;
  import com.google.zxing.common.BitMatrix;
  import com.journeyapps.barcodescanner.BarcodeEncoder;
-
- import java.util.UUID;
 
  public class CreateNewEventScreen2 extends AppCompatActivity {
      // Main Bar buttons
@@ -47,6 +46,7 @@
      private String inputEventDescription;
      private String inputEventLocation;
      private EventPoster inputEventPoster;
+     private String organizer;
      QrCode checkInQRCode = null;
      PromoQRCode promoQRCode = null;
      Event incomingEvent;
@@ -133,13 +133,18 @@
              */
             @Override
             public void onClick(View v) {
-                //UUID eventId = UUID.randomUUID();
+                // Get organizer fcm token to associate with the event
+                SharedPreferences prefs = getSharedPreferences("TOKEN_PREF", MODE_PRIVATE);
+                organizer = prefs.getString("token", "missing token");
+                Log.d("Firestore", String.format("TEST TOKEN STRING '%s'", organizer));
 
                 // Create and store an EventPoster to firestore storage
-                EventPoster inputEventPoster = new EventPoster(incomingPosterString, null);
-                inputEventPoster.uploadImage("/EventPosters", incomingPosterString);
+                if (incomingPosterString != null){
+                    inputEventPoster = new EventPoster(incomingPosterString, null);
+                    inputEventPoster.uploadImage("/EventPosters", incomingPosterString);
+                }
 
-                Event newEvent = new Event(checkInQRCode, promoQRCode, inputEventPoster, inputEventName, inputEventDate, inputEventTime, inputEventLocation, inputEventDescription, incomingEvent.isCheckInStatus());
+                Event newEvent = new Event(organizer, checkInQRCode, promoQRCode, inputEventPoster, inputEventName, inputEventDate, inputEventTime, inputEventLocation, inputEventDescription, incomingEvent.isCheckInStatus());
                 Log.d("event", String.format("storing event %s", newEvent.getEventName()));
                 db.storeEvent(newEvent);
 
