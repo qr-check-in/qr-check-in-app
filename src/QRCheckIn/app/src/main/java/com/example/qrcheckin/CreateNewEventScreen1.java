@@ -166,7 +166,8 @@ public class CreateNewEventScreen1 extends AppCompatActivity implements SelectDa
                 if (checkInSwitch.isChecked()){
                     isChecked = true;
                 }else{isChecked = false;}
-                Event newEvent = new Event(null, null, eventPoster,
+
+                Event newEvent = new Event(null, null, null, null,
                         inputEventName, inputEventDate, inputEventTime,
                         eventLocation.getText().toString(), eventDescription.getText().toString(), isChecked);
                 // Store Event attributes to pass to createNewEventScreen2

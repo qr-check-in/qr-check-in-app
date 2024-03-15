@@ -2,10 +2,7 @@
 <project version="4">
   <component name="deploymentTargetDropDown">
     <value>
-      <entry key="ProfileFragmentTest">
-        <State />
-      </entry>
-      <entry key="ProfileTest">
+      <entry key="CreateEventTest1">
         <State />
       </entry>
       <entry key="app">

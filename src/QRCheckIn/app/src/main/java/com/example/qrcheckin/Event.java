@@ -10,6 +10,7 @@ import java.util.ArrayList;
 public class Event implements Serializable {
     private ArrayList<Attendee> attendees;
     private ArrayList<Attendee> signups;
+    private String organizer;
     private QrCode checkInQRCode;
     private PromoQRCode promoQRCode;
     private EventPoster poster;
@@ -39,16 +40,19 @@ public class Event implements Serializable {
     // force pushing 
     /**
      * Constructs a new Event
-     * @param checkInQRCode the check-in QRCode
-     * @param promoQRCode the promotional PromoQRCode
-     * @param poster the Event's EventPoster
-     * @param eventName the Event's name String
-     * @param eventDate the Event's date String
-     * @param eventTime the Event's time String
-     * @param eventLocation the Event's location String
+     *
+     * @param organizer        the string FCM token of the organizer's device
+     * @param checkInQRCode    the check-in QRCode
+     * @param promoQRCode      the promotional PromoQRCode
+     * @param poster           the Event's EventPoster
+     * @param eventName        the Event's name String
+     * @param eventDate        the Event's date String
+     * @param eventTime        the Event's time String
+     * @param eventLocation    the Event's location String
      * @param eventDescription the Event's description String
      */
-    public Event(QrCode checkInQRCode, PromoQRCode promoQRCode, EventPoster poster, String eventName, String eventDate, String eventTime, String eventLocation, String eventDescription, boolean checkInStatus) {
+    public Event(String organizer, QrCode checkInQRCode, PromoQRCode promoQRCode, EventPoster poster, String eventName, String eventDate, String eventTime, String eventLocation, String eventDescription, boolean checkInStatus) {
+        this.organizer = organizer;
 
         this.checkInQRCode = checkInQRCode;
         this.promoQRCode = promoQRCode;
@@ -158,5 +162,11 @@ public class Event implements Serializable {
         this.eventDescription = eventDescription;
     }
 
+    public String getOrganizer() {
+        return organizer;
+    }
 
+    public void setOrganizer(String organizer) {
+        this.organizer = organizer;
+    }
 }

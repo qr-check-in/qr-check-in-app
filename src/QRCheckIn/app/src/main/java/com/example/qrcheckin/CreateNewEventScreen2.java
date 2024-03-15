@@ -2,8 +2,6 @@
 
  import android.content.Intent;
  import android.content.SharedPreferences;
- import android.content.pm.PackageManager;
- import android.database.Cursor;
  import android.graphics.Bitmap;
  import android.graphics.BitmapFactory;
  import android.graphics.drawable.BitmapDrawable;
@@ -44,8 +42,6 @@
  import android.Manifest;
  import java.security.Permission;
 
- import org.jetbrains.annotations.NotNull;
-
  public class CreateNewEventScreen2 extends AppCompatActivity {
      // Main Bar buttons
      ImageButton qrButton;
@@ -67,6 +63,7 @@
      private String inputEventDescription;
      private String inputEventLocation;
      private EventPoster inputEventPoster;
+     private String organizer;
      QrCode checkInQRCode = null;
      PromoQRCode promoQRCode = null;
      Event incomingEvent;
@@ -180,13 +177,21 @@
                 {
                     UUID eventId = UUID.randomUUID();
 
-                    // Create and store an EventPoster to firestore storage
-                    EventPoster inputEventPoster = new EventPoster(incomingPosterString, null);
-                    inputEventPoster.uploadImage("/EventPosters", incomingPosterString);
+                    // Get organizer fcm token to associate with the event
+                    SharedPreferences prefs = getSharedPreferences("TOKEN_PREF", MODE_PRIVATE);
+                    organizer = prefs.getString("token", "missing token");
+                    Log.d("Firestore", String.format("TEST TOKEN STRING '%s'", organizer));
 
-                    Event newEvent = new Event(checkInQRCode, promoQRCode, inputEventPoster, inputEventName, inputEventDate, inputEventTime, inputEventLocation, inputEventDescription, incomingEvent.isCheckInStatus());
+                    // Create and store an EventPoster to firestore storage
+                    if (incomingPosterString != null){
+                        inputEventPoster = new EventPoster(incomingPosterString, null);
+                        inputEventPoster.uploadImage("/EventPosters", incomingPosterString);
+                    }
+
+                    Event newEvent = new Event(organizer, checkInQRCode, promoQRCode, inputEventPoster, inputEventName, inputEventDate, inputEventTime, inputEventLocation, inputEventDescription, incomingEvent.isCheckInStatus());
                     Log.d("event", String.format("storing event %s", newEvent.getEventName()));
                     db.storeEvent(newEvent);
+
 
                     Intent activity = new Intent(getApplicationContext(), EventListView.class);
                     startActivity(activity);
@@ -306,9 +311,6 @@
              intent.setData(Uri.fromFile(outfile));
              sendBroadcast(intent);
 
-         }
-         catch (FileNotFoundException e){
-             e.printStackTrace();
          }
          catch (IOException e){
              e.printStackTrace();
