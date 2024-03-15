@@ -76,6 +76,7 @@
      Bitmap bitmap;
      BitmapDrawable bitmapDrawable;
      boolean qrCodeAvailable = false;
+     boolean alreadySaved = false;
 
 
 
@@ -172,20 +173,24 @@
              */
             @Override
             public void onClick(View v) {
-                genCheckInQR.performClick();
+                if (!qrCodeAvailable){
+                    Toast.makeText(CreateNewEventScreen2.this, "Finish generating QR Code", Toast.LENGTH_SHORT).show();
+                }
+                else
+                {
+                    UUID eventId = UUID.randomUUID();
 
-                UUID eventId = UUID.randomUUID();
+                    // Create and store an EventPoster to firestore storage
+                    EventPoster inputEventPoster = new EventPoster(incomingPosterString, null);
+                    inputEventPoster.uploadImage("/EventPosters", incomingPosterString);
 
-                // Create and store an EventPoster to firestore storage
-                EventPoster inputEventPoster = new EventPoster(incomingPosterString, null);
-                inputEventPoster.uploadImage("/EventPosters", incomingPosterString);
+                    Event newEvent = new Event(checkInQRCode, promoQRCode, inputEventPoster, inputEventName, inputEventDate, inputEventTime, inputEventLocation, inputEventDescription, incomingEvent.isCheckInStatus());
+                    Log.d("event", String.format("storing event %s", newEvent.getEventName()));
+                    db.storeEvent(newEvent);
 
-                Event newEvent = new Event(checkInQRCode, promoQRCode, inputEventPoster, inputEventName, inputEventDate, inputEventTime, inputEventLocation, inputEventDescription, incomingEvent.isCheckInStatus());
-                Log.d("event", String.format("storing event %s", newEvent.getEventName()));
-                db.storeEvent(newEvent);
-
-                Intent activity = new Intent(getApplicationContext(), EventListView.class);
-                startActivity(activity);
+                    Intent activity = new Intent(getApplicationContext(), EventListView.class);
+                    startActivity(activity);
+                }
             }
         });
 
@@ -265,7 +270,9 @@
              checkInQR.setVisibility(View.VISIBLE);
 
              qrCodeAvailable = true;
-             saveImage();
+             if (!alreadySaved) {
+                 saveImage();
+             }
 
          } catch (WriterException e) {
              e.printStackTrace();
@@ -274,6 +281,7 @@
 
     // To save image of QR Code generated in the device
      private void saveImage(){
+         alreadySaved = true;
          bitmapDrawable = (BitmapDrawable) checkInQR.getDrawable();
          bitmap = bitmapDrawable.getBitmap();
 

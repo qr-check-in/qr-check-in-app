@@ -2,7 +2,6 @@ package com.example.qrcheckin;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.TextView;
@@ -26,7 +25,7 @@ import java.util.Date;
 import java.util.Locale;
 
 
-public class QRCodeScan extends AppCompatActivity{
+public class QRCodeScan extends AppCompatActivity {
     TextView title;
     TextView location;
     TextView dateAndtime;
@@ -39,8 +38,6 @@ public class QRCodeScan extends AppCompatActivity{
 
     // Get access to the Firestore instance
     FirebaseFirestore db = FirebaseFirestore.getInstance();
-
-    // Assuming 'events' is the name of your collection
     CollectionReference eventsRef = db.collection("events");
 
 
