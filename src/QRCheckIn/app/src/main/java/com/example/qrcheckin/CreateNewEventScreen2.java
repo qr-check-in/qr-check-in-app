@@ -139,8 +139,10 @@
                 Log.d("Firestore", String.format("TEST TOKEN STRING '%s'", organizer));
 
                 // Create and store an EventPoster to firestore storage
-                EventPoster inputEventPoster = new EventPoster(incomingPosterString, null);
-                inputEventPoster.uploadImage("/EventPosters", incomingPosterString);
+                if (incomingPosterString != null){
+                    inputEventPoster = new EventPoster(incomingPosterString, null);
+                    inputEventPoster.uploadImage("/EventPosters", incomingPosterString);
+                }
 
                 Event newEvent = new Event(organizer, checkInQRCode, promoQRCode, inputEventPoster, inputEventName, inputEventDate, inputEventTime, inputEventLocation, inputEventDescription, incomingEvent.isCheckInStatus());
                 Log.d("event", String.format("storing event %s", newEvent.getEventName()));
