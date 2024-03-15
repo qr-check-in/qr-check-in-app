@@ -70,6 +70,7 @@
      QrCode checkInQRCode = null;
      PromoQRCode promoQRCode = null;
      Event incomingEvent;
+     private String incomingPosterString;
 
      // To save image in device
      Bitmap bitmap;
@@ -131,6 +132,9 @@
             inputEventName = incomingEvent.getEventName();
             inputEventDate = incomingEvent.getEventDate();
             //Log.d("event", String.format("passed event %s %s", inputEventName, inputEventDate));
+
+            // Retrieve the uri string for the EventPoster
+            incomingPosterString = extras.getString("posterString");
         }
 
 
@@ -171,8 +175,9 @@
 
                 UUID eventId = UUID.randomUUID();
 
-                // TEMPORARY: initializing event attributes to null to create a new Event
-                // TODO: set all event attributes to user's inputs
+                // Create and store an EventPoster to firestore storage
+                EventPoster inputEventPoster = new EventPoster(incomingPosterString, null);
+                inputEventPoster.uploadImage("/EventPosters", incomingPosterString);
 
                 Event newEvent = new Event(checkInQRCode, promoQRCode, inputEventPoster, inputEventName, inputEventDate, inputEventTime, inputEventLocation, inputEventDescription, incomingEvent.isCheckInStatus());
                 Log.d("event", String.format("storing event %s", newEvent.getEventName()));

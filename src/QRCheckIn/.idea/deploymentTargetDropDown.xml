@@ -2,6 +2,12 @@
 <project version="4">
   <component name="deploymentTargetDropDown">
     <value>
+      <entry key="ProfileFragmentTest">
+        <State />
+      </entry>
+      <entry key="ProfileTest">
+        <State />
+      </entry>
       <entry key="app">
         <State>
           <targetSelectedWithDropDown>
@@ -28,12 +34,6 @@
             </Target>
           </targetsSelectedWithDialog>
         </State>
-      </entry>
-      <entry key="testMainBarScan()">
-        <State />
-      </entry>
-      <entry key="testScanButton()">
-        <State />
       </entry>
     </value>
   </component>

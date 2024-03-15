@@ -1,14 +1,14 @@
 package com.example.qrcheckin;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.CollectionReference;
@@ -76,6 +76,10 @@ public class EventPage extends AppCompatActivity {
                     tvEventLocation.setText(event.getEventLocation());
                     tvEventDate.setText(event.getEventDate());
                     tvEventDescription.setText(event.getEventDescription());
+                    // Set the ImageView for the Event's poster
+                    if (event.getPoster() != null){
+                        event.getPoster().displayImage("/EventPosters/",ivEventPoster);
+                    }
                 } else {
                     Log.d("Firestore", String.format("No such document with id %s", documentId));
                 }
