@@ -160,6 +160,7 @@
                 pickMedia.launch(new PickVisualMediaRequest.Builder()
                         .setMediaType(ActivityResultContracts.PickVisualMedia.ImageOnly.INSTANCE)
                         .build());
+                qrCodeAvailable = true;
             }
 
         });
