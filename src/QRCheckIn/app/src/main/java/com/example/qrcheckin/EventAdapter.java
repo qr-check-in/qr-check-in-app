@@ -62,7 +62,7 @@ public class EventAdapter extends FirestoreRecyclerAdapter<Event, EventAdapter.V
             model.getPoster().displayImage("/EventPosters/", holder.ivPoster);
         }
     }
-    
+
     // https://stackoverflow.com/questions/36712704/why-is-my-item-image-in-custom-recyclerview-changing-while-scrolling, Fathima km, 2017
     // Override getItemId and getItemViewType methods to prevent flickering of images while scrolling through the recycler view
     /**

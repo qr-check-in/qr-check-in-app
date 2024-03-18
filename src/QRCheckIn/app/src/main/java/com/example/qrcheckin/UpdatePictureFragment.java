@@ -2,11 +2,9 @@ package com.example.qrcheckin;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
-import android.provider.MediaStore;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
@@ -59,7 +57,7 @@ public class UpdatePictureFragment extends DialogFragment {
                     // Creates a ProfilePicture object and calls method to upload the image to firestore
                     ProfilePicture profilePicture = new ProfilePicture(uri.toString(), null);
                     profilePicture.uploadImage("/ProfilePictures", uri.toString());
-                    Database database = new Database();
+                    AttendeeDatabaseManager database = new AttendeeDatabaseManager();
                     // Updates the profilePicture field
                     database.updateProfilePicture(fcmToken, uri);
 

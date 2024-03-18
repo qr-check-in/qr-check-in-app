@@ -3,7 +3,6 @@ package com.example.qrcheckin;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.util.Log;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
@@ -15,37 +14,14 @@ import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.FirebaseFirestoreException;
-import com.google.firebase.firestore.Query;
-import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.messaging.FirebaseMessaging;
-
-import org.mockito.internal.matchers.Null;
-
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Locale;
-
-import db.DocumentIdCallback;
 
 /**
  * A class that controls storing data to the firestore database collections
  */
-public class Database {
+public class AttendeeDatabaseManager {
     private final FirebaseFirestore db = FirebaseFirestore.getInstance();
-    private final CollectionReference eventsRef = db.collection("events");
     private final CollectionReference attendeesRef = db.collection("Attendees");
-
-
-    /**
-     * Stores an Event object to the Events collection
-     * @param event the Event to be stored
-     */
-    public void storeEvent(Event event){
-        eventsRef.document().set(event);
-        Log.d("Firestore", String.format("Event(%s) stored", event.getEventName()));
-    }
 
     /**
      * Searches Attendee collection for an Attendee whose docID matches fcmToken
