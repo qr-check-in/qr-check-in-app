@@ -21,6 +21,7 @@ import java.io.IOException;
 
 /**
  * Represents an image associated with an event or attendee within the QR Code Event Check-In system.
+ * Also contains methods to store and retrieve the associated image files in Firestore Storage
  */
 public class Image{
     //private File imageFile;

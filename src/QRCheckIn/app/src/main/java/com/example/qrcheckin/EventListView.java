@@ -77,7 +77,7 @@ public class EventListView extends AppCompatActivity {
             }
         });
 
-        // Set listenere for "Profile" toolbar button
+        // Set listener for "Profile" toolbar button
         profileButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -107,7 +107,7 @@ public class EventListView extends AppCompatActivity {
      */
     private void setUpRecyclerView() {
         // Set up a general query that returns "event" items from the database
-        Query query = eventDb.getEventsRef().orderBy("eventName", Query.Direction.DESCENDING);
+        Query query = eventDb.getEventRef().orderBy("eventName", Query.Direction.DESCENDING);
 
         // Put this query into the adapter so it can use it
         FirestoreRecyclerOptions<Event> options = new FirestoreRecyclerOptions.Builder<Event>()

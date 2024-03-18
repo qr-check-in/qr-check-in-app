@@ -36,9 +36,7 @@ public class QRCodeScan extends AppCompatActivity {
     private boolean hasScanned = false;   // Boolean flag to track whether a scan has been performed
     String summary = null, destination = null, dateOfEvent = null, timeOfEvent = null, dtstart = null;
 
-    // Get access to the Firestore instance
-    FirebaseFirestore db = FirebaseFirestore.getInstance();
-    CollectionReference eventsRef = db.collection("events");
+    private EventDatabaseManager eventDb;
 
 
     @Override
@@ -129,7 +127,7 @@ public class QRCodeScan extends AppCompatActivity {
                     String scannedData = result.getContents();
 
                     // Query Firestore to find the document with the matching hashedContent in the checkInQRCode field
-                    Query query = eventsRef.whereEqualTo("checkInQRCode.hashedContent", scannedData);
+                    Query query = eventDb.getEventRef().whereEqualTo("checkInQRCode.hashedContent", scannedData);
 
 
                     query.get().addOnCompleteListener(task -> {
