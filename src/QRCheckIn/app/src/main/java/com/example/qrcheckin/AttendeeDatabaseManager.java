@@ -19,20 +19,9 @@ import com.google.firebase.messaging.FirebaseMessaging;
 /**
  * A class that controls storing data to the firestore database collections
  */
-public class Database {
+public class AttendeeDatabaseManager {
     private final FirebaseFirestore db = FirebaseFirestore.getInstance();
-    private final CollectionReference eventsRef = db.collection("events");
     private final CollectionReference attendeesRef = db.collection("Attendees");
-
-
-    /**
-     * Stores an Event object to the Events collection
-     * @param event the Event to be stored
-     */
-    public void storeEvent(Event event){
-        eventsRef.document().set(event);
-        Log.d("Firestore", String.format("Event(%s) stored", event.getEventName()));
-    }
 
     /**
      * Searches Attendee collection for an Attendee whose docID matches fcmToken
@@ -153,4 +142,5 @@ public class Database {
             }
         });
     }
+
 }

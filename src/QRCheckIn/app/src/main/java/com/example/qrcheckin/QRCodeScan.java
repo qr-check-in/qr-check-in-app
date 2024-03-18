@@ -10,7 +10,12 @@ import android.widget.Toast;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.qrcheckin.R;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
@@ -20,7 +25,7 @@ import java.util.Date;
 import java.util.Locale;
 
 
-public class QRCodeScan extends AppCompatActivity{
+public class QRCodeScan extends AppCompatActivity {
     TextView title;
     TextView location;
     TextView dateAndtime;
@@ -29,6 +34,9 @@ public class QRCodeScan extends AppCompatActivity{
     ImageButton addEventButton;
     ImageButton profileButton;
     private boolean hasScanned = false;   // Boolean flag to track whether a scan has been performed
+    String summary = null, destination = null, dateOfEvent = null, timeOfEvent = null, dtstart = null;
+
+    private EventDatabaseManager eventDb;
 
 
     @Override
@@ -49,7 +57,6 @@ public class QRCodeScan extends AppCompatActivity{
 
         // uses the ZXing library to open the camera and proceed scanning
         startScanner();
-
 
         qrButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -106,6 +113,7 @@ public class QRCodeScan extends AppCompatActivity{
      */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+
         if (!hasScanned) { // Only proceed if scanning hasn't been performed yet
             IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
             if (result != null) {
@@ -117,40 +125,87 @@ public class QRCodeScan extends AppCompatActivity{
                 {
                     // Separate the scanned data into different variables
                     String scannedData = result.getContents();
-                    String[] lines = scannedData.split("\n");
-                    String summary = null, destination = null, dtstart = null;
 
-                    // Retrieve the Title, description, location, time and date form QR code data
-                    for (String line : lines) {
-                        if (line.startsWith("TITLE:")) {
-                            summary = line.substring("TITLE:".length()).trim();
-                        } else if (line.startsWith("LOCATION:")) {
-                            destination = line.substring("LOCATION:".length()).trim();
-                        } else if (line.startsWith("DTSTART:")) {
-                            dtstart = line.substring("DTSTART:".length()).trim();
+                    // Query Firestore to find the document with the matching hashedContent in the checkInQRCode field
+                    Query query = eventDb.getEventRef().whereEqualTo("checkInQRCode.hashedContent", scannedData);
+
+
+                    query.get().addOnCompleteListener(task -> {
+                        if (task.isSuccessful()) {
+
+                            // Check if any document matches the query
+                            QuerySnapshot querySnapshot = task.getResult();
+
+                            if (querySnapshot != null && !querySnapshot.isEmpty())
+                            {
+
+                                // Retrieve the first matching document
+                                DocumentSnapshot documentSnapshot = querySnapshot.getDocuments().get(0);
+
+                                // Extract relevant information from the document
+                                summary = documentSnapshot.getString("eventName");
+                                destination = documentSnapshot.getString("eventLocation");
+                                dateOfEvent = documentSnapshot.getString("eventDate");
+                                timeOfEvent = documentSnapshot.getString("eventTime");
+
+                                Toast.makeText(this, "summary: " + summary, Toast.LENGTH_SHORT).show();
+
+                                // make a string combined with date and time
+                                dtstart = dateOfEvent + 'T' + timeOfEvent + 'Z';
+
+                                // get the date and time formatted
+                                String formattedDateTime = null;
+                                try {
+                                    SimpleDateFormat inputFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm'Z'");
+                                    SimpleDateFormat outputFormat = new SimpleDateFormat("MMM dd, yyyy 'at' hh:mm a", Locale.US);
+                                    Date date = inputFormat.parse(dtstart);
+                                    formattedDateTime = outputFormat.format(date);
+                                } catch (ParseException e) {
+                                    e.printStackTrace();
+                                }
+
+                                // Display or use the separated variables as needed
+                                Toast.makeText(this, "CHECKED IN " + summary, Toast.LENGTH_SHORT).show();
+
+                                // set the event details on the event page
+                                title.setText(summary);
+                                location.setText(destination);
+                                dateAndtime.setText(formattedDateTime);
+
+                                hasScanned = true; // Set the flag to true after successful scan
+
+
+                            } else {
+                                // No matching document found
+                                Toast.makeText(this, "No event found!", Toast.LENGTH_SHORT).show();
+                            }
+
                         }
-                    }
+                          else
+                        {
+                            // An error occurred during the query execution, handle the error
+                            Exception exception = task.getException(); // Retrieve the exception that occurred
 
-                    // get the date and time formatted
-                    String formattedDateTime = null;
-                    try {
-                        SimpleDateFormat inputFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm'Z'");
-                        SimpleDateFormat outputFormat = new SimpleDateFormat("MMM dd, yyyy 'at' hh:mm a", Locale.US);
-                        Date date = inputFormat.parse(dtstart);
-                        formattedDateTime = outputFormat.format(date);
-                    } catch (ParseException e) {
-                        e.printStackTrace();
-                    }
-
-                    // Display or use the separated variables as needed
-                    Toast.makeText(this, "CHECKED IN " + summary, Toast.LENGTH_SHORT).show();
-
-                    // set the event details on the event page
-                    title.setText(summary);
-                    location.setText(destination);
-                    dateAndtime.setText(formattedDateTime);
-
-                    hasScanned = true; // Set the flag to true after successful scan
+                            if (exception instanceof FirebaseFirestoreException)
+                            {
+                                FirebaseFirestoreException firestoreException = (FirebaseFirestoreException) exception;
+                                FirebaseFirestoreException.Code errorCode = firestoreException.getCode(); // Retrieve the error code
+                                // Handle specific error codes if needed, for example:
+                                switch (errorCode) {
+                                    case NOT_FOUND:
+                                        // Handle document not found error
+                                        break;
+                                    default:
+                                        // Handle other errors
+                                        System.err.println("Firestore error occurred: " + exception.getMessage());
+                                }
+                            } else {
+                                // Handle other types of exceptions
+                                assert exception != null;
+                                System.err.println("An error occurred: " + exception.getMessage());
+                            }
+                        }
+                    });
                 }
             } else {
                 super.onActivityResult(requestCode, resultCode, data);

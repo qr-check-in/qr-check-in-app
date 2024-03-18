@@ -52,7 +52,7 @@ public class MainActivity extends AppCompatActivity{
         OpenApp app = (OpenApp) this.getApplicationContext();
         if (!app.hasCheckedFcmToken){
             // here we can call any methods we only want to occur once upon opening the app
-            Database db = new Database();
+            AttendeeDatabaseManager db = new AttendeeDatabaseManager();
 
             // Get and store this app installation's fcm token string
             // https://stackoverflow.com/questions/51834864/how-to-save-a-fcm-token-in-android , 2018, Whats Going On

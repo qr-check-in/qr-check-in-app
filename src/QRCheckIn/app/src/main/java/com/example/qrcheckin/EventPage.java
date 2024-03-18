@@ -11,10 +11,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.FirebaseFirestore;
 /**
  * Display detailed info about specific event.
  * Retrieves & displays event details from Firestore database.
@@ -26,6 +24,7 @@ public class EventPage extends AppCompatActivity {
     ImageButton eventButton;
     ImageButton addEventButton;
     ImageButton profileButton;
+    private EventDatabaseManager eventDb;
     /**
      * Init activity, sets content view, and configures the toolbar with navigation buttons.
      * Retrieves & displays event details from Firestore based on the passed document ID.
@@ -60,12 +59,10 @@ public class EventPage extends AppCompatActivity {
         ImageView ivEventPoster = findViewById(R.id.image_event_poster);
         ImageView ivEventPromoQr = findViewById(R.id.image_event_promo_qr);
 
-        // Connect to firebase
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
-        CollectionReference eventsRef = db.collection("events");
+        eventDb = new EventDatabaseManager();
         // Retrieve the event passed from the previous activity
         String documentId = getIntent().getStringExtra("DOCUMENT_ID");
-        DocumentReference docRef = eventsRef.document(documentId);
+        DocumentReference docRef = eventDb.getEventDoc(documentId);
         docRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
