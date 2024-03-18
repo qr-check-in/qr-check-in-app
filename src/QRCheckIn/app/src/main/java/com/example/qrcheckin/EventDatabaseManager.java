@@ -8,14 +8,14 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 public class EventDatabaseManager {
     private final FirebaseFirestore db;
-    private final CollectionReference eventRef;
+    private final CollectionReference eventCollectionRef;
 
     /**
      * Constructs EventDatabaseMangaer object. Gets instance of firestore and creates a collection for the 'events' collection
      */
     public EventDatabaseManager(){
         this.db = FirebaseFirestore.getInstance();
-        this.eventRef = db.collection("events");
+        this.eventCollectionRef = db.collection("events");
     }
 
     /**
@@ -23,7 +23,7 @@ public class EventDatabaseManager {
      * @param event the Event to be stored
      */
     public void storeEvent(Event event){
-        eventRef.document().set(event);
+        eventCollectionRef.document().set(event);
         Log.d("Firestore", String.format("Event(%s) stored", event.getEventName()));
     }
 
@@ -31,11 +31,11 @@ public class EventDatabaseManager {
      * Returns a CollectionReference for the 'events' collection
      * @return CollectionReference for the 'events' collection
      */
-    public CollectionReference getEventRef(){
-        return this.eventRef;
+    public CollectionReference getEventCollectionRef(){
+        return this.eventCollectionRef;
     }
     
-    public DocumentReference getEventDoc(String documentId){
-        return eventRef.document(documentId);
+    public DocumentReference getEventDocRef(String documentId){
+        return eventCollectionRef.document(documentId);
     }
 }

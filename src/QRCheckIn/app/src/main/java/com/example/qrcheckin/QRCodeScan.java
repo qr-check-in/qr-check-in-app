@@ -44,6 +44,7 @@ public class QRCodeScan extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_qrcode_scan);
 
+        eventDb = new EventDatabaseManager();
 
         title = findViewById(R.id.topNavigationText);
         location = findViewById(R.id.location);
@@ -127,7 +128,7 @@ public class QRCodeScan extends AppCompatActivity {
                     String scannedData = result.getContents();
 
                     // Query Firestore to find the document with the matching hashedContent in the checkInQRCode field
-                    Query query = eventDb.getEventRef().whereEqualTo("checkInQRCode.hashedContent", scannedData);
+                    Query query = eventDb.getEventCollectionRef().whereEqualTo("checkInQRCode.hashedContent", scannedData);
 
 
                     query.get().addOnCompleteListener(task -> {

@@ -62,7 +62,7 @@ public class EventPage extends AppCompatActivity {
         eventDb = new EventDatabaseManager();
         // Retrieve the event passed from the previous activity
         String documentId = getIntent().getStringExtra("DOCUMENT_ID");
-        DocumentReference docRef = eventDb.getEventDoc(documentId);
+        DocumentReference docRef = eventDb.getEventDocRef(documentId);
         docRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
