@@ -131,7 +131,6 @@ public class QRCodeScan extends AppCompatActivity {
                     // Query Firestore to find the document with the matching hashedContent in the checkInQRCode field
                     Query query = eventsRef.whereEqualTo("checkInQRCode.hashedContent", scannedData);
 
-
                     query.get().addOnCompleteListener(task -> {
                         if (task.isSuccessful()) {
 
@@ -143,6 +142,13 @@ public class QRCodeScan extends AppCompatActivity {
 
                                 // Retrieve the first matching document
                                 DocumentSnapshot documentSnapshot = querySnapshot.getDocuments().get(0);
+                                String id = documentSnapshot.getId();
+
+                                // Send the document id of the event to the Event Page before opening it
+                                Intent intent = new Intent(getApplicationContext(), EventPage.class);
+                                intent.putExtra("DOCUMENT_ID", id);
+                                startActivity(intent);
+
 
                                 // Extract relevant information from the document
                                 summary = documentSnapshot.getString("eventName");
