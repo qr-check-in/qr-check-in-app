@@ -8,8 +8,8 @@ import java.util.ArrayList;
  * Event represents an event created by a user
  */
 public class Event implements Serializable {
-    private ArrayList<Attendee> attendees;
-    private ArrayList<Attendee> signups;
+    private ArrayList<String> attendee;
+    private ArrayList<String> signups;
     private String organizer;
     private QrCode checkInQRCode;
     private PromoQRCode promoQRCode;
@@ -69,15 +69,15 @@ public class Event implements Serializable {
      * Returns the ArrayList of Attendees who have checked into the Event
      * @return attendees ArrayList of Attendees
      */
-    public ArrayList<Attendee> getAttendee() {
-        return attendees;
+    public ArrayList<String> getAttendee() {
+        return attendee;
     }
 
     /**
      * Returns the ArrayList of signups who have signed-up for the Event
      * @return signups ArrayList of Attendees
      */
-    public ArrayList<Attendee> getSignups() {
+    public ArrayList<String> getSignups() {
         return signups;
     }
 

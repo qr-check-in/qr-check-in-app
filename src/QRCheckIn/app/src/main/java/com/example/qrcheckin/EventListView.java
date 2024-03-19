@@ -12,9 +12,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
-import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 
 /**
@@ -28,8 +26,7 @@ public class EventListView extends AppCompatActivity {
     ImageButton profileButton;
     RecyclerView recyclerView;
     private EventAdapter eventAdapter;
-    FirebaseFirestore db = FirebaseFirestore.getInstance();
-    CollectionReference eventsRef = db.collection("events");
+    private EventDatabaseManager eventDb;
     /**
      * Sets up RecyclerView with an adapter & configures the toolbar.
      * Sets listeners for toolbar buttons to navigate to different parts of the app.
@@ -42,6 +39,7 @@ public class EventListView extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_event_list_view);
+        eventDb = new EventDatabaseManager();
 
         setUpRecyclerView();
 
@@ -51,6 +49,7 @@ public class EventListView extends AppCompatActivity {
         addEventButton = findViewById(R.id.addCalenderButton);
         profileButton = findViewById(R.id.profileButton);
         recyclerView = findViewById(R.id.event_recycler_view);
+
 
         eventButton.setPressed(true);       // https://stackoverflow.com/questions/9318331/keep-android-button-selected-state, 2024, Prompt: how  to keep a button selected
 
@@ -78,11 +77,11 @@ public class EventListView extends AppCompatActivity {
             }
         });
 
-        // Set listenere for "Profile" toolbar button
+        // Set listener for "Profile" toolbar button
         profileButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent event = new Intent(getApplicationContext(), ProfileFragment.class);
+                Intent event = new Intent(getApplicationContext(), ProfileActivity.class);
                 startActivity(event);
 
             }
@@ -108,7 +107,7 @@ public class EventListView extends AppCompatActivity {
      */
     private void setUpRecyclerView() {
         // Set up a general query that returns "event" items from the database
-        Query query = eventsRef.orderBy("eventName", Query.Direction.DESCENDING);
+        Query query = eventDb.getEventCollectionRef().orderBy("eventName", Query.Direction.DESCENDING);
 
         // Put this query into the adapter so it can use it
         FirestoreRecyclerOptions<Event> options = new FirestoreRecyclerOptions.Builder<Event>()
