@@ -75,7 +75,8 @@ public class EventPage extends AppCompatActivity {
                     tvEventDescription.setText(event.getEventDescription());
                     // Set the ImageView for the Event's poster
                     if (event.getPoster() != null){
-                        event.getPoster().displayImage("/EventPosters/",ivEventPoster);
+                        ImageStorageManager storage = new ImageStorageManager();
+                        storage.displayImage(event.getPoster(), "/EventPosters/",ivEventPoster);
                     }
                 } else {
                     Log.d("Firestore", String.format("No such document with id %s", documentId));

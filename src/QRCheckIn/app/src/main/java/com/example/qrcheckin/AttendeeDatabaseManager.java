@@ -17,7 +17,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.messaging.FirebaseMessaging;
 
 /**
- * A class that controls storing data to the firestore database collections
+ * Controls storing and retrieving data from the Attendees firebase collection
  */
 public class AttendeeDatabaseManager {
     private final FirebaseFirestore db = FirebaseFirestore.getInstance();
