@@ -11,7 +11,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 /**
  * Display detailed info about specific event.
@@ -59,11 +58,11 @@ public class EventPage extends AppCompatActivity {
         ImageView ivEventPoster = findViewById(R.id.image_event_poster);
         ImageView ivEventPromoQr = findViewById(R.id.image_event_promo_qr);
 
-        eventDb = new EventDatabaseManager();
+
         // Retrieve the event passed from the previous activity
         String documentId = getIntent().getStringExtra("DOCUMENT_ID");
-        DocumentReference docRef = eventDb.getEventDocRef(documentId);
-        docRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+        eventDb = new EventDatabaseManager(documentId);
+        eventDb.getEventDocRef().get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
                 // Get and display event details

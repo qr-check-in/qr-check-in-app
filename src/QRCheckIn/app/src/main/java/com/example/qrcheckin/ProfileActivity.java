@@ -99,10 +99,6 @@ public class ProfileActivity extends AppCompatActivity implements EditProfileFra
         fcmToken = prefs.getString("token", "missing token");
         dbManager = new AttendeeDatabaseManager(fcmToken);
 
-        //********* TEMPORARY TESTING
-        //dbManager.updateAttendedEvents("eventId 0");
-        // *****************
-
         // set the profile attribute fields and string attributes like name, contact, homepage
         setProfileFields();
 
@@ -192,7 +188,7 @@ public class ProfileActivity extends AppCompatActivity implements EditProfileFra
      * Fetches user profile details from Firestore & updates the UI.
      */
     public void setProfileFields() {
-        dbManager.getDocRef().get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+        dbManager.getAttendeeDocRef().get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
                 Attendee attendee = documentSnapshot.toObject(Attendee.class);

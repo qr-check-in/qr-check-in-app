@@ -20,26 +20,34 @@ import com.google.firebase.firestore.FirebaseFirestore;
  */
 public class AttendeeDatabaseManager {
     private final FirebaseFirestore db;
-    private final CollectionReference attendeesRef;
+    private final CollectionReference attendeeCollectionRef;
     private String fcmToken;
     private DocumentReference docRef;
 
     /**
-     * Constructs an AttendeeDatabaseManager to store/retrieve data from Firebase for a given Attendee
+     * Constructs an AttendeeDatabaseManager for cases where we want to store/retrieve data from Firebase for a specific Attendee
      * @param token String fcmToken of the Attendee whose data we are accessing
      */
     public AttendeeDatabaseManager(String token){
         this.db  = FirebaseFirestore.getInstance();
-        this.attendeesRef = db.collection("Attendees");
+        this.attendeeCollectionRef = db.collection("Attendees");
         this.fcmToken = token;
-        this.docRef = attendeesRef.document(fcmToken);
+        this.docRef = attendeeCollectionRef.document(fcmToken);
+    }
+
+    /**
+     * Constructs an AttendeeDatabaseManager for cases where we want the Attendee collection (to execute a query for example)
+     */
+    public AttendeeDatabaseManager(){
+        this.db  = FirebaseFirestore.getInstance();
+        this.attendeeCollectionRef = db.collection("Attendees");
     }
 
     /**
      * Returns a DocumentReference for an Attendee
      * @return docRef DocumentReference for an Attendee document
      */
-    public DocumentReference getDocRef(){
+    public DocumentReference getAttendeeDocRef(){
         return docRef;
     }
 
@@ -73,7 +81,7 @@ public class AttendeeDatabaseManager {
     public void storeAttendee(){
         Attendee attendee = new Attendee();
         // The docID of the attendee object is the associated user's fcmToken string
-        attendeesRef.document(fcmToken).set(attendee);
+        attendeeCollectionRef.document(fcmToken).set(attendee);
         Log.d("Firestore", String.format("Attendee for token (%s) stored", fcmToken));
     }
 
@@ -95,9 +103,21 @@ public class AttendeeDatabaseManager {
         });
     }
 
-    // **IN PROGRESS
-    public void updateAttendedEvents(String eventDocID){
-        docRef.update("attendedEvents", FieldValue.arrayUnion(eventDocID));
+    /**
+     * Adds an Event's firebase doc ID string to the Attendee's list of attended/signup event IDs
+     * @param fieldName String of the list to be updated (attendedEvents or signupEvents)
+     * @param eventDocID String ID of the Event
+     */
+    public void addEvent(String fieldName, String eventDocID){
+        docRef.update(fieldName, FieldValue.arrayUnion(eventDocID));
+    }
+    /**
+     * Removes an Event's firebase doc ID string from the Attendee's list of attended events
+     * * @param fieldName String of the list to be updated (attendedEvents or signupEvents)
+     * @param eventDocID String ID of the Event
+     */
+    public void removeEvent(String fieldName, String eventDocID){
+        docRef.update(fieldName, FieldValue.arrayRemove(eventDocID));
     }
 
     /**
