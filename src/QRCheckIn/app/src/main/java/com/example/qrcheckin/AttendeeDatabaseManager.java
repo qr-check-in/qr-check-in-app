@@ -1,6 +1,5 @@
 package com.example.qrcheckin;
 
-import android.content.SharedPreferences;
 import android.net.Uri;
 import android.util.Log;
 
@@ -13,36 +12,52 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.messaging.FirebaseMessaging;
 
 /**
- * A class that controls storing data to the firestore database collections
+ * Controls storing and retrieving data from the Attendees firebase collection
  */
-public class Database {
-    private final FirebaseFirestore db = FirebaseFirestore.getInstance();
-    private final CollectionReference eventsRef = db.collection("events");
-    private final CollectionReference attendeesRef = db.collection("Attendees");
-
+public class AttendeeDatabaseManager {
+    private final FirebaseFirestore db;
+    private final CollectionReference attendeeCollectionRef;
+    private String fcmToken;
+    private DocumentReference docRef;
 
     /**
-     * Stores an Event object to the Events collection
-     * @param event the Event to be stored
+     * Constructs an AttendeeDatabaseManager for cases where we want to store/retrieve data from Firebase for a specific Attendee
+     * @param token String fcmToken of the Attendee whose data we are accessing
      */
-    public void storeEvent(Event event){
-        eventsRef.document().set(event);
-        Log.d("Firestore", String.format("Event(%s) stored", event.getEventName()));
+    public AttendeeDatabaseManager(String token){
+        this.db  = FirebaseFirestore.getInstance();
+        this.attendeeCollectionRef = db.collection("Attendees");
+        this.fcmToken = token;
+        this.docRef = attendeeCollectionRef.document(fcmToken);
+    }
+
+    /**
+     * Constructs an AttendeeDatabaseManager for cases where we want the Attendee collection (to execute a query for example)
+     */
+    public AttendeeDatabaseManager(){
+        this.db  = FirebaseFirestore.getInstance();
+        this.attendeeCollectionRef = db.collection("Attendees");
+    }
+
+    /**
+     * Returns a DocumentReference for an Attendee
+     * @return docRef DocumentReference for an Attendee document
+     */
+    public DocumentReference getAttendeeDocRef(){
+        return docRef;
     }
 
     /**
      * Searches Attendee collection for an Attendee whose docID matches fcmToken
      * Does nothing if attendee document is found
      * Calls storeAttendee to create a new attendee object if attendee document does not exist
-     * @param fcmToken the fcmToken of the Attendee we're searching for
      *
      */
-    public void checkExistingAttendees(String fcmToken){
-        DocumentReference docRef = attendeesRef.document(fcmToken);
+    public void checkExistingAttendees(){
         docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
@@ -50,7 +65,7 @@ public class Database {
                     DocumentSnapshot document = task.getResult();
                     if (!document.exists()){
                         // no such document exists
-                        storeAttendee(fcmToken);
+                        storeAttendee();
                     }
                     else{
                         Log.d("Firestore", "attendee already exists");
@@ -62,23 +77,20 @@ public class Database {
 
     /**
      * Creates a new Attendee object and stores it to the Attendee collection
-     * @param fcmToken the fcmToken of the user we're creating an Attendee object for
      */
-    public void storeAttendee(String fcmToken){
+    public void storeAttendee(){
         Attendee attendee = new Attendee();
         // The docID of the attendee object is the associated user's fcmToken string
-        attendeesRef.document(fcmToken).set(attendee);
+        attendeeCollectionRef.document(fcmToken).set(attendee);
         Log.d("Firestore", String.format("Attendee for token (%s) stored", fcmToken));
     }
 
     /**
      * Updates the trackGeolocation field of the Attendee with the docID fcmToken
-     * @param fcmToken String ocID of the attendee to be updated
      * @param isShared Boolean value trackGeolocation is set to
      */
-    public void updateAttendeeGeolocation(String fcmToken, Boolean isShared){
-        DocumentReference attendeeRef = db.collection("Attendees").document(fcmToken);
-        attendeeRef.update("profile.trackGeolocation", isShared).addOnSuccessListener(new OnSuccessListener<Void>() {
+    public void updateAttendeeGeolocation(Boolean isShared){
+        docRef.update("profile.trackGeolocation", isShared).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void unused) {
                 Log.d("Firestore", "docsnapshot boolean updated");
@@ -92,35 +104,34 @@ public class Database {
     }
 
     /**
-     * Retrieves and logs the Firebase Cloud Messaging (FCM) token for this app's installation
-     * @param editor a SharedPreferences.Editor from the calling activity to save the token string value
+     * Adds an Event's firebase doc ID string to the Attendee's list of attended/signup event IDs
+     * @param fieldName String of the list to be updated (attendedEvents or signupEvents)
+     * @param eventDocID String ID of the Event
      */
-    public void getFcmToken(SharedPreferences.Editor editor) {
-        FirebaseMessaging.getInstance().getToken()
-                .addOnCompleteListener(task -> {
-                    if (!task.isSuccessful()) {
-                        Log.w(Utils.TAG, "Fetching FCM registration token failed", task.getException());
-                        return;
-                    }
-                    // Get and log the new FCM registration token
-                    String token = task.getResult();
-                    Log.d(Utils.TAG, token);
-                    // save token string
-                    editor.putString("token", token);
-                    editor.apply();
-                });
+    public void addEvent(String fieldName, String eventDocID){
+        docRef.update(fieldName, FieldValue.arrayUnion(eventDocID));
+    }
+    /**
+     * Removes an Event's firebase doc ID string from the Attendee's list of attended events
+     * * @param fieldName String of the list to be updated (attendedEvents or signupEvents)
+     * @param eventDocID String ID of the Event
+     */
+    public void removeEvent(String fieldName, String eventDocID){
+        docRef.update(fieldName, FieldValue.arrayRemove(eventDocID));
     }
 
     /**
      * Updates the profilePicture field in an Attendee's Profile
-     * @param fcmToken String of the Attendee's docID in firebase
      * @param uri Uri of the ProfilePicture
      */
-    public void updateProfilePicture(String fcmToken, Uri uri){
-        // Create doc reference for the Attendee
-        DocumentReference attendeeRef = db.collection("Attendees").document(fcmToken);
+    public void updateProfilePicture(Uri uri){
+        // Check if uri is null, in which case we are just removing the profile picture
+        String uriString = null;
+        if(uri != null){
+            uriString= uri.toString();
+        }
         // Update the uriString field
-        attendeeRef.update("profile.profilePicture.uriString", uri.toString()).addOnSuccessListener(new OnSuccessListener<Void>() {
+        docRef.update("profile.profilePicture.uriString", uriString).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void unused) {
                 Log.d("Firestore", "docsnapshot updated");
@@ -135,13 +146,11 @@ public class Database {
 
     /**
      * Updates a string field in an Attendee's Profile in firestore
-     * @param fcmToken String of the Attendee's docID in firebase
      * @param field String of the field to be updated in Profile
      * @param value String of the new value the field is set to
      */
-    public void updateProfileString(String fcmToken, String field, String value){
-        DocumentReference attendeeRef = db.collection("Attendees").document(fcmToken);
-        attendeeRef.update("profile."+field, value).addOnSuccessListener(new OnSuccessListener<Void>() {
+    public void updateProfileString(String field, String value){
+        docRef.update("profile."+field, value).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void unused) {
                 Log.d("Firestore", "docsnapshot string updated");
@@ -153,4 +162,5 @@ public class Database {
             }
         });
     }
+
 }
