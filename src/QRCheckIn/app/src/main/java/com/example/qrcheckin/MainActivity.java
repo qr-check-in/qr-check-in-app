@@ -9,20 +9,9 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-
-import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.FirebaseFirestoreException;
-import com.google.firebase.firestore.Query;
-import com.google.firebase.firestore.QuerySnapshot;
-import com.google.zxing.integration.android.IntentIntegrator;
-import com.google.zxing.integration.android.IntentResult;
 
 import com.google.firebase.messaging.FirebaseMessaging;
 
@@ -38,8 +27,6 @@ public class MainActivity extends AppCompatActivity{
     ImageButton profileButton;
     private String fcmToken;
     Button scanButton;
-    FirebaseFirestore db = FirebaseFirestore.getInstance();
-    CollectionReference eventsRef = db.collection("events");
 
     /**
      * Sets up UI and initializes application settings.
@@ -129,8 +116,8 @@ public class MainActivity extends AppCompatActivity{
 
             }
         });
-    }
 
+    }
     /**
      * Retrieves and logs the Firebase Cloud Messaging (FCM) token for this app's installation
      * @param editor a SharedPreferences.Editor from the calling activity to save the token string value
