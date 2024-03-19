@@ -63,7 +63,7 @@
             android:id="@+id/qrCodeImageView"
             android:layout_width="350dp"
             android:layout_height="400dp"
-            android:layout_marginTop="30dp"
+            android:layout_marginTop="20dp"
             android:layout_gravity="center_horizontal"
             app:srcCompat="@drawable/imagenotfound" />
 

@@ -1,9 +1,14 @@
 package com.example.qrcheckin;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.view.View;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -19,6 +24,9 @@ import com.google.firebase.firestore.QuerySnapshot;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -33,8 +41,10 @@ public class QRCodeScan extends AppCompatActivity {
     ImageButton eventButton;
     ImageButton addEventButton;
     ImageButton profileButton;
+    ImageView posterImage;
     private boolean hasScanned = false;   // Boolean flag to track whether a scan has been performed
-    String summary = null, destination = null, dateOfEvent = null, timeOfEvent = null, dtstart = null;
+    String summary = null, destination = null, dateOfEvent = null, timeOfEvent = null, dtstart = null, uriPoster = null;
+    Bitmap bitmapPoster = null;
 
     // Get access to the Firestore instance
     FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -50,6 +60,7 @@ public class QRCodeScan extends AppCompatActivity {
         title = findViewById(R.id.topNavigationText);
         location = findViewById(R.id.location);
         dateAndtime = findViewById(R.id.dateAndtime);
+        posterImage = findViewById(R.id.posterImage);
 
         qrButton = findViewById(R.id.qrCode);
         eventButton = findViewById(R.id.events);
@@ -116,7 +127,6 @@ public class QRCodeScan extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
 
-        if (!hasScanned) { // Only proceed if scanning hasn't been performed yet
             IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
             if (result != null) {
                 if (result.getContents() == null) {
@@ -149,8 +159,9 @@ public class QRCodeScan extends AppCompatActivity {
                                 destination = documentSnapshot.getString("eventLocation");
                                 dateOfEvent = documentSnapshot.getString("eventDate");
                                 timeOfEvent = documentSnapshot.getString("eventTime");
+                                uriPoster = documentSnapshot.getString("poster.uriString");
 
-                                Toast.makeText(this, "summary: " + summary, Toast.LENGTH_SHORT).show();
+                                Toast.makeText(this, "uriPoster: " + uriPoster, Toast.LENGTH_SHORT).show();
 
                                 // make a string combined with date and time
                                 dtstart = dateOfEvent + 'T' + timeOfEvent + 'Z';
@@ -166,8 +177,24 @@ public class QRCodeScan extends AppCompatActivity {
                                     e.printStackTrace();
                                 }
 
-                                // Display or use the separated variables as needed
-                                Toast.makeText(this, "CHECKED IN " + summary, Toast.LENGTH_SHORT).show();
+                                // Check if URI is not null (means available)
+                                if (uriPoster != null && !uriPoster.isEmpty()) {
+                                    // Convert the URI string back to a URI object
+                                    Uri uri = Uri.parse(uriPoster);
+
+                                    // Load the image using the URI
+                                    try {
+                                        bitmapPoster = BitmapFactory.decodeStream(getContentResolver().openInputStream(uri));
+                                    } catch (FileNotFoundException e) {
+                                        throw new RuntimeException(e);
+                                    }
+                                    posterImage.setImageBitmap(bitmapPoster);
+
+                                } else {
+                                    // Handle case where URI is null or empty
+                                    Toast.makeText(this, "No poster URI available", Toast.LENGTH_SHORT).show();
+                                }
+
 
                                 // set the event details on the event page
                                 title.setText(summary);
@@ -176,6 +203,8 @@ public class QRCodeScan extends AppCompatActivity {
 
                                 hasScanned = true; // Set the flag to true after successful scan
 
+                                // Display or use the separated variables as needed
+                                Toast.makeText(this, "CHECKED IN " + summary, Toast.LENGTH_SHORT).show();
 
                             } else {
                                 // No matching document found
@@ -213,5 +242,4 @@ public class QRCodeScan extends AppCompatActivity {
                 super.onActivityResult(requestCode, resultCode, data);
             }
         }
-    }
 }

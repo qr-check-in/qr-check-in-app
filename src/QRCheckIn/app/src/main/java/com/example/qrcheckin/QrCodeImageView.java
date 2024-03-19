@@ -4,11 +4,13 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.camera.core.processing.SurfaceProcessorNode;
 import androidx.core.content.FileProvider;
 
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.provider.ContactsContract;
 import android.util.Log;
 import android.view.View;
@@ -21,6 +23,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.Objects;
 
 public class QrCodeImageView extends AppCompatActivity {
 
@@ -41,7 +44,7 @@ public class QrCodeImageView extends AppCompatActivity {
         setContentView(R.layout.activity_qr_code_image_view);
 
         TextView header = findViewById(R.id.mainHeader);
-        header.setText("QR Code Image");
+        header.setText("Share QR Code");
 
         // Initialize Mainbar Attributes
         qrButton = findViewById(R.id.qrButton);
@@ -56,7 +59,8 @@ public class QrCodeImageView extends AppCompatActivity {
         // Retrieve the QR code bitmap from the Intent extras
         Bitmap qrCodeBitmap = getIntent().getParcelableExtra("QRCodeBitmap");
         // Retrieve event name and date
-        eventText = getIntent().getStringExtra("eventName&Date");
+        eventText = getIntent().getStringExtra("EventName&Date");
+        Log.d("eventText", "Event Name" + eventText);
 
         // Display the QR code bitmap in an ImageView
         qrCodeImage.setImageBitmap(qrCodeBitmap);
@@ -69,6 +73,7 @@ public class QrCodeImageView extends AppCompatActivity {
                 BitmapDrawable bitmapDrawable = (BitmapDrawable) qrCodeImage.getDrawable();
                 Bitmap bitmap = bitmapDrawable.getBitmap();
                 shareImageandText(bitmap);
+
             }
         });
 
@@ -106,37 +111,39 @@ public class QrCodeImageView extends AppCompatActivity {
     }
 
     private void shareImageandText(Bitmap bitmap) {
-        Uri uri = getImageToShare(bitmap);
 
         Intent intent = new Intent(Intent.ACTION_SEND);
+        intent.setType("image/jpeg");
 
+        Uri uri = null;
+        uri = getImageToShare(bitmap, getApplicationContext());
+
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         intent.putExtra(Intent.EXTRA_STREAM, uri);
-        intent.putExtra(Intent.EXTRA_TEXT, eventText);
         intent.putExtra(Intent.EXTRA_SUBJECT, "Scan and Share this QR Code to attend an event.");
-        intent.setType("qrCode/*");
+        intent.putExtra(Intent.EXTRA_TEXT, eventText);
         startActivity(Intent.createChooser(intent, "Share via"));
 
     }
 
-    private Uri getImageToShare(Bitmap bitmap) {
-        File folder = new File (getCacheDir(), "images");
+
+    private Uri getImageToShare(Bitmap image, Context context) {
+        File folder = new File (context.getCacheDir(), "images");
         Uri uri = null;
 
         try{
-            Log.d("folder", String.format("created: " + folder.mkdirs() ));
-
             folder.mkdirs();
-            File file = new File(folder, "qrCode.jpg");
-            FileOutputStream fileOutputStream = new FileOutputStream(file);
+            File file = new File(folder, eventText + ".jpg");
 
-            bitmap.compress(Bitmap.CompressFormat.JPEG,90, fileOutputStream);
+            FileOutputStream fileOutputStream = new FileOutputStream(file);
+            image.compress(Bitmap.CompressFormat.JPEG,90, fileOutputStream);
+
             fileOutputStream.flush();
             fileOutputStream.close();
-
-            uri = FileProvider.getUriForFile(this, "com.example.qrcheckin", file);
+            uri = FileProvider.getUriForFile(Objects.requireNonNull(context.getApplicationContext()), "com.example.qrcheckin" + ".provider", file);
         }
-        catch (Exception e){
-            e.printStackTrace();
+        catch (IOException e){
+            Log.d("getImageToShare Error", "Exception" + e.getMessage());
         }
         return uri;
     }
