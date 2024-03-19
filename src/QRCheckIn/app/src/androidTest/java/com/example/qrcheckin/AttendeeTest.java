@@ -1,11 +1,11 @@
 package com.example.qrcheckin;
 
 
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
-
 import org.junit.Before;
 import org.junit.Test;
+import static org.junit.Assert.*;
+
+import java.util.ArrayList;
 
 public class AttendeeTest {
     private Attendee attendee;
@@ -17,9 +17,6 @@ public class AttendeeTest {
 
     @Test
     public void testInitialAttendeeState() {
-
-        // ** Will fail now that AttendedEvents and SignupEvents are arrays of strings
-
         assertNotNull("Attendee's attended events list should not be null", attendee.getAttendedEvents());
         assertTrue("Attendee's attended events list should be empty initially", attendee.getAttendedEvents().isEmpty());
 

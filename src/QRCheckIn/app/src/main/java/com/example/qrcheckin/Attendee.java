@@ -6,8 +6,8 @@ import java.util.ArrayList;
  * A class that defines an app user as an Attendee
  */
 public class Attendee {
-    private ArrayList<String> attendedEvents;
-    private ArrayList<String> signupEvents;
+    private ArrayList<Event> attendedEvents;
+    private ArrayList<Event> signupEvents;
     private Profile profile;
     private Location location;
 
@@ -16,8 +16,8 @@ public class Attendee {
      * Constructs a new Attendee
      */
     public Attendee(){
-        this.attendedEvents = new ArrayList<String>();
-        this.signupEvents = new ArrayList<String>();
+        this.attendedEvents = new ArrayList<Event>();
+        this.signupEvents = new ArrayList<Event>();
         this.profile = new Profile();
     }
 
@@ -25,7 +25,7 @@ public class Attendee {
      * Returns a list of Events the Attendee has checked-in to
      * @return EventList of attended Events
      */
-    public ArrayList<String> getAttendedEvents() {
+    public ArrayList<Event> getAttendedEvents() {
         return attendedEvents;
     }
 
@@ -33,7 +33,7 @@ public class Attendee {
      * Returns a list of Events the Attendee has signed up for
      * @return EventList of signed up Events
      */
-    public ArrayList<String> getSignupEvents() {
+    public ArrayList<Event> getSignupEvents() {
         return signupEvents;
     }
 

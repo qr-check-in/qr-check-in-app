@@ -2,12 +2,18 @@ package com.example.qrcheckin;
 
 import static com.example.qrcheckin.R.layout.show_profile;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModelProvider;
+
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.ImageButton;
@@ -15,11 +21,26 @@ import android.widget.ImageView;
 import android.widget.Switch;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.squareup.picasso.Picasso;
+
+import com.google.firebase.storage.FileDownloadTask;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Manages user profile view within the app.
@@ -27,7 +48,7 @@ import com.google.firebase.firestore.DocumentSnapshot;
  * Can toggle geolocation tracking .
  * Listens for updates from the EditProfileFragment dialog and updates the UI.
  */
-public class ProfileActivity extends AppCompatActivity implements EditProfileFragment.EditProfileDialogListener {
+public class ProfileFragment extends AppCompatActivity implements EditProfileFragment.EditProfileDialogListener {
     ImageButton qrButton;
     ImageButton eventButton;
     ImageButton addEventButton;
@@ -52,7 +73,8 @@ public class ProfileActivity extends AppCompatActivity implements EditProfileFra
     TextView tvHomepage;
     Switch switchGeolocation;
     TextView profileName;
-    private AttendeeDatabaseManager dbManager;
+    FirebaseFirestore db = FirebaseFirestore.getInstance();
+    CollectionReference attendeesRef = db.collection("Attendees");
     private String fcmToken;
 
     /**
@@ -65,7 +87,6 @@ public class ProfileActivity extends AppCompatActivity implements EditProfileFra
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(show_profile);
-        // Initialize navigation bar and other views
         qrButton = findViewById(R.id.qrButton);
         eventButton = findViewById(R.id.calenderButton);
         addEventButton = findViewById(R.id.addCalenderButton);
@@ -88,26 +109,31 @@ public class ProfileActivity extends AppCompatActivity implements EditProfileFra
         });
         profileImageView = findViewById(R.id.profile_image);
 
+        sharedViewModel.getSelectedImageUri().observe(this, uri -> {
+            // Use Picasso, Glide, or similar library to load the image efficiently
+            // Picasso.get().load(uri).into(profileImageView);
+        });
+
         tvName = findViewById(R.id.profileName1);
         tvContact = findViewById(R.id.contact1);
         tvHomepage = findViewById(R.id.homepage1);
         switchGeolocation = findViewById(R.id.geoswitch);
         profileName = findViewById(R.id.profileName);
 
-        // Get the fcmToken of the Attendee, initialize an AttendeeDatabaseManager
+        // Get the fcmToken of the Attendee
         SharedPreferences prefs = getSharedPreferences("TOKEN_PREF", MODE_PRIVATE);
         fcmToken = prefs.getString("token", "missing token");
-        dbManager = new AttendeeDatabaseManager(fcmToken);
-
+        Log.d("Firestore", String.format("TEST TOKEN STRING '%s'", fcmToken));
         // set the profile attribute fields and string attributes like name, contact, homepage
-        setProfileFields();
+        setProfileFields(fcmToken);
 
         // Listener for the Geolocation tracking switch
         switchGeolocation.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                Database database = new Database();
                 // updates the Attendee's geolocation attribute
-                dbManager.updateAttendeeGeolocation(isChecked);
+                database.updateAttendeeGeolocation(fcmToken, isChecked);
             }
         });
 
@@ -139,8 +165,24 @@ public class ProfileActivity extends AppCompatActivity implements EditProfileFra
         removePicture.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                dbManager.updateProfilePicture(null);
-                profileImageView.setImageResource(R.drawable.profile);
+                DocumentReference userProfileRef = attendeesRef.document(fcmToken);
+
+                // Directly set uriString to null without fetching the document first
+                userProfileRef.update("profile.profilePicture.uriString", null)
+                        .addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void aVoid) {
+                                Log.d("ProfileFragment", "Profile picture URI set to null successfully.");
+                                // Update UI with default profile image
+                                profileImageView.setImageResource(R.drawable.profile); // Adjust with your default image
+                            }
+                        })
+                        .addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                Log.e("ProfileFragment", "Failed to set profile picture URI to null.", e);
+                            }
+                        });
             }
         });
 
@@ -178,17 +220,20 @@ public class ProfileActivity extends AppCompatActivity implements EditProfileFra
      */
     @Override
     public void editDetails(String nameUpdated, String contactUpdated, String homepageUpdated) {
-        dbManager.updateProfileString("name", nameUpdated);
-        dbManager.updateProfileString("contact", contactUpdated);
-        dbManager.updateProfileString("homepage", homepageUpdated);
-        setProfileFields();
+        Database database = new Database();
+        database.updateProfileString(fcmToken, "name", nameUpdated);
+        database.updateProfileString(fcmToken, "contact", contactUpdated);
+        database.updateProfileString(fcmToken, "homepage", homepageUpdated);
+        setProfileFields(fcmToken);
 
     }
     /**
      * Fetches user profile details from Firestore & updates the UI.
+     * @param fcmToken used to identify the user's document in Firestore.
      */
-    public void setProfileFields() {
-        dbManager.getAttendeeDocRef().get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+    public void setProfileFields(String fcmToken) {
+        DocumentReference docRef = attendeesRef.document(fcmToken);
+        docRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
                 Attendee attendee = documentSnapshot.toObject(Attendee.class);
@@ -211,11 +256,42 @@ public class ProfileActivity extends AppCompatActivity implements EditProfileFra
                     // Display profilePicutre if the profile has one
                     if(profile.getProfilePicture() != null){
                         Log.d("Firestore", "calling display profile pic");
-                        ImageStorageManager storage = new ImageStorageManager();
-                        storage.displayImage(profile.getProfilePicture(),"/EventPosters/", profileImageView);
+                        displayProfilePicture(profile.getProfilePicture().getUriString());
                     }
                 }
             }
         });
+    }
+
+    /**
+     * Retrieves a file from FireStorage, converts to a bitmap and sets the profileImageView to display it
+     * @param uriString name of the file in FireStorage
+     */
+    public void displayProfilePicture(String uriString){
+        // Create string of the path to the image file in firestorage
+        String filePath = "/ProfilePictures/"+uriString;
+        // Get the file
+        FirebaseStorage storage = FirebaseStorage.getInstance();
+        StorageReference storageReference = storage.getReference();
+        storageReference = FirebaseStorage.getInstance().getReference().child(filePath);
+        try{
+            final File localFile = File.createTempFile("tempProfilePic", "jpg");
+            storageReference.getFile(localFile).addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
+                @Override
+                public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
+                    Log.d("Firestore", "picture retrieved");
+                    // Convert local file to bitmap and set the imageview
+                    Bitmap bitmap = BitmapFactory.decodeFile(localFile.getAbsolutePath());
+                    profileImageView.setImageBitmap(bitmap);
+                }
+            }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    Log.e("Firestore", "picture error");
+                }
+            });
+        } catch (IOException e){
+            e.printStackTrace();
+        }
     }
 }
