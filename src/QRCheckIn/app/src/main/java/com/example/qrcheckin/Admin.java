@@ -50,7 +50,7 @@ public class Admin extends Attendee{
                 .addOnSuccessListener(aVoid -> System.out.println("Event successfully deleted!"))
                 .addOnFailureListener(e -> System.out.println("Error deleting event: " + e));
     }
-
+ 
     /**
      * Retrieves and prints the details of a user profile.
      *
