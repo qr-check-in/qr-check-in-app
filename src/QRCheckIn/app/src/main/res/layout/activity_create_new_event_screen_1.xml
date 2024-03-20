@@ -8,12 +8,11 @@
     tools:context=".CreateNewEventScreen1">
 
 
-
     <include
         layout="@layout/toolbar"
         android:id="@+id/addEventToolBar1"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"></include>
+        android:layout_height="wrap_content" />
 
 
     <include
@@ -25,7 +24,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintVertical_bias="1.0"></include>
+        app:layout_constraintVertical_bias="1.0" />
 
     <ScrollView
         android:id="@+id/scrollView2"

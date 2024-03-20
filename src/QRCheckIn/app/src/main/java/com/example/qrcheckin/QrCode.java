@@ -3,6 +3,7 @@ package com.example.qrcheckin;
 
 public class QrCode extends Image {
     private String hashedContent;
+    private String unhashContent;
 
     /**
      * empty constructor for firestore purposes
@@ -17,7 +18,16 @@ public class QrCode extends Image {
      */
     public QrCode(String uriString, Attendee uploader, String unhashedContent) {
         super(uriString, uploader);
+        this.unhashContent = unhashedContent;
         this.hashedContent = Utils.hashString(unhashedContent);
+    }
+
+    public String getUnhashContent() {
+        return unhashContent;
+    }
+
+    public void setUnhashContent(String unhashContent) {
+        this.unhashContent = unhashContent;
     }
 
     public String getHashedContent() {
