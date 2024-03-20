@@ -12,16 +12,20 @@
         android:layout_height="wrap_content" />
 
     <include
+        android:id="@+id/include2"
         layout="@layout/mainappbar"
         android:layout_width="match_parent"
         android:layout_height="45dp"
-        app:layout_constraintBottom_toBottomOf="parent"/>
+        app:layout_constraintBottom_toBottomOf="parent" />
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/profile_recycler_view"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
+        android:layout_width="407dp"
+        android:layout_height="607dp"
+        android:layout_marginTop="12dp"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/profiles"
-        tools:listitem="@layout/profile_list_item"/>
+        tools:listitem="@layout/profile_list_item" />
 </androidx.constraintlayout.widget.ConstraintLayout>
