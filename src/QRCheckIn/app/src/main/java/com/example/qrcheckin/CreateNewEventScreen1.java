@@ -1,7 +1,6 @@
 package com.example.qrcheckin;
 
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -185,7 +184,7 @@ public class CreateNewEventScreen1 extends AppCompatActivity implements SelectDa
         profileButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent event = new Intent(getApplicationContext(), ProfileFragment.class);
+                Intent event = new Intent(getApplicationContext(), ProfileActivity.class);
                 startActivity(event);
             }
         });

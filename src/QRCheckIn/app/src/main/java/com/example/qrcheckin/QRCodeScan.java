@@ -10,9 +10,7 @@ import android.widget.Toast;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -36,9 +34,7 @@ public class QRCodeScan extends AppCompatActivity {
     private boolean hasScanned = false;   // Boolean flag to track whether a scan has been performed
     String summary = null, destination = null, dateOfEvent = null, timeOfEvent = null, dtstart = null;
 
-    // Get access to the Firestore instance
-    FirebaseFirestore db = FirebaseFirestore.getInstance();
-    CollectionReference eventsRef = db.collection("events");
+    private EventDatabaseManager eventDb;
 
 
     @Override
@@ -46,6 +42,7 @@ public class QRCodeScan extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_qrcode_scan);
 
+        eventDb = new EventDatabaseManager();
 
         title = findViewById(R.id.topNavigationText);
         location = findViewById(R.id.location);
@@ -87,7 +84,7 @@ public class QRCodeScan extends AppCompatActivity {
         profileButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent event = new Intent(getApplicationContext(), ProfileFragment.class);
+                Intent event = new Intent(getApplicationContext(), ProfileActivity.class);
                 startActivity(event);
             }
         });
@@ -128,7 +125,7 @@ public class QRCodeScan extends AppCompatActivity {
                     String scannedData = result.getContents();
 
                     // Query Firestore to find the document with the matching hashedContent in the checkInQRCode field
-                    Query query = eventsRef.whereEqualTo("checkInQRCode.hashedContent", scannedData);
+                    Query query = eventDb.getEventCollectionRef().whereEqualTo("checkInQRCode.hashedContent", scannedData);
 
                     query.get().addOnCompleteListener(task -> {
                         if (task.isSuccessful()) {

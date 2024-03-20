@@ -51,7 +51,7 @@
             android:name=".CreateNewEventScreen1"
             android:exported="false" />
         <activity
-            android:name=".ProfileFragment"
+            android:name=".ProfileActivity"
             android:exported="false" />
         <activity
             android:name=".UpdatePictureFragment"
