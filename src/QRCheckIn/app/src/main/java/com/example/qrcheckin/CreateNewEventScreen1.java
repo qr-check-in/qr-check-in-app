@@ -1,6 +1,7 @@
 package com.example.qrcheckin;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -10,6 +11,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Switch;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.PickVisualMediaRequest;
@@ -46,7 +48,7 @@ public class CreateNewEventScreen1 extends AppCompatActivity implements SelectDa
     ImageButton selectTimeButton;
     ImageView poster;
     TextView posterTempText;
-
+    EventPoster eventPoster = null;
 
     private String inputEventName;
     private String inputEventDate;
@@ -149,6 +151,14 @@ public class CreateNewEventScreen1 extends AppCompatActivity implements SelectDa
              */
             @Override
             public void onClick(View v) {
+
+                if (eventNameEditText.getText().toString().isEmpty() || eventLocation.getText().toString().isEmpty() ||
+                        eventDate.getText().toString().isEmpty() || eventTime.getText().toString().isEmpty()) {
+                    // If any required field is empty, show a toast message and return without proceeding
+                    Toast.makeText(CreateNewEventScreen1.this, "Please fill in all required fields", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
                 // Get the Event attributes from the input fields
                 inputEventName = eventNameEditText.getText().toString();
                 Intent event = new Intent(getApplicationContext(), CreateNewEventScreen2.class);
@@ -156,7 +166,8 @@ public class CreateNewEventScreen1 extends AppCompatActivity implements SelectDa
                 if (checkInSwitch.isChecked()){
                     isChecked = true;
                 }else{isChecked = false;}
-                Event newEvent = new Event(null, null, null,
+
+                Event newEvent = new Event(null, null, null, null,
                         inputEventName, inputEventDate, inputEventTime,
                         eventLocation.getText().toString(), eventDescription.getText().toString(), isChecked);
                 // Store Event attributes to pass to createNewEventScreen2
@@ -220,6 +231,7 @@ public class CreateNewEventScreen1 extends AppCompatActivity implements SelectDa
                     Glide.with(this)
                             .load(uri)
                             .into(poster);
+
                     poster.setVisibility(View.VISIBLE);
                     posterTempText.setVisibility(View.GONE);
                     inputPosterString = uri.toString();

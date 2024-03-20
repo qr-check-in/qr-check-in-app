@@ -9,9 +9,20 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QuerySnapshot;
+import com.google.zxing.integration.android.IntentIntegrator;
+import com.google.zxing.integration.android.IntentResult;
 
 /**
  * Entry point of the app, hosts main interface.
@@ -25,6 +36,8 @@ public class MainActivity extends AppCompatActivity{
     ImageButton profileButton;
     private String fcmToken;
     Button scanButton;
+    FirebaseFirestore db = FirebaseFirestore.getInstance();
+    CollectionReference eventsRef = db.collection("events");
 
     /**
      * Sets up UI and initializes application settings.
@@ -78,8 +91,7 @@ public class MainActivity extends AppCompatActivity{
         scanButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent event = new Intent(getApplicationContext(), QRCodeScan.class);
-                startActivity(event);
+                startScanner();
             }
         });
 
@@ -115,6 +127,88 @@ public class MainActivity extends AppCompatActivity{
 
             }
         });
-
     }
+
+    /**
+     * using the IntentIntegrator class from the ZXing library to integrate barcode scanning functionality into your Android application
+     * The ZXing library will return the scanned barcode data to your activity once the scanning is complete.
+     */
+    private void startScanner() {
+        IntentIntegrator integrator = new IntentIntegrator(this);
+        integrator.setOrientationLocked(false);
+        integrator.setDesiredBarcodeFormats(IntentIntegrator.ALL_CODE_TYPES);
+        integrator.setPrompt("Scan a QR code");
+        integrator.setBeepEnabled(false);
+        integrator.initiateScan();
+    }
+
+    /**
+     * In order to get data embedded in the QR code
+     * @param resultCode An integer code that identifies the request
+     * @param requestCode An integer result code returned by the child activity
+     * @param data An Intent object that contains additional data returned by the child activity.
+     */
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
+        if (result != null) {
+            // If activity that launched was a qr code scan, parse and handle the scan
+            if (result.getContents() == null) {
+                // If user pressed the back button
+                Toast.makeText(this, "Scan Cancelled", Toast.LENGTH_SHORT).show();
+                finish();
+            } else {
+                // Query Firestore to find the document with the matching hashedContent in the checkInQRCode field
+                String scannedData = result.getContents();
+                Query query = eventsRef.whereEqualTo("checkInQRCode.hashedContent", scannedData);
+                query.get().addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        // Query successful, find the event it links to
+                        QuerySnapshot querySnapshot = task.getResult();
+                        if (querySnapshot != null && !querySnapshot.isEmpty()) {
+                            // Retrieve the first matching document of the scanned qr code
+                            DocumentSnapshot documentSnapshot = querySnapshot.getDocuments().get(0);
+                            String id = documentSnapshot.getId();
+
+                            // Send the document id of the event to the Event Page before opening it
+                            Intent intent = new Intent(getApplicationContext(), EventPage.class);
+                            intent.putExtra("DOCUMENT_ID", id);
+                            startActivity(intent);
+                        } else {
+                            // No matching document found
+                            Toast.makeText(this, "No event found!", Toast.LENGTH_SHORT).show();
+                        }
+
+                    } else {
+                        // An error occurred during the query execution, handle the error
+                        Exception exception = task.getException(); // Retrieve the exception that occurred
+                        if (exception instanceof FirebaseFirestoreException) {
+                            FirebaseFirestoreException firestoreException = (FirebaseFirestoreException) exception;
+                            FirebaseFirestoreException.Code errorCode = firestoreException.getCode(); // Retrieve the error code
+                            // Handle specific error codes if needed, for example:
+                            switch (errorCode) {
+                                case NOT_FOUND:
+                                    // Handle document not found error
+                                    break;
+                                default:
+                                    // Handle other errors
+                                    System.err.println("Firestore error occurred: " + exception.getMessage());
+                            }
+                        } else {
+                            // Handle other types of exceptions
+                            assert exception != null;
+                            System.err.println("An error occurred: " + exception.getMessage());
+                        }
+
+                    }
+
+                });
+            }
+
+        } else {
+            // Activity that is returning is not a QR code scan, let the super method deal with it
+            super.onActivityResult(requestCode, resultCode, data);
+        }
+    }
+
 }
