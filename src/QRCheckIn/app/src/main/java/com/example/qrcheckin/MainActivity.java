@@ -54,10 +54,9 @@ public class MainActivity extends AppCompatActivity{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-// EDIT
+
         db = FirebaseFirestore.getInstance();
 
-// EDIT
         qrButton = findViewById(R.id.qrButton);
         qrButton.setPressed(true);
 
@@ -72,7 +71,7 @@ public class MainActivity extends AppCompatActivity{
             // here we can call any methods we only want to occur once upon opening the app
             // Get and store this app installation's fcm token string
             // https://stackoverflow.com/questions/51834864/how-to-save-a-fcm-token-in-android , 2018, Whats Going On
-//EDIT
+
             SharedPreferences prefs = getSharedPreferences("TOKEN_PREF", MODE_PRIVATE);
             fcmToken = prefs.getString("token", "missing token");
             if ("missing token".equals(fcmToken)) {
@@ -83,8 +82,7 @@ public class MainActivity extends AppCompatActivity{
                 // If the token is found, check for admin privileges
                 checkAdminToken(fcmToken);
             }
-// EDIT
-// SharedPreferences prefs = getSharedPreferences("TOKEN_PREF", MODE_PRIVATE);
+
 
             SharedPreferences.Editor editor = getSharedPreferences("TOKEN_PREF", MODE_PRIVATE).edit();
             getFcmToken(editor);
@@ -166,7 +164,14 @@ public class MainActivity extends AppCompatActivity{
                     editor.apply();
                 });
     }
-//EDIT
+    /**
+     * Checks if the provided FCM token exists in the 'adminTokens' collection in Firestore.
+     * If the token exists, the user is considered an admin and the admin view is opened.
+     * If the token does not exist, or an error occurs during the check, appropriate actions
+     * or error handling can be implemented.
+     *
+     * @param token The FCM token to check against the 'adminTokens' collection.
+     */
     private void checkAdminToken(String token) {
         // Reference to the 'adminTokens' collection
         CollectionReference adminTokensRef = db.collection("adminTokens");
@@ -186,11 +191,15 @@ public class MainActivity extends AppCompatActivity{
         });
     }
 
+    /**
+     * Opens the AdminActivity view. This method is typically called when a user has been
+     * confirmed to have admin privileges.
+     */
     private void openAdminView() {
         // Open the AdminActivity
         Intent intent = new Intent(this, AdminActivity.class);
         startActivity(intent);
         finish(); // Close the current activity if necessary
     }
-//EDIT
+
 }
