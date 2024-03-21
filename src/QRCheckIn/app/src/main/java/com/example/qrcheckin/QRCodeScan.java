@@ -10,9 +10,7 @@ import android.widget.Toast;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -127,7 +125,7 @@ public class QRCodeScan extends AppCompatActivity {
                     String scannedData = result.getContents();
 
                     // Query Firestore to find the document with the matching hashedContent in the checkInQRCode field
-                    Query query = eventsRef.whereEqualTo("checkInQRCode.hashedContent", scannedData);
+                    Query query = eventDb.getEventCollectionRef().whereEqualTo("checkInQRCode.hashedContent", scannedData);
 
                     query.get().addOnCompleteListener(task -> {
                         if (task.isSuccessful()) {
