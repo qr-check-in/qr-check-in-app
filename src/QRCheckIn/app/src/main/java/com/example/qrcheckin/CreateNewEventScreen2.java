@@ -54,7 +54,7 @@
      private String inputEventLocation;
      private EventPoster inputEventPoster;
      private String organizer;
-     QrCode checkInQRCode = null;
+     QRCode checkInQRCode = null;
      PromoQRCode promoQRCode = null;
      Event incomingEvent;
      private String incomingPosterString;
@@ -219,7 +219,7 @@
                 Log.d("CombinedContent", "CombinedContent: " + combinedContent);
 
                 // Create a new QrCode object with combinedContent as unhashed content
-                checkInQRCode = new QrCode(null, null, combinedContent);
+                checkInQRCode = new QRCode(null, null, combinedContent);
 
                 String hashedContent = checkInQRCode.getHashedContent();
                 Log.d("HashedContent", "HashedContent: " + hashedContent);

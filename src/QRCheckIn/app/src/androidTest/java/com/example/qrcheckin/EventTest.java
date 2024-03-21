@@ -15,7 +15,7 @@ public class EventTest {
         String qrCodeValue = "SampleQRCodeValue";
         String qrCodeAdditionalInfo = "SampleAdditionalInfo";
         String organizer = "OrganiserMockString";
-        QrCode checkInQRCode = new QrCode(qrCodeValue, attendeeExample, qrCodeAdditionalInfo);
+        QRCode checkInQRCode = new QRCode(qrCodeValue, attendeeExample, qrCodeAdditionalInfo);
 
         // Create a PromoQRCode object
         PromoQRCode promoQRCode = new PromoQRCode();
