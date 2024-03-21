@@ -32,7 +32,7 @@
  import java.io.IOException;
  import java.util.UUID;
 
- public class CreateNewEventScreen2 extends AppCompatActivity {
+ public class CreateGenerateEventQR extends AppCompatActivity {
      // Main Bar buttons
      ImageButton qrButton;
      ImageButton eventButton;
@@ -54,7 +54,7 @@
      private String inputEventLocation;
      private EventPoster inputEventPoster;
      private String organizer;
-     QrCode checkInQRCode = null;
+     QRCode checkInQRCode = null;
      PromoQRCode promoQRCode = null;
      Event incomingEvent;
      private String incomingPosterString;
@@ -161,7 +161,7 @@
             @Override
             public void onClick(View v) {
                 if (!qrCodeAvailable){
-                    Toast.makeText(CreateNewEventScreen2.this, "Finish generating QR Code", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(CreateGenerateEventQR.this, "Finish generating QR Code", Toast.LENGTH_SHORT).show();
                 }
                 else
                 {
@@ -219,7 +219,7 @@
                 Log.d("CombinedContent", "CombinedContent: " + combinedContent);
 
                 // Create a new QrCode object with combinedContent as unhashed content
-                checkInQRCode = new QrCode(null, null, combinedContent);
+                checkInQRCode = new QRCode(null, null, combinedContent);
 
                 String hashedContent = checkInQRCode.getHashedContent();
                 Log.d("HashedContent", "HashedContent: " + hashedContent);
@@ -290,7 +290,7 @@
          String filename = String.format("%s_%s_%d.jpg", inputEventName, inputEventDate, System.currentTimeMillis());
          File outfile = new File(Directory,filename);
 
-         Toast.makeText(CreateNewEventScreen2.this, "Image Saved Successfully", Toast.LENGTH_SHORT).show();
+         Toast.makeText(CreateGenerateEventQR.this, "Image Saved Successfully", Toast.LENGTH_SHORT).show();
 
          try {
              fileOutputStream = new FileOutputStream(outfile);

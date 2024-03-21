@@ -1,14 +1,14 @@
 package com.example.qrcheckin;
 
 
-public class QrCode extends Image {
+public class QRCode extends Image {
     private String hashedContent;
     private String unhashContent;
 
     /**
      * empty constructor for firestore purposes
      */
-    public QrCode(){}
+    public QRCode(){}
 
     /**
      * Store a QR code with a generated ID linked to an event
@@ -16,7 +16,7 @@ public class QrCode extends Image {
      * @param uploader  Attendee object that uploaded the image
      * @param unhashedContent Event details string in the form of [name][date][time][location]
      */
-    public QrCode(String uriString, Attendee uploader, String unhashedContent) {
+    public QRCode(String uriString, Attendee uploader, String unhashedContent) {
         super(uriString, uploader);
         this.unhashContent = unhashedContent;
         this.hashedContent = Utils.hashString(unhashedContent);
