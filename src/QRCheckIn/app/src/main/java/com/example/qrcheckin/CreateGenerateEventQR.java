@@ -32,7 +32,7 @@
  import java.io.IOException;
  import java.util.UUID;
 
- public class CreateNewEventScreen2 extends AppCompatActivity {
+ public class CreateGenerateEventQR extends AppCompatActivity {
      // Main Bar buttons
      ImageButton qrButton;
      ImageButton eventButton;
@@ -161,7 +161,7 @@
             @Override
             public void onClick(View v) {
                 if (!qrCodeAvailable){
-                    Toast.makeText(CreateNewEventScreen2.this, "Finish generating QR Code", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(CreateGenerateEventQR.this, "Finish generating QR Code", Toast.LENGTH_SHORT).show();
                 }
                 else
                 {
@@ -290,7 +290,7 @@
          String filename = String.format("%s_%s_%d.jpg", inputEventName, inputEventDate, System.currentTimeMillis());
          File outfile = new File(Directory,filename);
 
-         Toast.makeText(CreateNewEventScreen2.this, "Image Saved Successfully", Toast.LENGTH_SHORT).show();
+         Toast.makeText(CreateGenerateEventQR.this, "Image Saved Successfully", Toast.LENGTH_SHORT).show();
 
          try {
              fileOutputStream = new FileOutputStream(outfile);
