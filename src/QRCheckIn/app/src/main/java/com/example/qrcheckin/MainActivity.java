@@ -24,6 +24,8 @@ import com.google.firebase.firestore.QuerySnapshot;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
+import com.google.firebase.messaging.FirebaseMessaging;
+
 /**
  * Entry point of the app, hosts main interface.
  * Provides buttons for; scanning QR codes, viewing event list, adding a new event, accessing the user profile.
@@ -53,6 +55,8 @@ public class MainActivity extends AppCompatActivity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        db = FirebaseFirestore.getInstance();
+
         qrButton = findViewById(R.id.qrButton);
         qrButton.setPressed(true);
 
@@ -65,17 +69,28 @@ public class MainActivity extends AppCompatActivity{
         OpenApp app = (OpenApp) this.getApplicationContext();
         if (!app.hasCheckedFcmToken){
             // here we can call any methods we only want to occur once upon opening the app
-            Database db = new Database();
-
             // Get and store this app installation's fcm token string
             // https://stackoverflow.com/questions/51834864/how-to-save-a-fcm-token-in-android , 2018, Whats Going On
+
             SharedPreferences prefs = getSharedPreferences("TOKEN_PREF", MODE_PRIVATE);
+            fcmToken = prefs.getString("token", "missing token");
+            if ("missing token".equals(fcmToken)) {
+                // If there is no token saved, retrieve it and save it
+                SharedPreferences.Editor editor = prefs.edit();
+                getFcmToken(editor);
+            } else {
+                // If the token is found, check for admin privileges
+                checkAdminToken(fcmToken);
+            }
+
+
             SharedPreferences.Editor editor = getSharedPreferences("TOKEN_PREF", MODE_PRIVATE).edit();
-            db.getFcmToken(editor);
+            getFcmToken(editor);
             fcmToken = prefs.getString("token", "missing token");
 
             // Check if an Attendee object associated with this fcm token already exists
-            db.checkExistingAttendees(fcmToken);
+            AttendeeDatabaseManager db = new AttendeeDatabaseManager(fcmToken);
+            db.checkExistingAttendees();
             Log.d("Firestore", String.format("fcmToken STRING (%s) stored", fcmToken));
             app.hasCheckedFcmToken = true;
         }
@@ -91,7 +106,8 @@ public class MainActivity extends AppCompatActivity{
         scanButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startScanner();
+                Intent event = new Intent(getApplicationContext(), QRCodeScan.class);
+                startActivity(event);
             }
         });
 
@@ -130,85 +146,60 @@ public class MainActivity extends AppCompatActivity{
     }
 
     /**
-     * using the IntentIntegrator class from the ZXing library to integrate barcode scanning functionality into your Android application
-     * The ZXing library will return the scanned barcode data to your activity once the scanning is complete.
+     * Retrieves and logs the Firebase Cloud Messaging (FCM) token for this app's installation
+     * @param editor a SharedPreferences.Editor from the calling activity to save the token string value
      */
-    private void startScanner() {
-        IntentIntegrator integrator = new IntentIntegrator(this);
-        integrator.setOrientationLocked(false);
-        integrator.setDesiredBarcodeFormats(IntentIntegrator.ALL_CODE_TYPES);
-        integrator.setPrompt("Scan a QR code");
-        integrator.setBeepEnabled(false);
-        integrator.initiateScan();
+    public void getFcmToken(SharedPreferences.Editor editor) {
+        FirebaseMessaging.getInstance().getToken()
+                .addOnCompleteListener(task -> {
+                    if (!task.isSuccessful()) {
+                        Log.w(Utils.TAG, "Fetching FCM registration token failed", task.getException());
+                        return;
+                    }
+                    // Get and log the new FCM registration token
+                    String token = task.getResult();
+                    Log.d(Utils.TAG, token);
+                    // save token string
+                    editor.putString("token", token);
+                    editor.apply();
+                });
+    }
+    /**
+     * Checks if the provided FCM token exists in the 'adminTokens' collection in Firestore.
+     * If the token exists, the user is considered an admin and the admin view is opened.
+     * If the token does not exist, or an error occurs during the check, appropriate actions
+     * or error handling can be implemented.
+     *
+     * @param token The FCM token to check against the 'adminTokens' collection.
+     */
+    private void checkAdminToken(String token) {
+        // Reference to the 'adminTokens' collection
+        CollectionReference adminTokensRef = db.collection("adminTokens");
+
+        // Check if the current FCM token exists in the 'adminTokens' collection
+        adminTokensRef.document(token).get().addOnSuccessListener(documentSnapshot -> {
+            if (documentSnapshot.exists()) {
+                // The document exists, meaning this device is associated with an admin
+                openAdminView();
+            } else {
+                // The document does not exist, meaning this device is not associated with an admin
+                // Handle accordingly, perhaps by staying on the current activity or opening a user view
+            }
+        }).addOnFailureListener(e -> {
+            // Handle any errors here
+            Log.e("Firestore", "Error checking admin token", e);
+        });
     }
 
     /**
-     * In order to get data embedded in the QR code
-     * @param resultCode An integer code that identifies the request
-     * @param requestCode An integer result code returned by the child activity
-     * @param data An Intent object that contains additional data returned by the child activity.
+     * Opens the AdminActivity view. This method is typically called when a user has been
+     * confirmed to have admin privileges.
      */
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
-        if (result != null) {
-            // If activity that launched was a qr code scan, parse and handle the scan
-            if (result.getContents() == null) {
-                // If user pressed the back button
-                Toast.makeText(this, "Scan Cancelled", Toast.LENGTH_SHORT).show();
-                finish();
-            } else {
-                // Query Firestore to find the document with the matching hashedContent in the checkInQRCode field
-                String scannedData = result.getContents();
-                Query query = eventsRef.whereEqualTo("checkInQRCode.hashedContent", scannedData);
-                query.get().addOnCompleteListener(task -> {
-                    if (task.isSuccessful()) {
-                        // Query successful, find the event it links to
-                        QuerySnapshot querySnapshot = task.getResult();
-                        if (querySnapshot != null && !querySnapshot.isEmpty()) {
-                            // Retrieve the first matching document of the scanned qr code
-                            DocumentSnapshot documentSnapshot = querySnapshot.getDocuments().get(0);
-                            String id = documentSnapshot.getId();
-
-                            // Send the document id of the event to the Event Page before opening it
-                            Intent intent = new Intent(getApplicationContext(), EventPage.class);
-                            intent.putExtra("DOCUMENT_ID", id);
-                            startActivity(intent);
-                        } else {
-                            // No matching document found
-                            Toast.makeText(this, "No event found!", Toast.LENGTH_SHORT).show();
-                        }
-
-                    } else {
-                        // An error occurred during the query execution, handle the error
-                        Exception exception = task.getException(); // Retrieve the exception that occurred
-                        if (exception instanceof FirebaseFirestoreException) {
-                            FirebaseFirestoreException firestoreException = (FirebaseFirestoreException) exception;
-                            FirebaseFirestoreException.Code errorCode = firestoreException.getCode(); // Retrieve the error code
-                            // Handle specific error codes if needed, for example:
-                            switch (errorCode) {
-                                case NOT_FOUND:
-                                    // Handle document not found error
-                                    break;
-                                default:
-                                    // Handle other errors
-                                    System.err.println("Firestore error occurred: " + exception.getMessage());
-                            }
-                        } else {
-                            // Handle other types of exceptions
-                            assert exception != null;
-                            System.err.println("An error occurred: " + exception.getMessage());
-                        }
-
-                    }
-
-                });
-            }
-
-        } else {
-            // Activity that is returning is not a QR code scan, let the super method deal with it
-            super.onActivityResult(requestCode, resultCode, data);
-        }
+    private void openAdminView() {
+        // Open the AdminActivity
+        Intent intent = new Intent(this, AdminActivity.class);
+        startActivity(intent);
+        finish(); // Close the current activity if necessary
     }
 
 }

@@ -36,9 +36,7 @@ public class QRCodeScan extends AppCompatActivity {
     private boolean hasScanned = false;   // Boolean flag to track whether a scan has been performed
     String summary = null, destination = null, dateOfEvent = null, timeOfEvent = null, dtstart = null;
 
-    // Get access to the Firestore instance
-    FirebaseFirestore db = FirebaseFirestore.getInstance();
-    CollectionReference eventsRef = db.collection("events");
+    private EventDatabaseManager eventDb;
 
 
     @Override
@@ -46,6 +44,7 @@ public class QRCodeScan extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_qrcode_scan);
 
+        eventDb = new EventDatabaseManager();
 
         title = findViewById(R.id.topNavigationText);
         location = findViewById(R.id.location);
@@ -115,6 +114,7 @@ public class QRCodeScan extends AppCompatActivity {
      */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+
         if (!hasScanned) { // Only proceed if scanning hasn't been performed yet
             IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
             if (result != null) {
