@@ -23,5 +23,6 @@
     <string name="user_info">User Info</string>
     <string name="homepage">Homepage</string>
     <string name="profile_picture">Profile Picture</string>
+    <string name="signup_button_text">I will be attending this event</string>
 
 </resources>

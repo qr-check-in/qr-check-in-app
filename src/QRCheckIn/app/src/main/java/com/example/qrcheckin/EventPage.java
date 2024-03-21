@@ -3,6 +3,9 @@ package com.example.qrcheckin;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -57,10 +60,11 @@ public class EventPage extends AppCompatActivity {
         TextView tvEventDescription = findViewById(R.id.text_event_description);
         ImageView ivEventPoster = findViewById(R.id.image_event_poster);
         ImageView ivEventPromoQr = findViewById(R.id.image_event_promo_qr);
-
+        CheckBox signupChecK = findViewById(R.id.signup_button);
 
         // Retrieve the event passed from the previous activity
         String documentId = getIntent().getStringExtra("DOCUMENT_ID");
+        setSignupCheck(documentId);
         eventDb = new EventDatabaseManager(documentId);
         eventDb.getEventDocRef().get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
@@ -84,6 +88,13 @@ public class EventPage extends AppCompatActivity {
             }
         });
 
+        signupChecK.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+
+            }
+        });
+
         // Set the "Scan QR code" toolbar button listener
         qrButton.setOnClickListener(v -> {
             Intent event = new Intent(getApplicationContext(), MainActivity.class);
@@ -96,5 +107,19 @@ public class EventPage extends AppCompatActivity {
             startActivity(event);
         });
 
+        // Set the "Profile" toolbar button listener
+        profileButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent event = new Intent(getApplicationContext(), ProfileActivity.class);
+                startActivity(event);
+
+            }
+        });
+
     }
+    public void setSignupCheck(String eventDocumentID){
+        // check for event in the Attendee's list of signups, set the check box accordingly
+    }
+
 }
