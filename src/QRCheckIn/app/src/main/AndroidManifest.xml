@@ -44,11 +44,11 @@
             android:name=".test"
             android:exported="false" />
         <activity
-            android:name=".CreateNewEventScreen2"
+            android:name=".CreateGenerateEventQR"
             android:exported="false"
-            android:parentActivityName=".CreateNewEventScreen1" />
+            android:parentActivityName=".CreateAddEventDetails" />
         <activity
-            android:name=".CreateNewEventScreen1"
+            android:name=".CreateAddEventDetails"
             android:exported="false" />
         <activity
             android:name=".ProfileActivity"
@@ -65,6 +65,10 @@
         <activity
             android:name=".QRCodeScan"
             android:exported="false" />
+        <activity
+            android:name=".AdminActivity"
+            android:exported="false" />
+
         <activity
             android:name=".MainActivity"
             android:exported="true">

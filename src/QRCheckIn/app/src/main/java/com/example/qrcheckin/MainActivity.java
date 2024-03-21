@@ -9,20 +9,12 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.FirebaseFirestoreException;
-import com.google.firebase.firestore.Query;
-import com.google.firebase.firestore.QuerySnapshot;
-import com.google.zxing.integration.android.IntentIntegrator;
-import com.google.zxing.integration.android.IntentResult;
 
 import com.google.firebase.messaging.FirebaseMessaging;
 
@@ -55,6 +47,8 @@ public class MainActivity extends AppCompatActivity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        db = FirebaseFirestore.getInstance();
+
         qrButton = findViewById(R.id.qrButton);
         qrButton.setPressed(true);
 
@@ -69,7 +63,19 @@ public class MainActivity extends AppCompatActivity{
             // here we can call any methods we only want to occur once upon opening the app
             // Get and store this app installation's fcm token string
             // https://stackoverflow.com/questions/51834864/how-to-save-a-fcm-token-in-android , 2018, Whats Going On
+
             SharedPreferences prefs = getSharedPreferences("TOKEN_PREF", MODE_PRIVATE);
+            fcmToken = prefs.getString("token", "missing token");
+            if ("missing token".equals(fcmToken)) {
+                // If there is no token saved, retrieve it and save it
+                SharedPreferences.Editor editor = prefs.edit();
+                getFcmToken(editor);
+            } else {
+                // If the token is found, check for admin privileges
+                checkAdminToken(fcmToken);
+            }
+
+
             SharedPreferences.Editor editor = getSharedPreferences("TOKEN_PREF", MODE_PRIVATE).edit();
             getFcmToken(editor);
             fcmToken = prefs.getString("token", "missing token");
@@ -116,7 +122,7 @@ public class MainActivity extends AppCompatActivity{
         addEventButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent event = new Intent(getApplicationContext(), CreateNewEventScreen1.class);
+                Intent event = new Intent(getApplicationContext(), CreateAddEventDetails.class);
                 startActivity(event);
             }
         });
@@ -150,4 +156,42 @@ public class MainActivity extends AppCompatActivity{
                     editor.apply();
                 });
     }
+    /**
+     * Checks if the provided FCM token exists in the 'adminTokens' collection in Firestore.
+     * If the token exists, the user is considered an admin and the admin view is opened.
+     * If the token does not exist, or an error occurs during the check, appropriate actions
+     * or error handling can be implemented.
+     *
+     * @param token The FCM token to check against the 'adminTokens' collection.
+     */
+    private void checkAdminToken(String token) {
+        // Reference to the 'adminTokens' collection
+        CollectionReference adminTokensRef = db.collection("adminTokens");
+
+        // Check if the current FCM token exists in the 'adminTokens' collection
+        adminTokensRef.document(token).get().addOnSuccessListener(documentSnapshot -> {
+            if (documentSnapshot.exists()) {
+                // The document exists, meaning this device is associated with an admin
+                openAdminView();
+            } else {
+                // The document does not exist, meaning this device is not associated with an admin
+                // Handle accordingly, perhaps by staying on the current activity or opening a user view
+            }
+        }).addOnFailureListener(e -> {
+            // Handle any errors here
+            Log.e("Firestore", "Error checking admin token", e);
+        });
+    }
+
+    /**
+     * Opens the AdminActivity view. This method is typically called when a user has been
+     * confirmed to have admin privileges.
+     */
+    private void openAdminView() {
+        // Open the AdminActivity
+        Intent intent = new Intent(this, AdminActivity.class);
+        startActivity(intent);
+        finish(); // Close the current activity if necessary
+    }
+
 }

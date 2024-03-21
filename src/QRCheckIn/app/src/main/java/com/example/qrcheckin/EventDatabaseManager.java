@@ -65,7 +65,7 @@ public class EventDatabaseManager {
      * @param fieldName String of the list to be updated (attendee or signups)
      * @param attendeeID String ID of the attendee
      */
-    public void addAttendee(String fieldName, String attendeeID){
+    public void addAttendeeID(String fieldName, String attendeeID){
         docRef.update(fieldName, FieldValue.arrayUnion(attendeeID));
     }
 
@@ -74,7 +74,7 @@ public class EventDatabaseManager {
      * @param fieldName String of the list to be updated (attendee or signups)
      * @param attendeeID String ID of the attendee
      */
-    public void removeAttendee(String fieldName, String attendeeID){
+    public void removeAttendeeID(String fieldName, String attendeeID){
         docRef.update(fieldName, FieldValue.arrayRemove(attendeeID));
     }
 }
