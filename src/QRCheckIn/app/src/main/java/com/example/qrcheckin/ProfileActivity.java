@@ -188,7 +188,7 @@ public class ProfileActivity extends AppCompatActivity implements EditProfileFra
      * Fetches user profile details from Firestore & updates the UI.
      */
     public void setProfileFields() {
-        dbManager.getAttendeeDocRef().get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+        dbManager.getDocRef().get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
                 Attendee attendee = documentSnapshot.toObject(Attendee.class);
@@ -212,7 +212,7 @@ public class ProfileActivity extends AppCompatActivity implements EditProfileFra
                     if(profile.getProfilePicture() != null){
                         Log.d("Firestore", "calling display profile pic");
                         ImageStorageManager storage = new ImageStorageManager();
-                        storage.displayImage(profile.getProfilePicture(),"/EventPosters/", profileImageView);
+                        storage.displayImage(profile.getProfilePicture(),"/ProfilePictures/", profileImageView);
                     }
                 }
             }
