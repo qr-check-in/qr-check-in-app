@@ -7,42 +7,11 @@ android:layout_width="match_parent"
 android:layout_height="match_parent"
 tools:context=".ProfileActivity">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="70dp"
-        android:id="@+id/linear1"
-        android:background="@color/ChryslerBlue"
-        android:orientation="horizontal"
-        tools:ignore="MissingConstraints">
-<!--        <ImageView-->
-<!--            android:id="@+id/imageView"-->
-<!--            android:layout_marginStart="10dp"-->
-<!--            android:layout_width="50dp"-->
-<!--            android:layout_height="match_parent"-->
-<!--            app:srcCompat="@drawable/baseline_arrow_back_24"-->
-<!--            app:tint="@color/White" />-->
+    <include
+        layout="@layout/profile_toolbar"
+        android:id="@+id/profileToolbar">
+    </include>
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_marginStart="125dp"
-            android:id="@+id/profile1"
-            android:text="@string/profile"
-            android:layout_gravity="center"
-            android:textColor="@color/White"
-            android:textSize="45dp" />
-        <ImageView
-            android:id="@+id/edit_profile"
-            android:layout_marginStart="75dp"
-            android:layout_width="match_parent"
-            android:layout_marginTop="10dp"
-            android:layout_height="50dp"
-            android:tint="@color/White"
-            app:srcCompat="@drawable/sharp_edit_square_24" />
-
-
-
-    </LinearLayout>
     <LinearLayout
         android:id="@+id/bodyContent"
         android:layout_width="match_parent"

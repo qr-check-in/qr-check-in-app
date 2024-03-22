@@ -16,6 +16,7 @@ import android.widget.Switch;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -93,6 +94,13 @@ public class ProfileActivity extends AppCompatActivity implements EditProfileFra
         tvHomepage = findViewById(R.id.homepage1);
         switchGeolocation = findViewById(R.id.geoswitch);
         profileName = findViewById(R.id.profileName);
+
+        // toolbar
+        Toolbar toolbar = findViewById(R.id.profileToolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
+        TextView header = findViewById(R.id.mainHeader);
+        header.setText("Profile");
 
         // Get the fcmToken of the Attendee, initialize an AttendeeDatabaseManager
         SharedPreferences prefs = getSharedPreferences("TOKEN_PREF", MODE_PRIVATE);

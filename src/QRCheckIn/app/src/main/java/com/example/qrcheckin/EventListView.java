@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
+import com.google.android.material.button.MaterialButton;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.Query;
 
@@ -25,6 +26,9 @@ public class EventListView extends AppCompatActivity {
     ImageButton addEventButton;
     ImageButton profileButton;
     RecyclerView recyclerView;
+    MaterialButton upcomingEvents;
+    MaterialButton signedUpEvents;
+    MaterialButton myEvents;
     private EventAdapter eventAdapter;
     private EventDatabaseManager eventDb;
     /**
@@ -50,6 +54,11 @@ public class EventListView extends AppCompatActivity {
         profileButton = findViewById(R.id.profileButton);
         recyclerView = findViewById(R.id.event_recycler_view);
 
+        // tabbar
+        upcomingEvents = findViewById(R.id.upcomingEventsButton);
+        signedUpEvents = findViewById(R.id.signedUpVEventsButton);
+        myEvents = findViewById(R.id.myEventsButton);
+
 
         eventButton.setPressed(true);       // https://stackoverflow.com/questions/9318331/keep-android-button-selected-state, 2024, Prompt: how  to keep a button selected
 
@@ -58,6 +67,25 @@ public class EventListView extends AppCompatActivity {
         getSupportActionBar().setDisplayShowTitleEnabled(false);
         TextView header = findViewById(R.id.mainHeader);
         header.setText("Ongoing Events");
+
+        upcomingEvents.setPressed(true);
+        // Listner for signed up events button
+        signedUpEvents.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                Intent event = new Intent(getApplicationContext(), SignedUpEvents.class);
+                startActivity(event);
+            }
+        });
+
+        // Listner for my events button
+        myEvents.setOnClickListener(new View.OnClickListener(){
+        @Override
+        public void onClick(View v) {
+            Intent event = new Intent(getApplicationContext(), MyEvents.class);
+            startActivity(event);
+        }
+        });
 
         // Set listener for "Scan QR code" toolbar button
         qrButton.setOnClickListener(new View.OnClickListener() {
@@ -101,6 +129,8 @@ public class EventListView extends AppCompatActivity {
             }
         });
     }
+
+    //
 
     /**
      * Sets up an EventAdapter on the recycler view and sends it the required query
