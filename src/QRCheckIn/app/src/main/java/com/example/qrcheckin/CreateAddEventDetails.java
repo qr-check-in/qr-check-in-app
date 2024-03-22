@@ -43,6 +43,7 @@ public class CreateAddEventDetails extends AppCompatActivity implements SelectDa
     EditText eventDate;
     EditText eventTime;
     EditText eventDescription;
+    EditText numOfAttendees;
     ImageButton selectDateButton;
     ImageButton selectTimeButton;
     ImageView poster;
@@ -54,7 +55,7 @@ public class CreateAddEventDetails extends AppCompatActivity implements SelectDa
     private String inputEventTime;
     private String inputEventLocation;
     private boolean isChecked;
-
+    private int numOfAttends;
     private String inputPosterString;
 
     /**
@@ -96,6 +97,7 @@ public class CreateAddEventDetails extends AppCompatActivity implements SelectDa
         eventDescription = findViewById(R.id.eventDescriptionText);
         selectTimeButton = findViewById(R.id.eventTimePicker);
         selectDateButton = findViewById(R.id.eventDatePicker);
+        numOfAttendees = findViewById(R.id.numOfAttendeeText);
 
 
         poster.setVisibility(View.GONE);
@@ -166,10 +168,16 @@ public class CreateAddEventDetails extends AppCompatActivity implements SelectDa
                     isChecked = true;
                 }else{isChecked = false;}
 
+                if (numOfAttendees.getText().toString().isEmpty()){
+                    numOfAttends = -1;
+                }else{
+                    numOfAttends = Integer.parseInt(numOfAttendees.getText().toString());
+                }
+
                 Event newEvent = new Event(null, null, null, null,
                         inputEventName, inputEventDate, inputEventTime,
-                        eventLocation.getText().toString(), eventDescription.getText().toString(), isChecked);
-                // Store Event attributes to pass to createNewEventScreen2
+                        eventLocation.getText().toString(), eventDescription.getText().toString(), isChecked, numOfAttends);
+                // Store Event attributes to pass to CreateGenerateEventQR
                 // https://stackoverflow.com/questions/2091465/how-do-i-pass-data-between-activities-in-android-application , 2011, user914425
 
                 event.putExtra("EVENT", newEvent);

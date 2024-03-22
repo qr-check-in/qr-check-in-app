@@ -54,6 +54,7 @@
      private String inputEventLocation;
      private EventPoster inputEventPoster;
      private String organizer;
+     private int numOfAttends;
      QRCode checkInQRCode = null;
      PromoQRCode promoQRCode = null;
      Event incomingEvent;
@@ -105,13 +106,12 @@
         inputEventLocation = null;
         inputEventTime = null;
         inputEventDescription = null;
+        numOfAttends = 0;
 
         if (extras != null) {
 //          Get the incoming event object
             incomingEvent = (Event) getIntent().getSerializableExtra("EVENT");
             // Move the info of the new
-//        checkInQRCode = incomingEvent.getCheckInQRCode();
-//        promoQRCode = incomingEvent.getPromoQRCode();
             // Info from the previous page
             inputEventPoster = incomingEvent.getPoster();
             inputEventLocation = incomingEvent.getEventLocation();
@@ -119,6 +119,7 @@
             inputEventDescription = incomingEvent.getEventDescription();
             inputEventName = incomingEvent.getEventName();
             inputEventDate = incomingEvent.getEventDate();
+            numOfAttends = incomingEvent.getNumberofAttendees();
             //Log.d("event", String.format("passed event %s %s", inputEventName, inputEventDate));
 
             // Retrieve the uri string for the EventPoster
@@ -179,7 +180,7 @@
                         storage.uploadImage(inputEventPoster, "/EventPosters");
                     }
 
-                    Event newEvent = new Event(organizer, checkInQRCode, promoQRCode, inputEventPoster, inputEventName, inputEventDate, inputEventTime, inputEventLocation, inputEventDescription, incomingEvent.isCheckInStatus());
+                    Event newEvent = new Event(organizer, checkInQRCode, promoQRCode, inputEventPoster, inputEventName, inputEventDate, inputEventTime, inputEventLocation, inputEventDescription, incomingEvent.isCheckInStatus(), numOfAttends);
                     Log.d("event", String.format("storing event %s", newEvent.getEventName()));
                     db.storeEvent(newEvent);
 
