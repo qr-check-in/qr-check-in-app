@@ -92,10 +92,10 @@ public class QRCodeScan extends AppCompatActivity {
      */
     private void startScanner() {
         IntentIntegrator integrator = new IntentIntegrator(this);
-        integrator.setOrientationLocked(true);
+        integrator.setOrientationLocked(false);
         integrator.setDesiredBarcodeFormats(IntentIntegrator.ALL_CODE_TYPES);
         integrator.setPrompt("Scan a QR code");
-        integrator.setBeepEnabled(true);
+        integrator.setBeepEnabled(false);
         integrator.initiateScan();
     }
 
@@ -134,12 +134,17 @@ public class QRCodeScan extends AppCompatActivity {
                             SharedPreferences prefs = getSharedPreferences("TOKEN_PREF", MODE_PRIVATE);
                             String fcmToken = prefs.getString("token", "missing token");
                             AttendeeDatabaseManager attendeeDbManager = new AttendeeDatabaseManager(fcmToken);
-                            EventDatabaseManager eventDbManager = new EventDatabaseManager(fcmToken);
+                            EventDatabaseManager eventDbManager = new EventDatabaseManager(documentId);
 
                             attendeeDbManager.addEventID("attendedEvents", documentId); // Add event to attendee
 
                             String attendeeId = attendeeDbManager.getAttendeeDocRef().getId();
                             eventDbManager.addAttendeeID("attendee", attendeeId);       // Add attendee to event
+
+                            String debugString = String.format("Attendee '%s' attended event '%s' ", attendeeId, documentId);
+                            Toast.makeText(this, debugString, Toast.LENGTH_SHORT).show();
+
+                            Log.d("QRCodeScan", debugString);
 
                             // Open the appropriate event page
                             Intent intent = new Intent(getApplicationContext(), EventPage.class);
@@ -166,7 +171,7 @@ public class QRCodeScan extends AppCompatActivity {
                             startActivity(intent);
                         } else {
                             // No matching document found
-                            Toast.makeText(this, "No event found!", Toast.LENGTH_SHORT).show();
+                            //Toast.makeText(this, "No event found for promo QR code", Toast.LENGTH_SHORT).show();
                         }
 
                     } else {
