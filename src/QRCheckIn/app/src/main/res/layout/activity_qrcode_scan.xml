@@ -38,10 +38,61 @@
     </LinearLayout>
 
 
+    <LinearLayout
+        android:id="@+id/ButtonsBar"
+        android:layout_width="match_parent"
+        android:layout_height="65dp"
+        android:background="#FFFFFF"
+        android:orientation="horizontal"
+        android:paddingHorizontal="5dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
+        android:layout_below="@id/topNavigation">
+
+
+        <ImageButton
+            android:id="@+id/editIcon"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/round_button"
+            android:padding="10dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
+            android:scaleType="fitCenter"
+            android:src="@drawable/pencil" />
+
+        <ImageButton
+            android:id="@+id/createNewNotification"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/round_button"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
+            android:padding="12dp"
+            android:scaleType="fitCenter"
+            android:src="@drawable/bell" />
+
+        <ImageButton
+            android:id="@+id/attendeeList"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/round_button"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
+            android:padding="7dp"
+            android:scaleType="fitCenter"
+            android:src="@drawable/profile_circle" />
+
+    </LinearLayout>
+
+
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/topNavigation"
+        android:layout_below="@id/ButtonsBar"
         android:layout_above="@+id/bottomNavigation">
 
         <LinearLayout
