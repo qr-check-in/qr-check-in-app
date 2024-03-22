@@ -158,7 +158,8 @@
                                 android:hint="Event Time"
                                 android:paddingStart="10dp"
                                 tools:layout_editor_absoluteX="30dp"
-                                tools:layout_editor_absoluteY="78dp">
+                                tools:layout_editor_absoluteY="78dp"
+                                android:inputType="time">
                             </com.google.android.material.textfield.TextInputEditText>
                         </com.google.android.material.textfield.TextInputLayout>
 
