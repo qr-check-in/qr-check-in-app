@@ -123,11 +123,9 @@ public class CreateAddEventDetails extends AppCompatActivity implements SelectDa
             new TimePickerFragment().show(getSupportFragmentManager(), "timePicker");
         });
         eventTimeLayout.setOnClickListener(v -> {
-            new SelectDateFragment().show(getSupportFragmentManager(), "Select Date");
-        });
+            new TimePickerFragment().show(getSupportFragmentManager(), "timePicker");        });
         eventTime.setOnClickListener(v -> {
-            new SelectDateFragment().show(getSupportFragmentManager(), "Select Date");
-        });
+            new TimePickerFragment().show(getSupportFragmentManager(), "timePicker");        });
 
         // Listener to go to event list page
         eventButton.setOnClickListener(new View.OnClickListener() {
