@@ -15,6 +15,9 @@ import androidx.appcompat.widget.Toolbar;
 
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentSnapshot;
+
+import java.util.ArrayList;
+
 /**
  * Display detailed info about specific event.
  * Retrieves & displays event details from Firestore database.
@@ -64,7 +67,7 @@ public class EventPage extends AppCompatActivity {
 
         // Retrieve the event passed from the previous activity
         String documentId = getIntent().getStringExtra("DOCUMENT_ID");
-        setSignupCheck(documentId);
+
         eventDb = new EventDatabaseManager(documentId);
         eventDb.getEventDocRef().get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
@@ -76,6 +79,7 @@ public class EventPage extends AppCompatActivity {
                     tvEventLocation.setText(event.getEventLocation());
                     tvEventDate.setText(event.getEventDate());
                     tvEventDescription.setText(event.getEventDescription());
+                    setSignupCheck(event.getNumberofAttendees(), event.getSignups());
                     // Set the ImageView for the Event's poster
                     if (event.getPoster() != null){
                         ImageStorageManager storage = new ImageStorageManager();
@@ -118,8 +122,10 @@ public class EventPage extends AppCompatActivity {
         });
 
     }
-    public void setSignupCheck(String eventDocumentID){
+    public void setSignupCheck(int signupLimit, ArrayList<String> signups){
         // check for event in the Attendee's list of signups, set the check box accordingly
+
+        // check event's signup limit, hide checkbox and display message saying its full
     }
 
 }
