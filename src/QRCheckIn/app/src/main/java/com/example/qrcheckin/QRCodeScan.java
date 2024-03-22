@@ -141,11 +141,6 @@ public class QRCodeScan extends AppCompatActivity {
                             String attendeeId = attendeeDbManager.getAttendeeDocRef().getId();
                             eventDbManager.addAttendeeID("attendee", attendeeId);       // Add attendee to event
 
-                            String debugString = String.format("Attendee '%s' attended event '%s' ", attendeeId, documentId);
-                            Toast.makeText(this, debugString, Toast.LENGTH_SHORT).show();
-
-                            Log.d("QRCodeScan", debugString);
-
                             // Open the appropriate event page
                             Intent intent = new Intent(getApplicationContext(), EventPage.class);
                             intent.putExtra("DOCUMENT_ID", documentId);
@@ -171,7 +166,6 @@ public class QRCodeScan extends AppCompatActivity {
                             startActivity(intent);
                         } else {
                             // No matching document found
-                            //Toast.makeText(this, "No event found for promo QR code", Toast.LENGTH_SHORT).show();
                         }
 
                     } else {
