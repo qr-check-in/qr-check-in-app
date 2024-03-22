@@ -69,7 +69,7 @@ public class SignedUpEvents extends AppCompatActivity {
         TextView header = findViewById(R.id.mainHeader);
         header.setText("Ongoing Events");
 
-        upcomingEvents.setPressed(true);
+        signedUpEvents.setPressed(true);
         // Listner for signed up events button
         upcomingEvents.setOnClickListener(new View.OnClickListener(){
             @Override
