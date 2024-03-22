@@ -103,7 +103,7 @@ public class EventPage extends AppCompatActivity {
 
         // Set the "Add event" toolbar button listener
         addEventButton.setOnClickListener(v -> {
-            Intent event = new Intent(getApplicationContext(), CreateNewEventScreen1.class);
+            Intent event = new Intent(getApplicationContext(), CreateAddEventDetails.class);
             startActivity(event);
         });
 

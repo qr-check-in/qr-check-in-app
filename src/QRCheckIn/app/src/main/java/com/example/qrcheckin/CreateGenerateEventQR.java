@@ -32,7 +32,7 @@
  import java.io.IOException;
  import java.util.UUID;
 
- public class CreateNewEventScreen2 extends AppCompatActivity {
+ public class CreateGenerateEventQR extends AppCompatActivity {
      // Main Bar buttons
      ImageButton qrButton;
      ImageButton eventButton;
@@ -54,7 +54,8 @@
      private String inputEventLocation;
      private EventPoster inputEventPoster;
      private String organizer;
-     QrCode checkInQRCode = null;
+     private int numOfAttends;
+     QRCode checkInQRCode = null;
      PromoQRCode promoQRCode = null;
      Event incomingEvent;
      private String incomingPosterString;
@@ -105,13 +106,12 @@
         inputEventLocation = null;
         inputEventTime = null;
         inputEventDescription = null;
+        numOfAttends = 0;
 
         if (extras != null) {
 //          Get the incoming event object
             incomingEvent = (Event) getIntent().getSerializableExtra("EVENT");
             // Move the info of the new
-//        checkInQRCode = incomingEvent.getCheckInQRCode();
-//        promoQRCode = incomingEvent.getPromoQRCode();
             // Info from the previous page
             inputEventPoster = incomingEvent.getPoster();
             inputEventLocation = incomingEvent.getEventLocation();
@@ -119,6 +119,7 @@
             inputEventDescription = incomingEvent.getEventDescription();
             inputEventName = incomingEvent.getEventName();
             inputEventDate = incomingEvent.getEventDate();
+            numOfAttends = incomingEvent.getNumberofAttendees();
             //Log.d("event", String.format("passed event %s %s", inputEventName, inputEventDate));
 
             // Retrieve the uri string for the EventPoster
@@ -161,7 +162,7 @@
             @Override
             public void onClick(View v) {
                 if (!qrCodeAvailable){
-                    Toast.makeText(CreateNewEventScreen2.this, "Finish generating QR Code", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(CreateGenerateEventQR.this, "Finish generating QR Code", Toast.LENGTH_SHORT).show();
                 }
                 else
                 {
@@ -179,7 +180,7 @@
                         storage.uploadImage(inputEventPoster, "/EventPosters");
                     }
 
-                    Event newEvent = new Event(organizer, checkInQRCode, promoQRCode, inputEventPoster, inputEventName, inputEventDate, inputEventTime, inputEventLocation, inputEventDescription, incomingEvent.isCheckInStatus());
+                    Event newEvent = new Event(organizer, checkInQRCode, promoQRCode, inputEventPoster, inputEventName, inputEventDate, inputEventTime, inputEventLocation, inputEventDescription, incomingEvent.isCheckInStatus(), numOfAttends);
                     Log.d("event", String.format("storing event %s", newEvent.getEventName()));
                     db.storeEvent(newEvent);
 
@@ -219,7 +220,7 @@
                 Log.d("CombinedContent", "CombinedContent: " + combinedContent);
 
                 // Create a new QrCode object with combinedContent as unhashed content
-                checkInQRCode = new QrCode(null, null, combinedContent);
+                checkInQRCode = new QRCode(null, null, combinedContent);
 
                 String hashedContent = checkInQRCode.getHashedContent();
                 Log.d("HashedContent", "HashedContent: " + hashedContent);
@@ -290,7 +291,7 @@
          String filename = String.format("%s_%s_%d.jpg", inputEventName, inputEventDate, System.currentTimeMillis());
          File outfile = new File(Directory,filename);
 
-         Toast.makeText(CreateNewEventScreen2.this, "Image Saved Successfully", Toast.LENGTH_SHORT).show();
+         Toast.makeText(CreateGenerateEventQR.this, "Image Saved Successfully", Toast.LENGTH_SHORT).show();
 
          try {
              fileOutputStream = new FileOutputStream(outfile);

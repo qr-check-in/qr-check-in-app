@@ -11,7 +11,7 @@ public class Event implements Serializable {
     private ArrayList<String> attendee;
     private ArrayList<String> signups;
     private String organizer;
-    private QrCode checkInQRCode;
+    private QRCode checkInQRCode;
     private PromoQRCode promoQRCode;
     private EventPoster poster;
     private ArrayList<Notification> notifications;
@@ -20,15 +20,10 @@ public class Event implements Serializable {
     private String eventTime;
     private String eventLocation;
     private String eventDescription;
+
+    private int numberofAttendees;
     private boolean checkInStatus;
 
-    public boolean isCheckInStatus() {
-        return checkInStatus;
-    }
-
-    public void setCheckInStatus(boolean checkInStatus) {
-        this.checkInStatus = checkInStatus;
-    }
 
     /**
      * No argument constructor used by firebase
@@ -50,8 +45,9 @@ public class Event implements Serializable {
      * @param eventTime        the Event's time String
      * @param eventLocation    the Event's location String
      * @param eventDescription the Event's description String
+     * @param numberofAttendees the max number of attendees for an event
      */
-    public Event(String organizer, QrCode checkInQRCode, PromoQRCode promoQRCode, EventPoster poster, String eventName, String eventDate, String eventTime, String eventLocation, String eventDescription, boolean checkInStatus) {
+    public Event(String organizer, QRCode checkInQRCode, PromoQRCode promoQRCode, EventPoster poster, String eventName, String eventDate, String eventTime, String eventLocation, String eventDescription, boolean checkInStatus, int numberofAttendees) {
         this.organizer = organizer;
 
         this.checkInQRCode = checkInQRCode;
@@ -63,6 +59,38 @@ public class Event implements Serializable {
         this.eventLocation = eventLocation;
         this.eventDescription = eventDescription;
         this.checkInStatus = checkInStatus;
+        this.numberofAttendees = numberofAttendees;
+    }
+
+    /**
+     *
+     * @return
+     */
+    public boolean isCheckInStatus() {
+        return checkInStatus;
+    }
+
+    /**
+     *
+     * @param checkInStatus
+     */
+    public void setCheckInStatus(boolean checkInStatus) {
+        this.checkInStatus = checkInStatus;
+    }
+    /**
+     * Returns the maxiumum number of attendees that can attend an event
+     * @return
+     */
+    public int getNumberofAttendees() {
+        return numberofAttendees;
+    }
+
+    /**
+     * Sets the total number attendees an event can hold
+     * @param numberofAttendees
+     */
+    public void setNumberofAttendees(int numberofAttendees) {
+        this.numberofAttendees = numberofAttendees;
     }
 
     /**
@@ -81,43 +109,82 @@ public class Event implements Serializable {
         return signups;
     }
 
-
-    public QrCode getCheckInQRCode() {
+    /**
+     *
+     * @return
+     */
+    public QRCode getCheckInQRCode() {
         return checkInQRCode;
     }
 
-    public void setCheckInQRCode(QrCode checkInQRCode) {
+    /**
+     *
+     * @param checkInQRCode
+     */
+    public void setCheckInQRCode(QRCode checkInQRCode) {
         this.checkInQRCode = checkInQRCode;
     }
 
+    /**
+     *
+     * @return
+     */
     public PromoQRCode getPromoQRCode() {
         return promoQRCode;
     }
 
+    /**
+     *
+     * @param promoQRCode
+     */
     public void setPromoQRCode(PromoQRCode promoQRCode) {
         this.promoQRCode = promoQRCode;
     }
 
+    /**
+     *
+     * @return
+     */
     public EventPoster getPoster() {
         return poster;
     }
 
+    /**
+     *
+     * @param poster
+     */
     public void setPoster(EventPoster poster) {
         this.poster = poster;
     }
 
+    /**
+     *
+     * @return
+     */
     public ArrayList<Notification> getNotifications() {
         return notifications;
     }
 
+    /**
+     *
+     * @param notifications
+     */
     public void setNotifications(ArrayList<Notification> notifications) {
         this.notifications = notifications;
     }
 
+    /**
+     *
+     * @return
+     */
     public String getEventName() {
         return eventName;
     }
 
+    /**
+     *
+     * @param eventName
+     */
     public void setEventName(String eventName) {
         this.eventName = eventName;
     }
@@ -138,34 +205,66 @@ public class Event implements Serializable {
         this.eventDate = eventDate;
     }
 
+    /**
+     *
+     * @return
+     */
     public String getEventTime() {
         return eventTime;
     }
 
+    /**
+     *
+     * @param eventTime
+     */
     public void setEventTime(String eventTime) {
         this.eventTime = eventTime;
     }
 
+    /**
+     *
+     * @return
+     */
     public String getEventLocation() {
         return eventLocation;
     }
 
+    /**
+     *
+     * @param eventLocation
+     */
     public void setEventLocation(String eventLocation) {
         this.eventLocation = eventLocation;
     }
 
+    /**
+     *
+     * @return
+     */
     public String getEventDescription() {
         return eventDescription;
     }
 
+    /**
+     *
+     * @param eventDescription
+     */
     public void setEventDescription(String eventDescription) {
         this.eventDescription = eventDescription;
     }
 
+    /**
+     *
+     * @return
+     */
     public String getOrganizer() {
         return organizer;
     }
 
+    /**
+     *
+     * @param organizer
+     */
     public void setOrganizer(String organizer) {
         this.organizer = organizer;
     }
