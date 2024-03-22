@@ -19,6 +19,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import com.bumptech.glide.Glide;
+import com.google.android.material.textfield.TextInputLayout;
 
 /**
  * Creates new event.
@@ -44,6 +45,8 @@ public class CreateAddEventDetails extends AppCompatActivity implements SelectDa
     EditText eventTime;
     EditText eventDescription;
     EditText numOfAttendees;
+    TextInputLayout eventDateLayout;
+    TextInputLayout eventTimeLayout;
     ImageButton selectDateButton;
     ImageButton selectTimeButton;
     ImageView poster;
@@ -98,6 +101,8 @@ public class CreateAddEventDetails extends AppCompatActivity implements SelectDa
         selectTimeButton = findViewById(R.id.eventTimePicker);
         selectDateButton = findViewById(R.id.eventDatePicker);
         numOfAttendees = findViewById(R.id.numOfAttendeeText);
+        eventDateLayout = findViewById(R.id.eventDateLayout);
+        eventTimeLayout = findViewById(R.id.eventTimeLayout);
 
 
         poster.setVisibility(View.GONE);
@@ -106,10 +111,22 @@ public class CreateAddEventDetails extends AppCompatActivity implements SelectDa
         selectDateButton.setOnClickListener(v -> {
             new SelectDateFragment().show(getSupportFragmentManager(), "Select Date");
         });
+        eventDateLayout.setOnClickListener(v -> {
+            new SelectDateFragment().show(getSupportFragmentManager(), "Select Date");
+        });
+        eventDate.setOnClickListener(v -> {
+            new SelectDateFragment().show(getSupportFragmentManager(), "Select Date");
+        });
 
         // Listener to show a TimePicker fragment when selectTimeButton is clicked
         selectTimeButton.setOnClickListener(v -> {
             new TimePickerFragment().show(getSupportFragmentManager(), "timePicker");
+        });
+        eventTimeLayout.setOnClickListener(v -> {
+            new SelectDateFragment().show(getSupportFragmentManager(), "Select Date");
+        });
+        eventTime.setOnClickListener(v -> {
+            new SelectDateFragment().show(getSupportFragmentManager(), "Select Date");
         });
 
         // Listener to go to event list page
