@@ -18,37 +18,21 @@ import com.google.firebase.firestore.FirebaseFirestore;
 /**
  * Controls storing and retrieving data from the Attendees firebase collection
  */
-public class AttendeeDatabaseManager {
-    private final FirebaseFirestore db;
-    private final CollectionReference attendeeCollectionRef;
-    private String fcmToken;
-    private DocumentReference docRef;
+public class AttendeeDatabaseManager extends DatabaseManager {
 
     /**
      * Constructs an AttendeeDatabaseManager for cases where we want to store/retrieve data from Firebase for a specific Attendee
      * @param token String fcmToken of the Attendee whose data we are accessing
      */
     public AttendeeDatabaseManager(String token){
-        this.db  = FirebaseFirestore.getInstance();
-        this.attendeeCollectionRef = db.collection("Attendees");
-        this.fcmToken = token;
-        this.docRef = attendeeCollectionRef.document(fcmToken);
+        super("Attendees", token);
     }
 
     /**
      * Constructs an AttendeeDatabaseManager for cases where we want the Attendee collection (to execute a query for example)
      */
     public AttendeeDatabaseManager(){
-        this.db  = FirebaseFirestore.getInstance();
-        this.attendeeCollectionRef = db.collection("Attendees");
-    }
-
-    /**
-     * Returns a DocumentReference for an Attendee
-     * @return docRef DocumentReference for an Attendee document
-     */
-    public DocumentReference getAttendeeDocRef(){
-        return docRef;
+        super("Attendees");
     }
 
     /**
@@ -58,7 +42,7 @@ public class AttendeeDatabaseManager {
      *
      */
     public void checkExistingAttendees(){
-        docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+        getDocRef().get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                 if (task.isSuccessful()){
@@ -81,8 +65,8 @@ public class AttendeeDatabaseManager {
     public void storeAttendee(){
         Attendee attendee = new Attendee();
         // The docID of the attendee object is the associated user's fcmToken string
-        attendeeCollectionRef.document(fcmToken).set(attendee);
-        Log.d("Firestore", String.format("Attendee for token (%s) stored", fcmToken));
+        getCollectionRef().document(getDocumentID()).set(attendee);
+        Log.d("Firestore", String.format("Attendee for token (%s) stored", getDocumentID()));
     }
 
     /**
@@ -90,7 +74,7 @@ public class AttendeeDatabaseManager {
      * @param isShared Boolean value trackGeolocation is set to
      */
     public void updateAttendeeGeolocation(Boolean isShared){
-        docRef.update("profile.trackGeolocation", isShared).addOnSuccessListener(new OnSuccessListener<Void>() {
+        getDocRef().update("profile.trackGeolocation", isShared).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void unused) {
                 Log.d("Firestore", "docsnapshot boolean updated");
@@ -104,23 +88,6 @@ public class AttendeeDatabaseManager {
     }
 
     /**
-     * Adds an Event's firebase doc ID string to the Attendee's list of attended/signup event IDs
-     * @param fieldName String of the list to be updated (attendedEvents or signupEvents)
-     * @param eventDocID String ID of the Event
-     */
-    public void addEventID(String fieldName, String eventDocID){
-        docRef.update(fieldName, FieldValue.arrayUnion(eventDocID));
-    }
-    /**
-     * Removes an Event's firebase doc ID string from the Attendee's list of attended events
-     * * @param fieldName String of the list to be updated (attendedEvents or signupEvents)
-     * @param eventDocID String ID of the Event
-     */
-    public void removeEventID(String fieldName, String eventDocID){
-        docRef.update(fieldName, FieldValue.arrayRemove(eventDocID));
-    }
-
-    /**
      * Updates the profilePicture field in an Attendee's Profile
      * @param uri Uri of the ProfilePicture
      */
@@ -131,7 +98,7 @@ public class AttendeeDatabaseManager {
             uriString= uri.toString();
         }
         // Update the uriString field
-        docRef.update("profile.profilePicture.uriString", uriString).addOnSuccessListener(new OnSuccessListener<Void>() {
+        getDocRef().update("profile.profilePicture.uriString", uriString).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void unused) {
                 Log.d("Firestore", "docsnapshot updated");
@@ -150,7 +117,7 @@ public class AttendeeDatabaseManager {
      * @param value String of the new value the field is set to
      */
     public void updateProfileString(String field, String value){
-        docRef.update("profile."+field, value).addOnSuccessListener(new OnSuccessListener<Void>() {
+        getDocRef().update("profile."+field, value).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void unused) {
                 Log.d("Firestore", "docsnapshot string updated");

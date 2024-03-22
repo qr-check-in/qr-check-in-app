@@ -107,7 +107,7 @@ public class EventListView extends AppCompatActivity {
      */
     private void setUpRecyclerView() {
         // Set up a general query that returns "event" items from the database
-        Query query = eventDb.getEventCollectionRef().orderBy("eventName", Query.Direction.DESCENDING);
+        Query query = eventDb.getCollectionRef().orderBy("eventName", Query.Direction.DESCENDING);
 
         // Put this query into the adapter so it can use it
         FirestoreRecyclerOptions<Event> options = new FirestoreRecyclerOptions.Builder<Event>()
