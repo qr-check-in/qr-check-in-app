@@ -17,11 +17,6 @@ import com.google.firebase.firestore.QuerySnapshot;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Locale;
-
 
 public class QRCodeScan extends AppCompatActivity {
     TextView title;
@@ -76,7 +71,7 @@ public class QRCodeScan extends AppCompatActivity {
         addEventButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent event = new Intent(getApplicationContext(), CreateNewEventScreen1.class);
+                Intent event = new Intent(getApplicationContext(), CreateAddEventDetails.class);
                 startActivity(event);
             }
         });
