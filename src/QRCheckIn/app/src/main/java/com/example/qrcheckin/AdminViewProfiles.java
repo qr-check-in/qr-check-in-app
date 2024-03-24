@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class AdminViewProfiles extends AppCompatActivity {
     private RecyclerView recyclerView;
@@ -29,7 +30,27 @@ public class AdminViewProfiles extends AppCompatActivity {
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         // Assume fetchProfiles() fills profileList with Profile objects fetched from Firestore
-        admin.browseProfiles();
+        admin.browseProfiles(new Admin.ProfilesCallback() {
+            @Override
+            public void onProfilesFetched(List<Map<String, Object>> profiles) {
+                List<Profile> profileObjects = new ArrayList<>();
+                for (Map<String, Object> profileData : profiles) {
+                    Profile profile = new Profile();
+                    if (profileData.containsKey("name")) {
+                        profile.setName((String) profileData.get("name"));
+                    }
+                    // Repeat for other fields you wish to set
+                    profileObjects.add(profile);
+                }
+                // Now you have a List<Profile> populated with data
+                // Proceed to update the RecyclerView's adapter with this list
+                runOnUiThread(() -> {
+                    profileList.clear();
+                    profileList.addAll(profileObjects);
+                    adapter.notifyDataSetChanged(); // Notify the adapter to refresh the UI
+                });
+            }
+        });
 
         adapter = new ProfileAdapter(profileList);
         recyclerView.setAdapter(adapter);

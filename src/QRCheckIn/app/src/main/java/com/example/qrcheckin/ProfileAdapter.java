@@ -7,8 +7,12 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import java.util.List;
+
+import com.bumptech.glide.Glide;
 import com.example.qrcheckin.Profile;
 import com.example.qrcheckin.R;
+
+import de.hdodenhof.circleimageview.CircleImageView;
 
 public class ProfileAdapter extends RecyclerView.Adapter<ProfileAdapter.ProfileViewHolder> {
     private List<Profile> profiles;
@@ -28,7 +32,10 @@ public class ProfileAdapter extends RecyclerView.Adapter<ProfileAdapter.ProfileV
     public void onBindViewHolder(@NonNull ProfileViewHolder holder, int position) {
         Profile profile = profiles.get(position);
         holder.nameTextView.setText(profile.getName());
-        // You can set more attributes here
+        Glide.with(holder.itemView.getContext())
+                .load(profile.getProfilePicture())
+                .placeholder(R.drawable.baseline_account_circle_24) // A default placeholder in case the load fails.
+                .into(holder.profileImageView);
     }
 
     @Override
@@ -38,11 +45,11 @@ public class ProfileAdapter extends RecyclerView.Adapter<ProfileAdapter.ProfileV
 
     public static class ProfileViewHolder extends RecyclerView.ViewHolder {
         public TextView nameTextView;
-
+        public CircleImageView profileImageView;
         public ProfileViewHolder(View itemView) {
             super(itemView);
             nameTextView = itemView.findViewById(R.id.textview_name);
-            // Initialize other views here
+            profileImageView = itemView.findViewById(R.id.profile_picture);
         }
     }
 }

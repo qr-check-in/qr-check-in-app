@@ -6,6 +6,8 @@ import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -14,7 +16,12 @@ import java.util.Map;
 
 public class Admin extends Attendee{
     private final FirebaseFirestore db;
-
+    public interface ProfilesCallback {
+        void onProfilesFetched(List<Map<String, Object>> profiles);
+    }
+    public interface EventsCallback {
+        void onEventsFetched(List<Event> events);
+    }
     /**
      * Constructor for admin initializes firestore instance.
      */
@@ -168,31 +175,42 @@ public class Admin extends Attendee{
      * Retrieves & prints the list of all events.
      * US 04.04.01
      */
-    public void browseEvents() {
+    public void browseEvents(EventsCallback callback) {
         db.collection("events").get()
                 .addOnSuccessListener(queryDocumentSnapshots -> {
+                    List<Event> events = new ArrayList<>();
                     for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
-                        System.out.println("Event ID: " + documentSnapshot.getId() + ", Data: " + documentSnapshot.getData());
+                        Event event = documentSnapshot.toObject(Event.class);
+                        events.add(event);
                     }
+                    callback.onEventsFetched(events);
                 })
-                .addOnFailureListener(e -> System.out.println("Error fetching events: " + e));
+                .addOnFailureListener(e -> {
+                    System.out.println("Error fetching events: " + e);
+                    callback.onEventsFetched(new ArrayList<>()); // In case of failure, return an empty list
+                });
     }
 
     /**
      * Retrieves & prints the list of all profiles.
      * US 04.05.01.
      */
-    public void browseProfiles() {
+    public void browseProfiles(ProfilesCallback callback) {
         db.collection("Attendees").get()
                 .addOnSuccessListener(queryDocumentSnapshots -> {
+                    List<Map<String, Object>> profiles = new ArrayList<>();
                     for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
                         Map<String, Object> profile = (Map<String, Object>) documentSnapshot.get("profile");
                         if (profile != null) {
-                            System.out.println("Profile ID: " + documentSnapshot.getId() + ", Data: " + profile);
+                            profiles.add(profile);
                         }
                     }
+                    callback.onProfilesFetched(profiles);
                 })
-                .addOnFailureListener(e -> System.out.println("Error fetching profiles: " + e));
+                .addOnFailureListener(e -> {
+                    System.out.println("Error fetching profiles: " + e);
+                    callback.onProfilesFetched(new ArrayList<>()); // Callback with empty list in case of failure
+                });
     }
 
     /**
