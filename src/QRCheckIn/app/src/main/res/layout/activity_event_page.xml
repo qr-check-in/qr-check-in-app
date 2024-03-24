@@ -129,6 +129,17 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/promo_qr_description" />
 
+            <TextView
+                android:id="@+id/signup_limit_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="This event has reached its sign-up limit"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/promo_qr_description" />
+
+
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>

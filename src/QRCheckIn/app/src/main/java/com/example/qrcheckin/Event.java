@@ -21,7 +21,7 @@ public class Event implements Serializable {
     private String eventLocation;
     private String eventDescription;
 
-    private int numberofAttendees;
+    private int signupLimit;
     private boolean checkInStatus;
 
 
@@ -45,9 +45,9 @@ public class Event implements Serializable {
      * @param eventTime        the Event's time String
      * @param eventLocation    the Event's location String
      * @param eventDescription the Event's description String
-     * @param numberofAttendees the max number of attendees for an event
+     * @param signupLimit the max number of signups for an event
      */
-    public Event(String organizer, QRCode checkInQRCode, PromoQRCode promoQRCode, EventPoster poster, String eventName, String eventDate, String eventTime, String eventLocation, String eventDescription, boolean checkInStatus, int numberofAttendees) {
+    public Event(String organizer, QRCode checkInQRCode, PromoQRCode promoQRCode, EventPoster poster, String eventName, String eventDate, String eventTime, String eventLocation, String eventDescription, boolean checkInStatus, int signupLimit) {
         this.organizer = organizer;
 
         this.checkInQRCode = checkInQRCode;
@@ -59,7 +59,9 @@ public class Event implements Serializable {
         this.eventLocation = eventLocation;
         this.eventDescription = eventDescription;
         this.checkInStatus = checkInStatus;
-        this.numberofAttendees = numberofAttendees;
+        this.signupLimit = signupLimit;
+        this.attendee = new ArrayList<String>();
+        this.signups = new ArrayList<String>();
     }
 
     /**
@@ -78,19 +80,19 @@ public class Event implements Serializable {
         this.checkInStatus = checkInStatus;
     }
     /**
-     * Returns the maxiumum number of attendees that can attend an event
+     * Returns the maximum number of signups for the event
      * @return
      */
-    public int getNumberofAttendees() {
-        return numberofAttendees;
+    public int getSignupLimit() {
+        return signupLimit;
     }
 
     /**
-     * Sets the total number attendees an event can hold
-     * @param numberofAttendees
+     * Sets the maximum number of signups for the event
+     * @param signupLimit
      */
-    public void setNumberofAttendees(int numberofAttendees) {
-        this.numberofAttendees = numberofAttendees;
+    public void setSignupLimit(int signupLimit) {
+        this.signupLimit = signupLimit;
     }
 
     /**

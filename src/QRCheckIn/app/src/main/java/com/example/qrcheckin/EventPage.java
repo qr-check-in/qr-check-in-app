@@ -1,6 +1,9 @@
 package com.example.qrcheckin;
 
+import static android.content.ContentValues.TAG;
+
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -10,13 +13,17 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.FirebaseFirestoreException;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 /**
  * Display detailed info about specific event.
@@ -29,7 +36,10 @@ public class EventPage extends AppCompatActivity {
     ImageButton eventButton;
     ImageButton addEventButton;
     ImageButton profileButton;
+    CheckBox signupCheckBox;
+    TextView signupLimitReached;
     private EventDatabaseManager eventDb;
+    private String fcmToken;
     /**
      * Init activity, sets content view, and configures the toolbar with navigation buttons.
      * Retrieves & displays event details from Firestore based on the passed document ID.
@@ -63,7 +73,13 @@ public class EventPage extends AppCompatActivity {
         TextView tvEventDescription = findViewById(R.id.text_event_description);
         ImageView ivEventPoster = findViewById(R.id.image_event_poster);
         ImageView ivEventPromoQr = findViewById(R.id.image_event_promo_qr);
-        CheckBox signupChecK = findViewById(R.id.signup_button);
+        signupCheckBox = findViewById(R.id.signup_button);
+        signupLimitReached = findViewById(R.id.signup_limit_text);
+        signupLimitReached.setVisibility(View.INVISIBLE);
+
+        // Retrieve the user's fcmToken/ attendee docID
+        SharedPreferences prefs = getSharedPreferences("TOKEN_PREF", MODE_PRIVATE);
+        fcmToken = prefs.getString("token", "missing token");
 
         // Retrieve the event passed from the previous activity
         String documentId = getIntent().getStringExtra("DOCUMENT_ID");
@@ -79,7 +95,7 @@ public class EventPage extends AppCompatActivity {
                     tvEventLocation.setText(event.getEventLocation());
                     tvEventDate.setText(event.getEventDate());
                     tvEventDescription.setText(event.getEventDescription());
-                    setSignupCheck(event.getNumberofAttendees(), event.getSignups());
+                    setSignupCheckBox(event.getSignupLimit(), event.getSignups());
                     // Set the ImageView for the Event's poster
                     if (event.getPoster() != null){
                         ImageStorageManager storage = new ImageStorageManager();
@@ -92,10 +108,37 @@ public class EventPage extends AppCompatActivity {
             }
         });
 
-        signupChecK.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        // Listen for updates to the event document, for cases where another user signs up for the event while this page is loaded
+        eventDb.getDocRef().addSnapshotListener(new EventListener<DocumentSnapshot>() {
+            @Override
+            public void onEvent(@Nullable DocumentSnapshot value, @Nullable FirebaseFirestoreException error) {
+                if (error != null) {
+                    Log.w(TAG, "Listen failed.", error);
+                    return;
+                }
+                if (value != null && value.exists()) {
+                    Log.d(TAG, "Current data: " + value.getData());
+                    Event event = value.toObject(Event.class);
+                    assert event != null;
+                    // Update the CheckBox upon a change in the event doc
+                    setSignupCheckBox(event.getSignupLimit(), event.getSignups());
+                } else {
+                    Log.d(TAG, "Current data: null");
+                }
+            }
+        });
+
+        // Set listener for the signup CheckBox
+        signupCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-
+                // Update signup array in event document
+                if (isChecked){
+                    eventDb.addToArrayField("signups", fcmToken);
+                }
+                else{
+                    eventDb.removeFromArrayField("signups", fcmToken);
+                }
             }
         });
 
@@ -122,10 +165,29 @@ public class EventPage extends AppCompatActivity {
         });
 
     }
-    public void setSignupCheck(int signupLimit, ArrayList<String> signups){
-        // check for event in the Attendee's list of signups, set the check box accordingly
 
-        // check event's signup limit, hide checkbox and display message saying its full
+    /**
+     * Displays either the CheckBox, allowing users to signup and un-signup for the event, or displays a TextView
+     * if the event has reached its limit
+     * @param signupLimit int of the maximum number of attendees who can sign up for the event
+     * @param signups ArrayList of Strings containing the attendee doc IDs of those who are signed-up for the event
+     */
+    public void setSignupCheckBox(int signupLimit, ArrayList<String> signups){
+        // Set status of the checkbox
+        boolean userInSignups = signups != null && signups.contains(fcmToken);
+        signupCheckBox.setChecked(userInSignups);
+
+        // Set visibilities of CheckBox and limit reached TextView
+        if(userInSignups || Objects.requireNonNull(signups).size() != signupLimit){
+            // User is signed up for the event, so they see the checkbox (in case they want to un-signup)
+            // Or the signup limit is not reached, so checkbox is visible to anyone
+            signupCheckBox.setVisibility(View.VISIBLE);
+            signupLimitReached.setVisibility(View.INVISIBLE);
+        }
+        else{
+            // User is not in signups list AND the limit is reached, show the limit reached text
+            signupCheckBox.setVisibility(View.INVISIBLE);
+            signupLimitReached.setVisibility(View.VISIBLE);
+        }
     }
-
 }
