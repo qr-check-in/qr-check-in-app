@@ -27,7 +27,7 @@ import com.bumptech.glide.Glide;
  *
  * Selecting dates & times through, navigating to other tabs, uploading image from gallery.
  */
-public class CreateNewEventScreen1 extends AppCompatActivity implements SelectDateFragment.DatePickerDialogListener, TimePickerFragment.TimePickerDialogListner{
+public class CreateAddEventDetails extends AppCompatActivity implements SelectDateFragment.DatePickerDialogListener, TimePickerFragment.TimePickerDialogListner{
     // MainBar declarations
     ImageButton qrButton;
     ImageButton eventButton;
@@ -154,13 +154,13 @@ public class CreateNewEventScreen1 extends AppCompatActivity implements SelectDa
                 if (eventNameEditText.getText().toString().isEmpty() || eventLocation.getText().toString().isEmpty() ||
                         eventDate.getText().toString().isEmpty() || eventTime.getText().toString().isEmpty()) {
                     // If any required field is empty, show a toast message and return without proceeding
-                    Toast.makeText(CreateNewEventScreen1.this, "Please fill in all required fields", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(CreateAddEventDetails.this, "Please fill in all required fields", Toast.LENGTH_SHORT).show();
                     return;
                 }
 
                 // Get the Event attributes from the input fields
                 inputEventName = eventNameEditText.getText().toString();
-                Intent event = new Intent(getApplicationContext(), CreateNewEventScreen2.class);
+                Intent event = new Intent(getApplicationContext(), CreateGenerateEventQR.class);
 //                Instead of passing particular values, set the values to a new event and pass the event object, more convienent
                 if (checkInSwitch.isChecked()){
                     isChecked = true;
