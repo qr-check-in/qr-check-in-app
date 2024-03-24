@@ -144,12 +144,16 @@ public class ProfileActivity extends AppCompatActivity implements EditProfileFra
         updatePicture.setOnClickListener(v -> {
             new UpdatePictureFragment(fcmToken).show(getSupportFragmentManager(), "Update Picture");
         });
+
+        // Listener for the remove picture button
         removePicture.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 dbManager.updateProfilePicture(null);
+                // Delete file in firebase storage
+                deleteProfilePicture();
                 profileImageView.setImageResource(R.drawable.profile);
-            }
+                }
         });
 
 
@@ -219,8 +223,32 @@ public class ProfileActivity extends AppCompatActivity implements EditProfileFra
                     // Display profilePicutre if the profile has one
                     if(profile.getProfilePicture() != null){
                         Log.d("Firestore", "calling display profile pic");
-                        ImageStorageManager storage = new ImageStorageManager();
-                        storage.displayImage(profile.getProfilePicture(),"/ProfilePictures/", profileImageView);
+                        ImageStorageManager storage = new ImageStorageManager(profile.getProfilePicture(),"/ProfilePictures");
+                        storage.displayImage(profileImageView);
+                    }
+                }
+            }
+        });
+    }
+
+    /**
+     * Deletes the profile picture in firebase storage upon the profile pictrure being removed
+     */
+    public void deleteProfilePicture(){
+        dbManager.getDocRef().get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                Attendee attendee = documentSnapshot.toObject(Attendee.class);
+                if (attendee == null) {
+                    Log.e("Firestore", "Attendee doc not found");
+                } else {
+                    Log.d("Firestore",
+                            String.format("Attendee with name (%s) retrieved", attendee.getProfile().getName()));
+                    Profile profile = attendee.getProfile();
+                    // Remove profile picture from storage
+                    if (profile.getProfilePicture() != null) {
+                        ImageStorageManager storage = new ImageStorageManager(profile.getProfilePicture(), "/ProfilePictures");
+                        storage.deleteImage();
                     }
                 }
             }

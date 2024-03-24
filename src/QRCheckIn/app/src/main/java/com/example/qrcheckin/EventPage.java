@@ -98,8 +98,8 @@ public class EventPage extends AppCompatActivity {
                     setSignupCheckBox(event.getSignupLimit(), event.getSignups());
                     // Set the ImageView for the Event's poster
                     if (event.getPoster() != null){
-                        ImageStorageManager storage = new ImageStorageManager();
-                        storage.displayImage(event.getPoster(), "/EventPosters/",ivEventPoster);
+                        ImageStorageManager storage = new ImageStorageManager(event.getPoster(), "/EventPosters");
+                        storage.displayImage(ivEventPoster);
                     }
                 } else {
                     Log.d("Firestore", String.format("No such document with id %s", documentId));
