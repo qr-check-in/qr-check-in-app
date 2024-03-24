@@ -23,6 +23,7 @@
     <string name="user_info">User Info</string>
     <string name="homepage">Homepage</string>
     <string name="profile_picture">Profile Picture</string>
+    <string name="signup_button_text">I will be attending this event</string>
     <!-- Strings used for fragments for navigation -->
     <string name="first_fragment_label">First Fragment</string>
     <string name="second_fragment_label">Second Fragment</string>
@@ -65,5 +66,6 @@
         libero vel nunc consequat, quis tincidunt nisl eleifend. Cras bibendum enim a justo luctus
         vestibulum. Fusce dictum libero quis erat maximus, vitae volutpat diam dignissim.
     </string>
+    <string name="signup_limit_text">This event has reached its sign-up limit</string>
 
 </resources>

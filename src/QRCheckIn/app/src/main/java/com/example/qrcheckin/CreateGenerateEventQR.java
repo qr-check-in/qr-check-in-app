@@ -119,7 +119,7 @@
             inputEventDescription = incomingEvent.getEventDescription();
             inputEventName = incomingEvent.getEventName();
             inputEventDate = incomingEvent.getEventDate();
-            numOfAttends = incomingEvent.getNumberofAttendees();
+            numOfAttends = incomingEvent.getSignupLimit();
             //Log.d("event", String.format("passed event %s %s", inputEventName, inputEventDate));
 
             // Retrieve the uri string for the EventPoster
