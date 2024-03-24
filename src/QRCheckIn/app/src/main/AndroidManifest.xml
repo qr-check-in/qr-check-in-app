@@ -57,15 +57,9 @@
         <activity android:name=".SharedViewModel"
             android:exported="false"/>
 
-        <activity
-            android:name=".ProfileActivity"
-            android:exported="false" />
-        <activity
-            android:name=".UpdatePictureFragment"
-            android:exported="false" />
-        <activity
-            android:name=".SharedViewModel"
-            android:exported="false" />
+        <activity android:name=".AdminViewEvent"/>
+        <activity android:name=".AdminViewProfiles"/>
+        <activity android:name=".AdminViewImages"/>
         <activity
             android:name=".EventListView"
             android:exported="false" />

@@ -22,6 +22,7 @@
             android:src="@drawable/baseline_account_circle_24"
             />
         <TextView
+            android:id="@+id/textview_name"
             android:layout_width="100dp"
             android:layout_height="20dp"
             android:layout_toRightOf="@+id/profile_picture"
