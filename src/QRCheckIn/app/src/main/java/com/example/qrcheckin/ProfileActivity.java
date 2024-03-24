@@ -16,6 +16,7 @@ import android.widget.Switch;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -93,6 +94,13 @@ public class ProfileActivity extends AppCompatActivity implements EditProfileFra
         tvHomepage = findViewById(R.id.homepage1);
         switchGeolocation = findViewById(R.id.geoswitch);
         profileName = findViewById(R.id.profileName);
+
+        // toolbar
+        Toolbar toolbar = findViewById(R.id.profileToolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
+        TextView header = findViewById(R.id.mainHeader);
+        header.setText("Profile");
 
         // Get the fcmToken of the Attendee, initialize an AttendeeDatabaseManager
         SharedPreferences prefs = getSharedPreferences("TOKEN_PREF", MODE_PRIVATE);
@@ -188,7 +196,7 @@ public class ProfileActivity extends AppCompatActivity implements EditProfileFra
      * Fetches user profile details from Firestore & updates the UI.
      */
     public void setProfileFields() {
-        dbManager.getAttendeeDocRef().get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+        dbManager.getDocRef().get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
                 Attendee attendee = documentSnapshot.toObject(Attendee.class);
@@ -212,7 +220,7 @@ public class ProfileActivity extends AppCompatActivity implements EditProfileFra
                     if(profile.getProfilePicture() != null){
                         Log.d("Firestore", "calling display profile pic");
                         ImageStorageManager storage = new ImageStorageManager();
-                        storage.displayImage(profile.getProfilePicture(),"/EventPosters/", profileImageView);
+                        storage.displayImage(profile.getProfilePicture(),"/ProfilePictures/", profileImageView);
                     }
                 }
             }

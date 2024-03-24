@@ -6,8 +6,12 @@ import android.view.View;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
+import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.graphics.Insets;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -16,11 +20,7 @@ import com.google.android.material.button.MaterialButton;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.Query;
 
-/**
- * An AppCompatActivity that displays a list view of events fetched from Firestore database.
- * Provides navigation buttons in the toolbar.
- */
-public class EventListView extends AppCompatActivity {
+public class SignedUpEvents extends AppCompatActivity {
     ImageButton qrButton;
     ImageButton eventButton;
     ImageButton addEventButton;
@@ -42,7 +42,8 @@ public class EventListView extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_event_list_view);
+        setContentView(R.layout.activity_signed_up_events);
+
         eventDb = new EventDatabaseManager();
 
         setUpRecyclerView();
@@ -68,23 +69,23 @@ public class EventListView extends AppCompatActivity {
         TextView header = findViewById(R.id.mainHeader);
         header.setText("Ongoing Events");
 
-        upcomingEvents.setPressed(true);
+        signedUpEvents.setPressed(true);
         // Listner for signed up events button
-        signedUpEvents.setOnClickListener(new View.OnClickListener(){
+        upcomingEvents.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
-                Intent event = new Intent(getApplicationContext(), SignedUpEvents.class);
+                Intent event = new Intent(getApplicationContext(), EventListView.class);
                 startActivity(event);
             }
         });
 
         // Listner for my events button
         myEvents.setOnClickListener(new View.OnClickListener(){
-        @Override
-        public void onClick(View v) {
-            Intent event = new Intent(getApplicationContext(), MyEvents.class);
-            startActivity(event);
-        }
+            @Override
+            public void onClick(View v) {
+                Intent event = new Intent(getApplicationContext(), MyEvents.class);
+                startActivity(event);
+            }
         });
 
         // Set listener for "Scan QR code" toolbar button
@@ -128,9 +129,8 @@ public class EventListView extends AppCompatActivity {
 
             }
         });
-    }
 
-    //
+    }
 
     /**
      * Sets up an EventAdapter on the recycler view and sends it the required query
@@ -155,3 +155,4 @@ public class EventListView extends AppCompatActivity {
     }
 
 }
+
