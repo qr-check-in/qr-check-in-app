@@ -133,7 +133,7 @@
                 android:id="@+id/signup_limit_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="This event has reached its sign-up limit"
+                android:text="@string/signup_limit_text"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
