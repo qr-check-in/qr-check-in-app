@@ -6,6 +6,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context=".AdminViewProfiles">
+
     <include
         android:id="@+id/profiles"
         layout="@layout/toolbar"
@@ -29,4 +30,12 @@
         app:layout_constraintTop_toBottomOf="@+id/profiles"
         app:layout_constraintBottom_toTopOf="@id/include2"
         tools:listitem="@layout/profile_list_item" />
+    <Button
+        android:id="@+id/back_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="BACK"
+        android:backgroundTint="@color/ChryslerBlue"
+        app:layout_constraintBottom_toTopOf="@id/include2"
+        app:layout_constraintEnd_toEndOf="parent"/>
 </androidx.constraintlayout.widget.ConstraintLayout>

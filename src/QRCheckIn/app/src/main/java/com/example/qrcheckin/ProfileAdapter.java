@@ -9,16 +9,21 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.List;
 
 import com.bumptech.glide.Glide;
-import com.example.qrcheckin.Profile;
-import com.example.qrcheckin.R;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
+
 public class ProfileAdapter extends RecyclerView.Adapter<ProfileAdapter.ProfileViewHolder> {
     private List<Profile> profiles;
+    public interface OnItemClickListener {
+        void onItemClick(Profile profile);
+    }
 
-    public ProfileAdapter(List<Profile> profiles) {
+    private OnItemClickListener listener;
+
+    public ProfileAdapter(List<Profile> profiles, OnItemClickListener onItemClickListener) {
         this.profiles = profiles;
+        this.listener = onItemClickListener; // This line was corrected
     }
 
     @NonNull
@@ -26,7 +31,9 @@ public class ProfileAdapter extends RecyclerView.Adapter<ProfileAdapter.ProfileV
     public ProfileViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(parent.getContext()).inflate(com.example.qrcheckin.R.layout.profile_list_item, parent, false);
         return new ProfileViewHolder(itemView);
+
     }
+
 
     @Override
     public void onBindViewHolder(@NonNull ProfileViewHolder holder, int position) {

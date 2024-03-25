@@ -22,6 +22,9 @@ public class Admin extends Attendee{
     public interface EventsCallback {
         void onEventsFetched(List<Event> events);
     }
+    public interface ImagesCallback {
+        void onImagesFetched(List<String> imageUris);
+    }
     /**
      * Constructor for admin initializes firestore instance.
      */
@@ -217,7 +220,9 @@ public class Admin extends Attendee{
      * Retrieves & prints the list of all images.
      * US 04.06.01
      */
-    public void browseImages() {
+    public void browseImages(ImagesCallback callback) {
+        List<String> imageUris = new ArrayList<>();
+
         // Browse profile pictures
         db.collection("Attendees").get()
                 .addOnSuccessListener(attendeesSnapshots -> {
@@ -225,24 +230,28 @@ public class Admin extends Attendee{
                         if (attendeeSnapshot.contains("profile.profilePicture")) {
                             String profilePicUri = attendeeSnapshot.getString("profile.profilePicture.uriString");
                             if (profilePicUri != null) {
-                                System.out.println("Attendee ID: " + attendeeSnapshot.getId() + ", Profile Picture URI: " + profilePicUri);
+                                imageUris.add(profilePicUri);
                             }
                         }
                     }
+                    // Browse event posters
+                    db.collection("events").get()
+                            .addOnSuccessListener(eventsSnapshots -> {
+                                for (DocumentSnapshot eventSnapshot : eventsSnapshots) {
+                                    if (eventSnapshot.contains("poster")) {
+                                        String posterUri = eventSnapshot.getString("poster.uriString");
+                                        if (posterUri != null) {
+                                            imageUris.add(posterUri);
+                                        }
+                                    }
+                                }
+                                callback.onImagesFetched(imageUris);
+                            });
                 })
-                .addOnFailureListener(e -> System.out.println("Error fetching profile pictures: " + e));
-        // Browse event posters
-        db.collection("events").get()
-                .addOnSuccessListener(eventsSnapshots -> {
-                    for (DocumentSnapshot eventSnapshot : eventsSnapshots) {
-                        if (eventSnapshot.contains("poster")) {
-                            String posterUri = eventSnapshot.getString("poster.uriString");
-                            if (posterUri != null) {
-                                System.out.println("Event ID: " + eventSnapshot.getId() + ", Poster URI: " + posterUri);
-                            }
-                        }
-                    }
-                })
-                .addOnFailureListener(e -> System.out.println("Error fetching event posters: " + e));
+                .addOnFailureListener(e -> {
+                    System.out.println("Error fetching images: " + e);
+                    callback.onImagesFetched(new ArrayList<>()); // Callback with an empty list in case of failure
+                });
     }
+
 }

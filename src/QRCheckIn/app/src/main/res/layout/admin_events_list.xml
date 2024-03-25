@@ -48,7 +48,7 @@
             android:id="@+id/eventTimeTextView"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_marginStart="25dp"
+            android:layout_marginStart="95dp"
             android:layout_toRightOf="@id/eventLocationTextView"
             android:text="Time"
             android:textColor="@color/White" />
@@ -56,7 +56,7 @@
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="169dp"
+            android:layout_marginLeft="70dp"
             android:layout_marginTop="20dp"
             android:layout_toRightOf="@id/eventTimeTextView"
             android:src="@drawable/baseline_delete_outline_24" />
