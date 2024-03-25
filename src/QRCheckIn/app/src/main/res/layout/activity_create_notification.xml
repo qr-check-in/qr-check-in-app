@@ -108,7 +108,10 @@
         app:layout_constraintBottom_toTopOf="@id/notificationMainBar"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.95"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        android:drawableRight="@drawable/notification_bell_resize"
+        android:drawableTint="@color/White"
+        />
 
     <include
         layout="@layout/mainappbar"
