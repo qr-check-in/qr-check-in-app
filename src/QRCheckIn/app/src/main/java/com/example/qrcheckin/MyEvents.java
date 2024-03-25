@@ -124,7 +124,7 @@ public class MyEvents extends AppCompatActivity {
                 String id = documentSnapshot.getId();
 
                 // Send the document id of the event to the Event Page before opening it
-                Intent intent = new Intent(getApplicationContext(), EventPage.class);
+                Intent intent = new Intent(getApplicationContext(), OrganisersEventPage.class);
                 intent.putExtra("DOCUMENT_ID", id);
                 startActivity(intent);
 
