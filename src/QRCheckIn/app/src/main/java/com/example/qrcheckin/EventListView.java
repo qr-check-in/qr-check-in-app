@@ -198,6 +198,16 @@ public class EventListView extends AppCompatActivity {
     }
 
     /**
+     * Called when this page is accessed by pressing the back button from an event page.
+     *      Re-selects the active tab
+     */
+    @Override
+    protected void onResume() {
+        super.onResume();
+        pressButton(btnCurrentTab);
+    }
+
+    /**
      * Change the colors of the tab buttons after being pressed to reflect the active page
      * @param button The new button to press
      */
@@ -206,7 +216,7 @@ public class EventListView extends AppCompatActivity {
         ColorStateList pressedTint = ColorStateList.valueOf(getResources().
                 getColor(R.color.Primary));
         ColorStateList notPressedTint = ColorStateList.valueOf(getResources().
-                getColor(R.color.PrimaryContainer));
+                getColor(R.color.Secondary));
 
         // Deselect previous button
         btnCurrentTab.setPressed(false);
