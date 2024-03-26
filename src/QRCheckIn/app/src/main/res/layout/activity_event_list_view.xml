@@ -15,8 +15,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0"
-        ></include>
+        app:layout_constraintVertical_bias="0.0">
+    </include>
 
     <include
         android:id="@+id/eventsTabbar"
@@ -25,20 +25,22 @@
         layout="@layout/event_tab_bar"
         app:layout_constraintTop_toBottomOf="@+id/eventListToolbar"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        ></include>
+        app:layout_constraintStart_toStartOf="parent">
+    </include>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/event_recycler_view"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        app:layout_constraintTop_toBottomOf="@+id/eventsTabbar"
+        app:layout_constraintBottom_toTopOf="@id/main_app_bar"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/eventsTabbar"
         tools:listitem="@layout/event_list_item">
     </androidx.recyclerview.widget.RecyclerView>
 
     <include
+        android:id="@+id/main_app_bar"
         layout="@layout/mainappbar"
         android:layout_width="match_parent"
         android:layout_height="45dp"
