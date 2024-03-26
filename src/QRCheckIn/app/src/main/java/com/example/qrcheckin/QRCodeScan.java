@@ -27,9 +27,8 @@ public class QRCodeScan extends AppCompatActivity {
     ImageButton eventButton;
     ImageButton addEventButton;
     ImageButton profileButton;
-
+    Boolean foundEvent = false;
     private EventDatabaseManager eventDb;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -125,6 +124,7 @@ public class QRCodeScan extends AppCompatActivity {
                         QuerySnapshot querySnapshot = task.getResult();
                         if (querySnapshot != null && !querySnapshot.isEmpty()) {
                             // Retrieve the event of the scanned QR code
+                            foundEvent = true;
                             DocumentSnapshot documentSnapshot = querySnapshot.getDocuments().get(0);
                             String documentId = documentSnapshot.getId();
 
@@ -155,6 +155,7 @@ public class QRCodeScan extends AppCompatActivity {
                         QuerySnapshot querySnapshot = task.getResult();
                         if (querySnapshot != null && !querySnapshot.isEmpty()) {
                             // Retrieve the event of the scanned QR code
+                            foundEvent = true;
                             DocumentSnapshot documentSnapshot = querySnapshot.getDocuments().get(0);
                             String documentId = documentSnapshot.getId();
 
@@ -163,7 +164,12 @@ public class QRCodeScan extends AppCompatActivity {
                             intent.putExtra("DOCUMENT_ID", documentId);
                             startActivity(intent);
                         } else {
-                            // No matching document found
+                            // No matching document found, return to main activity
+                            if (!foundEvent) {
+                                Toast.makeText(this, "No event found!", Toast.LENGTH_SHORT).show();
+                                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                                startActivity(intent);
+                            }
                         }
 
                     } else {
