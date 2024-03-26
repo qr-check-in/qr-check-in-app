@@ -1,17 +1,14 @@
 package com.example.qrcheckin;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
-import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -20,7 +17,7 @@ import com.google.android.material.button.MaterialButton;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.Query;
 
-public class MyEvents extends AppCompatActivity {
+public class MyEventsActivity extends AppCompatActivity {
     ImageButton qrButton;
     ImageButton eventButton;
     ImageButton addEventButton;
@@ -136,8 +133,14 @@ public class MyEvents extends AppCompatActivity {
      * Sets up an EventAdapter on the recycler view and sends it the required query
      */
     private void setUpRecyclerView() {
-        // Set up a general query that returns "event" items from the database
-        Query query = eventDb.getCollectionRef().orderBy("eventName", Query.Direction.DESCENDING);
+        // Get user's fcm token
+        SharedPreferences prefs = getSharedPreferences("TOKEN_PREF", MODE_PRIVATE);
+        String fcmToken = prefs.getString("token", "missing token");
+
+        // Set up a general query that returns "event" items created by this user
+        Query query = eventDb.getCollectionRef()
+                .whereEqualTo("organizer", fcmToken)
+                .orderBy("eventName", Query.Direction.DESCENDING);
 
         // Put this query into the adapter so it can use it
         FirestoreRecyclerOptions<Event> options = new FirestoreRecyclerOptions.Builder<Event>()

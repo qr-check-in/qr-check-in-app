@@ -82,7 +82,7 @@ public class EventListView extends AppCompatActivity {
         myEvents.setOnClickListener(new View.OnClickListener(){
         @Override
         public void onClick(View v) {
-            Intent event = new Intent(getApplicationContext(), MyEvents.class);
+            Intent event = new Intent(getApplicationContext(), MyEventsActivity.class);
             startActivity(event);
         }
         });

@@ -24,7 +24,7 @@
         android:theme="@style/Theme.QRCheckIn"
         tools:targetApi="31">
         <activity
-            android:name=".MyEvents"
+            android:name=".MyEventsActivity"
             android:exported="false" />
         <activity
             android:name=".SignedUpEvents"

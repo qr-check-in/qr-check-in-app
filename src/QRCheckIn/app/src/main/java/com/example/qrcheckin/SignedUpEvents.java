@@ -6,12 +6,8 @@ import android.view.View;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
-import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -83,7 +79,7 @@ public class SignedUpEvents extends AppCompatActivity {
         myEvents.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
-                Intent event = new Intent(getApplicationContext(), MyEvents.class);
+                Intent event = new Intent(getApplicationContext(), MyEventsActivity.class);
                 startActivity(event);
             }
         });
