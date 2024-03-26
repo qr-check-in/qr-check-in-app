@@ -62,7 +62,7 @@ public class ImageStorageManager {
      * @param imageView ImageView that the file is to be displayed on
      */
     public void displayImage(ImageView imageView){
-        Log.d("Firestore", String.format("filepath is  (%s)", filePath));
+        Log.d("Firestore", String.format("display filepath is  (%s)", filePath));
         try{
             final File localFile = File.createTempFile("tempPic", "jpg");
             storageReference.getFile(localFile).addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
@@ -84,6 +84,9 @@ public class ImageStorageManager {
         }
     }
 
+    /**
+     * Deletes an image file from firebase storage
+     */
     public void deleteImage(){
         storageReference.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override

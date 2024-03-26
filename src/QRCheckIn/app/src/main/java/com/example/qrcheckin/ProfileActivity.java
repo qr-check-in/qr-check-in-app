@@ -141,6 +141,8 @@ public class ProfileActivity extends AppCompatActivity implements EditProfileFra
                 startActivity(event);
             }
         });
+
+        // Listener for the update picture button
         updatePicture.setOnClickListener(v -> {
             new UpdatePictureFragment(fcmToken).show(getSupportFragmentManager(), "Update Picture");
         });
@@ -149,14 +151,13 @@ public class ProfileActivity extends AppCompatActivity implements EditProfileFra
         removePicture.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                dbManager.updateProfilePicture(null);
-                // Delete file in firebase storage
+                // Call method to delete the file from firebase storage and update the attendee doc's field
                 deleteProfilePicture();
                 profileImageView.setImageResource(R.drawable.profile);
                 }
         });
 
-
+        // Listener for the edit profile button
         editProfile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -232,7 +233,7 @@ public class ProfileActivity extends AppCompatActivity implements EditProfileFra
     }
 
     /**
-     * Deletes the profile picture in firebase storage upon the profile pictrure being removed
+     * Deletes the profile picture in firebase storage upon the profile picture being removed
      */
     public void deleteProfilePicture(){
         dbManager.getDocRef().get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
@@ -242,13 +243,13 @@ public class ProfileActivity extends AppCompatActivity implements EditProfileFra
                 if (attendee == null) {
                     Log.e("Firestore", "Attendee doc not found");
                 } else {
-                    Log.d("Firestore",
-                            String.format("Attendee with name (%s) retrieved", attendee.getProfile().getName()));
                     Profile profile = attendee.getProfile();
-                    // Remove profile picture from storage
                     if (profile.getProfilePicture() != null) {
                         ImageStorageManager storage = new ImageStorageManager(profile.getProfilePicture(), "/ProfilePictures");
+                        // Remove profile picture from storage
                         storage.deleteImage();
+                        // update attendee doc's field
+                        dbManager.updateProfilePicture(null);
                     }
                 }
             }
