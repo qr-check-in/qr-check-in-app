@@ -98,8 +98,14 @@ public class EventPage extends AppCompatActivity {
                     setSignupCheckBox(event.getSignupLimit(), event.getSignups());
                     // Set the ImageView for the Event's poster
                     if (event.getPoster() != null){
-                        ImageStorageManager storage = new ImageStorageManager(event.getPoster(), "/EventPosters");
-                        storage.displayImage(ivEventPoster);
+                        ImageStorageManager storagePoster = new ImageStorageManager(event.getPoster(), "/EventPosters");
+                        storagePoster.displayImage(ivEventPoster);
+                    }
+                    // Set the ImageView for the Event's QR code
+                    // TODO: Display promo QR instead of check-in QR
+                    if (event.getCheckInQRCode() != null) {
+                        ImageStorageManager storageQr = new ImageStorageManager(event.getCheckInQRCode(), "/QRCodes");
+                        storageQr.displayImage(ivEventPromoQr);
                     }
                 } else {
                     Log.d("Firestore", String.format("No such document with id %s", documentId));

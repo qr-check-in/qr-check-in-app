@@ -43,7 +43,7 @@
             app:cardBackgroundColor="@color/UranianBlue">
 
             <ImageView
-                android:id="@+id/checkInQR"
+                android:id="@+id/ivCheckInQR"
                 android:layout_width="200dp"
                 android:layout_height="175dp"
                 android:scaleType="fitXY"
@@ -60,7 +60,7 @@
             android:layout_weight="1">
 
             <Button
-                android:id="@+id/makeQRCI"
+                android:id="@+id/btnGenCheckInQR"
                 android:layout_width="165dp"
                 android:layout_height="wrap_content"
                 android:backgroundTint="@color/NeonBlue"
@@ -75,7 +75,7 @@
                 android:textStyle="italic"/>
 
             <Button
-                android:id="@+id/uploadQRCR"
+                android:id="@+id/btnUploadCheckInQR"
                 android:layout_width="165dp"
                 android:layout_height="wrap_content"
                 android:backgroundTint="@color/NeonBlue"
@@ -90,7 +90,7 @@
             app:cardBackgroundColor="@color/UranianBlue">
 
             <ImageView
-                android:id="@+id/promotionalQR"
+                android:id="@+id/ivPromoQr"
                 android:layout_width="200dp"
                 android:layout_height="175dp"
                 android:scaleType="fitXY">
