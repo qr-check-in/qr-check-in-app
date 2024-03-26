@@ -132,12 +132,15 @@ public class EventPage extends AppCompatActivity {
         signupCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                AttendeeDatabaseManager attendeeDb = new AttendeeDatabaseManager(fcmToken);
                 // Update signup array in event document
                 if (isChecked){
                     eventDb.addToArrayField("signups", fcmToken);
+                    attendeeDb.addToArrayField("signupEvents", documentId);
                 }
                 else{
                     eventDb.removeFromArrayField("signups", fcmToken);
+                    attendeeDb.removeFromArrayField("signupEvents", documentId);
                 }
             }
         });
