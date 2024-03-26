@@ -67,6 +67,7 @@ dependencies {
     androidTestImplementation ("androidx.test:runner:1.3.0")
     androidTestImplementation ("androidx.test:rules:1.3.0")
     androidTestImplementation ("org.mockito:mockito-android:3.3.3")
+
     // If you need additional functionality, consider adding extensions
     // implementation "androidx.camera:camera-extensions:1.0.0-alpha24"
     testImplementation("junit:junit:4.13.2")
@@ -78,4 +79,8 @@ dependencies {
     implementation ("com.google.android.gms:play-services-auth:16.0.0")
     implementation("com.journeyapps:zxing-android-embedded:4.3.0")
     implementation("com.google.mlkit:barcode-scanning:17.2.0")
+
+    //Material.io
+    implementation ("com.google.android.materialimaterial:1.3.0-alph01")
+
 }
