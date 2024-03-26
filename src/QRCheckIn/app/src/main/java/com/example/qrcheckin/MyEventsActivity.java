@@ -137,9 +137,7 @@ public class MyEventsActivity extends AppCompatActivity {
         SharedPreferences prefs = getSharedPreferences("TOKEN_PREF", MODE_PRIVATE);
         String fcmToken = prefs.getString("token", "missing token");
 
-        // Set up a general query that returns "event" items from the database
-        //Query query = eventDb.getCollectionRef().orderBy("eventName", Query.Direction.DESCENDING);
-
+        // Set up a general query that returns "event" items created by this user
         Query query = eventDb.getCollectionRef()
                 .whereEqualTo("organizer", fcmToken)
                 .orderBy("eventName", Query.Direction.DESCENDING);
