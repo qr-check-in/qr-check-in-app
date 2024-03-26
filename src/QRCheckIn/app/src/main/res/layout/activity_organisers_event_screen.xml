@@ -141,12 +141,15 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
 
-                <ImageView
+                <ImageButton
+                    android:id="@+id/"
                     android:layout_width="70dp"
                     android:layout_height="50dp"
+                    android:scaleType="fitCenter"
                     android:src="@drawable/arrow"
                     android:layout_gravity="center_horizontal"
-                    android:tint="@color/Black"/>
+                    android:tint="@color/Black"
+                    android:background="@color/zxing_transparent"/>
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -163,6 +166,8 @@
                         android:drawableBottom="@drawable/sharp_edit_square_24"
                         android:layout_weight="1"
                         android:layout_marginEnd="10dp"
+                        android:background="@drawable/bottom_sheet_button"
+                        android:textColor="@color/Black"
                         />
 
                     <Button
@@ -171,15 +176,20 @@
                         android:text="Notifications"
                         android:drawableBottom="@drawable/notification_bell_resize"
                         android:layout_weight="1"
-                        android:layout_marginEnd="10dp"/>
+                        android:layout_marginEnd="10dp"
+                        android:background="@drawable/bottom_sheet_button"
+                        android:textColor="@color/Black"
+                        />
 
                     <Button
                         android:layout_width="wrap_content"
                         android:layout_height="70dp"
                         android:text="Attendees"
                         android:drawableBottom="@drawable/profile_resize"
-                        android:layout_weight="1"/>
-
+                        android:layout_weight="1"
+                        android:background="@drawable/bottom_sheet_button"
+                        android:textColor="@color/Black"
+                        />
                 </LinearLayout>
 
 

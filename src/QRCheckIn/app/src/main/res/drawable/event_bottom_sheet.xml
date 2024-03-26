@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--https://www.youtube.com/watch?v=3vMtHKniOqI&t=2s, 2024, how to create a bottomsheet-->
 <shape xmlns:android="http://schemas.android.com/apk/res/android">
-    <solid android:color="@color/UranianBlue"></solid>
+    <solid android:color="@color/ChefBlue"></solid>
     <corners
         android:topLeftRadius="40dp"
         android:topRightRadius="40dp"
