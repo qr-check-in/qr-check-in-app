@@ -1,5 +1,7 @@
 package com.example.qrcheckin;
 
+import android.content.Context;
+import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -35,9 +37,8 @@ public class ProfileAdapter extends RecyclerView.Adapter<ProfileAdapter.ProfileV
     @NonNull
     @Override
     public ProfileViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View itemView = LayoutInflater.from(parent.getContext()).inflate(com.example.qrcheckin.R.layout.profile_list_item, parent, false);
-        return new ProfileViewHolder(itemView);
-
+        View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.profile_list_item, parent, false);
+        return new ProfileViewHolder(itemView, listener); // Pass the listener here
     }
 
 
@@ -45,6 +46,12 @@ public class ProfileAdapter extends RecyclerView.Adapter<ProfileAdapter.ProfileV
     public void onBindViewHolder(@NonNull ProfileViewHolder holder, int position) {
         Profile profile = profiles.get(position);
         holder.nameTextView.setText(profile.getName());
+        holder.itemView.setOnClickListener(v -> {
+            Context context = v.getContext();
+            Intent intent = new Intent(context, ProfileActivityAdmin.class);
+            intent.putExtra("profileName", profile.getName()); // Example of passing the profile name
+            context.startActivity(intent);
+        });
         // Assuming getProfilePicture() returns a valid, accessible URI as a String
         if(profile.getProfilePicture() != null && profile.getProfilePicture()!=null) {
             Glide.with(holder.itemView.getContext())
@@ -67,6 +74,14 @@ public class ProfileAdapter extends RecyclerView.Adapter<ProfileAdapter.ProfileV
             // Load a default image if no profile picture URI is available
             holder.profileImageView.setImageResource(R.drawable.baseline_account_circle_24);
         }
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (listener != null) {
+                    listener.onItemClick(profile);
+                }
+            }
+        });
     }
 
     @Override
@@ -76,11 +91,26 @@ public class ProfileAdapter extends RecyclerView.Adapter<ProfileAdapter.ProfileV
 
     public static class ProfileViewHolder extends RecyclerView.ViewHolder {
         public TextView nameTextView;
+        private List<Profile> profiles;
+        private OnItemClickListener listener;
         public CircleImageView profileImageView;
-        public ProfileViewHolder(View itemView) {
+        public ProfileViewHolder(View itemView, final OnItemClickListener listener) {
             super(itemView);
             nameTextView = itemView.findViewById(R.id.textview_name);
             profileImageView = itemView.findViewById(R.id.profile_picture);
+
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    // Get the position of the ViewHolder
+                    int position = getAdapterPosition();
+                    // Check if position is valid and listener is not null
+                    if (position != RecyclerView.NO_POSITION && listener != null) {
+                        listener.onItemClick(profiles.get(position));
+                    }
+                }
+            });
         }
+
     }
 }

@@ -37,8 +37,8 @@
             android:layout_width="match_parent"
             android:layout_marginTop="10dp"
             android:layout_height="50dp"
-            android:tint="@color/White"
-            app:srcCompat="@drawable/sharp_edit_square_24" />
+            app:srcCompat="@drawable/sharp_edit_square_24"
+            app:tint="@color/White" />
 
 
 

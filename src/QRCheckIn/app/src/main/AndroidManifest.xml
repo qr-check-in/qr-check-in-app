@@ -57,10 +57,13 @@
             android:exported="false"/>
         <activity android:name=".SharedViewModel"
             android:exported="false"/>
-
         <activity android:name=".AdminViewEvent"/>
-        <activity android:name=".AdminViewProfiles"/>
+        <activity android:name=".AdminViewProfiles"
+            android:exported="false"/>
         <activity android:name=".AdminViewImages"/>
+        <activity
+            android:name=".ProfileActivityAdmin"
+            android:exported="false" />
         <activity
             android:name=".EventListView"
             android:exported="false" />

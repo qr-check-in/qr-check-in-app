@@ -60,13 +60,16 @@ public class ProfileActivityAdmin extends AppCompatActivity implements EditProfi
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(show_profile_admin);
+        if (getIntent() != null && getIntent().hasExtra("profileName")) {
+            String profileName = getIntent().getStringExtra("profileName");
+        }
         // Initialize navigation bar and other views
         removePicture = findViewById(R.id.btnRemovePicture1);
         editProfile = findViewById(R.id.edit_profile1);
-        userName = findViewById(R.id.edit_name);
-        userContact = findViewById(R.id.edit_contact);
-        userHomepage = findViewById(R.id.edit_homepage);
-        userNameBesidePic = findViewById(R.id.profile_name1);
+//        userName = findViewById(R.id.edit_name);
+//        userContact = findViewById(R.id.edit_contact);
+//        userHomepage = findViewById(R.id.edit_homepage);
+//        userNameBesidePic = findViewById(R.id.profile_name1);
         sharedViewModel = new ViewModelProvider(this).get(SharedViewModel.class);
         sharedViewModel.getSelectedImageUri().observe(this, new androidx.lifecycle.Observer<Uri>() {
             @Override
