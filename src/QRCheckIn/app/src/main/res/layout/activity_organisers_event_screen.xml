@@ -148,7 +148,7 @@
                     android:scaleType="fitCenter"
                     android:src="@drawable/arrow"
                     android:layout_gravity="center_horizontal"
-                    android:tint="@color/Black"
+                    android:tint="@color/White"
                     android:background="@color/zxing_transparent"/>
 
                 <LinearLayout
