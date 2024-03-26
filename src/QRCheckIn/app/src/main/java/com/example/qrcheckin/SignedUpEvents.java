@@ -1,6 +1,7 @@
 package com.example.qrcheckin;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageButton;
@@ -132,8 +133,14 @@ public class SignedUpEvents extends AppCompatActivity {
      * Sets up an EventAdapter on the recycler view and sends it the required query
      */
     private void setUpRecyclerView() {
-        // Set up a general query that returns "event" items from the database
-        Query query = eventDb.getCollectionRef().orderBy("eventName", Query.Direction.DESCENDING);
+        // Get user's fcm token
+        SharedPreferences prefs = getSharedPreferences("TOKEN_PREF", MODE_PRIVATE);
+        String fcmToken = prefs.getString("token", "missing token");
+
+        // Set up a general query that returns events this user signed up for
+        Query query = eventDb.getCollectionRef()
+                .whereArrayContains("signups", fcmToken)
+                .orderBy("eventName", Query.Direction.DESCENDING);
 
         // Put this query into the adapter so it can use it
         FirestoreRecyclerOptions<Event> options = new FirestoreRecyclerOptions.Builder<Event>()
