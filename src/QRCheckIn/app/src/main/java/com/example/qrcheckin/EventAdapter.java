@@ -59,8 +59,8 @@ public class EventAdapter extends FirestoreRecyclerAdapter<Event, EventAdapter.V
 
         // Set the ImageView for the Event's poster
         if (model.getPoster() != null){
-            ImageStorageManager storage = new ImageStorageManager();
-            storage.displayImage(model.getPoster(), "/EventPosters/", holder.ivPoster);
+            ImageStorageManager storage = new ImageStorageManager(model.getPoster(), "/EventPosters");
+            storage.displayImage(holder.ivPoster);
         }
     }
 

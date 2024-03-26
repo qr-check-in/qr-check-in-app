@@ -98,8 +98,8 @@ public class EventPage extends AppCompatActivity {
                     setSignupCheckBox(event.getSignupLimit(), event.getSignups());
                     // Set the ImageView for the Event's poster
                     if (event.getPoster() != null){
-                        ImageStorageManager storage = new ImageStorageManager();
-                        storage.displayImage(event.getPoster(), "/EventPosters/",ivEventPoster);
+                        ImageStorageManager storage = new ImageStorageManager(event.getPoster(), "/EventPosters");
+                        storage.displayImage(ivEventPoster);
                     }
                 } else {
                     Log.d("Firestore", String.format("No such document with id %s", documentId));
@@ -132,12 +132,15 @@ public class EventPage extends AppCompatActivity {
         signupCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                AttendeeDatabaseManager attendeeDb = new AttendeeDatabaseManager(fcmToken);
                 // Update signup array in event document
                 if (isChecked){
                     eventDb.addToArrayField("signups", fcmToken);
+                    attendeeDb.addToArrayField("signupEvents", documentId);
                 }
                 else{
                     eventDb.removeFromArrayField("signups", fcmToken);
+                    attendeeDb.removeFromArrayField("signupEvents", documentId);
                 }
             }
         });

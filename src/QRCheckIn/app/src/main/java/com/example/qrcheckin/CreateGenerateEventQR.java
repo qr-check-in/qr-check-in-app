@@ -176,8 +176,8 @@
                     // Create and store an EventPoster to firestore storage
                     if (incomingPosterString != null){
                         inputEventPoster = new EventPoster(incomingPosterString, null);
-                        ImageStorageManager storage = new ImageStorageManager();
-                        storage.uploadImage(inputEventPoster, "/EventPosters");
+                        ImageStorageManager storage = new ImageStorageManager(inputEventPoster, "/EventPosters");
+                        storage.uploadImage();
                     }
 
                     Event newEvent = new Event(organizer, checkInQRCode, promoQRCode, inputEventPoster, inputEventName, inputEventDate, inputEventTime, inputEventLocation, inputEventDescription, incomingEvent.isCheckInStatus(), numOfAttends);
