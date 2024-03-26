@@ -80,4 +80,7 @@ dependencies {
     implementation("com.journeyapps:zxing-android-embedded:4.3.0")
     implementation("com.google.mlkit:barcode-scanning:17.2.0")
 
+    // Bottom Sheet
+    implementation ("com.google.android.material:material:1.4.0")
+
 }

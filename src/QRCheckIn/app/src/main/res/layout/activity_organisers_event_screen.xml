@@ -125,11 +125,11 @@
 
             </androidx.constraintlayout.widget.ConstraintLayout>
         </ScrollView>
-<!--        https://www.youtube.com/watch?v=3vMtHKniOqI&t=2s, 2024, how to create a bottom sheet-->
+
         <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:id="@+id/standard_bottom_sheet"
+            android:id="@+id/eventBottomSheet"
             app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior"
             app:layout_constraintBottom_toTopOf="@id/main_app_bar"
             app:layout_constraintStart_toStartOf="parent"
@@ -142,7 +142,7 @@
                 android:orientation="vertical">
 
                 <ImageButton
-                    android:id="@+id/"
+                    android:id="@+id/bottomSheetCollapseButton"
                     android:layout_width="70dp"
                     android:layout_height="50dp"
                     android:scaleType="fitCenter"
@@ -160,6 +160,7 @@
                     android:paddingHorizontal="10dp">
 
                     <Button
+                        android:id="@+id/editDetailsButton"
                         android:layout_width="wrap_content"
                         android:layout_height="70dp"
                         android:text="Edit Details"
@@ -171,6 +172,7 @@
                         />
 
                     <Button
+                        android:id="@+id/postNotificationButton"
                         android:layout_width="wrap_content"
                         android:layout_height="70dp"
                         android:text="Notifications"
@@ -182,6 +184,7 @@
                         />
 
                     <Button
+                        android:id="@+id/attendeeListButton"
                         android:layout_width="wrap_content"
                         android:layout_height="70dp"
                         android:text="Attendees"
@@ -191,13 +194,7 @@
                         android:textColor="@color/Black"
                         />
                 </LinearLayout>
-
-
             </LinearLayout>
-
-
-            <!-- Bottom sheet contents. -->
-
         </FrameLayout>
         <include
             android:id="@+id/main_app_bar"
