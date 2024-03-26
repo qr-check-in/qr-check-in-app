@@ -12,9 +12,7 @@ import android.widget.Toast;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.zxing.integration.android.IntentIntegrator;
@@ -118,8 +116,8 @@ public class QRCodeScan extends AppCompatActivity {
             else {
                 // Query events to find out if the scanned QR code was a check-in or promo type
                 String scannedData = result.getContents();
-                Query checkinQuery = eventDb.getEventCollectionRef().whereEqualTo("checkInQRCode.hashedContent", scannedData);
-                Query promoQuery = eventDb.getEventCollectionRef().whereEqualTo("promoQRCode.hashedContent", scannedData);
+                Query checkinQuery = eventDb.getCollectionRef().whereEqualTo("checkInQRCode.hashedContent", scannedData);
+                Query promoQuery = eventDb.getCollectionRef().whereEqualTo("promoQRCode.hashedContent", scannedData);
 
                 // Query for check-in QR codes, check the attendee in if an event is found
                 checkinQuery.get().addOnCompleteListener(task -> {
@@ -136,10 +134,10 @@ public class QRCodeScan extends AppCompatActivity {
                             AttendeeDatabaseManager attendeeDbManager = new AttendeeDatabaseManager(fcmToken);
                             EventDatabaseManager eventDbManager = new EventDatabaseManager(documentId);
 
-                            attendeeDbManager.addEventID("attendedEvents", documentId); // Add event to attendee
-
-                            String attendeeId = attendeeDbManager.getAttendeeDocRef().getId();
-                            eventDbManager.addAttendeeID("attendee", attendeeId);       // Add attendee to event
+                            attendeeDbManager.addToArrayField("attendedEvents", documentId); // Add event to attendee
+                            
+                            String attendeeId = attendeeDbManager.getDocRef().getId();
+                            eventDbManager.addToArrayField("attendee", attendeeId); // Add attendee to event
 
                             // Open the appropriate event page
                             Intent intent = new Intent(getApplicationContext(), EventPage.class);
