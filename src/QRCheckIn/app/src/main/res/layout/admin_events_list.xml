@@ -8,12 +8,12 @@
     app:cardBackgroundColor="@color/SecondaryContainer"
     app:cardCornerRadius="12dp"
     app:cardElevation="6dp">
-    <RelativeLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="370dp"
         android:layout_height="50dp"
         android:layout_margin="15dp"
         android:layout_marginTop="12dp"
-        android:background="@color/NeonBlue"
+        android:background="@color/JordyBlue"
         android:orientation="horizontal"
         app:layout_constraintTop_toBottomOf="@+id/events"
         tools:layout_editor_absoluteX="11dp">
@@ -29,39 +29,39 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="15dp"
-            android:layout_toRightOf="@id/qrCodeImageView"
+            app:layout_constraintLeft_toRightOf="@id/qrCodeImageView"
             android:text="Event 1"
             android:textAppearance="?android:attr/textAppearanceMedium"
-            android:textColor="@color/White" />
+            android:textColor="@color/Black" />
 
         <TextView
             android:id="@+id/eventLocationTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/eventNameTextView"
+            app:layout_constraintTop_toBottomOf="@id/eventNameTextView"
             android:layout_marginStart="15dp"
-            android:layout_toRightOf="@id/qrCodeImageView"
+            app:layout_constraintLeft_toRightOf="@id/qrCodeImageView"
             android:text="Location"
-            android:textColor="@color/White" />
+            android:textColor="@color/Black" />
 
         <TextView
             android:id="@+id/eventTimeTextView"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_marginStart="95dp"
-            android:layout_toRightOf="@id/eventLocationTextView"
+            android:layout_marginStart="55dp"
+            app:layout_constraintLeft_toRightOf="@id/eventNameTextView"
             android:text="Time"
-            android:textColor="@color/White" />
+            android:textColor="@color/Black" />
 
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="70dp"
-            android:layout_marginTop="20dp"
-            android:layout_toRightOf="@id/eventTimeTextView"
+            android:paddingTop="20dp"
+            app:layout_constraintEnd_toEndOf="parent"
             android:src="@drawable/baseline_delete_outline_24" />
 
-    </RelativeLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 
 </androidx.cardview.widget.CardView>

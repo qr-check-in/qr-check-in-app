@@ -1,6 +1,9 @@
 package com.example.qrcheckin;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -14,6 +17,7 @@ import java.util.List;
 public class AdminViewEvent extends AppCompatActivity {
     private RecyclerView eventsRecyclerView;
     private Admin admin;
+    Button back;
     private AdminEventAdapter eventAdapter;
     private List<Event> eventList = new ArrayList<>();
     @Override
@@ -25,7 +29,7 @@ public class AdminViewEvent extends AppCompatActivity {
         getSupportActionBar().setDisplayShowTitleEnabled(false);
         TextView header = findViewById(R.id.mainHeader);
         header.setText("Current Events");
-
+        back=findViewById(R.id.back_button);
         eventsRecyclerView = findViewById(R.id.event_recycler_view); // Ensure ID matches your XML
         eventsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 
@@ -38,6 +42,13 @@ public class AdminViewEvent extends AppCompatActivity {
             @Override
             public void onEventsFetched(List<Event> events) {
                 eventAdapter.updateEvents(events); // Method in EventAdapter to update the events list
+            }
+        });
+        back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent event = new Intent(getApplicationContext(), AdminActivity.class);
+                startActivity(event);
             }
         });
     }

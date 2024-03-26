@@ -18,11 +18,12 @@
         android:layout_width="300dp"
         android:layout_height="90dp"
         android:layout_marginTop="70dp"
-        android:backgroundTint="@color/NeonBlue"
+        android:backgroundTint="@color/JordyBlue"
         android:drawableLeft="@drawable/calenderresize"
         android:text="EVENTS"
         android:textSize="35dp"
         app:cornerRadius="5dp"
+        android:textColor="@color/Black"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/dashboard"
@@ -39,8 +40,9 @@
         android:drawableLeft="@drawable/baseline_account_circle_24"
         app:cornerRadius="5dp"
         app:layout_constraintStart_toStartOf="parent"
+        android:textColor="@color/Black"
         app:layout_constraintEnd_toEndOf="parent"
-        android:backgroundTint="@color/NeonBlue"
+        android:backgroundTint="@color/JordyBlue"
         app:layout_constraintTop_toBottomOf="@+id/btn_admin_event"
          />
     <com.google.android.material.button.MaterialButton
@@ -50,22 +52,16 @@
         android:layout_marginTop="90dp"
         android:text="IMAGES"
         android:textSize="35dp"
+        android:textColor="@color/Black"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         android:drawableLeft="@drawable/baseline_image_24"
         android:drawableTint="@color/Black"
         app:cornerRadius="5dp"
-        android:backgroundTint="@color/NeonBlue"
+        android:backgroundTint="@color/JordyBlue"
         app:layout_constraintTop_toBottomOf="@+id/profile_admin_button"
          />
 
-
-
-    <include
-        layout="@layout/mainappbar"
-        android:layout_width="match_parent"
-        android:layout_height="45dp"
-        app:layout_constraintBottom_toBottomOf="parent"/>
 
 
 

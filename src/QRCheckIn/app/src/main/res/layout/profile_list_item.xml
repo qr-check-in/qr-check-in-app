@@ -11,7 +11,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="55dp"
-        android:background="@color/NeonBlue"
+        android:background="@color/JordyBlue"
         android:orientation="horizontal">
         <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/profile_picture"
@@ -26,7 +26,7 @@
             android:layout_width="200dp"
             android:textSize="30dp"
             android:layout_height="match_parent"
-            android:textColor="@color/White"
+            android:textColor="@color/Black"
             android:layout_toRightOf="@+id/profile_picture"
             android:layout_marginTop="5dp"
             android:layout_marginStart="45dp"

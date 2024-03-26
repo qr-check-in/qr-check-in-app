@@ -52,6 +52,8 @@ dependencies {
     implementation ("com.google.api:api-common:2.2.1")
     implementation("com.google.firebase:firebase-storage:20.3.0")
     implementation("org.mockito:mockito-core:4.0.0")
+    implementation("com.github.bumptech.glide:glide:4.12.0")
+    annotationProcessor("com.github.bumptech.glide:compiler:4.12.0")
 
     testImplementation ("org.junit.jupiter:junit-jupiter-api:5.0.1")
     testRuntimeOnly ("org.junit.jupiter:junit-jupiter-engine:5.0.1")

@@ -62,7 +62,7 @@ public class AdminViewProfiles extends AppCompatActivity {
                         adapter = new ProfileAdapter(profileList, new ProfileAdapter.OnItemClickListener() {
                             @Override
                             public void onItemClick(Profile profile) {
-                                Intent event = new Intent(getApplicationContext(), ProfileActivity.class);
+                                Intent event = new Intent(getApplicationContext(), ProfileActivityAdmin.class);
                                 startActivity(event);
                             }
                         });

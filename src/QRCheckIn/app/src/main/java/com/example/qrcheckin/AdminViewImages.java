@@ -1,6 +1,9 @@
 package com.example.qrcheckin;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -16,6 +19,7 @@ public class AdminViewImages extends AppCompatActivity {
     private ImageAdapter imageAdapter;
     private List<String> imageUrls; // Populate this list with your image URLs
     Admin admin;
+    Button back;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -30,13 +34,20 @@ public class AdminViewImages extends AppCompatActivity {
         List<String> imageUris = new ArrayList<>();
         ImageAdapter imageAdapter = new ImageAdapter(this, imageUris);
         imagesRecyclerView.setAdapter(imageAdapter);
-
+        back=findViewById(R.id.back_button);
         Admin admin = new Admin(); // Assuming Admin contains browseImages()
         admin.browseImages(new Admin.ImagesCallback() {
             @Override
             public void onImagesFetched(List<String> imageUris) {
                 // Update RecyclerView with fetched images
                 imageAdapter.updateData(imageUris);
+            }
+        });
+        back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent event = new Intent(getApplicationContext(), AdminActivity.class);
+                startActivity(event);
             }
         });
     }
