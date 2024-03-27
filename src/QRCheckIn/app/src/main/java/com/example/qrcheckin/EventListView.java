@@ -50,15 +50,6 @@ public class EventListView extends AppCompatActivity {
         setContentView(R.layout.activity_event_list_view);
         eventDb = new EventDatabaseManager();
 
-        // Get user's fcm token (used for querying the right events in recycler view)
-        SharedPreferences prefs = getSharedPreferences("TOKEN_PREF", MODE_PRIVATE);
-        fcmToken = prefs.getString("token", "missing token");
-
-        // Set up the recycler view of events to be displayed (displays all by default)
-        Query query = eventDb.getCollectionRef()
-                .orderBy("eventName", Query.Direction.DESCENDING);
-        setUpRecyclerView(query);
-
         // Find main app tool bar buttons
         qrButton = findViewById(R.id.qrButton);
         eventButton = findViewById(R.id.calenderButton);
@@ -80,6 +71,15 @@ public class EventListView extends AppCompatActivity {
         getSupportActionBar().setDisplayShowTitleEnabled(false);
         TextView header = findViewById(R.id.mainHeader);
         header.setText("Ongoing Events");
+
+        // Get user's fcm token (used for querying the right events in recycler view)
+        SharedPreferences prefs = getSharedPreferences("TOKEN_PREF", MODE_PRIVATE);
+        fcmToken = prefs.getString("token", "missing token");
+
+        // Set up the recycler view of events to be displayed (displays all by default)
+        Query query = eventDb.getCollectionRef()
+                .orderBy("eventName", Query.Direction.DESCENDING);
+        setUpRecyclerView(query);
 
         // Set up listeners for event tabs (signed-up, my events/organized by me)
         btnUpcomingTab.setOnClickListener(new View.OnClickListener() {
@@ -177,8 +177,9 @@ public class EventListView extends AppCompatActivity {
 
         // Connect the recycler view to it's adapter and layout manager
         RecyclerView recyclerView = findViewById(R.id.event_recycler_view);
+        recyclerView.setHasFixedSize(true);
         recyclerView.setItemAnimator(null);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        recyclerView.setLayoutManager(new LinearLayoutManagerWrapper(this));
         recyclerView.setAdapter(eventAdapter);
     }
 
@@ -194,6 +195,7 @@ public class EventListView extends AppCompatActivity {
                 .setLifecycleOwner(this)
                 .build();
         eventAdapter.updateOptions(newOptions);
+        eventAdapter.notifyDataSetChanged();
         eventAdapter.startListening();
     }
 
@@ -204,6 +206,7 @@ public class EventListView extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        eventAdapter.notifyDataSetChanged();
         pressButton(btnCurrentTab);
     }
 
