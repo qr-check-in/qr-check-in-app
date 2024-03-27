@@ -136,7 +136,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             android:background="@drawable/event_bottom_sheet">
 
-            <LinearLayout
+            <androidx.appcompat.widget.LinearLayoutCompat
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
@@ -194,7 +194,7 @@
                         android:textColor="@color/Black"
                         />
                 </LinearLayout>
-            </LinearLayout>
+            </androidx.appcompat.widget.LinearLayoutCompat>
         </FrameLayout>
         <include
             android:id="@+id/main_app_bar"

@@ -3,6 +3,7 @@ package com.example.qrcheckin;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -11,6 +12,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.firebase.firestore.DocumentSnapshot;
 
 /**
@@ -25,6 +27,8 @@ public class OrganisersEventPage extends AppCompatActivity {
     ImageButton addEventButton;
     ImageButton profileButton;
     private EventDatabaseManager eventDb;
+    private BottomSheetBehavior bottomSheetBehavior;
+
     /**
      * Init activity, sets content view, and configures the toolbar with navigation buttons.
      * Retrieves & displays event details from Firestore based on the passed document ID.
@@ -58,6 +62,11 @@ public class OrganisersEventPage extends AppCompatActivity {
         TextView tvEventDescription = findViewById(R.id.text_event_description);
         ImageView ivEventPoster = findViewById(R.id.image_event_poster);
         ImageView ivEventPromoQr = findViewById(R.id.image_event_promo_qr);
+
+        // Bottom Sheet
+BottomSheetBehavior.from(view).apply
+
+
 
 
         // Retrieve the event passed from the previous activity
