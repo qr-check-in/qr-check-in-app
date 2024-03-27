@@ -83,4 +83,8 @@ dependencies {
     // Bottom Sheet
     implementation ("com.google.android.material:material:1.4.0")
     implementation ("com.google.android.material:material:1.2.0-alpha02")
+
+    // For test cases
+    //noinspection GradleCompatible
+    implementation ("com.android.support:recyclerview-selection:28.0.0")
 }
