@@ -47,15 +47,15 @@ public class CreateEventTest2 {
 
     @Test
     public void testGenerateQR(){
-        onView(withId(R.id.makeQRCI)).perform(click());
-        onView(withId(R.id.checkInQR)).check(matches(isDisplayed()));
+        onView(withId(R.id.btnGenCheckInQR)).perform(click());
+        onView(withId(R.id.ivCheckInQR)).check(matches(isDisplayed()));
     }
 
 
     @Test
     public void testUploadFromGallery(){
         // Check if the button works
-        onView(withId(R.id.uploadQRCR)).perform(click());
+        onView(withId(R.id.btnUploadCheckInQR)).perform(click());
     }
 
 
