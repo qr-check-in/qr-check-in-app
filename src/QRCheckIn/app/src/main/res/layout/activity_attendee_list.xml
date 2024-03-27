@@ -1,9 +1,152 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".AttendeeList">
+    android:layout_height="match_parent">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <LinearLayout
+        android:id="@+id/topNavigation"
+        android:layout_width="match_parent"
+        android:layout_height="65dp"
+        android:background="#87BFFF"
+        android:gravity="top"
+        android:orientation="horizontal"
+        android:paddingHorizontal="5dp">
+
+
+        <TextView
+            android:id="@+id/topNavigationText"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="8.7"
+            android:gravity="center"
+            android:paddingLeft="25dp"
+            android:text="Attendee List"
+            android:textSize="30dp"
+            android:textStyle="bold" />
+
+        <ImageButton
+            android:id="@+id/notificationSound"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1.3"
+            android:background="#87BFFF"
+            android:padding="5dp"
+            android:scaleType="fitCenter"
+            android:src="@drawable/speaker" />
+
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:id="@+id/ButtonsBar"
+        android:layout_width="match_parent"
+        android:layout_height="65dp"
+        android:layout_below="@id/topNavigation"
+        android:layout_marginTop="10dp"
+        android:background="#FFFFFF"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:paddingHorizontal="5dp">
+
+        <Button
+            android:id="@+id/mapLocation"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:background="@drawable/round_button"
+            android:drawableEnd="@drawable/locationresize"
+            android:drawableTint="#FFFFFF"
+            android:padding="10dp"
+            android:text="@string/view_check_in_locations"
+            android:textSize="20sp" />
+
+    </LinearLayout>
+
+
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/bottomNavigation"
+        android:layout_below="@id/ButtonsBar"
+        android:layout_marginTop="-10dp"
+        android:layout_marginBottom="20dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="650dp"
+            android:gravity="top"
+            android:orientation="vertical"
+            android:paddingHorizontal="5dp"
+            android:paddingTop="10dp">
+
+
+            <TextView
+                android:id="@+id/dateAndtime"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingTop="15dp"
+                android:paddingLeft="10dp"
+                android:paddingBottom="5dp"
+                android:hint="Firstname Lastname"
+                android:drawableStart="@drawable/profile_resized"
+                android:textSize="25dp"
+                android:textStyle="bold" />
+
+
+        </LinearLayout>
+
+    </ScrollView>
+
+    <LinearLayout
+        android:id="@+id/bottomNavigation"
+        android:layout_width="wrap_content"
+        android:layout_height="60dp"
+        android:gravity="bottom"
+        android:orientation="horizontal"
+        android:paddingHorizontal="5dp"
+        android:layout_alignParentBottom="true"
+        android:background="#87BFFF">
+
+
+        <ImageButton
+            android:id="@+id/qrCode"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="#87BFFF"
+            android:padding="5dp"
+            android:src="@drawable/qrcode"
+            android:scaleType="fitCenter"/>
+
+        <ImageButton
+            android:id="@+id/events"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:padding="10dp"
+            android:src="@drawable/calender"
+            android:background="#87BFFF"
+            android:scaleType="fitCenter"/>
+
+        <ImageButton
+            android:id="@+id/addEvent"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:padding="10dp"
+            android:src="@drawable/addcalender"
+            android:background="#87BFFF"
+            android:scaleType="fitCenter" />
+
+        <ImageButton
+            android:id="@+id/profile"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:src="@drawable/profile"
+            android:background="#87BFFF"
+            android:scaleType="fitCenter" />
+
+    </LinearLayout>
+
+</RelativeLayout>
