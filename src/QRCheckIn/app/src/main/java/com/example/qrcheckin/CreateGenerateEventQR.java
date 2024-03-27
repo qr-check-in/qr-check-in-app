@@ -61,10 +61,6 @@ public class CreateGenerateEventQR extends AppCompatActivity {
 
     // To save image in device
     Bitmap bitmap;
-    BitmapDrawable bitmapDrawable;
-    boolean checkInQrAvailable = false;
-    boolean alreadySaved = false;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -100,7 +96,7 @@ public class CreateGenerateEventQR extends AppCompatActivity {
         SharedPreferences prefs = getSharedPreferences("TOKEN_PREF", MODE_PRIVATE);
         organizerFcm = prefs.getString("token", "missing token");
 
-        // Fetch the user's inputs from createNewEventSceen1
+        // Fetch the user's inputs from the previous CreateAddEventDetails activity
         Bundle extras = getIntent().getExtras();
         checkInQRCode = null;
         promoQRCode = null;
@@ -126,48 +122,53 @@ public class CreateGenerateEventQR extends AppCompatActivity {
             incomingPosterString = extras.getString("posterString");
         }
 
-
-        finishButton.setOnClickListener(new View.OnClickListener() {
-            /**
-             * Creates a new Event upon the finish button being clicked
-             * @param v The view that was clicked.
-             */
-            @Override
-            public void onClick(View v) {
-                if (!checkInQrAvailable) {
-                    Toast.makeText(CreateGenerateEventQR.this, "Finish generating QR Code", Toast.LENGTH_SHORT).show();
-                } else {
-                    // Create and store an EventPoster to firestore storage
-                    if (incomingPosterString != null) {
-                        inputEventPoster = new EventPoster(incomingPosterString, null);
-                        ImageStorageManager posterStorage = new ImageStorageManager(inputEventPoster, "/EventPosters");
-                        posterStorage.uploadImage();
+        /*
+         * Registers a photo picker activity launcher to upload images.
+         * How to select a picture from gallery:
+         *      https://developer.android.com/jetpack/androidx/releases/activity#1.7.0
+         */
+        ActivityResultLauncher<PickVisualMediaRequest> pickMedia =
+                registerForActivityResult(new ActivityResultContracts.PickVisualMedia(), uri -> {
+                    // Callback is invoked after the user selects a media item or closes the
+                    // photo picker.
+                    if (uri != null) {
+                        // Load the selected image into the ImageView using Glide
+                        // openai, 2024, chatgpt, how to display the image
+                        Glide.with(this)
+                                .load(uri)
+                                .into(ivCheckInQR);
+                        ivCheckInQR.setVisibility(View.VISIBLE);
+                        Log.d("PhotoPicker", "Selected URI: " + uri);
+                    } else {
+                        Log.d("PhotoPicker", "No media selected");
                     }
-
-                    // Create and store a check-in QR code to firestore storage
-                    if (checkInQrAvailable) {
-                        ImageStorageManager storageQr = new ImageStorageManager(checkInQRCode, "/QRCodes");
-                        storageQr.uploadImage();
-                    }
-
-                    Event newEvent = new Event(organizerFcm, checkInQRCode, promoQRCode, inputEventPoster, inputEventName, inputEventDate, inputEventTime, inputEventLocation, inputEventDescription, incomingEvent.isCheckInStatus(), numOfAttends);
-                    Log.d("event", String.format("storing event %s", newEvent.getEventName()));
-                    db.storeEvent(newEvent);
-
-
-                    Intent activity = new Intent(getApplicationContext(), EventListView.class);
-                    startActivity(activity);
-                }
-            }
-        });
+                });
 
         // Set up listeners for QR code generation/upload/download
         btnGenCheckInQR.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Too make a combined string and convert into a hashed string (unique) so to generate QR code
-                String unhashedContent = inputEventName + inputEventLocation + inputEventDate + inputEventTime;
-                generateQRCode(unhashedContent);
+                // Create and set a check-in QR code only if it doesn't exist yet
+                if (checkInQRCode == null) {
+                    // Generate a QR code bitmap using event details from previous page
+                    String unhashedContent = inputEventName + inputEventLocation + inputEventDate + inputEventTime;
+                    bitmap = generateQRCode(unhashedContent);
+                    assert bitmap != null;
+                    ivCheckInQR.setImageBitmap(bitmap);
+                    ivCheckInQR.setVisibility(View.VISIBLE);
+
+                    // Create the QR code object and set the ImageView to the new QR code
+                    String filename = String.format("%s_%s_%d.jpg", inputEventName, inputEventDate, System.currentTimeMillis());
+                    String QRCodeUri = saveBitmapImage(bitmap, filename).toString();
+                    checkInQRCode = new QRCode(QRCodeUri, null, unhashedContent);
+                } else {
+                    Toast.makeText(CreateGenerateEventQR.this, "checkInQR already exists", Toast.LENGTH_SHORT).show();
+                }
+
+                // Ensure check-in QR code and image view were set successfully
+                if ((checkInQRCode == null) || (ivCheckInQR.getDrawable() == null)) {
+                    Log.d("generateQrCode", "QR code generation failed");
+                }
             }
         });
         btnUploadCheckInQR.setOnClickListener(new View.OnClickListener() {
@@ -179,17 +180,51 @@ public class CreateGenerateEventQR extends AppCompatActivity {
                 pickMedia.launch(new PickVisualMediaRequest.Builder()
                         .setMediaType(ActivityResultContracts.PickVisualMedia.ImageOnly.INSTANCE)
                         .build());
-                checkInQrAvailable = true;
             }
 
         });
         ivCheckInQR.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (checkInQrAvailable) {
+                if (checkInQRCode != null) {
                     Intent activity = new Intent(getApplicationContext(), QrCodeImageView.class);
                     activity.putExtra("QRCodeBitmap", bitmap); // Assuming 'bitmap' is the generated QR code bitmap
                     activity.putExtra("EventName&Date", inputEventName + "_" + inputEventDate); // Assuming 'bitmap' is the generated QR code bitmap
+                    startActivity(activity);
+                }
+            }
+        });
+
+        // Set listener to finish creating an event after generating it's QRCode(s)
+        finishButton.setOnClickListener(new View.OnClickListener() {
+            /**
+             * Creates a new Event upon the finish button being clicked
+             * @param v The view that was clicked.
+             */
+            @Override
+            public void onClick(View v) {
+                if (checkInQRCode == null) {
+                    Toast.makeText(CreateGenerateEventQR.this, "Finish generating QR Code", Toast.LENGTH_SHORT).show();
+                } else {
+                    // Create and store an EventPoster to firestore storage
+                    if (incomingPosterString != null) {
+                        inputEventPoster = new EventPoster(incomingPosterString, null);
+                        ImageStorageManager posterStorage = new ImageStorageManager(inputEventPoster, "/EventPosters");
+                        posterStorage.uploadImage();
+                    }
+
+                    // Create and store a check-in QR code to firestore storage
+                    if (checkInQRCode != null) {
+                        ImageStorageManager storageQr = new ImageStorageManager(checkInQRCode, "/QRCodes");
+                        storageQr.uploadImage();
+                    }
+
+                    Event newEvent = new Event(organizerFcm, checkInQRCode, promoQRCode, inputEventPoster, inputEventName, inputEventDate, inputEventTime, inputEventLocation, inputEventDescription, incomingEvent.isCheckInStatus(), numOfAttends);
+                    Log.d("event", String.format("storing event %s", newEvent.getEventName()));
+                    db.storeEvent(newEvent);
+
+
+                    Intent activity = new Intent(getApplicationContext(), EventListView.class);
                     startActivity(activity);
                 }
             }
@@ -216,92 +251,68 @@ public class CreateGenerateEventQR extends AppCompatActivity {
         });
     }
 
-
-    // https://developer.android.com/jetpack/androidx/releases/activity#1.7.0, 2024, how to select a picture from gallery
-    // Registers a photo picker activity launcher in single-select mode.
-    ActivityResultLauncher<PickVisualMediaRequest> pickMedia =
-            registerForActivityResult(new ActivityResultContracts.PickVisualMedia(), uri -> {
-                // Callback is invoked after the user selects a media item or closes the
-                // photo picker.
-                if (uri != null) {
-                    // Load the selected image into the ImageView using Glide
-                    // openai, 2024, chatgpt, how to display the image
-                    Glide.with(this)
-                            .load(uri)
-                            .into(ivCheckInQR);
-                    ivCheckInQR.setVisibility(View.VISIBLE);
-                    Log.d("PhotoPicker", "Selected URI: " + uri);
-                } else {
-                    Log.d("PhotoPicker", "No media selected");
-                }
-            });
-
-
-    private void generateQRCode(String unhashedContent) {
+    /**
+     * Encodes the unhashed content into a QR code image
+     * @param unhashedContent   String to encode into QR code
+     * @return                  Bitmap of the QR code image OR null (if generation failed)
+     */
+    private Bitmap generateQRCode(String unhashedContent) {
         try {
             // Get the hashed content of the qr code for the bitmap
             String hashedContent = Utils.hashString(unhashedContent);
 
             // Generate bitmap for QR code
             BarcodeEncoder barcodeEncoder = new BarcodeEncoder();
-            BitMatrix bitMatrix = barcodeEncoder.encode(String.valueOf(hashedContent), BarcodeFormat.QR_CODE, 200, 175);
-
+            BitMatrix bitMatrix = barcodeEncoder.encode(String.valueOf(hashedContent), BarcodeFormat.QR_CODE, 200, 200);
             Bitmap bitmap = Bitmap.createBitmap(bitMatrix.getWidth(), bitMatrix.getHeight(), Bitmap.Config.RGB_565);
             for (int x = 0; x < bitMatrix.getWidth(); x++) {
                 for (int y = 0; y < bitMatrix.getHeight(); y++) {
                     bitmap.setPixel(x, y, bitMatrix.get(x, y) ? getResources().getColor(R.color.Black) : getResources().getColor(R.color.White));
                 }
             }
-
-            ivCheckInQR.setImageBitmap(bitmap);
-            ivCheckInQR.setVisibility(View.VISIBLE);
-
-            if (!alreadySaved) {
-                String QRCodeUri = saveBitmapImage().toString();
-                checkInQRCode = new QRCode(QRCodeUri, null, unhashedContent);
-                checkInQrAvailable = true;
-            }
+            return bitmap;  // Return bitmap if it was created successfully
 
         } catch (WriterException e) {
             e.printStackTrace();
         }
+
+        return null;        // Return null if generation failed
     }
 
     /**
-     * Saves a bitmap to the device and returns its Uri
-     * @return Uri of the qr code saved
+     * Saves a bitmap image to the device and returns its Uri
+     * @param bitmap    Bitmap of image file to store
+     * @param filename  String desired name of image file
+     * @return          Uri of the image saved
      */
-    private Uri saveBitmapImage() {
-        alreadySaved = true;
-        bitmapDrawable = (BitmapDrawable) ivCheckInQR.getDrawable();
-        bitmap = bitmapDrawable.getBitmap();
-
-        FileOutputStream fileOutputStream = null;
-
+    private Uri saveBitmapImage(Bitmap bitmap, String filename) {
+        // Get directory to store file into
         File sdCard = Environment.getExternalStorageDirectory();
         File Directory = new File(sdCard.getAbsolutePath() + "/Download");
         Directory.mkdir();
 
-        String filename = String.format("%s_%s_%d.jpg", inputEventName, inputEventDate, System.currentTimeMillis());
+        // Set up file (file descriptor) in the directory where the image will be stored
         File outfile = new File(Directory, filename);
+        FileOutputStream fileOutputStream = null;
 
-        Toast.makeText(CreateGenerateEventQR.this, "Image Saved Successfully", Toast.LENGTH_SHORT).show();
-
+        // Attempt to store image into the file
         try {
+            // Write image into the file descriptor
             fileOutputStream = new FileOutputStream(outfile);
             bitmap.compress(Bitmap.CompressFormat.JPEG, 100, fileOutputStream);
             fileOutputStream.flush();
             fileOutputStream.close();
 
+            // Allow the media scanner to access the new file's URI
             Intent intent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
             intent.setData(Uri.fromFile(outfile));
             sendBroadcast(intent);
+            Toast.makeText(CreateGenerateEventQR.this, "QR Code saved to downloads folder", Toast.LENGTH_SHORT).show();
         } catch (IOException e) {
-            e.printStackTrace();
+            Log.e("SaveBitmapError", "Error saving bitmap to device\n", e);
         }
 
         return Uri.fromFile(outfile);
     }
-
 
 }
