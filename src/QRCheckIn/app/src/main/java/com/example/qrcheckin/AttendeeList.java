@@ -94,6 +94,8 @@ public class AttendeeList extends AppCompatActivity {
             }
         }
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
+
     }
 }
 
