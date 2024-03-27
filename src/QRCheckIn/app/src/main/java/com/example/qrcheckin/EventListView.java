@@ -31,8 +31,8 @@ public class EventListView extends AppCompatActivity {
     MaterialButton btnUpcomingTab;
     MaterialButton btnSignedUpTab;
     MaterialButton btnMyEventsTab;
-    String fcmToken;
     MaterialButton btnCurrentTab;
+    String fcmToken;
     private EventAdapter eventAdapter;
     private EventDatabaseManager eventDb;
 
@@ -152,7 +152,13 @@ public class EventListView extends AppCompatActivity {
                 String id = documentSnapshot.getId();
 
                 // Send the document id of the event to the Event Page before opening it
-                Intent intent = new Intent(getApplicationContext(), EventPage.class);
+                Intent intent;
+                if (btnCurrentTab == btnMyEventsTab){
+                     intent = new Intent(getApplicationContext(), OrganizersEventPage.class);
+                }
+                else{
+                    intent = new Intent(getApplicationContext(), EventPage.class);
+                }
                 intent.putExtra("DOCUMENT_ID", id);
                 startActivity(intent);
 

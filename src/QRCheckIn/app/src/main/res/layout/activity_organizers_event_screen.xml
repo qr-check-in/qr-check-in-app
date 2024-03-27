@@ -5,7 +5,7 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".OrganisersEventPage">
+    tools:context=".OrganizersEventPage">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -29,6 +29,7 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             app:layout_constraintBottom_toTopOf="@+id/main_app_bar"
+
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintStart_toStartOf="parent"
@@ -101,8 +102,8 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="16dp"
                     android:adjustViewBounds="true"
-                    android:maxWidth="100dp"
-                    android:maxHeight="100dp"
+                    android:maxWidth="200dp"
+                    android:maxHeight="200dp"
                     android:scaleType="fitCenter"
                     android:contentDescription="@string/description_promo_qrcode"
                     android:src="@drawable/qr2"
@@ -117,10 +118,33 @@
                     android:layout_marginTop="8dp"
                     android:layout_marginBottom="16dp"
                     android:text="@string/description_promo_qrcode"
-                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintBottom_toTopOf="@id/signup_button"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/image_event_promo_qr" />
+
+                <CheckBox
+                    android:id="@+id/signup_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:buttonTint="@color/NeonBlue"
+                    android:text="@string/signup_button_text"
+                    android:layoutDirection="rtl"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/promo_qr_description" />
+
+                <TextView
+                    android:id="@+id/signup_limit_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/signup_limit_text"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/promo_qr_description" />
+
 
 
             </androidx.constraintlayout.widget.ConstraintLayout>
