@@ -183,8 +183,8 @@ public class EventListView extends AppCompatActivity {
 
         // Connect the recycler view to it's adapter and layout manager
         RecyclerView recyclerView = findViewById(R.id.event_recycler_view);
-        recyclerView.setHasFixedSize(true);
-        recyclerView.setItemAnimator(null);
+        recyclerView.setHasFixedSize(true);     // RecyclerView inside constraint layout, won't grow
+        recyclerView.setItemAnimator(null);     // ItemAnimator is buggy, keep this OFF if possible
         recyclerView.setLayoutManager(new LinearLayoutManagerWrapper(this));
         recyclerView.setAdapter(eventAdapter);
     }
@@ -206,8 +206,9 @@ public class EventListView extends AppCompatActivity {
     }
 
     /**
-     * Called when this page is accessed by pressing the back button from an event page.
-     *      Re-selects the active tab
+     * Called when this page is accessed by pressing the back button from another page.
+     *      Re-selects the active tab and ensures updates to the event data set made while in
+     *      another page are reflected here
      */
     @Override
     protected void onResume() {
