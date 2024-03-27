@@ -17,10 +17,9 @@
         android:textStyle="bold"
         android:text="Upcoming"
         app:cornerRadius="5dp"
-        android:backgroundTint="@color/JordyBlue"
-        android:background="@drawable/buttonselect"
+        android:backgroundTint="@color/PrimaryContainer"
         android:layout_marginEnd="3dp"
-        android:textColor="@color/Black">
+        android:textColor="@color/OnPrimary">
     </com.google.android.material.button.MaterialButton>
 
     <com.google.android.material.button.MaterialButton
@@ -30,10 +29,9 @@
         android:layout_weight="1"
         android:textStyle="bold"
         android:text="Signed-Up"
-        android:textColor="@color/Black"
+        android:textColor="@color/OnPrimary"
         app:cornerRadius="5dp"
-        android:backgroundTint="@color/JordyBlue"
-        android:background="@drawable/buttonselect"
+        android:backgroundTint="@color/PrimaryContainer"
         android:layout_marginEnd="3dp">
     </com.google.android.material.button.MaterialButton>
 
@@ -44,10 +42,8 @@
         android:layout_weight="1"
         android:textStyle="bold"
         android:text="My Events"
-        android:textColor="@color/Black"
+        android:textColor="@color/OnPrimary"
         app:cornerRadius="5dp"
-        android:backgroundTint="@color/JordyBlue"
-        android:background="@drawable/buttonselect"
-        >
+        android:backgroundTint="@color/PrimaryContainer">
     </com.google.android.material.button.MaterialButton>
 </LinearLayout>

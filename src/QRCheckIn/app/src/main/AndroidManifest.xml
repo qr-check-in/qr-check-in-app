@@ -24,16 +24,7 @@
         android:theme="@style/Theme.QRCheckIn"
         tools:targetApi="31">
         <activity
-            android:name=".EditEventDetails"
-            android:exported="false" />
-        <activity
-            android:name=".OrganisersEventPage"
-            android:exported="false" />
-        <activity
-            android:name=".CreateNotification"
-            android:exported="false" />
-        <activity
-            android:name=".MyEvents"
+            android:name=".MyEventsActivity"
             android:exported="false" />
         <activity
             android:name=".SignedUpEvents"
