@@ -70,15 +70,18 @@ public class OrganizersEventPage extends AppCompatActivity {
         addEventButton = findViewById(R.id.addCalenderButton);
         profileButton = findViewById(R.id.profileButton);
 
-        Toolbar toolbar = findViewById(R.id.Toolbar);
+        // Manage Toolbar
+        Toolbar toolbar = findViewById(R.id.organizer_eventScreen_toolbar);
         setSupportActionBar(toolbar);
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayShowTitleEnabled(false);
         }
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        TextView header = findViewById(R.id.mainHeader);
+
         eventButton.setPressed(true);
 
         // Find the text views on the event page xml
-        TextView tvEventName = findViewById(R.id.text_event_name);
         TextView tvEventDate = findViewById(R.id.text_event_date);
         TextView tvEventLocation = findViewById(R.id.text_event_location);
         TextView tvEventDescription = findViewById(R.id.text_event_description);
@@ -108,7 +111,7 @@ public class OrganizersEventPage extends AppCompatActivity {
                 // Get and display event details
                 Event event = documentSnapshot.toObject(Event.class);
                 if (documentSnapshot != null && event != null) {
-                    tvEventName.setText(event.getEventName());
+                    header.setText(event.getEventName());
                     tvEventLocation.setText(event.getEventLocation());
                     tvEventDate.setText(event.getEventDate());
                     tvEventDescription.setText(event.getEventDescription());
