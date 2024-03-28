@@ -41,12 +41,10 @@ public class CreateAddEventDetails extends AppCompatActivity implements SelectDa
     Switch checkInSwitch;
     EditText eventNameEditText;
     EditText eventLocation;
-    EditText eventDate;
-    EditText eventTime;
+    TextView eventDate;
+    TextView eventTime;
     EditText eventDescription;
     EditText numOfAttendees;
-    TextInputLayout eventDateLayout;
-    TextInputLayout eventTimeLayout;
     ImageButton selectDateButton;
     ImageButton selectTimeButton;
     ImageView poster;
@@ -101,17 +99,14 @@ public class CreateAddEventDetails extends AppCompatActivity implements SelectDa
         selectTimeButton = findViewById(R.id.eventTimePicker);
         selectDateButton = findViewById(R.id.eventDatePicker);
         numOfAttendees = findViewById(R.id.numOfAttendeeText);
-        eventDateLayout = findViewById(R.id.eventDateLayout);
-        eventTimeLayout = findViewById(R.id.eventTimeLayout);
+//        eventDateLayout = findViewById(R.id.eventDateLayout);
+//        eventTimeLayout = findViewById(R.id.eventTimeLayout);
 
 
         poster.setVisibility(View.GONE);
 
         // Listener to show a DatePicker fragment when selectDateButton is clicked
         selectDateButton.setOnClickListener(v -> {
-            new SelectDateFragment().show(getSupportFragmentManager(), "Select Date");
-        });
-        eventDateLayout.setOnClickListener(v -> {
             new SelectDateFragment().show(getSupportFragmentManager(), "Select Date");
         });
         eventDate.setOnClickListener(v -> {
@@ -122,8 +117,6 @@ public class CreateAddEventDetails extends AppCompatActivity implements SelectDa
         selectTimeButton.setOnClickListener(v -> {
             new TimePickerFragment().show(getSupportFragmentManager(), "timePicker");
         });
-        eventTimeLayout.setOnClickListener(v -> {
-            new TimePickerFragment().show(getSupportFragmentManager(), "timePicker");        });
         eventTime.setOnClickListener(v -> {
             new TimePickerFragment().show(getSupportFragmentManager(), "timePicker");        });
 
