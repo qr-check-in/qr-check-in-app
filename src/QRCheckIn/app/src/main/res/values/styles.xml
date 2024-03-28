@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--openai, 2024, chatpgt: how to add animations to the bottom sheet-->
+<resources>
+    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+        <!-- Other style attributes -->
+    </style>
+
+    <!-- Define the dialog animation -->
+    <style name="DialogAnimation">
+        <item name="android:windowEnterAnimation">@anim/dialog_slide_in</item>
+        <item name="android:windowExitAnimation">@anim/dialog_slide_out</item>
+    </style>
+</resources>

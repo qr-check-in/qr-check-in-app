@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/event_bottom_sheet">
+    
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Select an Option"
+        android:textStyle="bold"
+        android:textSize="28dp"
+        android:layout_gravity="center_horizontal"
+        android:textColor="@color/White"/>
+    
+    <LinearLayout
+        android:id="@+id/editEventDetails"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Edit Event Details"
+            android:textSize="20dp"
+            android:textColor="@color/White"
+            />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/createEventNotification"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Post New Notifications"
+            android:textSize="20dp"
+            android:textColor="@color/White"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/viewEventCheckin"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="View Participants"
+            android:textSize="20dp"
+            android:textColor="@color/White"/>
+
+    </LinearLayout>
+
+</LinearLayout>

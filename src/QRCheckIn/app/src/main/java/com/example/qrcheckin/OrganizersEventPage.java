@@ -2,11 +2,17 @@ package com.example.qrcheckin;
 
 import static android.content.ContentValues.TAG;
 
+import android.app.Dialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.ImageButton;
@@ -36,8 +42,11 @@ public class OrganizersEventPage extends AppCompatActivity {
     ImageButton eventButton;
     ImageButton addEventButton;
     ImageButton profileButton;
+
+    // View widgets
     CheckBox signupCheckBox;
     TextView signupLimitReached;
+    ImageButton openBottomSheetBtn;
     private EventDatabaseManager eventDb;
     private String fcmToken;
     /**
@@ -73,9 +82,15 @@ public class OrganizersEventPage extends AppCompatActivity {
         TextView tvEventDescription = findViewById(R.id.text_event_description);
         ImageView ivEventPoster = findViewById(R.id.image_event_poster);
         ImageView ivEventPromoQr = findViewById(R.id.image_event_promo_qr);
+        openBottomSheetBtn = findViewById(R.id.openBottomSheetButton);
         signupCheckBox = findViewById(R.id.signup_button);
         signupLimitReached = findViewById(R.id.signup_limit_text);
         signupLimitReached.setVisibility(View.INVISIBLE);
+
+        // Set open Bottom Sheet Listner
+        openBottomSheetBtn.setOnClickListener(v -> {
+            showDialog();
+        });
 
         // Retrieve the user's fcmToken/ attendee docID
         SharedPreferences prefs = getSharedPreferences("TOKEN_PREF", MODE_PRIVATE);
@@ -198,5 +213,24 @@ public class OrganizersEventPage extends AppCompatActivity {
             signupCheckBox.setVisibility(View.INVISIBLE);
             signupLimitReached.setVisibility(View.VISIBLE);
         }
+    }
+
+    /**
+     * Opens the Bottom Sheet to access Organizer Options for their event
+     */
+    private void showDialog() {
+
+        final Dialog dialog = new Dialog(this);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.bottom_sheet_layout);
+
+//        Deal with content here
+
+        dialog.show();
+        dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.WRAP_CONTENT);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
+        dialog.getWindow().setGravity(Gravity.BOTTOM);
+
     }
 }
