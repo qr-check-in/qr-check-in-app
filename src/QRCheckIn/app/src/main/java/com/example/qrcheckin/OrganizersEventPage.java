@@ -239,7 +239,7 @@ public class OrganizersEventPage extends AppCompatActivity {
             public void onClick(View v) {
 
                 dialog.dismiss();
-                Toast.makeText(getApplicationContext(),"Edit is Clicked",Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(),"Feature not implemented",Toast.LENGTH_SHORT).show();
 
             }
         });
@@ -267,6 +267,5 @@ public class OrganizersEventPage extends AppCompatActivity {
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
         dialog.getWindow().setGravity(Gravity.BOTTOM);
-
     }
 }

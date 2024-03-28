@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:background="@drawable/event_bottom_sheet">
     
     <TextView
@@ -30,8 +30,9 @@
             android:textColor="@color/White"
             android:drawableLeft="@drawable/baseline_edit_document_24"
             android:drawableTint="@color/Black"
-            android:drawablePadding="20dp"
+            android:drawablePadding="25dp"
             android:paddingStart="30dp"
+            android:paddingBottom="10dp"
             android:layout_gravity="center_horizontal"
             />
     </LinearLayout>
@@ -51,8 +52,9 @@
             android:textColor="@color/White"
             android:drawableLeft="@drawable/notification_bell_resize"
             android:drawableTint="@color/Black"
-            android:drawablePadding="20dp"
+            android:drawablePadding="25dp"
             android:paddingStart="30dp"
+            android:paddingBottom="10dp"
             android:layout_gravity="center_horizontal"/>
 
     </LinearLayout>
@@ -72,8 +74,9 @@
             android:textColor="@color/White"
             android:drawableLeft="@drawable/profile_resize"
             android:drawableTint="@color/Black"
-            android:drawablePadding="20dp"
+            android:drawablePadding="25dp"
             android:paddingStart="30dp"
+            android:paddingBottom="20dp"
             android:layout_gravity="center_horizontal"/>
 
     </LinearLayout>

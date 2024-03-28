@@ -2,6 +2,7 @@ package com.example.qrcheckin;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
@@ -16,6 +17,7 @@ import android.location.LocationManager;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -37,6 +39,16 @@ public class AttendeeList extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_attendee_list);
+
+        // Manage Toolbar
+        Toolbar toolbar = findViewById(R.id.attendee_toolbar);
+        setSupportActionBar(toolbar);
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayShowTitleEnabled(false);
+        }
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        TextView header = findViewById(R.id.mainHeader);
+        header.setText("Total Participants: ");
 
         getMap = findViewById(R.id.mapLocation);
 
