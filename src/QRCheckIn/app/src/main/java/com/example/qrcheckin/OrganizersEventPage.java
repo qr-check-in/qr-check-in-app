@@ -17,7 +17,9 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -217,6 +219,7 @@ public class OrganizersEventPage extends AppCompatActivity {
 
     /**
      * Opens the Bottom Sheet to access Organizer Options for their event
+     * https://www.youtube.com/watch?v=sp9j0e-Kzc8&t=472s, 2024, how to implement a bottom sheet
      */
     private void showDialog() {
 
@@ -224,7 +227,37 @@ public class OrganizersEventPage extends AppCompatActivity {
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setContentView(R.layout.bottom_sheet_layout);
 
-//        Deal with content here
+        LinearLayout editEventDetails = dialog.findViewById(R.id.editEventDetails);
+        LinearLayout createEventNotification = dialog.findViewById(R.id.createEventNotification);
+        LinearLayout viewEventParticipants = dialog.findViewById(R.id.viewEventCheckin);
+
+        editEventDetails.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                dialog.dismiss();
+                Toast.makeText(getApplicationContext(),"Edit is Clicked",Toast.LENGTH_SHORT).show();
+
+            }
+        });
+
+        createEventNotification.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent event = new Intent(getApplicationContext(), CreateNotification.class);
+                startActivity(event);
+
+            }
+        });
+
+        viewEventParticipants.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+                Intent event = new Intent(getApplicationContext(), CreateNotification.class);
+                startActivity(event);
+            }
+        });
 
         dialog.show();
         dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.WRAP_CONTENT);

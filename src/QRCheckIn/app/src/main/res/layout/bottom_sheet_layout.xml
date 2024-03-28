@@ -10,15 +10,17 @@
         android:layout_height="wrap_content"
         android:text="Select an Option"
         android:textStyle="bold"
-        android:textSize="28dp"
+        android:textSize="32dp"
         android:layout_gravity="center_horizontal"
-        android:textColor="@color/White"/>
+        android:textColor="@color/White"
+        android:padding="15dp"/>
     
     <LinearLayout
         android:id="@+id/editEventDetails"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:padding="5dp">
 
         <TextView
             android:layout_width="match_parent"
@@ -26,6 +28,11 @@
             android:text="Edit Event Details"
             android:textSize="20dp"
             android:textColor="@color/White"
+            android:drawableLeft="@drawable/baseline_edit_document_24"
+            android:drawableTint="@color/Black"
+            android:drawablePadding="20dp"
+            android:paddingStart="30dp"
+            android:layout_gravity="center_horizontal"
             />
     </LinearLayout>
 
@@ -33,14 +40,20 @@
         android:id="@+id/createEventNotification"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:padding="5dp">
 
-        <TextView
+    <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Post New Notifications"
+            android:text="Post New Notification"
             android:textSize="20dp"
-            android:textColor="@color/White"/>
+            android:textColor="@color/White"
+            android:drawableLeft="@drawable/notification_bell_resize"
+            android:drawableTint="@color/Black"
+            android:drawablePadding="20dp"
+            android:paddingStart="30dp"
+            android:layout_gravity="center_horizontal"/>
 
     </LinearLayout>
 
@@ -48,13 +61,20 @@
         android:id="@+id/viewEventCheckin"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
-        <TextView
+        android:orientation="horizontal"
+        android:padding="5dp">
+
+    <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="View Participants"
             android:textSize="20dp"
-            android:textColor="@color/White"/>
+            android:textColor="@color/White"
+            android:drawableLeft="@drawable/profile_resize"
+            android:drawableTint="@color/Black"
+            android:drawablePadding="20dp"
+            android:paddingStart="30dp"
+            android:layout_gravity="center_horizontal"/>
 
     </LinearLayout>
 

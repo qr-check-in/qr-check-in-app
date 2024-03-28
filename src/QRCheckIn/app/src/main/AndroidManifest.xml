@@ -51,6 +51,9 @@
             android:name=".test"
             android:exported="false" />
         <activity
+            android:name=".CreateNotification"
+            android:exported="false" />
+        <activity
             android:name=".CreateGenerateEventQR"
             android:exported="false"
             android:parentActivityName=".CreateAddEventDetails" />
