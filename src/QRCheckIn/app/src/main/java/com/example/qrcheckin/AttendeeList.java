@@ -42,6 +42,7 @@ public class AttendeeList extends AppCompatActivity {
     String latitude, longitude;
     private static final int REQUEST_LOCATION = 101;
     RecyclerView recyclerView;
+    //AttendeeAdapter attendeeAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -101,7 +102,7 @@ public class AttendeeList extends AppCompatActivity {
                 .build();
         // needs AttendeeAdapter
         /*
-        AttendeeAdapter attendeeAdapter = new AttendeeAdapter(Options);
+        attendeeAdapter = new AttendeeAdapter(Options);
         // Connect the recycler view to it's adapter and layout manager
         RecyclerView recyclerView = findViewById(R.id.attendee_recycler_view);
         recyclerView.setHasFixedSize(true);     // RecyclerView inside constraint layout, won't grow
@@ -110,6 +111,17 @@ public class AttendeeList extends AppCompatActivity {
         recyclerView.setAdapter(attendeeAdapter);
         */
 
+    }
+
+    /**
+     * Called when this page is accessed by pressing the back button from another page.
+     *      Ensures updates to the attendee data set made while in
+     *      another page are reflected here
+     */
+    @Override
+    protected void onResume() {
+        super.onResume();
+        //attendeeAdapter.notifyDataSetChanged();
     }
 
 
