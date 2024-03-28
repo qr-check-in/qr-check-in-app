@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.Manifest;
 
@@ -36,6 +37,7 @@ public class AttendeeList extends AppCompatActivity {
     Button getMap;
     String latitude, longitude;
     private static final int REQUEST_LOCATION = 101;
+    RecyclerView recyclerView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,6 +61,7 @@ public class AttendeeList extends AppCompatActivity {
         //Log.d("ATTENDEE LIST", String.format("should display (%s) for (%s)", fieldName, documentId));
 
         // TODO: setup recycler view
+
 
         getMap = findViewById(R.id.mapLocation);
 
