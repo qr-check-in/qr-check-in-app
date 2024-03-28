@@ -2,6 +2,6 @@
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android">
     <item
         android:drawable="@drawable/notificationbell"
-        android:width="25dp"
-        android:height="25dp" />
+        android:width="28dp"
+        android:height="28dp" />
 </layer-list>
