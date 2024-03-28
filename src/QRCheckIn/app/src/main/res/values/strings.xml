@@ -68,5 +68,6 @@
         vestibulum. Fusce dictum libero quis erat maximus, vitae volutpat diam dignissim.
     </string>
     <string name="signup_limit_text">This event has reached its sign-up limit</string>
+    <string name="view_check_in_locations">View Check In Locations</string>
 
 </resources>
