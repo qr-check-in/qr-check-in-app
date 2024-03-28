@@ -22,18 +22,6 @@
             android:textStyle="bold"
             android:layout_centerInParent="true">
         </TextView>
-
-        <!-- Edit Profile Icon openai, 2024, chatgpt, how to center the title and icon-->
-        <ImageView
-            android:id="@+id/edit_profile"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:tint="@color/Black"
-            android:src="@drawable/speaker"
-            android:layout_alignParentEnd="true"
-            android:layout_centerVertical="true"
-            android:paddingEnd="10dp">
-        </ImageView>
     </RelativeLayout>
 
 </androidx.appcompat.widget.Toolbar>
