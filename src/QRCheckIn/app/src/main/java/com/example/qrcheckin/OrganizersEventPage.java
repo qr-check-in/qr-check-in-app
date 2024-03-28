@@ -254,7 +254,7 @@ public class OrganizersEventPage extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 dialog.dismiss();
-                Intent event = new Intent(getApplicationContext(), CreateNotification.class);
+                Intent event = new Intent(getApplicationContext(), AttendeeList.class);
                 startActivity(event);
             }
         });
