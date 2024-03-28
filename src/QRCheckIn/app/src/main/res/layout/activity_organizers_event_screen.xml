@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
@@ -7,33 +8,21 @@
     android:layout_height="match_parent"
     tools:context=".OrganizersEventPage">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-        <TextView
-            android:id="@+id/text_event_name"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:text="@string/header_event_details"
-            android:textAlignment="center"
-            android:textColor="@android:color/black"
-            android:textSize="28sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
-        </TextView>
+    <include
+        layout="@layout/toolbar"
+        android:id="@+id/organizer_eventScreen_toolbar"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
 
         <ScrollView
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            app:layout_constraintBottom_toTopOf="@+id/main_app_bar"
-
+            app:layout_constraintBottom_toTopOf="@+id/eventBottomSheet"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/text_event_name"
+            app:layout_constraintTop_toBottomOf="@+id/organizer_eventScreen_toolbar"
             app:layout_constraintVertical_bias="0.0"
             app:layout_constraintVertical_chainStyle="packed">
 
@@ -145,8 +134,6 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/promo_qr_description" />
 
-
-
             </androidx.constraintlayout.widget.ConstraintLayout>
         </ScrollView>
 
@@ -159,68 +146,18 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             android:background="@drawable/event_bottom_sheet">
-
-            <androidx.appcompat.widget.LinearLayoutCompat
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical">
-
                 <ImageButton
-                    android:id="@+id/bottomSheetCollapseButton"
-                    android:layout_width="70dp"
+                    android:id="@+id/openBottomSheetButton"
+                    android:layout_width="match_parent"
                     android:layout_height="50dp"
                     android:scaleType="fitCenter"
-                    android:src="@drawable/arrow"
+                    android:src="@drawable/baseline_keyboard_arrow_up_24"
                     android:layout_gravity="center_horizontal"
                     android:tint="@color/White"
                     android:background="@color/zxing_transparent"/>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:layout_weight="3"
-                    android:paddingVertical="15dp"
-                    android:paddingHorizontal="10dp">
-
-                    <Button
-                        android:id="@+id/editDetailsButton"
-                        android:layout_width="wrap_content"
-                        android:layout_height="70dp"
-                        android:text="Edit Details"
-                        android:drawableBottom="@drawable/sharp_edit_square_24"
-                        android:layout_weight="1"
-                        android:layout_marginEnd="10dp"
-                        android:background="@drawable/bottom_sheet_button"
-                        android:textColor="@color/Black"
-                        />
-
-                    <Button
-                        android:id="@+id/postNotificationButton"
-                        android:layout_width="wrap_content"
-                        android:layout_height="70dp"
-                        android:text="Notifications"
-                        android:drawableBottom="@drawable/notification_bell_resize"
-                        android:layout_weight="1"
-                        android:layout_marginEnd="10dp"
-                        android:background="@drawable/bottom_sheet_button"
-                        android:textColor="@color/Black"
-                        />
-
-                    <Button
-                        android:id="@+id/attendeeListButton"
-                        android:layout_width="wrap_content"
-                        android:layout_height="70dp"
-                        android:text="Attendees"
-                        android:drawableBottom="@drawable/profile_resize"
-                        android:layout_weight="1"
-                        android:background="@drawable/bottom_sheet_button"
-                        android:textColor="@color/Black"
-                        />
-                </LinearLayout>
-            </androidx.appcompat.widget.LinearLayoutCompat>
         </FrameLayout>
-        <include
+
+    <include
             android:id="@+id/main_app_bar"
             layout="@layout/mainappbar"
             android:layout_width="match_parent"
@@ -229,4 +166,8 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
-</androidx.coordinatorlayout.widget.CoordinatorLayout>
+
+
+
+
+

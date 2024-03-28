@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/event_bottom_sheet">
+    
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Select an Option"
+        android:textStyle="bold"
+        android:textSize="32dp"
+        android:layout_gravity="center_horizontal"
+        android:textColor="@color/White"
+        android:padding="15dp"/>
+    
+    <LinearLayout
+        android:id="@+id/editEventDetails"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="5dp">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Edit Event Details"
+            android:textSize="20dp"
+            android:textColor="@color/White"
+            android:drawableLeft="@drawable/baseline_edit_document_24"
+            android:drawableTint="@color/Black"
+            android:drawablePadding="25dp"
+            android:paddingStart="30dp"
+            android:paddingBottom="10dp"
+            android:layout_gravity="center_horizontal"
+            />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/createEventNotification"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="5dp">
+
+    <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Post New Notification"
+            android:textSize="20dp"
+            android:textColor="@color/White"
+            android:drawableLeft="@drawable/notification_bell_resize"
+            android:drawableTint="@color/Black"
+            android:drawablePadding="25dp"
+            android:paddingStart="30dp"
+            android:paddingBottom="10dp"
+            android:layout_gravity="center_horizontal"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/viewSignedUp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="5dp">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="View Signed Up"
+            android:textSize="20dp"
+            android:textColor="@color/White"
+            android:drawableLeft="@drawable/baseline_person_24"
+            android:drawableTint="@color/Black"
+            android:drawablePadding="25dp"
+            android:paddingStart="30dp"
+            android:paddingBottom="10dp"
+            android:layout_gravity="center_horizontal"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/viewEventCheckin"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="5dp">
+
+    <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="View Participants"
+            android:textSize="20dp"
+            android:textColor="@color/White"
+            android:drawableLeft="@drawable/baseline_diversity_3_24"
+            android:drawableTint="@color/Black"
+            android:drawablePadding="25dp"
+            android:paddingStart="30dp"
+            android:paddingBottom="20dp"
+            android:layout_gravity="center_horizontal"/>
+
+    </LinearLayout>
+
+</LinearLayout>

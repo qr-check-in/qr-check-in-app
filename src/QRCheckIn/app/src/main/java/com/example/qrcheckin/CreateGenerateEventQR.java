@@ -86,7 +86,6 @@ public class CreateGenerateEventQR extends AppCompatActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
         TextView header = findViewById(R.id.mainHeader);
         header.setText("Create an Event");
 

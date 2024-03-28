@@ -2,16 +2,24 @@ package com.example.qrcheckin;
 
 import static android.content.ContentValues.TAG;
 
+import android.app.Dialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -36,8 +44,11 @@ public class OrganizersEventPage extends AppCompatActivity {
     ImageButton eventButton;
     ImageButton addEventButton;
     ImageButton profileButton;
+
+    // View widgets
     CheckBox signupCheckBox;
     TextView signupLimitReached;
+    ImageButton openBottomSheetBtn;
     private EventDatabaseManager eventDb;
     private String fcmToken;
     /**
@@ -59,23 +70,32 @@ public class OrganizersEventPage extends AppCompatActivity {
         addEventButton = findViewById(R.id.addCalenderButton);
         profileButton = findViewById(R.id.profileButton);
 
-        Toolbar toolbar = findViewById(R.id.Toolbar);
+        // Manage Toolbar
+        Toolbar toolbar = findViewById(R.id.organizer_eventScreen_toolbar);
         setSupportActionBar(toolbar);
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayShowTitleEnabled(false);
         }
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        TextView header = findViewById(R.id.mainHeader);
+
         eventButton.setPressed(true);
 
         // Find the text views on the event page xml
-        TextView tvEventName = findViewById(R.id.text_event_name);
         TextView tvEventDate = findViewById(R.id.text_event_date);
         TextView tvEventLocation = findViewById(R.id.text_event_location);
         TextView tvEventDescription = findViewById(R.id.text_event_description);
         ImageView ivEventPoster = findViewById(R.id.image_event_poster);
         ImageView ivEventPromoQr = findViewById(R.id.image_event_promo_qr);
+        openBottomSheetBtn = findViewById(R.id.openBottomSheetButton);
         signupCheckBox = findViewById(R.id.signup_button);
         signupLimitReached = findViewById(R.id.signup_limit_text);
         signupLimitReached.setVisibility(View.INVISIBLE);
+
+        // Set open Bottom Sheet Listner
+        openBottomSheetBtn.setOnClickListener(v -> {
+            showDialog();
+        });
 
         // Retrieve the user's fcmToken/ attendee docID
         SharedPreferences prefs = getSharedPreferences("TOKEN_PREF", MODE_PRIVATE);
@@ -91,7 +111,7 @@ public class OrganizersEventPage extends AppCompatActivity {
                 // Get and display event details
                 Event event = documentSnapshot.toObject(Event.class);
                 if (documentSnapshot != null && event != null) {
-                    tvEventName.setText(event.getEventName());
+                    header.setText(event.getEventName());
                     tvEventLocation.setText(event.getEventLocation());
                     tvEventDate.setText(event.getEventDate());
                     tvEventDescription.setText(event.getEventDescription());
@@ -198,5 +218,54 @@ public class OrganizersEventPage extends AppCompatActivity {
             signupCheckBox.setVisibility(View.INVISIBLE);
             signupLimitReached.setVisibility(View.VISIBLE);
         }
+    }
+
+    /**
+     * Opens the Bottom Sheet to access Organizer Options for their event
+     * https://www.youtube.com/watch?v=sp9j0e-Kzc8&t=472s, 2024, how to implement a bottom sheet
+     */
+    private void showDialog() {
+
+        final Dialog dialog = new Dialog(this);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.bottom_sheet_layout);
+
+        LinearLayout editEventDetails = dialog.findViewById(R.id.editEventDetails);
+        LinearLayout createEventNotification = dialog.findViewById(R.id.createEventNotification);
+        LinearLayout viewEventParticipants = dialog.findViewById(R.id.viewEventCheckin);
+
+        editEventDetails.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                dialog.dismiss();
+                Toast.makeText(getApplicationContext(),"Feature not implemented",Toast.LENGTH_SHORT).show();
+
+            }
+        });
+
+        createEventNotification.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent event = new Intent(getApplicationContext(), CreateNotification.class);
+                startActivity(event);
+
+            }
+        });
+
+        viewEventParticipants.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+                Intent event = new Intent(getApplicationContext(), AttendeeList.class);
+                startActivity(event);
+            }
+        });
+
+        dialog.show();
+        dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.WRAP_CONTENT);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
+        dialog.getWindow().setGravity(Gravity.BOTTOM);
     }
 }

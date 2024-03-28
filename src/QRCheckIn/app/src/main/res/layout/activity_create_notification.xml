@@ -89,7 +89,7 @@
                         android:id="@+id/notificationDescriptionText"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Notification Description"
+                        android:hint="Notification Description"
                         android:gravity="center_horizontal"
                         android:drawableLeft="@drawable/arrowresized">
 
