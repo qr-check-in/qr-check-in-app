@@ -5,7 +5,8 @@ xmlns:tools="http://schemas.android.com/tools"
 android:orientation="vertical"
 android:layout_width="match_parent"
 android:layout_height="match_parent"
-tools:context=".ProfileActivity">
+tools:context=".ProfileActivity"
+    android:id="@+id/showProfile">
 
     <include
         layout="@layout/profile_toolbar"
@@ -157,7 +158,7 @@ tools:context=".ProfileActivity">
                 <Switch
                     android:id="@+id/geoswitch"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:layout_marginLeft="52dp"
                     android:textSize="17dp"
                     tools:ignore="UseSwitchCompatOrMaterialXml" />
