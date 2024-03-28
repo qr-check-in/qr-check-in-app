@@ -263,7 +263,7 @@ public class OrganizersEventPage extends AppCompatActivity {
                 dialog.dismiss();
                 Intent intent = new Intent(getApplicationContext(), AttendeeList.class);
                 intent.putExtra("EVENT_DOC_ID", documentId);
-                intent.putExtra("FIELD_NAME", "signups");
+                intent.putExtra("FIELD_NAME", "signupEvents");
                 startActivity(intent);
             }
         });
@@ -275,7 +275,7 @@ public class OrganizersEventPage extends AppCompatActivity {
                 dialog.dismiss();
                 Intent intent = new Intent(getApplicationContext(), AttendeeList.class);
                 intent.putExtra("EVENT_DOC_ID", documentId);
-                intent.putExtra("FIELD_NAME", "attendee");
+                intent.putExtra("FIELD_NAME", "attendedEvents");
                 startActivity(intent);
             }
         });
