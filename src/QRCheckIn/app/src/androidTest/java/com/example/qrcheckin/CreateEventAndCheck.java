@@ -2,12 +2,14 @@ package com.example.qrcheckin;
 
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
+import static androidx.test.espresso.action.ViewActions.scrollTo;
 import static androidx.test.espresso.action.ViewActions.swipeUp;
 import static androidx.test.espresso.intent.Intents.intended;
 import static androidx.test.espresso.matcher.ViewMatchers.isAssignableFrom;
 import static androidx.test.espresso.matcher.ViewMatchers.isDescendantOfA;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
+import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.CoreMatchers.allOf;
 import static org.junit.Assert.assertTrue;
 
@@ -136,6 +138,8 @@ public class CreateEventAndCheck {
 
         // Scroll to and click on the event
 //        onView(withId(R.id.event_recycler_view)).perform(actionOnItemAtPosition(position, click()));
+//        onView(withText(title)).perform(scrollTo(), click());
+
 
 
     }

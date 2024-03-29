@@ -84,10 +84,5 @@ public class CreateAndUpdateProfile {
         // Click on the "Choose from Gallery" option
         onView(withId(R.id.gallery)).perform(click());
 
-        // Check if the intent to pick an image from the gallery is sent
-//        intended(allOf(
-//                hasAction(Intent.ACTION_GET_CONTENT),
-//                hasType("image/*")
-//        ));
     }
 }
