@@ -8,6 +8,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
@@ -18,6 +19,7 @@ import android.widget.Toast;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.PickVisualMediaRequest;
 import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
@@ -248,6 +250,27 @@ public class CreateGenerateEventQR extends AppCompatActivity {
                 Toast.makeText(getApplicationContext(), "Please Finish Adding Event", Toast.LENGTH_LONG).show();
             }
         });
+    }
+
+    /**
+     *  openai,2024, chatgpt
+     *  It returns the event back to the previous page and autofills the data that has been previously inputted
+     * @param item The menu item that was selected.
+     *
+     * @return
+     */
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        if (item.getItemId() == android.R.id.home) {
+            // Handle the up button press
+            // Create a new intent to pass the event back to the previous activity
+            Intent resultIntent = new Intent();
+            resultIntent.putExtra("EVENT", incomingEvent);
+            setResult(RESULT_OK, resultIntent);
+            finish(); // Finish the current activity
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     /**
