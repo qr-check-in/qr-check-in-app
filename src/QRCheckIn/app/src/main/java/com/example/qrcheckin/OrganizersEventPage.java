@@ -51,6 +51,8 @@ public class OrganizersEventPage extends AppCompatActivity {
     ImageButton openBottomSheetBtn;
     private EventDatabaseManager eventDb;
     private String fcmToken;
+    private String documentId;
+
     /**
      * Init activity, sets content view, and configures the toolbar with navigation buttons.
      * Retrieves & displays event details from Firestore based on the passed document ID.
@@ -102,7 +104,7 @@ public class OrganizersEventPage extends AppCompatActivity {
         fcmToken = prefs.getString("token", "missing token");
 
         // Retrieve the event passed from the previous activity
-        String documentId = getIntent().getStringExtra("DOCUMENT_ID");
+        documentId = getIntent().getStringExtra("DOCUMENT_ID");
 
         eventDb = new EventDatabaseManager(documentId);
         eventDb.getDocRef().get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
@@ -232,6 +234,7 @@ public class OrganizersEventPage extends AppCompatActivity {
 
         LinearLayout editEventDetails = dialog.findViewById(R.id.editEventDetails);
         LinearLayout createEventNotification = dialog.findViewById(R.id.createEventNotification);
+        LinearLayout viewEventSignups = dialog.findViewById(R.id.viewSignedUp);
         LinearLayout viewEventParticipants = dialog.findViewById(R.id.viewEventCheckin);
 
         editEventDetails.setOnClickListener(new View.OnClickListener() {
@@ -253,12 +256,27 @@ public class OrganizersEventPage extends AppCompatActivity {
             }
         });
 
+        // Listener for the View Event Signups layout
+        viewEventSignups.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+                Intent intent = new Intent(getApplicationContext(), AttendeeList.class);
+                intent.putExtra("EVENT_DOC_ID", documentId);
+                intent.putExtra("FIELD_NAME", "signups");
+                startActivity(intent);
+            }
+        });
+
+        // Listener for the View Event Participants layout (checked-in attendees)
         viewEventParticipants.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 dialog.dismiss();
-                Intent event = new Intent(getApplicationContext(), AttendeeList.class);
-                startActivity(event);
+                Intent intent = new Intent(getApplicationContext(), AttendeeList.class);
+                intent.putExtra("EVENT_DOC_ID", documentId);
+                intent.putExtra("FIELD_NAME", "attendee");
+                startActivity(intent);
             }
         });
 

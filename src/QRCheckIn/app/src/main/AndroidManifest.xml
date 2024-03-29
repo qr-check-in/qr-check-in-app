@@ -45,6 +45,9 @@
             android:exported="false"
             android:label="@string/title_activity_maps" />
         <activity
+            android:name=".ViewPostedNotificationActivity"
+            android:exported="false" />
+        <activity
             android:name=".AttendeeList"
             android:exported="false"
             android:parentActivityName=".OrganizersEventPage" />

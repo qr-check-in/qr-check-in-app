@@ -9,7 +9,7 @@
     tools:context=".OrganizersEventPage">
 
     <include
-        layout="@layout/toolbar"
+        layout="@layout/event_toolbar"
         android:id="@+id/organizer_eventScreen_toolbar"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"

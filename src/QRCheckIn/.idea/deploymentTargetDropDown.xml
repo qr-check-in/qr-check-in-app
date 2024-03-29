@@ -3,6 +3,7 @@
   <component name="deploymentTargetDropDown">
     <value>
 <<<<<<< HEAD
+<<<<<<< HEAD
       <entry key="app">
 =======
       <entry key="EventListTest">
@@ -22,6 +23,9 @@
         <State />
       </entry>
       <entry key="testSharingQrWithApps()">
+=======
+      <entry key="app">
+>>>>>>> e4dc93ea9d1e2031a41c54eecde63bb2c26f09d3
         <State />
       </entry>
     </value>

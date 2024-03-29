@@ -15,6 +15,7 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -23,6 +24,7 @@ import android.widget.Toast;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.firestore.Query;
 
 import java.io.IOException;
 import java.util.List;
@@ -49,6 +51,14 @@ public class AttendeeList extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         TextView header = findViewById(R.id.mainHeader);
         header.setText("Total Participants: ");
+
+        // Retrieve values passed by previous activity to determine if the event's signups list or attendee list should be displayed
+        String documentId = getIntent().getStringExtra("EVENT_DOC_ID");
+        String fieldName = getIntent().getStringExtra("FIELD_NAME");
+
+        //Log.d("ATTENDEE LIST", String.format("should display (%s) for (%s)", fieldName, documentId));
+
+        // TODO: setup recycler view
 
         getMap = findViewById(R.id.mapLocation);
 
