@@ -58,6 +58,8 @@
         <activity android:name=".SharedViewModel"
             android:exported="false"/>
         <activity android:name=".AdminViewEvent"/>
+        <activity android:name=".AdminEventPage"
+            android:exported="false"/>
         <activity android:name=".AdminViewProfiles"
             android:exported="false"/>
         <activity android:name=".AdminViewImages"/>

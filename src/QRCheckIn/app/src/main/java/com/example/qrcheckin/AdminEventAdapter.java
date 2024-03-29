@@ -7,17 +7,17 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
+import com.firebase.ui.firestore.FirestoreRecyclerOptions;
+import com.google.firebase.firestore.DocumentSnapshot;
 
-import com.example.qrcheckin.Event;
-import com.example.qrcheckin.R;
-import java.util.List;
+public class AdminEventAdapter extends FirestoreRecyclerAdapter<Event, AdminEventAdapter.EventViewHolder> {
 
-public class AdminEventAdapter extends RecyclerView.Adapter<AdminEventAdapter.EventViewHolder> {
-    private List<com.example.qrcheckin.Event> events;
+    private OnItemClickListener listener;
 
-    // Constructor
-    public AdminEventAdapter(List<Event> events) {
-        this.events = events;
+    public AdminEventAdapter(@NonNull FirestoreRecyclerOptions<Event> options, OnItemClickListener listener) {
+        super(options);
+        this.listener = listener;
     }
 
     @NonNull
@@ -26,29 +26,18 @@ public class AdminEventAdapter extends RecyclerView.Adapter<AdminEventAdapter.Ev
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.admin_events_list, parent, false);
         return new EventViewHolder(view);
     }
-    public void updateEvents(List<Event> events) {
-        this.events.clear();
-        this.events.addAll(events);
-        notifyDataSetChanged(); // Refresh the RecyclerView
-    }
 
     @Override
-    public void onBindViewHolder(@NonNull EventViewHolder holder, int position) {
-        Event event = events.get(position);
-        holder.eventNameTextView.setText(event.getEventName());
-        holder.eventLocationTextView.setText(event.getEventLocation());
-        holder.eventTimeTextView.setText(event.getEventTime());
-        // Set other fields as necessary
+    protected void onBindViewHolder(@NonNull EventViewHolder holder, int position, @NonNull Event model) {
+        holder.eventNameTextView.setText(model.getEventName());
+        holder.eventLocationTextView.setText(model.getEventLocation());
+        holder.eventTimeTextView.setText(model.getEventDate());
+        // Assuming you have a method to set the image on the ImageView
     }
 
-    @Override
-    public int getItemCount() {
-        return events.size();
-    }
-
-    public static class EventViewHolder extends RecyclerView.ViewHolder {
+    public class EventViewHolder extends RecyclerView.ViewHolder {
         TextView eventNameTextView, eventLocationTextView, eventTimeTextView;
-        ImageView qrCodeImageView, deleteImageView;
+        ImageView qrCodeImageView;
 
         public EventViewHolder(View itemView) {
             super(itemView);
@@ -56,7 +45,21 @@ public class AdminEventAdapter extends RecyclerView.Adapter<AdminEventAdapter.Ev
             eventLocationTextView = itemView.findViewById(R.id.eventLocationTextView);
             eventTimeTextView = itemView.findViewById(R.id.eventTimeTextView);
             qrCodeImageView = itemView.findViewById(R.id.qrCodeImageView);
-            //deleteImageView = itemView.findViewById(R.id.deleteImageView); // Assuming you have a delete icon and want to use it for something.
+
+            itemView.setOnClickListener(view -> {
+                int position = getBindingAdapterPosition();
+                if (position != RecyclerView.NO_POSITION && listener != null) {
+                    listener.onItemClick(getSnapshots().getSnapshot(position), position);
+                }
+            });
         }
+    }
+
+    public interface OnItemClickListener {
+        void onItemClick(DocumentSnapshot documentSnapshot, int position);
+    }
+
+    public void setOnItemClickListener(OnItemClickListener listener) {
+        this.listener = listener;
     }
 }

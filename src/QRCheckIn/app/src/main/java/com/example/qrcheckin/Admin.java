@@ -1,5 +1,7 @@
 package com.example.qrcheckin;
 
+import android.util.Log;
+
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldValue;
@@ -16,14 +18,14 @@ import java.util.Map;
 
 public class Admin extends Attendee{
     private final FirebaseFirestore db;
-    public interface ProfilesCallback {
-        void onProfilesFetched(List<Map<String, Object>> profiles);
-    }
     public interface EventsCallback {
         void onEventsFetched(List<Event> events);
     }
     public interface ImagesCallback {
         void onImagesFetched(List<String> imageUris);
+    }
+    public interface ProfilesCallback {
+        void onProfilesFetched(List<Profile> profiles);
     }
     /**
      * Constructor for admin initializes firestore instance.
@@ -60,7 +62,7 @@ public class Admin extends Attendee{
                 .addOnSuccessListener(aVoid -> System.out.println("Event successfully deleted!"))
                 .addOnFailureListener(e -> System.out.println("Error deleting event: " + e));
     }
- 
+
     /**
      * Retrieves and prints the details of a user profile.
      *
@@ -198,21 +200,35 @@ public class Admin extends Attendee{
      * Retrieves & prints the list of all profiles.
      * US 04.05.01.
      */
-    public void browseProfiles(ProfilesCallback callback) {
+    public void browseProfiles(final Admin.ProfilesCallback callback) {
         db.collection("Attendees").get()
                 .addOnSuccessListener(queryDocumentSnapshots -> {
-                    List<Map<String, Object>> profiles = new ArrayList<>();
+                    List<Profile> profilesList = new ArrayList<>();
                     for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
-                        Map<String, Object> profile = (Map<String, Object>) documentSnapshot.get("profile");
-                        if (profile != null) {
-                            profiles.add(profile);
+                        Map<String, Object> profileMap = (Map<String, Object>) documentSnapshot.get("profile");
+                        if (profileMap != null) {
+                            String name = (String) profileMap.get("name");
+                            if (name != null) {
+                                Profile profile = new Profile();
+                                profile.setName(name);
+                                profilesList.add(profile);
+                                Log.d("AdminViewProfiles", "Fetched profile - Name: " + name);
+                            } else {
+                                Log.d("AdminViewProfiles", "Name field is missing in the profile document with ID: " + documentSnapshot.getId());
+                            }
+                        } else {
+                            Log.d("AdminViewProfiles", "Profile map is missing in the document with ID: " + documentSnapshot.getId());
                         }
                     }
-                    callback.onProfilesFetched(profiles);
+                    if (callback != null) {
+                        callback.onProfilesFetched(profilesList);
+                    }
                 })
                 .addOnFailureListener(e -> {
-                    System.out.println("Error fetching profiles: " + e);
-                    callback.onProfilesFetched(new ArrayList<>()); // Callback with empty list in case of failure
+                    Log.e("Admin", "Error fetching profiles", e);
+                    if (callback != null) {
+                        callback.onProfilesFetched(new ArrayList<>()); // Callback with an empty list in case of failure
+                    }
                 });
     }
 

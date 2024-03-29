@@ -11,39 +11,33 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import java.util.ArrayList;
-import java.util.List;
+import com.firebase.ui.firestore.FirestoreRecyclerOptions;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
 
 public class AdminViewEvent extends AppCompatActivity {
     private RecyclerView eventsRecyclerView;
-    private Admin admin;
-    Button back;
+    private FirebaseFirestore db;
     private AdminEventAdapter eventAdapter;
-    private List<Event> eventList = new ArrayList<>();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.browse_events_admin); // Ensure this is the correct layout file
+        setContentView(R.layout.browse_events_admin);
         Toolbar toolbar = findViewById(R.id.events);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
         TextView header = findViewById(R.id.mainHeader);
         header.setText("Current Events");
-        back=findViewById(R.id.back_button);
-        eventsRecyclerView = findViewById(R.id.event_recycler_view); // Ensure ID matches your XML
+
+        db = FirebaseFirestore.getInstance();
+        eventsRecyclerView = findViewById(R.id.event_recycler_view);
         eventsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        admin = new Admin();
-        eventAdapter = new AdminEventAdapter(new ArrayList<>()); // Initialize adapter with an empty list
-        eventsRecyclerView.setAdapter(eventAdapter);
+        setUpRecyclerView();
 
-        // Fetch and display events
-        admin.browseEvents(new Admin.EventsCallback() {
-            @Override
-            public void onEventsFetched(List<Event> events) {
-                eventAdapter.updateEvents(events); // Method in EventAdapter to update the events list
-            }
-        });
+        Button back = findViewById(R.id.back_button);
         back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -51,5 +45,36 @@ public class AdminViewEvent extends AppCompatActivity {
                 startActivity(event);
             }
         });
+    }
+
+    private void setUpRecyclerView() {
+        Query query = db.collection("events").orderBy("eventName", Query.Direction.DESCENDING);
+        FirestoreRecyclerOptions<Event> options = new FirestoreRecyclerOptions.Builder<Event>()
+                .setQuery(query, Event.class)
+                .build();
+
+        eventAdapter = new AdminEventAdapter(options, new AdminEventAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(DocumentSnapshot documentSnapshot, int position) {
+                // Navigate to AdminEventPage
+                Intent intent = new Intent(AdminViewEvent.this, AdminEventPage.class);
+                intent.putExtra("DOCUMENT_ID", documentSnapshot.getId());
+                startActivity(intent);
+            }
+        });
+
+        eventsRecyclerView.setAdapter(eventAdapter);
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        eventAdapter.startListening();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        eventAdapter.stopListening();
     }
 }

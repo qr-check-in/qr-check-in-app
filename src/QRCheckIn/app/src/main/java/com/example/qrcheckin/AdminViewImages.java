@@ -36,13 +36,7 @@ public class AdminViewImages extends AppCompatActivity {
         imagesRecyclerView.setAdapter(imageAdapter);
         back=findViewById(R.id.back_button);
         Admin admin = new Admin(); // Assuming Admin contains browseImages()
-        admin.browseImages(new Admin.ImagesCallback() {
-            @Override
-            public void onImagesFetched(List<String> imageUris) {
-                // Update RecyclerView with fetched images
-                imageAdapter.updateData(imageUris);
-            }
-        });
+
         back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
