@@ -50,7 +50,7 @@
             android:text="Post New Notification"
             android:textSize="20dp"
             android:textColor="@color/White"
-            android:drawableLeft="@drawable/notification_bell_resize"
+            android:drawableLeft="@drawable/baseline_notification_add_24"
             android:drawableTint="@color/Black"
             android:drawablePadding="25dp"
             android:paddingStart="30dp"
