@@ -208,8 +208,6 @@ public class ProfileActivity extends AppCompatActivity implements EditProfileFra
                 if (attendee == null) {
                     Log.e("Firestore", "Attendee doc not found");
                 } else {
-                    Log.d("Firestore",
-                            String.format("Attendee with name (%s) retrieved", attendee.getProfile().getName()));
                     Profile profile = attendee.getProfile();
                     // sets strings for profile fragment
                     name = profile.getName();
@@ -223,7 +221,6 @@ public class ProfileActivity extends AppCompatActivity implements EditProfileFra
                     switchGeolocation.setChecked(profile.getTrackGeolocation());
                     // Display profilePicutre if the profile has one
                     if(profile.getProfilePicture() != null){
-                        Log.d("Firestore", "calling display profile pic");
                         ImageStorageManager storage = new ImageStorageManager(profile.getProfilePicture(),"/ProfilePictures");
                         storage.displayImage(profileImageView);
                     }

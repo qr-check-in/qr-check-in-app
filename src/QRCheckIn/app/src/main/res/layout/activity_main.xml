@@ -43,6 +43,19 @@
         tools:layout_editor_absoluteY="1dp" />
 
     <Button
+        android:id="@+id/adminButton"
+        android:layout_width="wrap_content"
+        android:layout_height="57dp"
+        android:backgroundTint="@color/ChryslerBlue"
+        android:text="@string/admin_button_text"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toTopOf="@+id/welcomeToAppTest"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/Toolbar" />
+
+    <Button
         android:id="@+id/scanButton"
         android:layout_width="191dp"
         android:layout_height="57dp"
