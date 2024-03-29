@@ -1,7 +1,12 @@
 package com.example.qrcheckin;
 
+import android.Manifest;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
+import android.location.Address;
+import android.location.Geocoder;
+import android.location.Location;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -9,14 +14,27 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
+
+import org.checkerframework.checker.units.qual.C;
+
+import java.io.IOException;
+import java.util.List;
+import java.util.Locale;
 
 
 public class QRCodeScan extends AppCompatActivity {
@@ -29,6 +47,13 @@ public class QRCodeScan extends AppCompatActivity {
     ImageButton profileButton;
     Boolean foundEvent = false;
     private EventDatabaseManager eventDb;
+
+    // For location
+    FusedLocationProviderClient fusedLocationProviderClient;
+    private static final int REQUEST_CODE = 100;
+    String longitude = null, latitude = null;
+    private String attendeeFcm;
+    SharedPreferences prefs;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,6 +70,14 @@ public class QRCodeScan extends AppCompatActivity {
         eventButton = findViewById(R.id.events);
         addEventButton = findViewById(R.id.addEvent);
         profileButton = findViewById(R.id.profile);
+
+        // initialize fusedLocationProviderClient for location
+        fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
+
+//        // Get user's fcm token (used for querying the right events in recycler view)
+//        prefs = getSharedPreferences("TOKEN_PREF", MODE_PRIVATE);
+//        attendeeFcm = prefs.getString("token", "missing token");
+//        Log.d("FCM TOKEN", "attendeeFcm : " + attendeeFcm);
 
 
         // uses the ZXing library to open the camera and proceed scanning
@@ -128,16 +161,35 @@ public class QRCodeScan extends AppCompatActivity {
                             DocumentSnapshot documentSnapshot = querySnapshot.getDocuments().get(0);
                             String documentId = documentSnapshot.getId();
 
+//                            Log.d("Document Id", "document id: " + documentId);
+
                             // Check the attendee into the event, update the event's attendees accordingly
-                            SharedPreferences prefs = getSharedPreferences("TOKEN_PREF", MODE_PRIVATE);
-                            String fcmToken = prefs.getString("token", "missing token");
-                            AttendeeDatabaseManager attendeeDbManager = new AttendeeDatabaseManager(fcmToken);
+                            prefs = getSharedPreferences("TOKEN_PREF", MODE_PRIVATE);
+                            attendeeFcm = prefs.getString("token", "missing token");
+                            AttendeeDatabaseManager attendeeDbManager = new AttendeeDatabaseManager(attendeeFcm);
                             EventDatabaseManager eventDbManager = new EventDatabaseManager(documentId);
 
                             attendeeDbManager.addToArrayField("attendedEvents", documentId); // Add event to attendee
-                            
+
                             String attendeeId = attendeeDbManager.getDocRef().getId();
                             eventDbManager.addToArrayField("attendee", attendeeId); // Add attendee to event
+
+                            // Retrieve the value of the checkInStatus field
+                            Boolean checkInStatus = documentSnapshot.getBoolean("checkInStatus");
+                            Log.d("CheckInStatus", "checkInStatus: " + checkInStatus);
+
+
+
+                            // Retrieve the boolean value of the "location" field under the "profile" field
+                            Boolean geoLocation = prefs.getBoolean("profile.trackGeolocation", false);
+                            Log.d("geoLocation", "geoLocation: " + geoLocation);
+
+
+                            // if organizer wants the user location
+                            if (checkInStatus && geoLocation) {
+                                // call to get last location of user
+                                getLastLocation();
+                            }
 
                             // Open the appropriate event page
                             Intent intent = new Intent(getApplicationContext(), EventPage.class);
@@ -181,6 +233,73 @@ public class QRCodeScan extends AppCompatActivity {
         } else {
             // QR code scanner wasn't the returning activity, so handle the return normally
             super.onActivityResult(requestCode, resultCode, data);
+        }
+    }
+
+
+    private void getLastLocation() {
+        if (ContextCompat.checkSelfPermission(QRCodeScan.this, android.Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED){
+            fusedLocationProviderClient.getLastLocation().addOnSuccessListener(new OnSuccessListener<Location>() {
+                @Override
+                public void onSuccess(Location location) {
+                    if (location != null){
+                        Geocoder geocoder = new Geocoder(QRCodeScan.this, Locale.getDefault());
+                        List<Address> addresses = null;
+                        try {
+                            addresses = geocoder.getFromLocation(location.getLatitude(), location.getLongitude(), 1);
+                            String coordinates = null;
+                            latitude = String.valueOf(addresses.get(0).getLatitude());
+                            longitude = String.valueOf(addresses.get(0).getLongitude());
+
+                            coordinates = latitude + "," + longitude;
+
+                            Log.d("COORDINATES", "coordinates: " + coordinates);
+
+//                            // Update the field location in the document
+//                            prefs.update("location", coordinates)
+//                                    .addOnSuccessListener(new OnSuccessListener<Void>() {
+//                                        @Override
+//                                        public void onSuccess(Void aVoid) {
+//                                            // Field successfully updated
+//                                            // Handle success
+//                                        }
+//                                    })
+//                                    .addOnFailureListener(new OnFailureListener() {
+//                                        @Override
+//                                        public void onFailure(@NonNull Exception e) {
+//                                            // Throw a runtime exception to stop the program
+//                                            throw new RuntimeException("Firestore update failed: " + e.getMessage());
+//                                        }
+//                                    });
+
+
+                        } catch (IOException e) {
+                            throw new RuntimeException(e);
+                        }
+                    }
+                }
+            });
+        }
+        else{
+            askPermission();
+        }
+    }
+
+    private void askPermission(){
+        ActivityCompat.requestPermissions(this, new String[]{
+                Manifest.permission.ACCESS_FINE_LOCATION
+        }, REQUEST_CODE);
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == REQUEST_CODE) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                getLastLocation();
+            } else {
+                Toast.makeText(this, "Permission Required", Toast.LENGTH_SHORT).show();
+            }
         }
     }
 
