@@ -69,5 +69,6 @@
     </string>
     <string name="signup_limit_text">This event has reached its sign-up limit</string>
     <string name="view_check_in_locations">View Check In Locations</string>
+    <string name="title_activity_maps">MapsActivity</string>
 
 </resources>
