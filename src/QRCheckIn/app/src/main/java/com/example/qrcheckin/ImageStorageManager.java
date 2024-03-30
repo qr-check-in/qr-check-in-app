@@ -23,25 +23,28 @@ import java.io.IOException;
  */
 public class ImageStorageManager {
     private final FirebaseStorage storage;
-    StorageReference storageReference;
+    private StorageReference storageReference;
+    private Image image;
+    private String filePath;
 
     /**
-     * Constructs an ImageStorageManager object
+     * Constructs an ImageStorageManager
+     * @param image Image to be stored/deleted/displayed by manager's methods
+     * @param folderName String of the Image's location in firebase storage
      */
-    public ImageStorageManager(){
+    public ImageStorageManager(Image image, String folderName){
         this.storage = FirebaseStorage.getInstance();
-        this.storageReference = storage.getReference();
+        this.image = image;
+        this.filePath = folderName+"/"+image.getUriString();
+        this.storageReference = storage.getReference().child(filePath);
     }
 
     /**
      * Uploads a Uri to firestorage
-     * @param image Image to be stored as a uri
-     * @param folderName String folder the file is saved to in format "/FolderName"
      */
-    public void uploadImage(Image image, String folderName){
-        StorageReference reference = storageReference.child(folderName+"/"+image.getUriString());
+    public void uploadImage(){
         Uri uri = Uri.parse(image.getUriString());
-        reference.putFile(uri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+        storageReference.putFile(uri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
             @Override
             public void onSuccess (UploadTask.TaskSnapshot taskSnapshot){
 
@@ -56,23 +59,14 @@ public class ImageStorageManager {
 
     /**
      * Retrieves an Image file from FireStorage, converts to a bitmap and sets the input ImageView to display it
-     * @param image Image to be displayed
-     * @param folder String of the folder where the image file is stored in firestore storage
      * @param imageView ImageView that the file is to be displayed on
      */
-    public void displayImage(Image image, String folder, ImageView imageView){
-        // Create string of the path to the image file in firestorage
-        String filePath = folder+image.getUriString();
-        // Get the file
-        FirebaseStorage storage = FirebaseStorage.getInstance();
-        StorageReference storageReference = storage.getReference();
-        storageReference = FirebaseStorage.getInstance().getReference().child(filePath);
+    public void displayImage(ImageView imageView){
         try{
             final File localFile = File.createTempFile("tempPic", "jpg");
             storageReference.getFile(localFile).addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
                 @Override
                 public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
-                    Log.d("Firestore", "picture retrieved");
                     // Convert local file to bitmap and set the imageview
                     Bitmap bitmap = BitmapFactory.decodeFile(localFile.getAbsolutePath());
                     imageView.setImageBitmap(bitmap);
@@ -80,11 +74,28 @@ public class ImageStorageManager {
             }).addOnFailureListener(new OnFailureListener() {
                 @Override
                 public void onFailure(@NonNull Exception e) {
-                    Log.e("Firestore", "picture error");
+                    Log.e("Firestore", "picture display error");
                 }
             });
         } catch (IOException e){
             e.printStackTrace();
         }
+    }
+
+    /**
+     * Deletes an image file from firebase storage
+     */
+    public void deleteImage(){
+        storageReference.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void unused) {
+                Log.d("Firestore", "picture deleted");
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Log.e("Firestore", "picture deletion error");
+            }
+        });
     }
 }

@@ -16,6 +16,7 @@ import android.widget.Switch;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -94,6 +95,13 @@ public class ProfileActivity extends AppCompatActivity implements EditProfileFra
         switchGeolocation = findViewById(R.id.geoswitch);
         profileName = findViewById(R.id.profileName);
 
+        // toolbar
+        Toolbar toolbar = findViewById(R.id.profileToolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
+        TextView header = findViewById(R.id.mainHeader);
+        header.setText("Profile");
+
         // Get the fcmToken of the Attendee, initialize an AttendeeDatabaseManager
         SharedPreferences prefs = getSharedPreferences("TOKEN_PREF", MODE_PRIVATE);
         fcmToken = prefs.getString("token", "missing token");
@@ -133,18 +141,23 @@ public class ProfileActivity extends AppCompatActivity implements EditProfileFra
                 startActivity(event);
             }
         });
+
+        // Listener for the update picture button
         updatePicture.setOnClickListener(v -> {
             new UpdatePictureFragment(fcmToken).show(getSupportFragmentManager(), "Update Picture");
         });
+
+        // Listener for the remove picture button
         removePicture.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                dbManager.updateProfilePicture(null);
+                // Call method to delete the file from firebase storage and update the attendee doc's field
+                deleteProfilePicture();
                 profileImageView.setImageResource(R.drawable.profile);
-            }
+                }
         });
 
-
+        // Listener for the edit profile button
         editProfile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -188,15 +201,13 @@ public class ProfileActivity extends AppCompatActivity implements EditProfileFra
      * Fetches user profile details from Firestore & updates the UI.
      */
     public void setProfileFields() {
-        dbManager.getAttendeeDocRef().get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+        dbManager.getDocRef().get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
                 Attendee attendee = documentSnapshot.toObject(Attendee.class);
                 if (attendee == null) {
                     Log.e("Firestore", "Attendee doc not found");
                 } else {
-                    Log.d("Firestore",
-                            String.format("Attendee with name (%s) retrieved", attendee.getProfile().getName()));
                     Profile profile = attendee.getProfile();
                     // sets strings for profile fragment
                     name = profile.getName();
@@ -210,9 +221,32 @@ public class ProfileActivity extends AppCompatActivity implements EditProfileFra
                     switchGeolocation.setChecked(profile.getTrackGeolocation());
                     // Display profilePicutre if the profile has one
                     if(profile.getProfilePicture() != null){
-                        Log.d("Firestore", "calling display profile pic");
-                        ImageStorageManager storage = new ImageStorageManager();
-                        storage.displayImage(profile.getProfilePicture(),"/EventPosters/", profileImageView);
+                        ImageStorageManager storage = new ImageStorageManager(profile.getProfilePicture(),"/ProfilePictures");
+                        storage.displayImage(profileImageView);
+                    }
+                }
+            }
+        });
+    }
+
+    /**
+     * Deletes the profile picture in firebase storage upon the profile picture being removed
+     */
+    public void deleteProfilePicture(){
+        dbManager.getDocRef().get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                Attendee attendee = documentSnapshot.toObject(Attendee.class);
+                if (attendee == null) {
+                    Log.e("Firestore", "Attendee doc not found");
+                } else {
+                    Profile profile = attendee.getProfile();
+                    if (profile.getProfilePicture() != null) {
+                        ImageStorageManager storage = new ImageStorageManager(profile.getProfilePicture(), "/ProfilePictures");
+                        // Remove profile picture from storage
+                        storage.deleteImage();
+                        // update attendee doc's field
+                        dbManager.updateProfilePicture(null);
                     }
                 }
             }

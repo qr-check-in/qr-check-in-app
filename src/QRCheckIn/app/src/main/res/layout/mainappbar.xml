@@ -56,7 +56,7 @@
         android:paddingVertical="5dp"
         android:background="@drawable/buttonselect"
         android:tint="@android:color/black"
-        app:srcCompat="@drawable/profile"
+        app:srcCompat="@drawable/baseline_person_24"
         />
 
 </LinearLayout>

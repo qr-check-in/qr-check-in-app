@@ -19,6 +19,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import com.bumptech.glide.Glide;
+import com.google.android.material.textfield.TextInputLayout;
 
 /**
  * Creates new event.
@@ -40,9 +41,10 @@ public class CreateAddEventDetails extends AppCompatActivity implements SelectDa
     Switch checkInSwitch;
     EditText eventNameEditText;
     EditText eventLocation;
-    EditText eventDate;
-    EditText eventTime;
+    TextView eventDate;
+    TextView eventTime;
     EditText eventDescription;
+    EditText numOfAttendees;
     ImageButton selectDateButton;
     ImageButton selectTimeButton;
     ImageView poster;
@@ -54,7 +56,7 @@ public class CreateAddEventDetails extends AppCompatActivity implements SelectDa
     private String inputEventTime;
     private String inputEventLocation;
     private boolean isChecked;
-
+    private int numOfAttends;
     private String inputPosterString;
 
     /**
@@ -96,6 +98,9 @@ public class CreateAddEventDetails extends AppCompatActivity implements SelectDa
         eventDescription = findViewById(R.id.eventDescriptionText);
         selectTimeButton = findViewById(R.id.eventTimePicker);
         selectDateButton = findViewById(R.id.eventDatePicker);
+        numOfAttendees = findViewById(R.id.numOfAttendeeText);
+//        eventDateLayout = findViewById(R.id.eventDateLayout);
+//        eventTimeLayout = findViewById(R.id.eventTimeLayout);
 
 
         poster.setVisibility(View.GONE);
@@ -104,11 +109,16 @@ public class CreateAddEventDetails extends AppCompatActivity implements SelectDa
         selectDateButton.setOnClickListener(v -> {
             new SelectDateFragment().show(getSupportFragmentManager(), "Select Date");
         });
+        eventDate.setOnClickListener(v -> {
+            new SelectDateFragment().show(getSupportFragmentManager(), "Select Date");
+        });
 
         // Listener to show a TimePicker fragment when selectTimeButton is clicked
         selectTimeButton.setOnClickListener(v -> {
             new TimePickerFragment().show(getSupportFragmentManager(), "timePicker");
         });
+        eventTime.setOnClickListener(v -> {
+            new TimePickerFragment().show(getSupportFragmentManager(), "timePicker");        });
 
         // Listener to go to event list page
         eventButton.setOnClickListener(new View.OnClickListener() {
@@ -166,10 +176,16 @@ public class CreateAddEventDetails extends AppCompatActivity implements SelectDa
                     isChecked = true;
                 }else{isChecked = false;}
 
+                if (numOfAttendees.getText().toString().isEmpty()){
+                    numOfAttends = -1;
+                }else{
+                    numOfAttends = Integer.parseInt(numOfAttendees.getText().toString());
+                }
+
                 Event newEvent = new Event(null, null, null, null,
                         inputEventName, inputEventDate, inputEventTime,
-                        eventLocation.getText().toString(), eventDescription.getText().toString(), isChecked);
-                // Store Event attributes to pass to createNewEventScreen2
+                        eventLocation.getText().toString(), eventDescription.getText().toString(), isChecked, numOfAttends);
+                // Store Event attributes to pass to CreateGenerateEventQR
                 // https://stackoverflow.com/questions/2091465/how-do-i-pass-data-between-activities-in-android-application , 2011, user914425
 
                 event.putExtra("EVENT", newEvent);

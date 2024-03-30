@@ -10,19 +10,37 @@
         android:id="@+id/eventListToolbar"
         layout="@layout/toolbar"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="50dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0">
+    </include>
+
+    <include
+        android:id="@+id/eventsTabbar"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        layout="@layout/event_tab_bar"
+        app:layout_constraintTop_toBottomOf="@+id/eventListToolbar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
     </include>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/event_recycler_view"
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        app:layout_constraintBottom_toTopOf="@id/main_app_bar"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/eventListToolbar"
-        tools:listitem="@layout/event_list_item"/>
+        app:layout_constraintTop_toBottomOf="@+id/eventsTabbar"
+        tools:listitem="@layout/event_list_item">
+    </androidx.recyclerview.widget.RecyclerView>
 
     <include
+        android:id="@+id/main_app_bar"
         layout="@layout/mainappbar"
         android:layout_width="match_parent"
         android:layout_height="45dp"
@@ -32,8 +50,5 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/event_recycler_view"
         app:layout_constraintVertical_bias="1.0" />
-
-
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>

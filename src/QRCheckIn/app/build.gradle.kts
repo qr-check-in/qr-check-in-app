@@ -30,6 +30,9 @@ android {
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
     }
+    buildFeatures {
+        viewBinding = true
+    }
 }
 
 dependencies {
@@ -52,6 +55,11 @@ dependencies {
     implementation ("com.google.api:api-common:2.2.1")
     implementation("com.google.firebase:firebase-storage:20.3.0")
     implementation("org.mockito:mockito-core:4.0.0")
+    implementation("androidx.navigation:navigation-fragment:2.6.0")
+    implementation("androidx.navigation:navigation-ui:2.6.0")
+    implementation("com.google.android.gms:play-services-location:21.2.0")
+
+
     implementation("com.github.bumptech.glide:glide:4.12.0")
     annotationProcessor("com.github.bumptech.glide:compiler:4.12.0")
     implementation("com.google.firebase:firebase-database:19.3.1")
@@ -64,6 +72,7 @@ dependencies {
     androidTestImplementation ("androidx.test:runner:1.3.0")
     androidTestImplementation ("androidx.test:rules:1.3.0")
     androidTestImplementation ("org.mockito:mockito-android:3.3.3")
+
     // If you need additional functionality, consider adding extensions
     // implementation "androidx.camera:camera-extensions:1.0.0-alpha24"
     testImplementation("junit:junit:4.13.2")
@@ -75,4 +84,20 @@ dependencies {
     implementation ("com.google.android.gms:play-services-auth:16.0.0")
     implementation("com.journeyapps:zxing-android-embedded:4.3.0")
     implementation("com.google.mlkit:barcode-scanning:17.2.0")
+
+    // Bottom Sheet
+    implementation ("com.google.android.material:material:1.4.0")
+    implementation ("com.google.android.material:material:1.2.0-alpha02")
+
+    // Expresso Intent
+    implementation ("androidx.test.espresso:espresso-intents:3.5.1")
+
+    implementation ("androidx.test:runner:1.5.2")
+    implementation ("androidx.test:rules:1.5.0")
+    implementation ("androidx.test.espresso:espresso-core:3.5.1")
+
+    // Glide
+    implementation ("com.github.bumptech.glide:glide:4.12.0")
+    annotationProcessor ("com.github.bumptech.glide:compiler:4.12.0")
+
 }

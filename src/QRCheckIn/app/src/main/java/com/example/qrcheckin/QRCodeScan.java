@@ -1,7 +1,9 @@
 package com.example.qrcheckin;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.TextView;
@@ -11,7 +13,6 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.zxing.integration.android.IntentIntegrator;
@@ -26,11 +27,8 @@ public class QRCodeScan extends AppCompatActivity {
     ImageButton eventButton;
     ImageButton addEventButton;
     ImageButton profileButton;
-    private boolean hasScanned = false;   // Boolean flag to track whether a scan has been performed
-    String summary = null, destination = null, dateOfEvent = null, timeOfEvent = null, dtstart = null;
-
+    Boolean foundEvent = false;
     private EventDatabaseManager eventDb;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -91,10 +89,10 @@ public class QRCodeScan extends AppCompatActivity {
      */
     private void startScanner() {
         IntentIntegrator integrator = new IntentIntegrator(this);
-        integrator.setOrientationLocked(true);
+        integrator.setOrientationLocked(false);
         integrator.setDesiredBarcodeFormats(IntentIntegrator.ALL_CODE_TYPES);
         integrator.setPrompt("Scan a QR code");
-        integrator.setBeepEnabled(true);
+        integrator.setBeepEnabled(false);
         integrator.initiateScan();
     }
 
@@ -108,68 +106,82 @@ public class QRCodeScan extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
 
-        if (!hasScanned) { // Only proceed if scanning hasn't been performed yet
-            IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
-            if (result != null) {
-                if (result.getContents() == null) {
-                    Toast.makeText(this, "Scan Cancelled", Toast.LENGTH_SHORT).show();
-                    finish();
-                }
-                else {
-                    // Separate the scanned data into different variables
-                    String scannedData = result.getContents();
-
-                    // Query Firestore to find the document with the matching hashedContent in the checkInQRCode field
-                    Query query = eventDb.getEventCollectionRef().whereEqualTo("checkInQRCode.hashedContent", scannedData);
-
-                    query.get().addOnCompleteListener(task -> {
-                        if (task.isSuccessful()) {
-                            // QR code scanned successfully, find the event it links to
-                            QuerySnapshot querySnapshot = task.getResult();
-                            if (querySnapshot != null && !querySnapshot.isEmpty()) {
-                                // Retrieve the first matching document of the scanned qr code
-                                DocumentSnapshot documentSnapshot = querySnapshot.getDocuments().get(0);
-                                String id = documentSnapshot.getId();
-
-                                // Send the document id of the event to the Event Page before opening it
-                                Intent intent = new Intent(getApplicationContext(), EventPage.class);
-                                intent.putExtra("DOCUMENT_ID", id);
-                                startActivity(intent);
-
-                                hasScanned = true; // Set the flag to true after successful scan
-                            } else {
-                                // No matching document found
-                                Toast.makeText(this, "No event found!", Toast.LENGTH_SHORT).show();
-                            }
-
-                        } else {
-                            // An error occurred during the query execution, handle the error
-                            Exception exception = task.getException(); // Retrieve the exception that occurred
-
-                            if (exception instanceof FirebaseFirestoreException) {
-                                FirebaseFirestoreException firestoreException = (FirebaseFirestoreException) exception;
-                                FirebaseFirestoreException.Code errorCode = firestoreException.getCode(); // Retrieve the error code
-                                // Handle specific error codes if needed, for example:
-                                switch (errorCode) {
-                                    case NOT_FOUND:
-                                        // Handle document not found error
-                                        break;
-                                    default:
-                                        // Handle other errors
-                                        System.err.println("Firestore error occurred: " + exception.getMessage());
-                                }
-                            } else {
-                                // Handle other types of exceptions
-                                assert exception != null;
-                                System.err.println("An error occurred: " + exception.getMessage());
-                            }
-
-                        }
-                    });
-                }
-            } else {
-                super.onActivityResult(requestCode, resultCode, data);
+        IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
+        if (result != null) {
+            if (result.getContents() == null) {
+                Toast.makeText(this, "Scan Cancelled", Toast.LENGTH_SHORT).show();
+                finish();
             }
+            else {
+                // Query events to find out if the scanned QR code was a check-in or promo type
+                String scannedData = result.getContents();
+                Query checkinQuery = eventDb.getCollectionRef().whereEqualTo("checkInQRCode.hashedContent", scannedData);
+                Query promoQuery = eventDb.getCollectionRef().whereEqualTo("promoQRCode.hashedContent", scannedData);
+
+                // Query for check-in QR codes, check the attendee in if an event is found
+                checkinQuery.get().addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        QuerySnapshot querySnapshot = task.getResult();
+                        if (querySnapshot != null && !querySnapshot.isEmpty()) {
+                            // Retrieve the event of the scanned QR code
+                            foundEvent = true;
+                            DocumentSnapshot documentSnapshot = querySnapshot.getDocuments().get(0);
+                            String documentId = documentSnapshot.getId();
+
+                            // Check the attendee into the event, update the event's attendees accordingly
+                            SharedPreferences prefs = getSharedPreferences("TOKEN_PREF", MODE_PRIVATE);
+                            String fcmToken = prefs.getString("token", "missing token");
+                            AttendeeDatabaseManager attendeeDbManager = new AttendeeDatabaseManager(fcmToken);
+                            EventDatabaseManager eventDbManager = new EventDatabaseManager(documentId);
+
+                            attendeeDbManager.addToArrayField("attendedEvents", documentId); // Add event to attendee
+                            
+                            String attendeeId = attendeeDbManager.getDocRef().getId();
+                            eventDbManager.addToArrayField("attendee", attendeeId); // Add attendee to event
+
+                            // Open the appropriate event page
+                            Intent intent = new Intent(getApplicationContext(), EventPage.class);
+                            intent.putExtra("DOCUMENT_ID", documentId);
+                            startActivity(intent);
+                        }
+                    } else {
+                        Log.d("QueryError", "Error getting documents: ", task.getException());
+                    }
+                });
+
+                // Query for promo QR codes
+                promoQuery.get().addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        QuerySnapshot querySnapshot = task.getResult();
+                        if (querySnapshot != null && !querySnapshot.isEmpty()) {
+                            // Retrieve the event of the scanned QR code
+                            foundEvent = true;
+                            DocumentSnapshot documentSnapshot = querySnapshot.getDocuments().get(0);
+                            String documentId = documentSnapshot.getId();
+
+                            // Open the appropriate event page
+                            Intent intent = new Intent(getApplicationContext(), EventPage.class);
+                            intent.putExtra("DOCUMENT_ID", documentId);
+                            startActivity(intent);
+                        } else {
+                            // No matching document found, return to main activity
+                            if (!foundEvent) {
+                                Toast.makeText(this, "No event found!", Toast.LENGTH_SHORT).show();
+                                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                                startActivity(intent);
+                            }
+                        }
+
+                    } else {
+                        Log.d("QueryError", "Error getting documents: ", task.getException());
+                    }
+                });
+
+            }
+        } else {
+            // QR code scanner wasn't the returning activity, so handle the return normally
+            super.onActivityResult(requestCode, resultCode, data);
         }
     }
+
 }

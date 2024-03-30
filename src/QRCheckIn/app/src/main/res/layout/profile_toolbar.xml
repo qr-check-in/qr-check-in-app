@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.appcompat.widget.Toolbar xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/JordyBlue"
+    android:theme="@style/ThemeOverlay.AppCompat.Dark"
+    app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <!-- Centered Title -->
+        <TextView
+            android:id="@+id/mainHeader"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Centered Title"
+            android:textColor="@android:color/black"
+            android:textSize="28dp"
+            android:textStyle="bold"
+            android:layout_centerInParent="true">
+        </TextView>
+
+        <!-- Edit Profile Icon openai, 2024, chatgpt, how to center the title and icon-->
+        <ImageView
+            android:id="@+id/edit_profile"
+            android:layout_width="wrap_content"
+            android:layout_height="50dp"
+            android:tint="@color/Black"
+            android:src="@drawable/sharp_edit_square_24"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:paddingEnd="10dp">
+        </ImageView>
+    </RelativeLayout>
+
+</androidx.appcompat.widget.Toolbar>

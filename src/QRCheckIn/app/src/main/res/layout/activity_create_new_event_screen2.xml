@@ -38,14 +38,14 @@
         <androidx.cardview.widget.CardView
             android:id="@+id/firstBox"
             android:layout_width="200dp"
-            android:layout_height="175dp"
+            android:layout_height="200dp"
             android:elevation="20dp"
             app:cardBackgroundColor="@color/UranianBlue">
 
             <ImageView
-                android:id="@+id/checkInQR"
+                android:id="@+id/ivCheckInQR"
                 android:layout_width="200dp"
-                android:layout_height="175dp"
+                android:layout_height="200dp"
                 android:scaleType="fitXY"
                 android:visibility="gone">
             </ImageView>
@@ -60,7 +60,7 @@
             android:layout_weight="1">
 
             <Button
-                android:id="@+id/makeQRCI"
+                android:id="@+id/btnGenCheckInQR"
                 android:layout_width="165dp"
                 android:layout_height="wrap_content"
                 android:backgroundTint="@color/NeonBlue"
@@ -75,7 +75,7 @@
                 android:textStyle="italic"/>
 
             <Button
-                android:id="@+id/uploadQRCR"
+                android:id="@+id/btnUploadCheckInQR"
                 android:layout_width="165dp"
                 android:layout_height="wrap_content"
                 android:backgroundTint="@color/NeonBlue"
@@ -85,16 +85,15 @@
         <androidx.cardview.widget.CardView
             android:id="@+id/secondBox"
             android:layout_width="200dp"
-            android:layout_height="175dp"
+            android:layout_height="200dp"
             android:elevation="20dp"
             app:cardBackgroundColor="@color/UranianBlue">
 
             <ImageView
-                android:id="@+id/promotionalQR"
+                android:id="@+id/ivPromoQr"
                 android:layout_width="200dp"
-                android:layout_height="175dp"
-                android:scaleType="fitXY">
-            </ImageView>
+                android:layout_height="200dp"
+                android:scaleType="fitXY"></ImageView>
 
         </androidx.cardview.widget.CardView>
 
