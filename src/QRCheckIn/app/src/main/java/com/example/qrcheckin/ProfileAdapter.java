@@ -11,10 +11,11 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.firebase.firestore.DocumentSnapshot;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class ProfileAdapter extends RecyclerView.Adapter<ProfileAdapter.ProfileViewHolder> {
-    private static List<Profile> profileList;
+    private List<Profile> profileList;
     private static OnItemClickListener listener;
 
     // Constructor
@@ -38,7 +39,6 @@ public class ProfileAdapter extends RecyclerView.Adapter<ProfileAdapter.ProfileV
                     listener.onItemClick(position);
                 }
             });
-
         }
     }
 
@@ -62,9 +62,11 @@ public class ProfileAdapter extends RecyclerView.Adapter<ProfileAdapter.ProfileV
     }
 
     // Update method to refresh the list
-    public void updateProfiles(List<Profile> profiles) {
+    public void updateProfiles(List<Profile> profiles, List<String> documentIds) {
         profileList.clear();
         profileList.addAll(profiles);
+        documentIds.clear();
+        documentIds.addAll(documentIds);
         notifyDataSetChanged();
     }
 //    public interface OnItemClickListener {
@@ -74,7 +76,8 @@ public class ProfileAdapter extends RecyclerView.Adapter<ProfileAdapter.ProfileV
     public interface OnItemClickListener {
         void onItemClick(int position);
     }
-    public void setOnItemClickListener(ProfileAdapter.OnItemClickListener listener) {
+
+    public void setOnItemClickListener(OnItemClickListener listener) {
         this.listener = listener;
     }
 

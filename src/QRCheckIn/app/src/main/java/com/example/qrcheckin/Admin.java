@@ -24,9 +24,14 @@ public class Admin extends Attendee{
     public interface ImagesCallback {
         void onImagesFetched(List<String> imageUris);
     }
+    public interface ProfileCallback {
+        void onProfileFetched(Map<String, Object> profile);
+        void onError(Exception e);
+    }
     public interface ProfilesCallback {
         void onProfilesFetched(List<Profile> profiles);
     }
+
     /**
      * Constructor for admin initializes firestore instance.
      */
@@ -68,25 +73,23 @@ public class Admin extends Attendee{
      *
      * @param userId the ID of the user profile to view.
      */
-    public void viewProfile(String userId) {
+    public void viewProfile(String userId, ProfileCallback callback) {
         db.collection("Attendees").document(userId).get()
                 .addOnSuccessListener(documentSnapshot -> {
                     if (documentSnapshot.exists()) {
                         // Access the nested profile field within the Attendees document
                         Map<String, Object> profile = (Map<String, Object>) documentSnapshot.get("profile");
-                        if (profile != null) { // Check if the profile field exists
-                            System.out.println("Profile data: " + profile);
+                        if (profile != null) {
+                            callback.onProfileFetched(profile);
                         } else {
-                            System.out.println("No profile data found!");
+                            callback.onError(new Exception("No profile data found!"));
                         }
                     } else {
-                        System.out.println("No such profile exists!");
+                        callback.onError(new Exception("No such profile exists!"));
                     }
                 })
-                .addOnFailureListener(e -> System.out.println("Error fetching profile: " + e));
+                .addOnFailureListener(callback::onError);
     }
-
-
     /**
      * Deletes a user profile from the database.
      * US 04.02.01
@@ -200,10 +203,11 @@ public class Admin extends Attendee{
      * Retrieves & prints the list of all profiles.
      * US 04.05.01.
      */
-    public void browseProfiles(final Admin.ProfilesCallback callback) {
+    public void browseProfiles(final ProfileCallback callback) {
         db.collection("Attendees").get()
                 .addOnSuccessListener(queryDocumentSnapshots -> {
                     List<Profile> profilesList = new ArrayList<>();
+                    List<String> documentIds = new ArrayList<>();
                     for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
                         Map<String, Object> profileMap = (Map<String, Object>) documentSnapshot.get("profile");
                         if (profileMap != null) {
@@ -212,6 +216,7 @@ public class Admin extends Attendee{
                                 Profile profile = new Profile();
                                 profile.setName(name);
                                 profilesList.add(profile);
+                                documentIds.add(documentSnapshot.getId());
                                 Log.d("AdminViewProfiles", "Fetched profile - Name: " + name);
                             } else {
                                 Log.d("AdminViewProfiles", "Name field is missing in the profile document with ID: " + documentSnapshot.getId());
@@ -220,15 +225,15 @@ public class Admin extends Attendee{
                             Log.d("AdminViewProfiles", "Profile map is missing in the document with ID: " + documentSnapshot.getId());
                         }
                     }
-                    if (callback != null) {
-                        callback.onProfilesFetched(profilesList);
-                    }
+//                    if (callback != null) {
+//                        callback.onProfilesFetched(profilesList, documentIds);
+//                    }
                 })
                 .addOnFailureListener(e -> {
                     Log.e("Admin", "Error fetching profiles", e);
-                    if (callback != null) {
-                        callback.onProfilesFetched(new ArrayList<>()); // Callback with an empty list in case of failure
-                    }
+//                    if (callback != null) {
+//                        callback.onProfilesFetched(new ArrayList<>(), documentIds); // Callback with an empty list in case of failure
+//                    }
                 });
     }
 

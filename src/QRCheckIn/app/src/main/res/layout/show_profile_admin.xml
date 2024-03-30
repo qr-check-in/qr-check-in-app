@@ -90,6 +90,13 @@
                 android:layout_marginLeft="30dp"
                 android:backgroundTint="@color/NeonBlue"
                 android:text="Remove Picture" />
+            <Button
+                android:id="@+id/btnBack"
+                android:layout_width="164dp"
+                android:layout_height="41dp"
+                android:layout_marginLeft="30dp"
+                android:backgroundTint="@color/NeonBlue"
+                android:text="Go Back" />
 
         </LinearLayout>
 
