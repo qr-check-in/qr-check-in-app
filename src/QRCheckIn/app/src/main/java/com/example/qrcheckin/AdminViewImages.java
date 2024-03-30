@@ -1,4 +1,3 @@
-<<<<<<< Updated upstream
 package com.example.qrcheckin;
 
 import android.content.Intent;
@@ -21,6 +20,7 @@ public class AdminViewImages extends AppCompatActivity {
     private List<String> imageUrls; // Populate this list with your image URLs
     Admin admin;
     Button back;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -35,7 +35,7 @@ public class AdminViewImages extends AppCompatActivity {
         List<String> imageUris = new ArrayList<>();
         ImageAdapter imageAdapter = new ImageAdapter(this, imageUris);
         imagesRecyclerView.setAdapter(imageAdapter);
-        back=findViewById(R.id.back_button);
+        back = findViewById(R.id.back_button);
         Admin admin = new Admin(); // Assuming Admin contains browseImages()
 
         back.setOnClickListener(new View.OnClickListener() {
@@ -47,18 +47,3 @@ public class AdminViewImages extends AppCompatActivity {
         });
     }
 }
-=======
-//package com.example.qrcheckin;
-//
-//import android.os.Bundle;
-//
-//import androidx.appcompat.app.AppCompatActivity;
-//
-//public class AdminViewImages extends AppCompatActivity {
-//    @Override
-//    protected void onCreate(Bundle savedInstanceState) {
-//        super.onCreate(savedInstanceState);
-//        setContentView(R.layout.admin_browse_images);
-//    }
-//}
->>>>>>> Stashed changes

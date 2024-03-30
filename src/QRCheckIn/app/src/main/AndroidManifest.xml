@@ -32,13 +32,13 @@
             android:name=".AttendeeList"
             android:exported="false"
             android:parentActivityName=".OrganizersEventPage" />
-        <activity
-            android:name=".MyEventsActivity"
-            android:exported="false" />
-        <activity
-            android:name=".SignedUpEvents"
-            android:exported="false"
-            android:theme="@style/Theme.QRCheckIn" />
+<!--        <activity-->
+<!--            android:name=".MyEventsActivity"-->
+<!--            android:exported="false" />-->
+<!--        <activity-->
+<!--            android:name=".SignedUpEvents"-->
+<!--            android:exported="false"-->
+<!--            android:theme="@style/Theme.QRCheckIn" />-->
         <activity
             android:name=".QrCodeImageView"
             android:exported="false" />
@@ -76,7 +76,7 @@
             android:exported="false"/>
         <activity android:name=".SharedViewModel"
             android:exported="false"/>
-<<<<<<< Updated upstream
+
         <activity android:name=".AdminViewEvent"/>
         <activity android:name=".AdminEventPage"
             android:exported="false"/>
@@ -86,18 +86,6 @@
         <activity
             android:name=".ProfileActivityAdmin"
             android:exported="false" />
-=======
-
-<!--        <activity-->
-<!--            android:name=".ProfileActivity"-->
-<!--            android:exported="false" />-->
-<!--        <activity-->
-<!--            android:name=".UpdatePictureFragment"-->
-<!--            android:exported="false" />-->
-<!--        <activity-->
-<!--            android:name=".SharedViewModel"-->
-<!--            android:exported="false" />-->
->>>>>>> Stashed changes
         <activity
             android:name=".EventListView"
             android:exported="false" />
@@ -107,23 +95,10 @@
         <activity
             android:name=".AdminActivity"
             android:exported="false" />
-<<<<<<< Updated upstream
         <activity
             android:name=".OrganizersEventPage"
             android:exported="false"
             android:parentActivityName=".EventListView" />
-=======
-<!--        <activity-->
-<!--            android:name=".AdminViewProfiles"-->
-<!--            android:exported="false"/>-->
-<!--        <activity-->
-<!--            android:name=".AdminViewEvent"-->
-<!--            android:exported="false"/>-->
-<!--        <activity-->
-<!--            android:name=".AdminViewImages"-->
-<!--            android:exported="false"/>-->
-
->>>>>>> Stashed changes
         <activity
             android:name=".MainActivity"
             android:exported="true">

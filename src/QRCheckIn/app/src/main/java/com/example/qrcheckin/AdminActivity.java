@@ -11,7 +11,6 @@ import androidx.appcompat.widget.Toolbar;
 
 public class AdminActivity extends AppCompatActivity {
 
-<<<<<<< Updated upstream
     Button eventListButton;
     Button profileListButton;
     Admin admin;
@@ -20,16 +19,10 @@ public class AdminActivity extends AppCompatActivity {
     ImageButton addEventButton;
     ImageButton profileButton;
     Button imageListButton;
-=======
-//    ImageButton eventListButton;
-//    ImageButton profileListButton;
-//    ImageButton imageListButton;
->>>>>>> Stashed changes
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.admin_main);
-<<<<<<< Updated upstream
         admin = new Admin();
         eventListButton = findViewById(R.id.btn_admin_event);
         profileListButton = findViewById(R.id.profile_admin_button);
@@ -43,13 +36,6 @@ public class AdminActivity extends AppCompatActivity {
         eventButton = findViewById(R.id.calenderButton);
         addEventButton = findViewById(R.id.addCalenderButton);
         profileButton = findViewById(R.id.profileButton);
-=======
-
-//        eventListButton = findViewById(R.id.btnEvent);
-//        profileListButton = findViewById(R.id.profile_button);
-//        imageListButton = findViewById(R.id.image_button);
-        /*
->>>>>>> Stashed changes
         eventListButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -70,7 +56,6 @@ public class AdminActivity extends AppCompatActivity {
                 Intent event = new Intent(getApplicationContext(), AdminViewImages.class);
                 startActivity(event);
             }
-<<<<<<< Updated upstream
         });
         qrButton.setOnClickListener(v -> {
             Intent event = new Intent(getApplicationContext(), MainActivity.class);
@@ -99,9 +84,5 @@ public class AdminActivity extends AppCompatActivity {
                 startActivity(event);
             }
         });
-=======
-        });*/
->>>>>>> Stashed changes
     }
 }
-
