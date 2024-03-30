@@ -61,6 +61,17 @@
         android:backgroundTint="@color/JordyBlue"
         app:layout_constraintTop_toBottomOf="@+id/profile_admin_button"
          />
+    <include
+        android:id="@+id/include"
+        layout="@layout/mainappbar"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="1.0" />
 
 
 

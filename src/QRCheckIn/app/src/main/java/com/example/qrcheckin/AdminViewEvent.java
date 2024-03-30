@@ -52,17 +52,19 @@ public class AdminViewEvent extends AppCompatActivity {
         FirestoreRecyclerOptions<Event> options = new FirestoreRecyclerOptions.Builder<Event>()
                 .setQuery(query, Event.class)
                 .build();
+        eventAdapter = new AdminEventAdapter(options);
 
-        eventAdapter = new AdminEventAdapter(options, new AdminEventAdapter.OnItemClickListener() {
+        eventAdapter.setOnItemClickListener(new AdminEventAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(DocumentSnapshot documentSnapshot, int position) {
-                // Navigate to AdminEventPage
-                Intent intent = new Intent(AdminViewEvent.this, AdminEventPage.class);
-                intent.putExtra("DOCUMENT_ID", documentSnapshot.getId());
+                String id = documentSnapshot.getId();
+
+                // Send the document id of the event to the Event Page before opening it
+                Intent intent = new Intent(getApplicationContext(), AdminEventPage.class);
+                intent.putExtra("DOCUMENT_ID", id);
                 startActivity(intent);
             }
         });
-
         eventsRecyclerView.setAdapter(eventAdapter);
     }
 

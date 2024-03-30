@@ -15,9 +15,9 @@ public class AdminEventAdapter extends FirestoreRecyclerAdapter<Event, AdminEven
 
     private OnItemClickListener listener;
 
-    public AdminEventAdapter(@NonNull FirestoreRecyclerOptions<Event> options, OnItemClickListener listener) {
+    public AdminEventAdapter(@NonNull FirestoreRecyclerOptions<Event> options) {
         super(options);
-        this.listener = listener;
+
     }
 
     @NonNull
