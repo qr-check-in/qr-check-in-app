@@ -3,6 +3,7 @@ package com.example.qrcheckin;
 import androidx.fragment.app.FragmentActivity;
 
 import android.os.Bundle;
+import android.util.Log;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -12,10 +13,13 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.example.qrcheckin.databinding.ActivityMapsBinding;
 
+import java.util.ArrayList;
+
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
 
     private GoogleMap mMap;
     private ActivityMapsBinding binding;
+    private ArrayList<LatLng> locationArrayList = new ArrayList<>(); // Initialize the ArrayList
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,6 +32,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
+
+        // Retrieve values passed by previous activity to determine
+        locationArrayList = (ArrayList<LatLng>) getIntent().getSerializableExtra("AllGeoPoints");
     }
 
     /**
@@ -43,9 +50,13 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
 
-        // Add a marker in Sydney and move the camera
-        LatLng sydney = new LatLng(-34, 151);
-        mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
+        Log.d("MapLocations", "onMapReady: " + locationArrayList);
+
+        // Iterate over the locationArrayList up to its size
+        for (int i = 0; i < locationArrayList.size(); i++) {
+            mMap.addMarker(new MarkerOptions().position(locationArrayList.get(i)).title(locationArrayList.get(i).toString())); // Set title as "Marker" instead of "Marker in Sydney"
+            mMap.animateCamera(CameraUpdateFactory.zoomTo(18.0f));
+            mMap.moveCamera(CameraUpdateFactory.newLatLng(locationArrayList.get(i)));
+        }
     }
 }

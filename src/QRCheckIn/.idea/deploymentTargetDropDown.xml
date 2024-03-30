@@ -2,30 +2,7 @@
 <project version="4">
   <component name="deploymentTargetDropDown">
     <value>
-<<<<<<< HEAD
-<<<<<<< HEAD
       <entry key="app">
-=======
-      <entry key="EventListTest">
-        <State />
-      </entry>
-      <entry key="app">
-        <State />
-      </entry>
-      <entry key="testButtonsAndTextboxes() (1)">
-        <State />
-      </entry>
-      <entry key="testEditButton()">
->>>>>>> bebfee9f82d09c401aa31ffc8072b8bd275d69ea
-        <State />
-      </entry>
-      <entry key="testListItem()">
-        <State />
-      </entry>
-      <entry key="testSharingQrWithApps()">
-=======
-      <entry key="app">
->>>>>>> e4dc93ea9d1e2031a41c54eecde63bb2c26f09d3
         <State />
       </entry>
     </value>
