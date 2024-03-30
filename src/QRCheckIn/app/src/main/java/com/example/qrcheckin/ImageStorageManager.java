@@ -62,13 +62,11 @@ public class ImageStorageManager {
      * @param imageView ImageView that the file is to be displayed on
      */
     public void displayImage(ImageView imageView){
-        Log.d("Firestore", String.format("display filepath is  (%s)", filePath));
         try{
             final File localFile = File.createTempFile("tempPic", "jpg");
             storageReference.getFile(localFile).addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
                 @Override
                 public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
-                    Log.d("Firestore", "picture retrieved");
                     // Convert local file to bitmap and set the imageview
                     Bitmap bitmap = BitmapFactory.decodeFile(localFile.getAbsolutePath());
                     imageView.setImageBitmap(bitmap);
@@ -76,7 +74,7 @@ public class ImageStorageManager {
             }).addOnFailureListener(new OnFailureListener() {
                 @Override
                 public void onFailure(@NonNull Exception e) {
-                    Log.e("Firestore", "picture error");
+                    Log.e("Firestore", "picture display error");
                 }
             });
         } catch (IOException e){
