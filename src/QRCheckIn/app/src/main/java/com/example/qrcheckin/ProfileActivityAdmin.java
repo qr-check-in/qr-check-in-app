@@ -57,6 +57,7 @@ public class ProfileActivityAdmin extends AppCompatActivity {
         TextView contactTextView = findViewById(R.id.contact1);
         TextView homepageTextView = findViewById(R.id.homepage1);
         Button back = findViewById(R.id.btnBack);
+        Button removeProfile = findViewById(R.id.btnRemoveProfile);
         Toolbar toolbar = findViewById(R.id.profileToolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
@@ -68,6 +69,14 @@ public class ProfileActivityAdmin extends AppCompatActivity {
             @Override
             public void onChanged(Uri uri) {
                 profileImageView.setImageURI(uri);
+            }
+        });
+        removeProfile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                admin.deleteProfile(documentId);
+                Intent event = new Intent(getApplicationContext(), AdminViewProfiles.class);
+                startActivity(event);
             }
         });
 
