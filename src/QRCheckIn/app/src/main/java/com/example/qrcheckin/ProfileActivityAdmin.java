@@ -17,6 +17,7 @@ import android.widget.Switch;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -45,17 +46,22 @@ public class ProfileActivityAdmin extends AppCompatActivity {
         setContentView(show_profile_admin);
 
         String documentId = getIntent().getStringExtra("DOCUMENT_ID");
-        editProfile = findViewById(R.id.edit_profile1);
+        editProfile = findViewById(R.id.edit_profile);
 //        String name = getIntent().getStringExtra("name");
 //        String contact = getIntent().getStringExtra("contact");
 //        String homepage = getIntent().getStringExtra("homepage");
-        profileImageView = findViewById(R.id.profile_image1);
+        profileImageView = findViewById(R.id.profile_image);
         // Find views and set data
-        TextView nameTextView = findViewById(R.id.profile_name1);
-        TextView nameTextView2 = findViewById(R.id.profileName2);
+        TextView nameTextView = findViewById(R.id.profileName);
+        TextView nameTextView2 = findViewById(R.id.profileName1);
         TextView contactTextView = findViewById(R.id.contact1);
-        TextView homepageTextView = findViewById(R.id.homepage2);
+        TextView homepageTextView = findViewById(R.id.homepage1);
         Button back = findViewById(R.id.btnBack);
+        Toolbar toolbar = findViewById(R.id.profileToolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
+        TextView header = findViewById(R.id.mainHeader);
+        header.setText("Profile");
         admin = new Admin();
         sharedViewModel = new ViewModelProvider(this).get(SharedViewModel.class);
         sharedViewModel.getSelectedImageUri().observe(this, new androidx.lifecycle.Observer<Uri>() {
