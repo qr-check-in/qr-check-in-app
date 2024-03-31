@@ -6,6 +6,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
+import androidx.fragment.app.FragmentActivity;
 import androidx.recyclerview.widget.RecyclerView;
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
@@ -33,6 +34,7 @@ public class AdminEventAdapter extends FirestoreRecyclerAdapter<Event, AdminEven
         holder.eventLocationTextView.setText(model.getEventLocation());
         holder.eventTimeTextView.setText(model.getEventDate());
         // Assuming you have a method to set the image on the ImageView
+
     }
 
     public class EventViewHolder extends RecyclerView.ViewHolder {

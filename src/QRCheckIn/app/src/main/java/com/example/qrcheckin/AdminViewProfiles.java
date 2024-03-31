@@ -1,6 +1,7 @@
 package com.example.qrcheckin;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -28,6 +29,7 @@ public class AdminViewProfiles extends AppCompatActivity {
     ImageButton qrButton;
     ImageButton eventButton;
     ImageButton addEventButton;
+    private SharedViewModel sharedViewModel;
     ImageButton profileButton;
     private List<String> documentIds = new ArrayList<>();
 
@@ -101,7 +103,9 @@ public class AdminViewProfiles extends AppCompatActivity {
                 documentIds.clear(); // Clear previous IDs
                 for (QueryDocumentSnapshot document : task.getResult()) {
                     Map<String, Object> profileMap = (Map<String, Object>) document.get("profile");
-                    if (profileMap != null) {
+                    Map<String, Object> profilePictureMap = (Map<String, Object>) document.get("profilePicture");
+
+                    if (profileMap != null && profilePictureMap == null) {
                         String name = (String) profileMap.get("name");
                         if (name != null) {
                             Profile profile = new Profile();
@@ -110,12 +114,25 @@ public class AdminViewProfiles extends AppCompatActivity {
                             documentIds.add(document.getId()); // Store document ID
                         }
                     }
+                    else if (profileMap != null && profilePictureMap != null) {
+                        String name = (String) profileMap.get("name");
+                        String uri = (String)profilePictureMap.get("profilePicture");
+                        if (name != null) {
+                            Profile profile = new Profile();
+                            Attendee attendee = new Attendee();
+                            ProfilePicture pic = new ProfilePicture(uri, attendee);
+                            profile.setName(name);
+                            profile.setProfilePicture(pic);
+                            profilesList.add(profile);
+                            documentIds.add(document.getId()) ; // Store document ID
+                        }
+                    }
                 }
                 adapter = new ProfileAdapter(profilesList);
                 adapter.setOnItemClickListener(position -> {
                     if (position >= 0 && position < documentIds.size()) {
                         String docId = documentIds.get(position);
-                        // Intent to navigate to the ProfileDetailActivity with the document ID
+                        // Intent to navigate to the ProfileActivityAdmin with the document ID
                         Intent intent = new Intent(AdminViewProfiles.this, ProfileActivityAdmin.class);
                         intent.putExtra("DOCUMENT_ID", docId);
                         startActivity(intent);

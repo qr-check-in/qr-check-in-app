@@ -3,12 +3,15 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
-    <ImageView xmlns:android="http://schemas.android.com/apk/res/android"
-        android:id="@+id/imageView"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="4dp">
+
+    <ImageView
+        android:id="@+id/image_view"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:scaleType="centerCrop"
-        app:srcCompat="@drawable/fest1" />
+        android:src="@drawable/calenderresize"
+        android:layout_height="120dp"
+        android:scaleType="centerCrop" />
 
 </LinearLayout>

@@ -21,15 +21,13 @@ public class Admin extends Attendee{
     public interface EventsCallback {
         void onEventsFetched(List<Event> events);
     }
-    public interface ImagesCallback {
+    public interface ImageFetchCallback {
         void onImagesFetched(List<String> imageUris);
     }
+
     public interface ProfileCallback {
         void onProfileFetched(Map<String, Object> profile);
         void onError(Exception e);
-    }
-    public interface ProfilesCallback {
-        void onProfilesFetched(List<Profile> profiles);
     }
 
     /**
@@ -241,7 +239,7 @@ public class Admin extends Attendee{
      * Retrieves & prints the list of all images.
      * US 04.06.01
      */
-    public void browseImages(ImagesCallback callback) {
+    public void browseImages(final ImageFetchCallback callback) {
         List<String> imageUris = new ArrayList<>();
 
         // Browse profile pictures
@@ -255,7 +253,7 @@ public class Admin extends Attendee{
                             }
                         }
                     }
-                    // Browse event posters
+                    // Continue to browse event posters after fetching profile pictures
                     db.collection("events").get()
                             .addOnSuccessListener(eventsSnapshots -> {
                                 for (DocumentSnapshot eventSnapshot : eventsSnapshots) {
@@ -266,13 +264,14 @@ public class Admin extends Attendee{
                                         }
                                     }
                                 }
-                                callback.onImagesFetched(imageUris);
-                            });
+                                if (callback != null) {
+                                    callback.onImagesFetched(imageUris);
+                                }
+                            })
+                            .addOnFailureListener(e -> System.out.println("Error fetching event posters: " + e));
                 })
-                .addOnFailureListener(e -> {
-                    System.out.println("Error fetching images: " + e);
-                    callback.onImagesFetched(new ArrayList<>()); // Callback with an empty list in case of failure
-                });
+                .addOnFailureListener(e -> System.out.println("Error fetching profile pictures: " + e));
     }
+
 
 }

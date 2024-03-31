@@ -1,5 +1,6 @@
 package com.example.qrcheckin;
 
+import android.net.Uri;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,6 +10,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.google.firebase.firestore.DocumentSnapshot;
 
 import java.util.ArrayList;
@@ -54,6 +56,16 @@ public class ProfileAdapter extends RecyclerView.Adapter<ProfileAdapter.ProfileV
         Profile profile = profileList.get(position);
         Log.d("ProfileAdapter", "Binding profile: " + profile.getName());
         holder.nameTextView.setText(profile.getName());
+        ProfilePicture pic = profile.getProfilePicture(); // Adapt this line based on how you can get the URI
+        if (pic != null) {
+            String uriString = profile.getProfilePicture().getUriString();
+            Glide.with(holder.itemView.getContext())
+                    .load(Uri.parse(uriString))
+                    .into(holder.photoImageView);
+        } else {
+            holder.photoImageView.setImageResource(R.drawable.baseline_account_circle_24); // Set a default image
+        }
+
     }
 
     @Override
@@ -72,6 +84,7 @@ public class ProfileAdapter extends RecyclerView.Adapter<ProfileAdapter.ProfileV
 //    public interface OnItemClickListener {
 //        void onItemClick(DocumentSnapshot documentSnapshot, int position);
 //    }
+
 
     public interface OnItemClickListener {
         void onItemClick(int position);

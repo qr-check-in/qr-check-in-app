@@ -3,9 +3,11 @@ package com.example.qrcheckin;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -68,7 +70,6 @@ public class AdminViewEvent extends AppCompatActivity {
         });
         eventsRecyclerView.setAdapter(eventAdapter);
     }
-
     @Override
     protected void onStart() {
         super.onStart();

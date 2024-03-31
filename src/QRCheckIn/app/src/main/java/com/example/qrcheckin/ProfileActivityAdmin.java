@@ -40,6 +40,7 @@ public class ProfileActivityAdmin extends AppCompatActivity {
     private String name = "";
     private String contact = "";
     private String homepage = "";
+    private AttendeeDatabaseManager dbManager;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -51,6 +52,7 @@ public class ProfileActivityAdmin extends AppCompatActivity {
 //        String contact = getIntent().getStringExtra("contact");
 //        String homepage = getIntent().getStringExtra("homepage");
         profileImageView = findViewById(R.id.profile_image);
+        Button removePicture = findViewById(R.id.btnRemovePicture);
         // Find views and set data
         TextView nameTextView = findViewById(R.id.profileName);
         TextView nameTextView2 = findViewById(R.id.profileName1);
@@ -77,6 +79,14 @@ public class ProfileActivityAdmin extends AppCompatActivity {
                 admin.deleteProfile(documentId);
                 Intent event = new Intent(getApplicationContext(), AdminViewProfiles.class);
                 startActivity(event);
+            }
+        });
+        removePicture.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Call method to delete the file from firebase storage and update the attendee doc's field
+                deleteProfilePicture();
+                profileImageView.setImageResource(R.drawable.profile);
             }
         });
 
@@ -128,5 +138,26 @@ public class ProfileActivityAdmin extends AppCompatActivity {
             }
         });
 
+
+    }
+    public void deleteProfilePicture(){
+        dbManager.getDocRef().get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                Attendee attendee = documentSnapshot.toObject(Attendee.class);
+                if (attendee == null) {
+                    Log.e("Firestore", "Attendee doc not found");
+                } else {
+                    Profile profile = attendee.getProfile();
+                    if (profile.getProfilePicture() != null) {
+                        ImageStorageManager storage = new ImageStorageManager(profile.getProfilePicture(), "/ProfilePictures");
+                        // Remove profile picture from storage
+                        storage.deleteImage();
+                        // update attendee doc's field
+                        dbManager.updateProfilePicture(null);
+                    }
+                }
+            }
+        });
     }
 }
