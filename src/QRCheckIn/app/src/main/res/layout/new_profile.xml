@@ -1,8 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/showProfile"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    android:layout_height="match_parent">
 
     <include
         android:id="@+id/profileToolbar"
@@ -15,7 +18,7 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.0" />
 
-<!--    ShubKaran's code-->
+    <!--    ShubKaran's code-->
     <LinearLayout
         android:id="@+id/imageLinearLayout"
         android:layout_width="match_parent"
@@ -43,15 +46,15 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:paddingTop="10dp"
+            android:paddingVertical="10dp"
             android:textAppearance="@style/TextAppearance.AppCompat.Large" />
     </LinearLayout>
 
     <!--    ShubKaran's code-->
     <Button
         android:id="@+id/btnUpdatePicture"
-        android:layout_width="164dp"
-        android:layout_height="41dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:backgroundTint="@color/NeonBlue"
         android:text="Update Picture"
         app:layout_constraintEnd_toEndOf="parent"
@@ -62,9 +65,8 @@
     <!--    ShubKaran's code-->
     <Button
         android:id="@+id/btnRemovePicture"
-        android:layout_width="164dp"
-        android:layout_height="41dp"
-        android:layout_marginLeft="30dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:backgroundTint="@color/NeonBlue"
         android:text="Remove Picture"
         app:layout_constraintEnd_toEndOf="parent"
@@ -72,12 +74,200 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/imageLinearLayout" />
 
-    <androidx.cardview.widget.CardView
-        android:layout_width=""
-        android:layout_height=""
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintTop_toBottomOf="@+id/btnRemovePicture"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/main_app_bar"
+        android:orientation="vertical"
+        android:padding="15dp">
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:elevation="50dp"
+            app:cardCornerRadius="20dp"
+            app:cardUseCompatPadding="true">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <!--    ShubKaran's code-->
+                    <TextView
+                        android:id="@+id/user_info"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="sans-serif-black"
+                        android:text="@string/user_info"
+                        android:textStyle="bold"
+                        android:layout_gravity="center_horizontal"
+                        android:paddingVertical="10dp"
+                        android:textSize="25dp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <ScrollView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:orientation="vertical">
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="horizontal"
+                                android:weightSum="2">
+
+                                <!--    ShubKaran's code-->
+                                <TextView
+                                    android:id="@+id/nameText"
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginLeft="25dp"
+                                    android:text="Name"
+                                    android:textStyle="italic"
+                                    android:textSize="13dp"
+                                    android:paddingVertical="15dp"
+                                    android:layout_weight="1"/>
+
+                                <!--    ShubKaran's code-->
+                                <TextView
+                                    android:id="@+id/profileName1"
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:hint="FirstName LastName"
+                                    android:paddingVertical="15dp"
+                                    android:textSize="17dp"
+                                    android:textStyle="bold"
+                                    android:layout_weight="1"/>
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="horizontal"
+                                android:weightSum="2">
+
+                                <!--    ShubKaran's code-->
+                                <TextView
+                                    android:id="@+id/contactText"
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginLeft="25dp"
+                                    android:text="Contact"
+                                    android:textSize="13dp"
+                                    android:textStyle="italic"
+                                    android:paddingVertical="15dp"
+                                    android:layout_weight="1"/>
+
+                                <!--    ShubKaran's code-->
+                                <TextView
+                                    android:id="@+id/contact1"
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:hint="(587) XXX XXXX"
+                                    android:inputType="phone"
+                                    android:paddingVertical="15dp"
+                                    android:textSize="17dp"
+                                    android:textStyle="bold"
+                                    android:layout_weight="1"/>
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="horizontal"
+                                android:weightSum="2">
+
+                                <!--    ShubKaran's code-->
+                                <TextView
+                                    android:id="@+id/homepageText"
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginLeft="25dp"
+                                    android:text="Homepage"
+                                    android:textSize="13dp"
+                                    android:textStyle="italic"
+                                    android:paddingVertical="15dp"
+                                    android:layout_weight="1"/>
+
+                                <!--    ShubKaran's code-->
+                                <TextView
+                                    android:id="@+id/homepage1"
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginLeft="67dp"
+                                    android:hint="_name_.com"
+                                    android:paddingVertical="15dp"
+                                    android:textSize="17dp"
+                                    android:textStyle="bold"
+                                    android:layout_weight="1"/>
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="horizontal"
+                                android:weightSum="2">
+
+                                <!--    ShubKaran's code-->
+                                <TextView
+                                    android:id="@+id/locationText"
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginLeft="25dp"
+                                    android:text="Geolocation Track"
+                                    android:textSize="13dp"
+                                    android:textStyle="italic"
+                                    android:paddingVertical="15dp"
+                                    android:layout_weight="1"/>
+
+                                <!--    ShubKaran's code-->
+                                <Switch
+                                    android:id="@+id/geoswitch"
+                                    android:layout_width="0dp"
+                                    android:layout_height="match_parent"
+                                    android:textSize="17dp"
+                                    tools:ignore="UseSwitchCompatOrMaterialXml"
+                                    android:layout_gravity="center"
+                                    android:layout_weight="1"/>
+                            </LinearLayout>
+
+                        </LinearLayout>
+
+
+                    </ScrollView>
+
+                </LinearLayout>
+
+
+            </LinearLayout>
+
+
+        </androidx.cardview.widget.CardView>
+
+    </LinearLayout>
 
     <include
         layout="@layout/mainappbar"
+        android:id="@+id/main_app_bar"
         android:layout_width="match_parent"
         android:layout_height="45dp"
         app:layout_constraintStart_toStartOf="parent"
