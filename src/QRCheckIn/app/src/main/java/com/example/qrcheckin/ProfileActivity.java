@@ -112,7 +112,8 @@ public class ProfileActivity extends AppCompatActivity implements EditProfileFra
         dbManager = new AttendeeDatabaseManager(fcmToken);
 
         // set the profile attribute fields and string attributes like name, contact, homepage
-        setProfileFields();
+        setProfileFields(true);
+
 
         // Set listener to updates of the attendee doc
         // Main purpose is to update the displayed profile pic to a generated one
@@ -219,13 +220,14 @@ public class ProfileActivity extends AppCompatActivity implements EditProfileFra
         dbManager.updateProfileString("name", nameUpdated);
         dbManager.updateProfileString("contact", contactUpdated);
         dbManager.updateProfileString("homepage", homepageUpdated);
-        setProfileFields();
+        setProfileFields(false);
 
     }
     /**
-     * Fetches user profile details from Firestore & updates the UI.
+     * Fetches user profile details from Firebase & updates the UI.
+     * @param firstOpen Boolean indicating if the activity has just been opened and the method is being called from onCreate
      */
-    public void setProfileFields() {
+    public void setProfileFields(Boolean firstOpen) {
         dbManager.getDocRef().get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
@@ -244,10 +246,11 @@ public class ProfileActivity extends AppCompatActivity implements EditProfileFra
                     tvContact.setText(contact);
                     tvHomepage.setText(homepage);
                     switchGeolocation.setChecked(profile.getTrackGeolocation());
-                    // Display profilePicutre if the profile has one
-                    if(profile.getProfilePicture() != null){
+                    // Display profilePicutre if this method is being called from onCreate
+                    // Prevents profileImageView from being updated twice in cases where a user updates their name and needs a new generated profile pic
+                    if(profile.getProfilePicture() != null && firstOpen){
                         ImageStorageManager storage = new ImageStorageManager(profile.getProfilePicture(),"/ProfilePictures");
-                        storage.displayImage(profileImageView);
+                       storage.displayImage(profileImageView);
                     }
                 }
             }
