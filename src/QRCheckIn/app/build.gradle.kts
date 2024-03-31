@@ -8,6 +8,10 @@ android {
     namespace = "com.example.qrcheckin"
     compileSdk = 34
 
+    tasks.withType<Test>{
+        useJUnitPlatform()
+    }
+
     defaultConfig {
         applicationId = "com.example.qrcheckin"
         minSdk = 24

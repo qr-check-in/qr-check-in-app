@@ -1,6 +1,9 @@
 package com.example.qrcheckin;
 
+import android.location.Geocoder;
 import android.location.Location;
+
+import com.google.firebase.firestore.GeoPoint;
 
 import java.io.FileNotFoundException;
 public class Profile {
@@ -9,7 +12,7 @@ public class Profile {
     private String homepage;
     private String contact;
     private ProfilePicture profilePicture;
-    private Location location;
+    private GeoPoint location;
     /**
      * Constructs a Profile for an Attendee
      */
@@ -45,7 +48,7 @@ public class Profile {
      * Returns the Location of the Profile
      * @return the Location of the Profile
      */
-    public Location getLocation() {
+    public GeoPoint getLocation() {
         return location;
     }
 
@@ -53,7 +56,7 @@ public class Profile {
      * Sets the Location of the Profile
      * @param location the Location of the Profile
      */
-    public void setLocation(Location location) {
+    public void setLocation(GeoPoint location) {
         this.location = location;
     }
 

@@ -53,7 +53,7 @@ public class ProfileActivity extends AppCompatActivity implements EditProfileFra
     TextView tvHomepage;
     Switch switchGeolocation;
     TextView profileName;
-    private AttendeeDatabaseManager dbManager;
+    AttendeeDatabaseManager dbManager;
     private String fcmToken;
 
     /**

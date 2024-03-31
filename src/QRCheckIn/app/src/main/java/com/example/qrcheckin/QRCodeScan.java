@@ -188,6 +188,7 @@ public class QRCodeScan extends AppCompatActivity {
 //                            Boolean geoLocation = prefs.getBoolean("profile.trackGeolocation", false);
 //                            Log.d("geoLocation", "geoLocation: " + geoLocation);
 
+                            Log.d("attendeeFcm", "attendeeFcm: " + attendeeFcm);
 
                             // if organizer wants the user location
 //                            if (checkInStatus && geoLocation) {
@@ -259,7 +260,7 @@ public class QRCodeScan extends AppCompatActivity {
 //                            coordinates = latitude + "," + longitude;
 //
 //                            Log.d("COORDINATES", "coordinates: " + coordinates);
-//                            Log.d("attendeeFcm", "attendeeFcm: " + attendeeFcm);
+                            Log.d("attendeeFcm", "attendeeFcm: " + attendeeFcm);
 
                             // Convert latitude and longitude to GeoPoint
                             GeoPoint geoPoint = new GeoPoint(location.getLatitude(), location.getLongitude());
