@@ -1,7 +1,5 @@
 package com.example.qrcheckin;
 
-import static android.graphics.Color.BLACK;
-
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -31,8 +29,6 @@ public class Profile {
 
         // TODO: randomize initial names in some way so that more unique profile pictures are generated.
         this.name = "New User";
-
-        generateProfilePicture();
     }
 
     /**
@@ -46,16 +42,23 @@ public class Profile {
         Bitmap bitmap = Bitmap.createBitmap(size, size, Bitmap.Config.ARGB_8888);
         Canvas canvas = new Canvas(bitmap);
         Paint background = new Paint();
-        background.setColor(BLACK);
+        background.setColor(Color.LTGRAY);
         canvas.drawRect(0F, 0F, (float) size, (float) size, background);
 
         // Draw the user's initials if their name is not empty
         if(!Objects.equals(initials, "")){
             Paint textPaint = new Paint();
-            textPaint.setColor(Color.WHITE);
+            textPaint.setColor(Color.BLACK);
             textPaint.setTextSize(72);
             textPaint.setTextScaleX(1);
-            canvas.drawText(initials, 75 - 25, 75 + 20, textPaint);
+
+            // Center the text in the canvas
+            // https://stackoverflow.com/questions/11120392/android-center-text-on-canvas , Arun George, 2012
+            textPaint.setTextAlign(Paint.Align.CENTER);
+            int x = (canvas.getWidth() / 2);
+            int y = (int) ((canvas.getHeight() / 2) - ((textPaint.descent() + textPaint.ascent()) / 2)) ;
+
+            canvas.drawText(initials, x, y, textPaint);
         }
         try{
             // Convert bitmap to uri using a temporary file

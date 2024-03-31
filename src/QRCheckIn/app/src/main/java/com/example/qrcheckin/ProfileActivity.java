@@ -1,5 +1,6 @@
 package com.example.qrcheckin;
 
+import static android.content.ContentValues.TAG;
 import static com.example.qrcheckin.R.layout.show_profile;
 
 import android.content.Intent;
@@ -15,12 +16,15 @@ import android.widget.ImageView;
 import android.widget.Switch;
 import android.widget.TextView;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.FirebaseFirestoreException;
 
 /**
  * Manages user profile view within the app.
@@ -110,12 +114,33 @@ public class ProfileActivity extends AppCompatActivity implements EditProfileFra
         // set the profile attribute fields and string attributes like name, contact, homepage
         setProfileFields();
 
+        // Set listener to updates of the attendee doc
+        // Main purpose is to update the displayed profile pic to a generated one
+        dbManager.getDocRef().addSnapshotListener(new EventListener<DocumentSnapshot>() {
+            @Override
+            public void onEvent(@Nullable DocumentSnapshot value, @Nullable FirebaseFirestoreException error) {
+                if (error != null) {
+                    Log.w(TAG, "Listen failed.", error);
+                    return;
+                }
+                if (value != null && value.exists()) {
+                    Log.d(TAG, "Current data: " + value.getData());
+                    Attendee attendee = value.toObject(Attendee.class);
+                    assert attendee != null;
+                    // Update the profile picture currently displayed
+                    sharedViewModel.setSelectedImageUri(Uri.parse(attendee.getProfile().getProfilePicture().getUriString()));
+                } else {
+                    Log.d(TAG, "Current data: null");
+                }
+            }
+        });
+
         // Listener for the Geolocation tracking switch
         switchGeolocation.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 // updates the Attendee's geolocation attribute
-                dbManager.updateAttendeeGeolocation(isChecked);
+                dbManager.updateAttendeeBoolean("profile.trackGeolocation",isChecked);
             }
         });
 
@@ -152,8 +177,8 @@ public class ProfileActivity extends AppCompatActivity implements EditProfileFra
             @Override
             public void onClick(View v) {
                 // Call method to delete the file from firebase storage and update the attendee doc's field
-                deleteProfilePicture();
-                profileImageView.setImageResource(R.drawable.profile);
+                dbManager.deleteProfilePicture();
+                //profileImageView.setImageResource(R.drawable.profile);
                 }
         });
 
@@ -223,30 +248,6 @@ public class ProfileActivity extends AppCompatActivity implements EditProfileFra
                     if(profile.getProfilePicture() != null){
                         ImageStorageManager storage = new ImageStorageManager(profile.getProfilePicture(),"/ProfilePictures");
                         storage.displayImage(profileImageView);
-                    }
-                }
-            }
-        });
-    }
-
-    /**
-     * Deletes the profile picture in firebase storage upon the profile picture being removed
-     */
-    public void deleteProfilePicture(){
-        dbManager.getDocRef().get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-            @Override
-            public void onSuccess(DocumentSnapshot documentSnapshot) {
-                Attendee attendee = documentSnapshot.toObject(Attendee.class);
-                if (attendee == null) {
-                    Log.e("Firestore", "Attendee doc not found");
-                } else {
-                    Profile profile = attendee.getProfile();
-                    if (profile.getProfilePicture() != null) {
-                        ImageStorageManager storage = new ImageStorageManager(profile.getProfilePicture(), "/ProfilePictures");
-                        // Remove profile picture from storage
-                        storage.deleteImage();
-                        // update attendee doc's field
-                        dbManager.updateProfilePicture(null);
                     }
                 }
             }

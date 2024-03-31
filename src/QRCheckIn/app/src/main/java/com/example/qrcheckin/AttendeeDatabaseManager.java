@@ -9,11 +9,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.FieldValue;
-import com.google.firebase.firestore.FirebaseFirestore;
 
 /**
  * Controls storing and retrieving data from the Attendees firebase collection
@@ -64,17 +60,20 @@ public class AttendeeDatabaseManager extends DatabaseManager {
      */
     public void storeAttendee(){
         Attendee attendee = new Attendee();
+        attendee.getProfile().generateProfilePicture();
+        attendee.getProfile().getProfilePicture().setGenerated(true);
         // The docID of the attendee object is the associated user's fcmToken string
         getCollectionRef().document(getDocumentID()).set(attendee);
         Log.d("Firestore", String.format("Attendee for token (%s) stored", getDocumentID()));
     }
 
     /**
-     * Updates the trackGeolocation field of the Attendee with the docID fcmToken
-     * @param isShared Boolean value trackGeolocation is set to
+     * Updates a boolean field in the Attendee's firebase document
+     * @param field String name of the field to be updated
+     * @param value Boolean value the field is to be set to
      */
-    public void updateAttendeeGeolocation(Boolean isShared){
-        getDocRef().update("profile.trackGeolocation", isShared).addOnSuccessListener(new OnSuccessListener<Void>() {
+    public void updateAttendeeBoolean(String field, Boolean value){
+        getDocRef().update(field, value).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void unused) {
                 Log.d("Firestore", "docsnapshot boolean updated");
@@ -112,6 +111,57 @@ public class AttendeeDatabaseManager extends DatabaseManager {
     }
 
     /**
+     * Retrieves the Attendee's profile and calls method to generate a new ProfilePicture of their initials
+     */
+    public void callGenerateProfilePicture(){
+        getDocRef().get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                Attendee attendee = documentSnapshot.toObject(Attendee.class);
+                if (attendee == null) {
+                    Log.e("Firestore", "Attendee doc not found");
+                } else {
+                    ProfilePicture pfp = attendee.getProfile().getProfilePicture();
+                    if (pfp != null && pfp.getGenerated()){
+                        ImageStorageManager storage = new ImageStorageManager(pfp, "/ProfilePictures");
+                        // Remove profile picture from storage
+                        storage.deleteImage();
+                        // Generate a new profile picture for cases where the user previously had a generated pfp, and has now changed their name
+                        attendee.getProfile().generateProfilePicture();
+                        updateProfilePicture(Uri.parse(attendee.getProfile().getProfilePicture().getUriString()));
+                    }
+                }
+            }
+        });
+    }
+
+    /**
+     * Deletes the Attendee's ProfilePicture in firestorage and replaces it with a generated one
+     */
+    public void deleteProfilePicture(){
+        getDocRef().get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                Attendee attendee = documentSnapshot.toObject(Attendee.class);
+                if (attendee == null) {
+                    Log.e("Firestore", "Attendee doc not found");
+                } else {
+                    ProfilePicture pfp = attendee.getProfile().getProfilePicture();
+                    if (pfp != null) {
+                        ImageStorageManager storage = new ImageStorageManager(pfp, "/ProfilePictures");
+                        // Remove profile picture from storage
+                        storage.deleteImage();
+                        // Updated isGenerated value and generate a new profile picture from user's initials
+                        updateAttendeeBoolean("profile.profilePicture.generated", true);
+                        callGenerateProfilePicture();
+                    }
+                }
+            }
+        });
+    }
+
+
+    /**
      * Updates a string field in an Attendee's Profile in firestore
      * @param field String of the field to be updated in Profile
      * @param value String of the new value the field is set to
@@ -121,6 +171,10 @@ public class AttendeeDatabaseManager extends DatabaseManager {
             @Override
             public void onSuccess(Void unused) {
                 Log.d("Firestore", "docsnapshot string updated");
+                if(field.equals("name")){
+                    // For cases where the user updates their name, and thus their generated profile picture must get updated as well
+                    callGenerateProfilePicture();
+                }
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override

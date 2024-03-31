@@ -60,8 +60,9 @@ public class UpdatePictureFragment extends DialogFragment {
                     storage.uploadImage();
 
                     // Use AttendeeDatabaseManager to update the Attendee's profilePicture field
-                    AttendeeDatabaseManager database = new AttendeeDatabaseManager(fcmToken);
-                    database.updateProfilePicture(uri);
+                    AttendeeDatabaseManager dbManager = new AttendeeDatabaseManager(fcmToken);
+                    dbManager.updateProfilePicture(uri);
+                    dbManager.updateAttendeeBoolean("profile.profilePicture.generated", false);
 
                 }
             });
