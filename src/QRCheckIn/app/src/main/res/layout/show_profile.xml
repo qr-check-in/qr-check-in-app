@@ -1,24 +1,22 @@
-<?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-xmlns:app="http://schemas.android.com/apk/res-auto"
-xmlns:tools="http://schemas.android.com/tools"
-android:orientation="vertical"
-android:layout_width="match_parent"
-android:layout_height="match_parent"
-tools:context=".ProfileActivity"
-    android:id="@+id/showProfile">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/showProfile"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
     <include
         layout="@layout/profile_toolbar"
-        android:id="@+id/profileToolbar">
-    </include>
+        android:id="@+id/profileToolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
 
     <LinearLayout
         android:id="@+id/bodyContent"
         android:layout_width="match_parent"
-        android:layout_height="75dp"
+        android:layout_height="0dp"
         android:layout_weight="9"
-        android:gravity="top"
         android:orientation="vertical">
 
         <LinearLayout
@@ -32,11 +30,10 @@ tools:context=".ProfileActivity"
                 android:layout_width="180dp"
                 android:layout_height="180dp"
                 android:layout_gravity="center"
-                android:src="@drawable/profile"
                 android:layout_marginTop="30dp"
+                android:src="@drawable/profile"
                 app:civ_border_color="@color/DarkGray"
-                app:civ_border_width="4dp"
-                />
+                app:civ_border_width="4dp" />
 
             <TextView
                 android:id="@+id/profileName"
@@ -46,20 +43,20 @@ tools:context=".ProfileActivity"
                 android:paddingTop="10dp"
                 android:textAppearance="@style/TextAppearance.AppCompat.Large" />
         </LinearLayout>
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="0.8"
             android:orientation="horizontal">
+
             <Button
                 android:id="@+id/btnUpdatePicture"
                 android:layout_width="164dp"
                 android:layout_height="41dp"
-                android:backgroundTint="@color/NeonBlue"
                 android:layout_marginLeft="25dp"
-                android:text="Update Picture"
-                tools:layout_editor_absoluteX="32dp" />
-
+                android:backgroundTint="@color/NeonBlue"
+                android:text="Update Picture" />
 
             <Button
                 android:id="@+id/btnRemovePicture"
@@ -71,8 +68,8 @@ tools:context=".ProfileActivity"
 
         </LinearLayout>
 
-
         <LinearLayout
+            android:id="@+id/profile_info_box"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_margin="25dp"
@@ -85,10 +82,9 @@ tools:context=".ProfileActivity"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
 
-
                 <TextView
                     android:id="@+id/user_info"
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_margin="20dp"
                     android:fontFamily="sans-serif-black"
@@ -106,16 +102,16 @@ tools:context=".ProfileActivity"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="25dp"
-                    android:textSize="17dp"
-                    android:text="Name"  />
+                    android:text="Name"
+                    android:textSize="17dp" />
 
                 <TextView
                     android:id="@+id/profileName1"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="140dp"
+                    android:layout_marginLeft="100dp"
                     android:textSize="17dp"
-                    android:hint="_name_" />
+                    android:hint="FirstName LastName" />
             </LinearLayout>
 
             <LinearLayout
@@ -128,75 +124,71 @@ tools:context=".ProfileActivity"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="25dp"
-                    android:textSize="17dp"
-                    android:text="Contact" />
+                    android:text="Contact"
+                    android:textSize="17dp" />
 
                 <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
                     android:id="@+id/contact1"
-                    android:layout_marginLeft="93dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="90dp"
                     android:hint="(587) XXX XXXX"
                     android:inputType="phone"
                     android:textSize="17dp" />
             </LinearLayout>
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="13.5dp"
-
                 android:orientation="horizontal">
-
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="25dp"
+                    android:text="Homepage"
+                    android:textSize="17dp" />
+
+                <TextView
+                    android:id="@+id/homepage1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="67dp"
                     android:textSize="17dp"
-                    android:text="Geolocation Track" />
+                    android:hint="_name_.com" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="13.5dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="25dp"
+                    android:text="Geolocation Track"
+                    android:textSize="17dp" />
 
                 <Switch
                     android:id="@+id/geoswitch"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:layout_marginLeft="52dp"
+                    android:layout_marginLeft="20dp"
                     android:textSize="17dp"
                     tools:ignore="UseSwitchCompatOrMaterialXml" />
             </LinearLayout>
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="13.5dp"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="25dp"
-                    android:textSize="17dp"
-                    android:text="Homepage"/>
-                <TextView
-                    android:id="@+id/homepage1"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="100dp"
-                    android:textSize="17dp"
-                    android:hint="_name_.com" />
-
-            </LinearLayout>
         </LinearLayout>
 
-
     </LinearLayout>
-
 
     <include
         layout="@layout/mainappbar"
         android:layout_width="match_parent"
         android:layout_height="45dp" />
-
-
-
 
 </LinearLayout>
