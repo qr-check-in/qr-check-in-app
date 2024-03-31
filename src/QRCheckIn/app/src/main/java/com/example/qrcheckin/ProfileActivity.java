@@ -177,9 +177,9 @@ public class ProfileActivity extends AppCompatActivity implements EditProfileFra
         removePicture.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Call method to delete the file from firebase storage and update the attendee doc's field
-                dbManager.deleteProfilePicture();
-                //profileImageView.setImageResource(R.drawable.profile);
+                // Call method to delete update the user's profile picture to a generated one
+                dbManager.updateAttendeeBoolean("profile.profilePicture.generated", true);
+                dbManager.callGenerateProfilePicture();
                 }
         });
 

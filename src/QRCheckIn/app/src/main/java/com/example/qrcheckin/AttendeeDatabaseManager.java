@@ -148,12 +148,9 @@ public class AttendeeDatabaseManager extends DatabaseManager {
                 } else {
                     ProfilePicture pfp = attendee.getProfile().getProfilePicture();
                     if (pfp != null) {
-                        ImageStorageManager storage = new ImageStorageManager(pfp, "/ProfilePictures");
                         // Remove profile picture from storage
+                        ImageStorageManager storage = new ImageStorageManager(pfp, "/ProfilePictures");
                         storage.deleteImage();
-                        // Updated isGenerated value and generate a new profile picture from user's initials
-                        updateAttendeeBoolean("profile.profilePicture.generated", true);
-                        callGenerateProfilePicture();
                     }
                 }
             }
