@@ -1,5 +1,6 @@
 package com.example.qrcheckin;
 
+import static android.content.ContentValues.TAG;
 import static com.example.qrcheckin.R.layout.show_profile;
 
 import android.content.Intent;
@@ -15,12 +16,15 @@ import android.widget.ImageView;
 import android.widget.Switch;
 import android.widget.TextView;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.FirebaseFirestoreException;
 
 /**
  * Manages user profile view within the app.
@@ -108,14 +112,36 @@ public class ProfileActivity extends AppCompatActivity implements EditProfileFra
         dbManager = new AttendeeDatabaseManager(fcmToken);
 
         // set the profile attribute fields and string attributes like name, contact, homepage
-        setProfileFields();
+        setProfileFields(true);
+
+
+        // Set listener to updates of the attendee doc
+        // Main purpose is to update the displayed profile pic to a generated one
+        dbManager.getDocRef().addSnapshotListener(new EventListener<DocumentSnapshot>() {
+            @Override
+            public void onEvent(@Nullable DocumentSnapshot value, @Nullable FirebaseFirestoreException error) {
+                if (error != null) {
+                    Log.w(TAG, "Listen failed.", error);
+                    return;
+                }
+                if (value != null && value.exists()) {
+                    Log.d(TAG, "Current data: " + value.getData());
+                    Attendee attendee = value.toObject(Attendee.class);
+                    assert attendee != null;
+                    // Update the profile picture currently displayed
+                    sharedViewModel.setSelectedImageUri(Uri.parse(attendee.getProfile().getProfilePicture().getUriString()));
+                } else {
+                    Log.d(TAG, "Current data: null");
+                }
+            }
+        });
 
         // Listener for the Geolocation tracking switch
         switchGeolocation.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 // updates the Attendee's geolocation attribute
-                dbManager.updateAttendeeGeolocation(isChecked);
+                dbManager.updateAttendeeBoolean("profile.trackGeolocation",isChecked);
             }
         });
 
@@ -151,9 +177,9 @@ public class ProfileActivity extends AppCompatActivity implements EditProfileFra
         removePicture.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Call method to delete the file from firebase storage and update the attendee doc's field
-                deleteProfilePicture();
-                profileImageView.setImageResource(R.drawable.profile);
+                // Call method to delete update the user's profile picture to a generated one
+                dbManager.updateAttendeeBoolean("profile.profilePicture.generated", true);
+                dbManager.callGenerateProfilePicture();
                 }
         });
 
@@ -194,13 +220,14 @@ public class ProfileActivity extends AppCompatActivity implements EditProfileFra
         dbManager.updateProfileString("name", nameUpdated);
         dbManager.updateProfileString("contact", contactUpdated);
         dbManager.updateProfileString("homepage", homepageUpdated);
-        setProfileFields();
+        setProfileFields(false);
 
     }
     /**
-     * Fetches user profile details from Firestore & updates the UI.
+     * Fetches user profile details from Firebase & updates the UI.
+     * @param firstOpen Boolean indicating if the activity has just been opened and the method is being called from onCreate
      */
-    public void setProfileFields() {
+    public void setProfileFields(Boolean firstOpen) {
         dbManager.getDocRef().get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
@@ -219,34 +246,11 @@ public class ProfileActivity extends AppCompatActivity implements EditProfileFra
                     tvContact.setText(contact);
                     tvHomepage.setText(homepage);
                     switchGeolocation.setChecked(profile.getTrackGeolocation());
-                    // Display profilePicutre if the profile has one
-                    if(profile.getProfilePicture() != null){
+                    // Display profilePicutre if this method is being called from onCreate
+                    // Prevents profileImageView from being updated twice in cases where a user updates their name and needs a new generated profile pic
+                    if(profile.getProfilePicture() != null && firstOpen){
                         ImageStorageManager storage = new ImageStorageManager(profile.getProfilePicture(),"/ProfilePictures");
-                        storage.displayImage(profileImageView);
-                    }
-                }
-            }
-        });
-    }
-
-    /**
-     * Deletes the profile picture in firebase storage upon the profile picture being removed
-     */
-    public void deleteProfilePicture(){
-        dbManager.getDocRef().get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-            @Override
-            public void onSuccess(DocumentSnapshot documentSnapshot) {
-                Attendee attendee = documentSnapshot.toObject(Attendee.class);
-                if (attendee == null) {
-                    Log.e("Firestore", "Attendee doc not found");
-                } else {
-                    Profile profile = attendee.getProfile();
-                    if (profile.getProfilePicture() != null) {
-                        ImageStorageManager storage = new ImageStorageManager(profile.getProfilePicture(), "/ProfilePictures");
-                        // Remove profile picture from storage
-                        storage.deleteImage();
-                        // update attendee doc's field
-                        dbManager.updateProfilePicture(null);
+                       storage.displayImage(profileImageView);
                     }
                 }
             }
