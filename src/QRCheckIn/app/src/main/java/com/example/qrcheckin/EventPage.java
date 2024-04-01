@@ -59,6 +59,7 @@ public class EventPage extends AppCompatActivity {
         addEventButton = findViewById(R.id.addCalenderButton);
         profileButton = findViewById(R.id.profileButton);
 
+        // Toolbar Actions
         Toolbar toolbar = findViewById(R.id.event_page_toolbar);
         setSupportActionBar(toolbar);
         if (getSupportActionBar() != null) {
@@ -66,6 +67,7 @@ public class EventPage extends AppCompatActivity {
         }
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         TextView header = findViewById(R.id.mainHeader);
+        ImageButton notificationsbtn = findViewById(R.id.notificationIconBtn);
 
         // Find the text views on the event page xml
         TextView tvEventName = findViewById(R.id.text_event_name);
@@ -77,6 +79,15 @@ public class EventPage extends AppCompatActivity {
         signupCheckBox = findViewById(R.id.signup_button);
         signupLimitReached = findViewById(R.id.signup_limit_text);
         signupLimitReached.setVisibility(View.INVISIBLE);
+
+        // Handles click on event notification
+        notificationsbtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Call the NotificationListDialog method when the button is clicked
+                NotificationListDialog();
+            }
+        });
 
         // Retrieve the user's fcmToken/ attendee docID
         SharedPreferences prefs = getSharedPreferences("TOKEN_PREF", MODE_PRIVATE);
@@ -174,6 +185,33 @@ public class EventPage extends AppCompatActivity {
             }
         });
 
+    }
+
+    public void NotificationListDialog(){
+        // Temporary Notifications list
+        ArrayList<Notification> notifications = new ArrayList<>();
+
+    // Creating sample notification objects and adding them to the list
+        Notification notification1 = new Notification("Test Notification 1", "Description for Test Notification 1", "Date Time for Test Notification 1");
+        Notification notification2 = new Notification("Test Notification 2", "Description for Test Notification 2", "Date Time for Test Notification 2");
+        Notification notification3 = new Notification("Test Notification 3", "Description for Test Notification 3", "Date Time for Test Notification 3");
+        Notification notification4 = new Notification("Test Notification 4", "Description for Test Notification 4", "Date Time for Test Notification 4");
+        Notification notification5 = new Notification("Test Notification 5", "Description for Test Notification 5", "Date Time for Test Notification 5");
+
+    // Adding the notifications to the list
+        notifications.add(notification1);
+        notifications.add(notification2);
+        notifications.add(notification3);
+        notifications.add(notification4);
+        notifications.add(notification5);
+        DialogRecyclerView listDialog = new DialogRecyclerView(
+                this, notifications) {
+            @Override
+            public void onCreate(Bundle savedInstanceState) {
+                super.onCreate(savedInstanceState);
+            }
+        };
+        listDialog.show();
     }
 
     /**

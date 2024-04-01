@@ -1,5 +1,9 @@
 package com.example.qrcheckin;
 
+import com.google.type.DateTime;
+
+import org.checkerframework.checker.units.qual.Time;
+
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -11,47 +15,36 @@ public class Notification {
     private String title;
     // Notification Description
     private String message;
-    // List of recipients
+    // Notification date
+    private String dateTime;
 
-    /**
-     *
-     * @param title
-     * @param message
-     */
-    public Notification(String title, String message) {
+    public Notification(String title, String message, String dateTime) {
         this.title = title;
         this.message = message;
+        this.dateTime = dateTime;
     }
 
-    /**
-     *
-     * @return
-     */
     public String getTitle() {
         return title;
     }
 
-    /**
-     *
-     * @param title
-     */
     public void setTitle(String title) {
         this.title = title;
     }
 
-    /**
-     *
-     * @return
-     */
     public String getMessage() {
         return message;
     }
 
-    /**
-     * 
-     * @param message
-     */
     public void setMessage(String message) {
         this.message = message;
+    }
+
+    public String getDateTime() {
+        return dateTime;
+    }
+
+    public void setDateTime(String dateTime) {
+        this.dateTime = dateTime;
     }
 }

@@ -32,7 +32,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Notification Title"
-                android:textSize="20sp"
+                android:textSize="16sp"
                 android:textStyle="bold"
                 android:textColor="@android:color/black"
                 android:layout_marginBottom="4dp"/>
@@ -42,7 +42,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Notification Description"
-                android:textSize="14sp"
+                android:textSize="12sp"
                 android:textColor="@android:color/darker_gray"/>
 
             <TextView
@@ -51,12 +51,13 @@
                 android:layout_height="wrap_content"
                 android:text="Notification Time"
                 android:textStyle="italic"
-                android:textSize="12sp"
+                android:textSize="10sp"
                 android:textColor="@android:color/darker_gray"/>
 
         </LinearLayout>
 
         <ImageView
+            android:id="@+id/eventPoster"
             android:layout_width="50dp"
             android:layout_height="75dp"
             android:src="@drawable/fest1"
