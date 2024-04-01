@@ -83,7 +83,6 @@ public class CreateNotification extends AppCompatActivity {
 
         // Retrieve the event passed from the previous activity
         documentId = getIntent().getStringExtra("EVENT_DOC_ID");
-
         eventDb = new EventDatabaseManager(documentId);
 
         // Inside the addNotificationBtn.setOnClickListener method of CreateNotification activity
@@ -109,8 +108,8 @@ public class CreateNotification extends AppCompatActivity {
             }
         });
     }
-    //openai, 2024, chatgpt: how to pass the document Id through the upButton
 
+    //openai, 2024, chatgpt: how to pass the document Id through the upButton
     /**
      * Pass information through the the up button
      * @param item The menu item that was selected.
