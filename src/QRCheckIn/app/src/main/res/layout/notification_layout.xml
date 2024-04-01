@@ -15,6 +15,7 @@
         android:padding="16dp">
 
         <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/notificationImage"
             android:layout_width="60dp"
             android:layout_height="60dp"
             android:src="@drawable/appicon"
