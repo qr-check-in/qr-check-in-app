@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:background="@color/JordyBlue"
+    android:background="@color/Surface"
     android:theme="@style/ThemeOverlay.AppCompat.Dark"
     app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
 
@@ -12,7 +12,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Centered Title"
-        android:textColor="@android:color/black"
+        android:textColor="@color/OnSurface"
         android:textSize="28dp"
         android:layout_gravity="center"
         android:textStyle="bold">
