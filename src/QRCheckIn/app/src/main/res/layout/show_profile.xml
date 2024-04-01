@@ -81,7 +81,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toTopOf="@+id/main_app_bar"
-        android:background="@color/JordyBlue"
+        android:background="@color/ChefBlue"
         android:orientation="vertical"
         android:padding="15dp">
 
