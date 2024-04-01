@@ -65,7 +65,7 @@
                     tools:layout_editor_absoluteX="30dp"
                     tools:layout_editor_absoluteY="78dp"
                     android:drawableLeft="@drawable/arrowresized"
-                    android:gravity="center_horizontal">
+                    android:drawablePadding="35dp">
                 </com.google.android.material.textfield.TextInputEditText>
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -90,7 +90,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="Notification Description"
-                        android:gravity="center_horizontal"
+                        android:drawablePadding="35dp"
                         android:drawableLeft="@drawable/arrowresized">
 
                     </com.google.android.material.textfield.TextInputEditText>
