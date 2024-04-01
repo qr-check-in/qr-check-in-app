@@ -2,54 +2,54 @@ package com.example.qrcheckin;
 
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
-import static androidx.test.espresso.action.ViewActions.scrollTo;
 import static androidx.test.espresso.action.ViewActions.swipeUp;
+import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.intent.Intents.intended;
-import static androidx.test.espresso.matcher.ViewMatchers.isAssignableFrom;
 import static androidx.test.espresso.matcher.ViewMatchers.isDescendantOfA;
-import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
+import static androidx.test.espresso.matcher.ViewMatchers.withClassName;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
-import static org.hamcrest.CoreMatchers.allOf;
-import static org.junit.Assert.assertTrue;
 
-import android.util.Log;
-import android.view.View;
+import static net.bytebuddy.implementation.bind.annotation.IgnoreForBinding.Verifier.check;
+import static java.util.EnumSet.allOf;
 
-import androidx.recyclerview.widget.RecyclerView;
-import androidx.test.core.app.ActivityScenario;
-import androidx.test.espresso.NoMatchingViewException;
-import androidx.test.espresso.UiController;
-import androidx.test.espresso.ViewAction;
-import androidx.test.espresso.ViewInteraction;
+import android.app.DatePickerDialog;
+import android.app.TimePickerDialog;
+
 import androidx.test.espresso.action.ViewActions;
-//import androidx.test.espresso.contrib.RecyclerViewActions;
 import androidx.test.espresso.intent.Intents;
 import androidx.test.espresso.intent.matcher.IntentMatchers;
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.filters.LargeTest;
-//import static androidx.test.espresso.contrib.RecyclerViewActions.actionOnItemAtPosition;
+
+import com.firebase.ui.firestore.FirestoreRecyclerOptions;
+import com.google.firebase.firestore.Query;
+
+import com.example.qrcheckin.EventListView; // Import the class containing eventDb
 
 
-import org.hamcrest.Matcher;
+import org.hamcrest.Matchers;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import java.util.Calendar;
 import java.util.Random;
 
 @RunWith(AndroidJUnit4.class)
 @LargeTest
 public class CreateEventAndCheck {
+
+    String title = "AAA Annual Conference";
+    String detail = "'AAA Annual Conference' is a premier event gathering professionals and experts from the field of Computer Science";
+    Calendar currentDate;
+    Calendar time;
+
     @Rule
     public ActivityScenarioRule<CreateAddEventDetails> scenario = new ActivityScenarioRule<CreateAddEventDetails>(CreateAddEventDetails.class);
-
-    private EventAdapter adapter;
-    private RecyclerView recyclerView;
-    public int rand = 2000 + (new Random().nextInt(1000));
 
 
     @Before
@@ -69,14 +69,45 @@ public class CreateEventAndCheck {
      * Create a Event and generate QR Code for check-in
      * Finally, check if the event exists
      */
+
+
     @Test
-    public void testButtonsAndTextboxes() {
-        String title = "Happy Birthday Dear";
+    public void testCreateEventInputFields() {
 
         // Test the text boxes
         onView(withId(R.id.eventNameText)).perform(ViewActions.typeText(title));
-        onView(withId(R.id.eventDateText)).perform(ViewActions.typeText("2024-3-20"));
-        onView(withId(R.id.eventTimeText)).perform(ViewActions.typeText("15:30"));
+
+        // Open the SelectDateFragment by clicking on a button
+        onView(withId(R.id.eventDateText)).perform(click());
+
+        // Wait for the DatePickerDialog to be displayed
+        onView(withClassName(Matchers.equalTo(DatePickerDialog.class.getName())));
+
+        // Get the current date
+        currentDate = Calendar.getInstance();
+
+        // Add two days to the current date
+        currentDate.add(Calendar.DAY_OF_MONTH, 2);
+
+        // Click on the OK button of the DatePickerDialog to select the current date
+        onView(withText("OK")).perform(click());
+
+        // Open the TimePickerFragment by clicking on a button
+        onView(withId(R.id.eventTimeText)).perform(click());
+
+        // Wait for the TimePickerDialog to be displayed
+        onView(withClassName(Matchers.equalTo(TimePickerDialog.class.getName())));
+
+        // Use the current time as the default values for the picker.
+        time = Calendar.getInstance();
+
+        // Add two hours to the current time
+        time.add(Calendar.HOUR_OF_DAY, 2);
+
+        // Click on the OK button of the TimePickerDialog to select the time two hours from now
+        onView(withText("OK")).perform(click());
+
+        // Type the location
         onView(withId(R.id.eventLocationText)).perform(ViewActions.typeText("Toronto, Canada"));
 
         // Test the switch by enabling it
@@ -92,14 +123,18 @@ public class CreateEventAndCheck {
         onView(withId(R.id.scrollView2)).perform(swipeUp());
 
         // Test event description
-        onView(withId(R.id.eventDescriptionText)).perform(ViewActions.typeText("Welcome! Bless me with best wishes."));
-
+        onView(withId(R.id.eventDescriptionText)).perform(ViewActions.typeText(detail));
 
         // Perform action that triggers the new activity
         onView(withId(R.id.nextButton)).perform(click());
 
-        // A random delay (So, that it do too fast)
-//        Thread.sleep(rand);
+    }
+
+    @Test
+    public void testGenerateQrCode() {
+
+        // First run this test to get event details
+        testCreateEventInputFields();
 
         // Check that the intended activity is started
         intended(IntentMatchers.hasComponent(CreateGenerateEventQR.class.getName()));
@@ -110,64 +145,24 @@ public class CreateEventAndCheck {
         // perform click on finishButton to create event
         onView(withId(R.id.finishButton)).perform(click());
 
-        // A random delay (So, that it do too fast)
-//        Thread.sleep(rand);
+    }
 
+    @Test
+    public void testSearchEventInList() {
+
+        // First run this test to get better setup;
+        testGenerateQrCode();
 
         // Now check in the events page if the created event exists or not
 
-        // move to EventListView using intend
+        // move to EventListView using intent
         intended(IntentMatchers.hasComponent(EventListView.class.getName()));
 
-        // click on My Events to see events created by user (YOU)
-        ViewInteraction myEventsView = onView(allOf(withId(R.id.myEventsButton), isDescendantOfA(withId(R.id.eventsTabbar))));
-        myEventsView.perform(click());
+        // Click on the event with text stored in title
+        onView(withText(title)).perform(click());
 
-        // Delay to ensure the view is loaded
-//        Thread.sleep(1000);
-
-        // Find the position of the event with the name containing "Happy"
-        int position = findEventPosition(title);
-
-        // Perform action on the item at the obtained position
-        Log.d("Position", "event position: " + position);
-        assertTrue("Event with title containing '" + title + "' not found.", position != -1);
-
-        // Perform action on the item at the obtained position
-        Log.d("Position", "event position: " + position);
-
-        // Scroll to and click on the event
-//        onView(withId(R.id.event_recycler_view)).perform(actionOnItemAtPosition(position, click()));
-//        onView(withText(title)).perform(scrollTo(), click());
-
-
-
+        //
+//        onView(withId(withId(R.id.mainHeader)), isDescendantOfA(withId(R.id.event_page_toolbar))))
+//                .check(matches(withText("Expected Text")));
     }
-
-
-    private int findEventPosition(String title) {
-        ActivityScenario<EventListView> scenario = ActivityScenario.launch(EventListView.class);
-        int[] position = {-1}; // Using an array to store the position since it needs to be final or effectively final in the lambda expression
-        scenario.onActivity(activity -> {
-            RecyclerView recyclerView = activity.findViewById(R.id.event_recycler_view);
-            if (recyclerView != null) {
-                RecyclerView.Adapter adapter = recyclerView.getAdapter();
-                if (adapter instanceof EventAdapter) {
-                    EventAdapter eventAdapter = (EventAdapter) adapter;
-                    Log.d("EventAdapter", "Item Count: " + eventAdapter.getItemCount());
-                    for (int i = 0; i < eventAdapter.getItemCount(); i++) {
-                        Event event = eventAdapter.getItem(i);
-                        Log.d("EventName", "EventName[" + i + "] : " + event.getEventName());
-                        if (event != null && event.getEventName().contains(title)) {
-                            position[0] = i;
-                            break;
-                        }
-                    }
-                }
-            }
-        });
-        scenario.close(); // Close the activity after performing the actions
-        return position[0];
-    }
-
 }
