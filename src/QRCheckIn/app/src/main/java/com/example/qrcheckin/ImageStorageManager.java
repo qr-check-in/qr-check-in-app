@@ -28,7 +28,18 @@ public class ImageStorageManager {
     private String filePath;
 
     /**
-     * Constructs an ImageStorageManager
+     * Constructs an ImageStorageManager to deal with a file in storage, without an Image object
+     * (For displaying the AddAdminQRCode without hardcoding it, in case it needs to be changed)
+     * @param filePath String of the complete path and file name
+     */
+    public ImageStorageManager(String filePath){
+        this.storage = FirebaseStorage.getInstance();
+        this.filePath = filePath;
+        this.storageReference = storage.getReference().child(filePath);
+    }
+
+    /**
+     * Constructs an ImageStorageManager to deal with an Image object
      * @param image Image to be stored/deleted/displayed by manager's methods
      * @param folderName String of the Image's location in firebase storage
      */

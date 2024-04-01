@@ -70,5 +70,7 @@
     <string name="signup_limit_text">This event has reached its sign-up limit</string>
     <string name="view_check_in_locations">View Check In Locations</string>
     <string name="admin_button_text">View admin dashboard</string>
+    <string name="add_admin_text">Scan this code to enable admin permissions on another device.</string>
+    <string name="attendee_icon">Attendee icon</string>
 
 </resources>

@@ -27,7 +27,7 @@
         <activity
             android:name=".AttendeeList"
             android:exported="false"
-            android:parentActivityName=".OrganizersEventPage" />
+            android:parentActivityName=".OrganizersEventPageActivity"/>
         <activity
             android:name=".MyEventsActivity"
             android:exported="false" />
@@ -59,7 +59,7 @@
         <activity
             android:name=".CreateNotification"
             android:exported="false"
-            android:parentActivityName=".OrganizersEventPage" />
+            android:parentActivityName=".OrganizersEventPageActivity"/>
         <activity
             android:name=".CreateGenerateEventQR"
             android:exported="false"
@@ -86,7 +86,7 @@
             android:name=".AdminActivity"
             android:exported="false" />
         <activity
-            android:name=".OrganizersEventPage"
+            android:name=".OrganizersEventPageActivity"
             android:exported="false"
             android:parentActivityName=".EventListView" />
         <activity

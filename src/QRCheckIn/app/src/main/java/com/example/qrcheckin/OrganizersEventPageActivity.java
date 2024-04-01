@@ -38,7 +38,7 @@ import java.util.Objects;
  * Retrieves & displays event details from Firestore database.
  * Provide users with information about event; name, date, location, description, images.
  */
-public class OrganizersEventPage extends AppCompatActivity {
+public class OrganizersEventPageActivity extends AppCompatActivity {
     // Mainbar
     ImageButton qrButton;
     ImageButton eventButton;
@@ -293,7 +293,7 @@ public class OrganizersEventPage extends AppCompatActivity {
                 dialog.dismiss();
                 Intent intent = new Intent(getApplicationContext(), AttendeeList.class);
                 intent.putExtra("EVENT_DOC_ID", documentId);
-                intent.putExtra("FIELD_NAME", "signups");
+                intent.putExtra("FIELD_NAME", "signupEvents");
                 startActivity(intent);
             }
         });
@@ -305,7 +305,7 @@ public class OrganizersEventPage extends AppCompatActivity {
                 dialog.dismiss();
                 Intent intent = new Intent(getApplicationContext(), AttendeeList.class);
                 intent.putExtra("EVENT_DOC_ID", documentId);
-                intent.putExtra("FIELD_NAME", "attendee");
+                intent.putExtra("FIELD_NAME", "attendedEvents");
                 startActivity(intent);
             }
         });
