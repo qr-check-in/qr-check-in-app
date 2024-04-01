@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.Manifest;
 
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Address;
 import android.location.Geocoder;
@@ -17,6 +18,7 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -42,6 +44,10 @@ public class AttendeeList extends AppCompatActivity {
     AttendeeDatabaseManager attendeeDb;
     private static final int REQUEST_LOCATION = 101;
 
+    private EventDatabaseManager eventDb;
+    private String fcmToken;
+    private String documentId;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -61,8 +67,9 @@ public class AttendeeList extends AppCompatActivity {
         header.setText("Total Participants: ");
 
         // Retrieve values passed by previous activity to determine if the event's signups list or attendee list should be displayed
-        String documentId = getIntent().getStringExtra("EVENT_DOC_ID");
+        documentId = getIntent().getStringExtra("EVENT_DOC_ID");
         String fieldName = getIntent().getStringExtra("FIELD_NAME");
+
 
         // Set up the recycler view of events to be displayed (displays all by default)
         attendeeDb = new AttendeeDatabaseManager();
@@ -155,6 +162,28 @@ public class AttendeeList extends AppCompatActivity {
         recyclerView.setAdapter(attendeeAdapter);
     }
 
+    //openai, 2024, chatgpt: how to pass the document Id through the upButton
+
+    /**
+     * Pass information through the the up button
+     * @param item The menu item that was selected.
+     *
+     * @return
+     */
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle presses on the action bar items
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                // Navigate back to OrganizersEventPageActivity with documentId
+                Intent intent = new Intent(getApplicationContext(), OrganizersEventPageActivity.class);
+                intent.putExtra("DOCUMENT_ID", documentId);
+                startActivity(intent);
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
 
 }
 
