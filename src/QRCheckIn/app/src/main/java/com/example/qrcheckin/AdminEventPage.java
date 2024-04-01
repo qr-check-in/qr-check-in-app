@@ -3,6 +3,8 @@ package com.example.qrcheckin;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -16,10 +18,15 @@ import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.storage.FileDownloadTask;
+import com.google.firebase.storage.StorageReference;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Objects;
 
@@ -34,6 +41,7 @@ public class AdminEventPage extends AppCompatActivity {
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private EventDatabaseManager eventDb;
     CheckBox signupCheckBox;
+    private StorageReference storageReference;
     private TextView tvEventName, tvEventDate, tvEventLocation, tvEventDescription;
     TextView signupLimitReached;
     private ImageView ivEventPoster, ivEventPromoQr;
@@ -70,8 +78,8 @@ public class AdminEventPage extends AppCompatActivity {
         // Retrieve the event passed from the previous activity
         Intent intent = getIntent();
         String documentId = intent.getStringExtra("DOCUMENT_ID");
-        SharedPreferences prefs = getSharedPreferences("TOKEN_PREF", MODE_PRIVATE);
-        fcmToken = prefs.getString("token", "missing token");
+//        SharedPreferences prefs = getSharedPreferences("TOKEN_PREF", MODE_PRIVATE);
+//        fcmToken = prefs.getString("token", "missing token");
 
         if (documentId != null && !documentId.isEmpty()) {
 
@@ -139,7 +147,7 @@ public class AdminEventPage extends AppCompatActivity {
 
     }
     private void initializeViews() {
-        tvEventName = findViewById(R.id.text_event_name);
+        //tvEventName = findViewById(R.id.text_event_name);
         tvEventDate = findViewById(R.id.text_event_date);
         tvEventLocation = findViewById(R.id.text_event_location);
         tvEventDescription = findViewById(R.id.text_event_description);
@@ -151,12 +159,26 @@ public class AdminEventPage extends AppCompatActivity {
     }
     private void displayEventDetails(Event event) {
         //tvEventName.setText(event.getEventName());
+        TextView header = findViewById(R.id.mainHeader);
+        header.setText(event.getEventName());
         tvEventLocation.setText(event.getEventLocation());
         tvEventDate.setText(event.getEventDate());
         tvEventDescription.setText(event.getEventDescription());
 
-        // Assuming you have methods to handle displaying images in ivEventPoster and ivEventPromoQr
-        // For example:
-        // loadImageIntoView(event.getPosterURL(), ivEventPoster);
+        if (event.getPoster() != null){
+            ImageStorageManager storagePoster = new ImageStorageManager(event.getPoster(), "/EventPosters");
+            storagePoster.displayImage(ivEventPoster);
+            Log.d("ivEventPoster", String.format("displayed poster"));
+        }
+        else {
+            Log.d("ivEventPoster", String.format("cannot displaye poster"));
+        }
+        // Set the ImageView for the Event's QR code
+        // TODO: Display promo QR instead of check-in QR
+        if (event.getCheckInQRCode() != null) {
+            ImageStorageManager storageQr = new ImageStorageManager(event.getCheckInQRCode(), "/QRCodes");
+            storageQr.displayImage(ivEventPromoQr);
+        }
     }
+
 }

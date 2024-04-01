@@ -34,7 +34,6 @@ public class AdminEventAdapter extends FirestoreRecyclerAdapter<Event, AdminEven
         holder.eventLocationTextView.setText(model.getEventLocation());
         holder.eventTimeTextView.setText(model.getEventDate());
         // Assuming you have a method to set the image on the ImageView
-
     }
 
     public class EventViewHolder extends RecyclerView.ViewHolder {
