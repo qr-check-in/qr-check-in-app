@@ -14,10 +14,10 @@
         android:orientation="horizontal"
         android:padding="16dp">
 
-        <ImageView
+        <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/imageViewAttendeeIcon"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
             android:contentDescription="@string/attendee_icon"
             android:src="@drawable/ic_profile_light" />
 
