@@ -65,7 +65,7 @@ public class NotificationAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     }
 
     /**
-     * Define a ViewHolder class that holds references to the TextViews in the item_employee layout file
+     * Define a ViewHolder class that holds references to the TextViews in the notification_layout layout file
      */
     private static class MyViewHolder
             extends RecyclerView.ViewHolder {
