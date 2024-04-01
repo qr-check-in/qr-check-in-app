@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="8dp"
-    app:cardBackgroundColor="@color/SecondaryContainer"
+    app:cardBackgroundColor="@color/SurfaceContainerHigh"
     app:cardCornerRadius="12dp"
     app:cardElevation="6dp">
 
@@ -29,7 +29,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:text="@string/description_event_name"
-            android:textColor="@color/OnPrimary"
+            android:textColor="@color/OnSurface"
             android:textSize="18sp"
             android:textStyle="bold" />
 
@@ -38,7 +38,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/description_event_location"
-            android:textColor="@color/OnSecondary"
+            android:textColor="@color/OnSurface"
             android:textSize="14sp" />
 
         <TextView
@@ -47,7 +47,7 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="8dp"
             android:text="@string/description_event_date"
-            android:textColor="@color/OnTertiary"
+            android:textColor="@color/OnSurface"
             android:textSize="14sp" />
     </LinearLayout>
 </androidx.cardview.widget.CardView>
