@@ -30,6 +30,7 @@
                 android:textSize="28sp"
                 android:textStyle="bold"
                 android:text="Event notifications"
+                android:gravity="center_horizontal"
                 android:visibility="visible"/>
 
             <View

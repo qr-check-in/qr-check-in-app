@@ -45,7 +45,22 @@
                 android:textSize="14sp"
                 android:textColor="@android:color/darker_gray"/>
 
+            <TextView
+                android:id="@+id/notificationTimeText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Notification Time"
+                android:textStyle="italic"
+                android:textSize="12sp"
+                android:textColor="@android:color/darker_gray"/>
+
         </LinearLayout>
+
+        <ImageView
+            android:layout_width="50dp"
+            android:layout_height="75dp"
+            android:src="@drawable/fest1"
+            android:scaleType="fitXY"/>
 
     </LinearLayout>
 
