@@ -3,4 +3,49 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+<<<<<<< Updated upstream
 </androidx.cardview.widget.CardView>
+=======
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="16dp">
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:src="@drawable/appicon"
+            android:layout_marginEnd="16dp"/>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/notificationTitleText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Notification Title"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:textColor="@android:color/black"
+                android:layout_marginBottom="4dp"/>
+
+            <TextView
+                android:id="@+id/notificationDescriptionText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Notification Description"
+                android:textSize="14sp"
+                android:textColor="@android:color/darker_gray"/>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</androidx.cardview.widget.CardView>
+
+>>>>>>> Stashed changes
