@@ -187,6 +187,9 @@ public class EventPage extends AppCompatActivity {
 
     }
 
+    /**
+     * This handles the interactions with opening the dialog for notifcations
+     */
     public void NotificationListDialog(){
         // Temporary Notifications list
         ArrayList<Notification> notifications = new ArrayList<>();
