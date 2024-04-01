@@ -198,6 +198,36 @@ public class OrganizersEventPage extends AppCompatActivity {
     }
 
     /**
+     * This handles the interactions with opening the dialog for notifcations
+     */
+    public void NotificationListDialog(){
+        // Temporary Notifications list
+        ArrayList<Notification> notifications = new ArrayList<>();
+
+        // Creating sample notification objects and adding them to the list
+        Notification notification1 = new Notification("Test Notification 1", "Description for Test Notification 1", "Date Time for Test Notification 1");
+        Notification notification2 = new Notification("Test Notification 2", "Description for Test Notification 2", "Date Time for Test Notification 2");
+        Notification notification3 = new Notification("Test Notification 3", "Description for Test Notification 3", "Date Time for Test Notification 3");
+        Notification notification4 = new Notification("Test Notification 4", "Description for Test Notification 4", "Date Time for Test Notification 4");
+        Notification notification5 = new Notification("Test Notification 5", "Description for Test Notification 5", "Date Time for Test Notification 5");
+
+        // Adding the notifications to the list
+        notifications.add(notification1);
+        notifications.add(notification2);
+        notifications.add(notification3);
+        notifications.add(notification4);
+        notifications.add(notification5);
+        DialogRecyclerView listDialog = new DialogRecyclerView(
+                this, notifications) {
+            @Override
+            public void onCreate(Bundle savedInstanceState) {
+                super.onCreate(savedInstanceState);
+            }
+        };
+        listDialog.show();
+    }
+
+    /**
      * Displays either the CheckBox, allowing users to signup and un-signup for the event, or displays a TextView
      * if the event has reached its limit
      * @param signupLimit int of the maximum number of attendees who can sign up for the event

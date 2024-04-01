@@ -59,9 +59,11 @@ public class UpdatePictureFragment extends DialogFragment {
                     ImageStorageManager storage = new ImageStorageManager(profilePicture,"/ProfilePictures");
                     storage.uploadImage();
 
-                    // Use AttendeeDatabaseManager to update the Attendee's profilePicture field
-                    AttendeeDatabaseManager database = new AttendeeDatabaseManager(fcmToken);
-                    database.updateProfilePicture(uri);
+                    // Use AttendeeDatabaseManager to delete the previous profile picture and update the Attendee's firebase doc
+                    AttendeeDatabaseManager dbManager = new AttendeeDatabaseManager(fcmToken);
+                    dbManager.deleteProfilePicture();
+                    dbManager.updateProfilePicture(uri);
+                    dbManager.updateAttendeeBoolean("profile.profilePicture.generated", false);
 
                 }
             });
