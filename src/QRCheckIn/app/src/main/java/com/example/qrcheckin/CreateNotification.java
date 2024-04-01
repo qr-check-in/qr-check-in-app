@@ -1,6 +1,7 @@
 package com.example.qrcheckin;
 
 import android.os.Bundle;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
@@ -11,6 +12,13 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 public class CreateNotification extends AppCompatActivity {
+
+    // Widgets and text on the activity
+    EditText notificationTitle;
+    EditText notificationDescription;
+
+    String notificationTxt;
+    String notificationDescrpTxt;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,5 +35,11 @@ public class CreateNotification extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         TextView header = findViewById(R.id.mainHeader);
         header.setText("Create New Annoucement");
+
+        notificationTitle = findViewById(R.id.notificationTitleText);
+        notificationDescription = findViewById(R.id.notificationDescriptionText);
+
+
+
     }
 }
