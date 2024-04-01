@@ -14,54 +14,50 @@ import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.firebase.firestore.DocumentSnapshot;
 
 /**
- * Syncs the recycler view displaying events with the firestore database
+ * Syncs a recycler view displaying a list of attendee profiles with firestore database
  */
-public class EventAdapter extends FirestoreRecyclerAdapter<Event, EventAdapter.EventViewHolder> {
-    private OnItemClickListener listener;
+public class AttendeeAdapter extends FirestoreRecyclerAdapter<Attendee, AttendeeAdapter.AttendeeViewHolder> {
+    private EventAdapter.OnItemClickListener listener;
 
     /**
      * Create a new RecyclerView adapter that listens to a Firestore Query.  See {@link
      * FirestoreRecyclerOptions} for configuration options.
      *
-     * @param options Options for the query which will lookup an event
+     * @param options
      */
-    public EventAdapter(@NonNull FirestoreRecyclerOptions<Event> options) {
+    public AttendeeAdapter(@NonNull FirestoreRecyclerOptions<Attendee> options) {
         super(options);
     }
 
     /**
-     * Creates a view holder for a new Event item
-     * @param parent   The ViewGroup into which the new View will be added after it is bound to
-     *                 an adapter position.
-     * @param viewType The view type of the new View.
-     * @return          ViewHolder with the created view
-     */
-    @NonNull
-    @Override
-    public EventViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.event_list_item,
-                parent, false);
-        return new EventViewHolder(view);
-    }
-
-    /**
-     * Displays the Event in the appropriate view in the view holder (invoked by the layout manager)
+     * Displays the Attendee in the appropriate view in the view holder (invoked by the layout manager)
      * @param holder    The ViewHolder which should be updated to represent the contents of the
      *                      item at the given position in the data set.
      * @param position  The position of the item within the adapter's data set.
      * @param model     The model object containing the data that should be used to populate the view.
      */
     @Override
-    protected void onBindViewHolder(@NonNull EventViewHolder holder, int position, @NonNull Event model) {
-        holder.tvTitle.setText(model.getEventName());
-        holder.tvLocation.setText(model.getEventLocation());
-        holder.tvDate.setText(model.getEventDate());
-
-        // Set the ImageView for the Event's poster
-        if (model.getPoster() != null){
-            ImageStorageManager storage = new ImageStorageManager(model.getPoster(), "/EventPosters");
-            storage.displayImage(holder.ivPoster);
+    protected void onBindViewHolder(@NonNull AttendeeAdapter.AttendeeViewHolder holder, int position, @NonNull Attendee model) {
+        holder.tvName.setText(model.getProfile().getName());
+        if (model.getProfile().getProfilePicture() != null) {
+            ImageStorageManager storage = new ImageStorageManager(model.getProfile().getProfilePicture(), "/ProfilePictures");
+            storage.displayImage(holder.ivProfilePic);
         }
+    }
+
+    /**
+     * Creates a view holder for a new Attendee item
+     * @param parent    The ViewGroup into which the new View will be added after it is bound to
+     *                      an adapter position.
+     * @param viewType  The view type of the new View.
+     * @return          ViewHolder with the created view
+     */
+    @NonNull
+    @Override
+    public AttendeeAdapter.AttendeeViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item_attendee,
+                parent, false);
+        return new AttendeeAdapter.AttendeeViewHolder(view);
     }
 
     // https://stackoverflow.com/questions/36712704/why-is-my-item-image-in-custom-recyclerview-changing-while-scrolling, Fathima km, 2017
@@ -87,19 +83,16 @@ public class EventAdapter extends FirestoreRecyclerAdapter<Event, EventAdapter.E
     }
 
     /**
-     * Holds the view where event data is sent
+     * Holds the view where attendee data is sent
      */
-    class EventViewHolder extends RecyclerView.ViewHolder {
-        TextView tvTitle;
-        TextView tvLocation;
-        TextView tvDate;
-        ImageView ivPoster;
-        public EventViewHolder(View itemView) {
+    class AttendeeViewHolder extends RecyclerView.ViewHolder {
+        //TextView tvCheckIns;
+        TextView tvName;
+        ImageView ivProfilePic;
+        public AttendeeViewHolder(@NonNull View itemView) {
             super(itemView);
-            tvTitle = itemView.findViewById(R.id.text_event_title);
-            tvLocation = itemView.findViewById(R.id.text_event_location);
-            tvDate = itemView.findViewById(R.id.text_event_date);
-            ivPoster = itemView.findViewById(R.id.image_event_poster);
+            tvName = itemView.findViewById(R.id.textViewAttendeeName);
+            ivProfilePic = itemView.findViewById(R.id.imageViewAttendeeIcon);
 
             // Set onclick listener to open event page when this event's view is clicked
             itemView.setOnClickListener(new View.OnClickListener() {
@@ -128,7 +121,7 @@ public class EventAdapter extends FirestoreRecyclerAdapter<Event, EventAdapter.E
      * Used in the Event Page activity to set a listener for an adapter
      * @param listener The listener to set for an adapter
      */
-    public void setOnItemClickListener(OnItemClickListener listener) {
+    public void setOnItemClickListener(EventAdapter.OnItemClickListener listener) {
         this.listener = listener;
     }
 }
