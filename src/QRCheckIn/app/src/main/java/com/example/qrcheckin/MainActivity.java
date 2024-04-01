@@ -16,8 +16,6 @@ import androidx.appcompat.widget.Toolbar;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
-import com.google.firebase.messaging.FirebaseMessaging;
-
 /**
  * Entry point of the app, hosts main interface.
  * Provides buttons for; scanning QR codes, viewing event list, adding a new event, accessing the user profile.
@@ -28,11 +26,9 @@ public class MainActivity extends AppCompatActivity{
     ImageButton eventButton;
     ImageButton addEventButton;
     ImageButton profileButton;
-    private String fcmToken;
     Button scanButton;
     Button adminButton;
-    FirebaseFirestore db = FirebaseFirestore.getInstance();
-    CollectionReference eventsRef = db.collection("events");
+    private String fcmToken;
 
     /**
      * Sets up UI and initializes application settings.
@@ -48,8 +44,6 @@ public class MainActivity extends AppCompatActivity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        db = FirebaseFirestore.getInstance();
-
         qrButton = findViewById(R.id.qrButton);
         qrButton.setPressed(true);
 
@@ -60,31 +54,26 @@ public class MainActivity extends AppCompatActivity{
         adminButton = findViewById(R.id.adminButton);
         adminButton.setVisibility(View.INVISIBLE);
 
-        // SharedPreferences to save this app installation's fcmToken
-        // https://stackoverflow.com/questions/51834864/how-to-save-a-fcm-token-in-android , 2018, Whats Going On
-        SharedPreferences prefs = getSharedPreferences("TOKEN_PREF", MODE_PRIVATE);
-        SharedPreferences.Editor editor = prefs.edit();
+        SharedPreferences tokenPrefs = getSharedPreferences("TOKEN_PREF", MODE_PRIVATE);
+        fcmToken = tokenPrefs.getString("token", "missing token");
+        Log.d("Firestore", String.format("your fcmToken is  (%s)", fcmToken));
 
         // Creates a sub applicaton. If app.hasCheckFcmToken is false, it means the app has just been opened
         OpenApp app = (OpenApp) this.getApplicationContext();
         if (!app.hasCheckedFcmToken){
-            // Here we can call any methods we only want to occur once upon opening the app
-            // If there is no token saved, retrieve it and save it to the SharedPreferences
-            if (prefs.getString("token", "missing token").equals("missing token")) {
-                getFcmToken(editor);
-            }
-            fcmToken = prefs.getString("token", "missing token");
+            // Any methods called within this if statement only occur once upon the app's launch
+
             // checkExistingAttendees will store a new Attendee document if there's not already an existing doc for this fcmToken
+            // in case an attendee doc has been deleted, but the app has not been deleting and reinstalled to create an new token
             AttendeeDatabaseManager db = new AttendeeDatabaseManager(fcmToken);
             db.checkExistingAttendees();
+
             app.hasCheckedFcmToken = true;
         }
 
-        // Re-assign fcmToken in case we are opening this activity NOT upon launching the app,
         // Check if the admin dashboard button should be visible
-        fcmToken = prefs.getString("token", "missing token");
-        Log.d("Firestore", String.format("your fcmToken is  (%s)", fcmToken));
         checkAdminToken();
+
         // Set the Header of the App
         Toolbar toolbar = findViewById(R.id.Toolbar);
         setSupportActionBar(toolbar);
@@ -141,25 +130,7 @@ public class MainActivity extends AppCompatActivity{
         });
     }
 
-    /**
-     * Retrieves and logs the Firebase Cloud Messaging (FCM) token for this app's installation
-     * @param editor a SharedPreferences.Editor from the calling activity to save the token string value
-     */
-    public void getFcmToken(SharedPreferences.Editor editor) {
-        FirebaseMessaging.getInstance().getToken()
-                .addOnCompleteListener(task -> {
-                    if (!task.isSuccessful()) {
-                        Log.w(Utils.TAG, "Fetching FCM registration token failed", task.getException());
-                        return;
-                    }
-                    // Get and log the new FCM registration token
-                    String token = task.getResult();
-                    Log.d(Utils.TAG, token);
-                    // save token string
-                    editor.putString("token", token);
-                    editor.apply();
-                });
-    }
+
     /**
      * Checks if the provided FCM token exists in the 'adminTokens' collection in Firestore.
      * If the token exists, the user is considered an admin and the admin view is opened.
@@ -169,6 +140,7 @@ public class MainActivity extends AppCompatActivity{
      */
     private void checkAdminToken() {
         // Reference to the 'adminTokens' collection
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
         CollectionReference adminTokensRef = db.collection("adminTokens");
 
         // Check if the current FCM token exists in the 'adminTokens' collection

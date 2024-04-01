@@ -3,16 +3,18 @@ package com.example.qrcheckin;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Build;
 import android.util.Log;
-import java.util.Random;
 
 import androidx.annotation.NonNull;
 
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
+
+import java.util.Random;
 
 public class MyFirebaseMessagingService extends FirebaseMessagingService {
     /**
@@ -31,6 +33,36 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         // TODO: create a "sendRegistrationToServer(token)" function which sends the new token to the backend
         // sendRegistrationToServer(token);
 
+        // use SharedPreferences to save this app installation's fcmToken
+        // https://stackoverflow.com/questions/51834864/how-to-save-a-fcm-token-in-android , 2018, Whats Going On
+        SharedPreferences prefs = getSharedPreferences("TOKEN_PREF", MODE_PRIVATE);
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.putString("token", token);
+        editor.apply();
+        // checkExistingAttendees will store a new Attendee document if there's not already an existing doc for this fcmToken
+        AttendeeDatabaseManager db = new AttendeeDatabaseManager(token);
+        db.checkExistingAttendees();
+
+    }
+    /**
+     * Retrieves and logs the Firebase Cloud Messaging (FCM) token for this app's installation
+     * @param editor a SharedPreferences.Editor from the calling activity to save the token string value
+     */
+    public void getFcmToken(SharedPreferences.Editor editor) {
+        // this method is no longer used now that new attendee docs are stored by onNewToken method
+        FirebaseMessaging.getInstance().getToken()
+                .addOnCompleteListener(task -> {
+                    if (!task.isSuccessful()) {
+                        Log.w(Utils.TAG, "Fetching FCM registration token failed", task.getException());
+                        return;
+                    }
+                    // Get and log the new FCM registration token
+                    String token = task.getResult();
+                    Log.d(Utils.TAG, token);
+                    // save token string
+                    editor.putString("token", token);
+                    editor.apply();
+                });
     }
 
     /**
