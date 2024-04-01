@@ -54,6 +54,7 @@ public class DialogRecyclerView extends Dialog {
 
     /**
      * This method sets up the RecyclerView in the dialog
+     *
      * @param view
      */
     private void setUpRecyclerView(View view) {
