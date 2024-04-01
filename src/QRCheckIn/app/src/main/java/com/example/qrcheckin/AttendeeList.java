@@ -13,10 +13,7 @@ import android.content.pm.PackageManager;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
-import android.location.LocationListener;
-import android.location.LocationManager;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -31,6 +28,7 @@ import com.google.firebase.firestore.Query;
 import java.io.IOException;
 import java.util.List;
 import java.util.Locale;
+import java.util.Objects;
 
 
 public class AttendeeList extends AppCompatActivity {
@@ -70,7 +68,7 @@ public class AttendeeList extends AppCompatActivity {
         assert fieldName != null;
         Query query = attendeeDb.getCollectionRef()
                 .whereArrayContains(fieldName, documentId);
-        setUpRecyclerView(query);
+        setUpRecyclerView(query, fieldName);
 
         // TODO: setup recycler view
 
@@ -135,9 +133,10 @@ public class AttendeeList extends AppCompatActivity {
     /**
      * Sets up an AttendeeAdapter on the recycler view and sends it the required query. Do not call
      *      this method more than once
-     * @param query The query the recycler view will use to display events
+     * @param query         The query the recycler view will use to display events
+     * @param fieldName     String from options: ["signupEvents", "attendedEvents"] to display
      */
-    private void setUpRecyclerView(Query query) {
+    private void setUpRecyclerView(Query query, String fieldName) {
 
         // Put the desired query into the adapter so it can use it to find the specified events
         FirestoreRecyclerOptions<Attendee> options = new FirestoreRecyclerOptions.Builder<Attendee>()
@@ -145,7 +144,15 @@ public class AttendeeList extends AppCompatActivity {
                 .setLifecycleOwner(this)
                 .build();
 
-        attendeeAdapter = new AttendeeAdapter(options);
+        attendeeAdapter = new AttendeeAdapter(options, position -> {
+            if (Objects.equals(fieldName, "attendedEvents")) {
+                return false;
+            } else if (Objects.equals(fieldName, "signupEvents")) {
+                return true;
+            }
+            return false;   // Return the default attendedEvents if the fieldName is invalid
+
+        });
 
         // Connect the recycler view to it's adapter and layout manager
         RecyclerView recyclerView = findViewById(R.id.recycler_view_attendee_check_ins);
