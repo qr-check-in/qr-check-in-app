@@ -94,10 +94,7 @@ public class OrganizersEventPageActivity extends AppCompatActivity {
         signupLimitReached = findViewById(R.id.signup_limit_text);
         signupLimitReached.setVisibility(View.INVISIBLE);
 
-        // Set open Bottom Sheet Listner
-        openBottomSheetBtn.setOnClickListener(v -> {
-            showDialog();
-        });
+        openBottomSheetBtn.setVisibility(View.GONE);
 
         // Retrieve the user's fcmToken/ attendee docID
         SharedPreferences prefs = getSharedPreferences("TOKEN_PREF", MODE_PRIVATE);
@@ -128,6 +125,14 @@ public class OrganizersEventPageActivity extends AppCompatActivity {
                     if (event.getCheckInQRCode() != null) {
                         ImageStorageManager storageQr = new ImageStorageManager(event.getCheckInQRCode(), "/QRCodes");
                         storageQr.displayImage(ivEventPromoQr);
+                    }
+                    // Check if current event is organized by this user
+                    if (Objects.equals(event.getOrganizer(), fcmToken)) {
+                        openBottomSheetBtn.setVisibility(View.VISIBLE);
+                        // Set open Bottom Sheet Listner
+                        openBottomSheetBtn.setOnClickListener(v -> {
+                            showDialog();
+                        });
                     }
                 } else {
                     Log.d("Firestore", String.format("No such document with id %s", documentId));

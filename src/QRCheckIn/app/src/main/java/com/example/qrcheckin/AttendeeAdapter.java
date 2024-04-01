@@ -124,7 +124,7 @@ public class AttendeeAdapter extends FirestoreRecyclerAdapter<Attendee, Attendee
         /**
          * Displays the Attendee in the appropriate view in the view holder. Called by
          *      onBindViewHolder()
-         * @param model The Attendee class
+         * @param model The Attendee class instance
          */
         public void bind(Attendee model) {
             tvName.setText(model.getProfile().getName());
@@ -145,6 +145,10 @@ public class AttendeeAdapter extends FirestoreRecyclerAdapter<Attendee, Attendee
             tvCheckIns = itemView.findViewById(R.id.textViewCheckInCount);
         }
 
+        /**
+         * Overrides the bind method to also display the attendee profile picture
+         * @param model The Attendee class instance
+         */
         @Override
         public void bind(Attendee model) {
             tvName.setText(model.getProfile().getName());
