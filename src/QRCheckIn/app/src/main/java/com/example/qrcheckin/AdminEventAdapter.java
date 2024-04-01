@@ -33,7 +33,12 @@ public class AdminEventAdapter extends FirestoreRecyclerAdapter<Event, AdminEven
         holder.eventNameTextView.setText(model.getEventName());
         holder.eventLocationTextView.setText(model.getEventLocation());
         holder.eventTimeTextView.setText(model.getEventDate());
-        // Assuming you have a method to set the image on the ImageView
+        if (model.getCheckInQRCode() != null){
+            //ImageStorageManager storage = new ImageStorageManager(model.getPoster(), "/EventPosters");
+            ImageStorageManager storageQr = new ImageStorageManager(model.getCheckInQRCode(), "/QRCodes");
+            storageQr.displayImage(holder.qrCodeImageView);
+        }
+
     }
 
     public class EventViewHolder extends RecyclerView.ViewHolder {

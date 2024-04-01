@@ -1,7 +1,9 @@
 package com.example.qrcheckin;
 
 import android.content.Context;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,49 +13,73 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.DataSource;
+import com.bumptech.glide.load.engine.GlideException;
+import com.bumptech.glide.request.RequestListener;
+import com.bumptech.glide.request.target.Target;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
+import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
-public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ImageViewHolder> {
+// ImageAdapter.java
+public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ViewHolder> {
+    private List<String> imageUrls;
+    private LayoutInflater inflater;
 
-    private Context context;
-    private List<String> imagePaths;
-
-    public ImageAdapter(Context context, List<String> imagePaths) {
-        this.context = context;
-        this.imagePaths = imagePaths;
-    }
-
-
-    public static class ImageViewHolder extends RecyclerView.ViewHolder {
-        public ImageView imageView;
-
-        public ImageViewHolder(View itemView) {
-            super(itemView);
-            imageView = itemView.findViewById(R.id.image_view); // Replace with your ImageView ID
-        }
-    }
-
-    @NonNull
-    @Override
-    public ImageViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.image_list, parent, false); // Replace with your item layout
-        return new ImageViewHolder(v);
+    public ImageAdapter(Context context, List<String> imageUrls) {
+        this.inflater = LayoutInflater.from(context);
+        this.imageUrls = imageUrls;
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ImageViewHolder holder, int position) {
-        String imagePath = imagePaths.get(position);
-        // Use Glide to load the image directly into the ImageView
-        Glide.with(holder.imageView.getContext())
+    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        View view = inflater.inflate(R.layout.image_list, parent, false);
+        return new ViewHolder(view);
+    }
+
+    @Override
+    public void onBindViewHolder(ViewHolder holder, int position) {
+        String imagePath = imageUrls.get(position);
+        Log.d("imageUrls", "image is shown:"+ imagePath);
+        Log.d("imageUrls", "List size: " + imageUrls.size());
+
+        Picasso.get()
                 .load(imagePath)
-                .into(holder.imageView);
+                .placeholder(R.drawable.imageresize) // Optional: Placeholder image
+                .error(R.drawable.calenderresize) // Optional: Error image, use a different image for error
+                .into(holder.imageView, new com.squareup.picasso.Callback() {
+                    @Override
+                    public void onSuccess() {
+                        // Image successfully loaded
+                        Log.d("Picasso", "Success loading image: " + imagePath);
+                    }
+
+                    @Override
+                    public void onError(Exception e) {
+                        // Image loading failed
+                        Log.e("Picasso", "Error loading image: " + imagePath, e);
+                    }
+                });
     }
 
     @Override
     public int getItemCount() {
-        return imagePaths.size();
+        return imageUrls.size();
+    }
+
+    public static class ViewHolder extends RecyclerView.ViewHolder {
+        ImageView imageView;
+
+        public ViewHolder(View itemView) {
+            super(itemView);
+            imageView = itemView.findViewById(R.id.image_view);
+        }
+    }
+    public void updateData(List<String> newImageUris) {
+        imageUrls.clear();
+        imageUrls.addAll(newImageUris);
+        notifyDataSetChanged();
     }
 }
