@@ -146,11 +146,11 @@ public class AttendeeList extends AppCompatActivity {
 
         attendeeAdapter = new AttendeeAdapter(options, position -> {
             if (Objects.equals(fieldName, "attendedEvents")) {
-                return false;
-            } else if (Objects.equals(fieldName, "signupEvents")) {
                 return true;
+            } else if (Objects.equals(fieldName, "signupEvents")) {
+                return false;
             }
-            return false;   // Return the default attendedEvents if the fieldName is invalid
+            return true;   // Return the default attendedEvents if the fieldName is invalid
 
         });
 
