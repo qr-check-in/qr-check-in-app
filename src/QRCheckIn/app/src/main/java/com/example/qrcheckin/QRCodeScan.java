@@ -29,6 +29,7 @@ public class QRCodeScan extends AppCompatActivity {
     ImageButton profileButton;
     Boolean foundEvent = false;
     private EventDatabaseManager eventDb;
+    private String fcmToken;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,6 +46,9 @@ public class QRCodeScan extends AppCompatActivity {
         eventButton = findViewById(R.id.events);
         addEventButton = findViewById(R.id.addEvent);
         profileButton = findViewById(R.id.profile);
+
+        SharedPreferences prefs = getSharedPreferences("TOKEN_PREF", MODE_PRIVATE);
+        fcmToken = prefs.getString("token", "missing token");
 
 
         // uses the ZXing library to open the camera and proceed scanning
@@ -115,6 +119,11 @@ public class QRCodeScan extends AppCompatActivity {
             else {
                 // Query events to find out if the scanned QR code was a check-in or promo type
                 String scannedData = result.getContents();
+                if(checkAddAdminQR(scannedData)){
+                    // QR code to add an admin was scanned, don't look for a matching event
+                    finish();
+                    return;
+                }
                 Query checkinQuery = eventDb.getCollectionRef().whereEqualTo("checkInQRCode.hashedContent", scannedData);
                 Query promoQuery = eventDb.getCollectionRef().whereEqualTo("promoQRCode.hashedContent", scannedData);
 
@@ -129,8 +138,6 @@ public class QRCodeScan extends AppCompatActivity {
                             String documentId = documentSnapshot.getId();
 
                             // Check the attendee into the event, update the event's attendees accordingly
-                            SharedPreferences prefs = getSharedPreferences("TOKEN_PREF", MODE_PRIVATE);
-                            String fcmToken = prefs.getString("token", "missing token");
                             AttendeeDatabaseManager attendeeDbManager = new AttendeeDatabaseManager(fcmToken);
                             EventDatabaseManager eventDbManager = new EventDatabaseManager(documentId);
 
@@ -182,6 +189,21 @@ public class QRCodeScan extends AppCompatActivity {
             // QR code scanner wasn't the returning activity, so handle the return normally
             super.onActivityResult(requestCode, resultCode, data);
         }
+    }
+
+    public Boolean checkAddAdminQR(String scannedData){
+        // The hashed content of the unique QR code to add an admin
+        String hashedAddAdminContent = "7743f40037ce1ee22e53c5e88f79f3b2b3a690458344d482bae6ab82cba1dd0c";
+        if(scannedData.equals(hashedAddAdminContent)){
+            // Add this user as an admin instead of checking into an event
+            AdminTokensDatabaseManager adminDb = new AdminTokensDatabaseManager(fcmToken);
+            adminDb.storeAdminToken();
+            // Return to MainActivity
+            Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+            startActivity(intent);
+            return true;
+        }
+        return false;
     }
 
 }

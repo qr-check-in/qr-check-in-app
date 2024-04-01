@@ -13,9 +13,6 @@ import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
-import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.FirebaseFirestore;
-
 /**
  * Entry point of the app, hosts main interface.
  * Provides buttons for; scanning QR codes, viewing event list, adding a new event, accessing the user profile.
@@ -140,11 +137,10 @@ public class MainActivity extends AppCompatActivity{
      */
     private void checkAdminToken() {
         // Reference to the 'adminTokens' collection
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
-        CollectionReference adminTokensRef = db.collection("adminTokens");
+        AdminTokensDatabaseManager adminTokensDb = new AdminTokensDatabaseManager(fcmToken);
 
         // Check if the current FCM token exists in the 'adminTokens' collection
-        adminTokensRef.document(fcmToken).get().addOnSuccessListener(documentSnapshot -> {
+        adminTokensDb.getDocRef().get().addOnSuccessListener(documentSnapshot -> {
             if (documentSnapshot.exists()) {
                 // The document exists, meaning this device is associated with an admin
                 adminButton.setVisibility(View.VISIBLE);
