@@ -54,7 +54,8 @@
 
         <activity
             android:name=".EventPage"
-            android:exported="false" />
+            android:exported="false"
+            android:parentActivityName=".EventListView"/>
         <activity
             android:name=".test"
             android:exported="false" />
