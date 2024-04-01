@@ -10,7 +10,6 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
@@ -154,7 +153,7 @@ public class EventListView extends AppCompatActivity {
                 // Send the document id of the event to the Event Page before opening it
                 Intent intent;
                 if (btnCurrentTab == btnMyEventsTab){
-                     intent = new Intent(getApplicationContext(), OrganizersEventPage.class);
+                     intent = new Intent(getApplicationContext(), OrganizersEventPageActivity.class);
                 }
                 else{
                     intent = new Intent(getApplicationContext(), EventPage.class);

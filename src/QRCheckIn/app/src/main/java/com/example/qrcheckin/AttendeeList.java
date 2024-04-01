@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.Manifest;
 
@@ -21,6 +22,7 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -35,12 +37,18 @@ public class AttendeeList extends AppCompatActivity {
 
     Button getMap;
     String latitude, longitude;
+    RecyclerView recyclerView;
+    AttendeeAdapter attendeeAdapter;
+    AttendeeDatabaseManager attendeeDb;
     private static final int REQUEST_LOCATION = 101;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_attendee_list);
+
+        //Set up recycler view of attendees
+        recyclerView = findViewById(R.id.event_recycler_view);
 
         // Manage Toolbar
         Toolbar toolbar = findViewById(R.id.attendee_toolbar);
@@ -56,7 +64,13 @@ public class AttendeeList extends AppCompatActivity {
         String documentId = getIntent().getStringExtra("EVENT_DOC_ID");
         String fieldName = getIntent().getStringExtra("FIELD_NAME");
 
-        //Log.d("ATTENDEE LIST", String.format("should display (%s) for (%s)", fieldName, documentId));
+        // Set up the recycler view of events to be displayed (displays all by default)
+        attendeeDb = new AttendeeDatabaseManager();
+        assert documentId != null;
+        assert fieldName != null;
+        Query query = attendeeDb.getCollectionRef()
+                .whereArrayContains(fieldName, documentId);
+        setUpRecyclerView(query);
 
         // TODO: setup recycler view
 
@@ -116,9 +130,32 @@ public class AttendeeList extends AppCompatActivity {
             }
         }
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-
-
     }
+
+    /**
+     * Sets up an AttendeeAdapter on the recycler view and sends it the required query. Do not call
+     *      this method more than once
+     * @param query The query the recycler view will use to display events
+     */
+    private void setUpRecyclerView(Query query) {
+
+        // Put the desired query into the adapter so it can use it to find the specified events
+        FirestoreRecyclerOptions<Attendee> options = new FirestoreRecyclerOptions.Builder<Attendee>()
+                .setQuery(query, Attendee.class)
+                .setLifecycleOwner(this)
+                .build();
+
+        attendeeAdapter = new AttendeeAdapter(options);
+
+        // Connect the recycler view to it's adapter and layout manager
+        RecyclerView recyclerView = findViewById(R.id.recycler_view_attendee_check_ins);
+        recyclerView.setHasFixedSize(true);     // RecyclerView inside constraint layout, won't grow
+        recyclerView.setItemAnimator(null);     // ItemAnimator is buggy, keep this OFF if possible
+        recyclerView.setLayoutManager(new LinearLayoutManagerWrapper(this));
+        recyclerView.setAdapter(attendeeAdapter);
+    }
+
+
 }
 
 
