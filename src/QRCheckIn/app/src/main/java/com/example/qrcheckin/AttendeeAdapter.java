@@ -13,36 +13,26 @@ import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.firebase.firestore.DocumentSnapshot;
 
+import java.util.Locale;
+import java.util.function.Function;
+
 /**
  * Syncs a recycler view displaying a list of attendee profiles with firestore database
  */
 public class AttendeeAdapter extends FirestoreRecyclerAdapter<Attendee, AttendeeAdapter.AttendeeViewHolder> {
     private EventAdapter.OnItemClickListener listener;
+    private final Function<Integer, Boolean> viewTypeDeterminer;
 
     /**
      * Create a new RecyclerView adapter that listens to a Firestore Query.  See {@link
      * FirestoreRecyclerOptions} for configuration options.
      *
      * @param options
+     * @param viewTypeDeterminer
      */
-    public AttendeeAdapter(@NonNull FirestoreRecyclerOptions<Attendee> options) {
+    public AttendeeAdapter(@NonNull FirestoreRecyclerOptions<Attendee> options, Function<Integer, Boolean> viewTypeDeterminer) {
         super(options);
-    }
-
-    /**
-     * Displays the Attendee in the appropriate view in the view holder (invoked by the layout manager)
-     * @param holder    The ViewHolder which should be updated to represent the contents of the
-     *                      item at the given position in the data set.
-     * @param position  The position of the item within the adapter's data set.
-     * @param model     The model object containing the data that should be used to populate the view.
-     */
-    @Override
-    protected void onBindViewHolder(@NonNull AttendeeAdapter.AttendeeViewHolder holder, int position, @NonNull Attendee model) {
-        holder.tvName.setText(model.getProfile().getName());
-        if (model.getProfile().getProfilePicture() != null) {
-            ImageStorageManager storage = new ImageStorageManager(model.getProfile().getProfilePicture(), "/ProfilePictures");
-            storage.displayImage(holder.ivProfilePic);
-        }
+        this.viewTypeDeterminer = viewTypeDeterminer;
     }
 
     /**
@@ -55,9 +45,31 @@ public class AttendeeAdapter extends FirestoreRecyclerAdapter<Attendee, Attendee
     @NonNull
     @Override
     public AttendeeAdapter.AttendeeViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item_attendee,
-                parent, false);
-        return new AttendeeAdapter.AttendeeViewHolder(view);
+        View view;
+        if (viewType == 0) {
+            view = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item_attendee, parent, false);
+            return new AttendeeViewHolder(view);
+        } else {
+            view = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item_attendee_check_ins, parent, false);
+            return new AttendeeCheckInViewHolder(view);
+        }
+    }
+
+    /**
+     * Displays the Attendee in the appropriate view in the view holder (invoked by the layout manager)
+     * @param holder    The ViewHolder which should be updated to represent the contents of the
+     *                      item at the given position in the data set.
+     * @param position  The position of the item within the adapter's data set.
+     * @param model     The model object containing the data that should be used to populate the view.
+     */
+    @Override
+    protected void onBindViewHolder(@NonNull AttendeeAdapter.AttendeeViewHolder holder, int position, @NonNull Attendee model) {
+        if (getItemViewType(position) == 0) {
+            ((AttendeeViewHolder) holder).bind(model);
+        } else {
+            ((AttendeeCheckInViewHolder) holder).bind(model);
+        }
+
     }
 
     // https://stackoverflow.com/questions/36712704/why-is-my-item-image-in-custom-recyclerview-changing-while-scrolling, Fathima km, 2017
@@ -79,11 +91,11 @@ public class AttendeeAdapter extends FirestoreRecyclerAdapter<Attendee, Attendee
      */
     @Override
     public int getItemViewType(int position) {
-        return position;
+        return viewTypeDeterminer.apply(position) ? 1 : 0;
     }
 
     /**
-     * Holds the view where attendee data is sent
+     * Holds the view where attendee data is sent, does not include the check-in field
      */
     class AttendeeViewHolder extends RecyclerView.ViewHolder {
         //TextView tvCheckIns;
@@ -107,6 +119,45 @@ public class AttendeeAdapter extends FirestoreRecyclerAdapter<Attendee, Attendee
                     }
                 }
             });
+        }
+
+        /**
+         * Displays the Attendee in the appropriate view in the view holder. Called by
+         *      onBindViewHolder()
+         * @param model The Attendee class instance
+         */
+        public void bind(Attendee model) {
+            tvName.setText(model.getProfile().getName());
+            if (model.getProfile().getProfilePicture() != null) {
+                ImageStorageManager storage = new ImageStorageManager(model.getProfile().getProfilePicture(), "/ProfilePictures");
+                storage.displayImage(ivProfilePic);
+            }
+        }
+    }
+
+    /**
+     * Holds the view where attendee data is sent, includes the check-in field
+     */
+    class AttendeeCheckInViewHolder extends AttendeeViewHolder {
+        TextView tvCheckIns;
+        public AttendeeCheckInViewHolder(@NonNull View itemView) {
+            super(itemView);
+            tvCheckIns = itemView.findViewById(R.id.textViewCheckInCount);
+        }
+
+        /**
+         * Overrides the bind method to also display the attendee profile picture
+         * @param model The Attendee class instance
+         */
+        @Override
+        public void bind(Attendee model) {
+            tvName.setText(model.getProfile().getName());
+            String checkInString = String.format(Locale.CANADA, "Checked in: %d", model.getAttendedEvents().size());
+            tvCheckIns.setText(checkInString);
+            if (model.getProfile().getProfilePicture() != null) {
+                ImageStorageManager storage = new ImageStorageManager(model.getProfile().getProfilePicture(), "/ProfilePictures");
+                storage.displayImage(ivProfilePic);
+            }
         }
     }
 

@@ -147,7 +147,7 @@ public class QRCodeScan extends AppCompatActivity {
                             eventDbManager.addToArrayField("attendee", attendeeId); // Add attendee to event
 
                             // Open the appropriate event page
-                            Intent intent = new Intent(getApplicationContext(), EventPage.class);
+                            Intent intent = new Intent(getApplicationContext(), OrganizersEventPageActivity.class);
                             intent.putExtra("DOCUMENT_ID", documentId);
                             startActivity(intent);
                         }
@@ -167,7 +167,7 @@ public class QRCodeScan extends AppCompatActivity {
                             String documentId = documentSnapshot.getId();
 
                             // Open the appropriate event page
-                            Intent intent = new Intent(getApplicationContext(), EventPage.class);
+                            Intent intent = new Intent(getApplicationContext(), OrganizersEventPageActivity.class);
                             intent.putExtra("DOCUMENT_ID", documentId);
                             startActivity(intent);
                         } else {

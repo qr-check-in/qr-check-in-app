@@ -53,15 +53,7 @@ public class EventAdapter extends FirestoreRecyclerAdapter<Event, EventAdapter.E
      */
     @Override
     protected void onBindViewHolder(@NonNull EventViewHolder holder, int position, @NonNull Event model) {
-        holder.tvTitle.setText(model.getEventName());
-        holder.tvLocation.setText(model.getEventLocation());
-        holder.tvDate.setText(model.getEventDate());
-
-        // Set the ImageView for the Event's poster
-        if (model.getPoster() != null){
-            ImageStorageManager storage = new ImageStorageManager(model.getPoster(), "/EventPosters");
-            storage.displayImage(holder.ivPoster);
-        }
+        ((EventAdapter.EventViewHolder) holder).bind(model);
     }
 
     // https://stackoverflow.com/questions/36712704/why-is-my-item-image-in-custom-recyclerview-changing-while-scrolling, Fathima km, 2017
@@ -114,6 +106,23 @@ public class EventAdapter extends FirestoreRecyclerAdapter<Event, EventAdapter.E
                     }
                 }
             });
+        }
+
+        /**
+         * Displays the Event in the appropriate view in the view holder. Called by
+         *      onBindViewHolder()
+         * @param model The Event class instance
+         */
+        public void bind(Event model) {
+            tvTitle.setText(model.getEventName());
+            tvLocation.setText(model.getEventLocation());
+            tvDate.setText(model.getEventDate());
+
+            // Set the ImageView for the Event's poster
+            if (model.getPoster() != null){
+                ImageStorageManager storage = new ImageStorageManager(model.getPoster(), "/EventPosters");
+                storage.displayImage(ivPoster);
+            }
         }
     }
 
