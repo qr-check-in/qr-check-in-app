@@ -49,6 +49,7 @@ public class OrganizersEventPageActivity extends AppCompatActivity {
     CheckBox signupCheckBox;
     TextView signupLimitReached;
     ImageButton openBottomSheetBtn;
+    ImageButton openNotifications;
     private EventDatabaseManager eventDb;
     private String fcmToken;
     private String documentId;
@@ -89,6 +90,7 @@ public class OrganizersEventPageActivity extends AppCompatActivity {
         TextView tvEventDescription = findViewById(R.id.text_event_description);
         ImageView ivEventPoster = findViewById(R.id.image_event_poster);
         ImageView ivEventPromoQr = findViewById(R.id.image_event_promo_qr);
+        openNotifications = findViewById(R.id.notificationIconBtn);
         openBottomSheetBtn = findViewById(R.id.openBottomSheetButton);
         signupCheckBox = findViewById(R.id.signup_button);
         signupLimitReached = findViewById(R.id.signup_limit_text);
@@ -175,6 +177,15 @@ public class OrganizersEventPageActivity extends AppCompatActivity {
                     eventDb.removeFromArrayField("signups", fcmToken);
                     attendeeDb.removeFromArrayField("signupEvents", documentId);
                 }
+            }
+        });
+
+        // Handles click on event notification
+        openNotifications.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Call the NotificationListDialog method when the button is clicked
+                NotificationListDialog();
             }
         });
 
@@ -275,7 +286,6 @@ public class OrganizersEventPageActivity extends AppCompatActivity {
         editEventDetails.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 dialog.dismiss();
                 Toast.makeText(getApplicationContext(),"Feature not implemented",Toast.LENGTH_SHORT).show();
 
@@ -285,9 +295,10 @@ public class OrganizersEventPageActivity extends AppCompatActivity {
         createEventNotification.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                dialog.dismiss();
                 Intent event = new Intent(getApplicationContext(), CreateNotification.class);
+                event.putExtra("EVENT_DOC_ID", documentId);
                 startActivity(event);
-
             }
         });
 
@@ -321,4 +332,5 @@ public class OrganizersEventPageActivity extends AppCompatActivity {
         dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
         dialog.getWindow().setGravity(Gravity.BOTTOM);
     }
+
 }

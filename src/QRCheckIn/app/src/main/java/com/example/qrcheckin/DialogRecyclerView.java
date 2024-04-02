@@ -75,8 +75,8 @@ public class DialogRecyclerView extends Dialog {
         DisplayMetrics displayMetrics = context.getResources().getDisplayMetrics();
 
         // Calculate the width and height of the dialog
-        int width = (int) (displayMetrics.widthPixels * 0.95); // 90% of screen width
-        int height = (int) (displayMetrics.heightPixels * 0.7); // 50% of screen height
+        int width = (int) (displayMetrics.widthPixels * 0.95); // 95% of screen width
+        int height = (int) (displayMetrics.heightPixels * 0.7); // 70% of screen height
 
         // Set the dialog's width and height
         getWindow().setLayout(width, height);
