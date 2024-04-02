@@ -287,7 +287,7 @@ public class OrganizersEventPageActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 dialog.dismiss();
-                Toast.makeText(getApplicationContext(),"Feature not implemented",Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(),"Feature Coming Soon!",Toast.LENGTH_SHORT).show();
 
             }
         });
