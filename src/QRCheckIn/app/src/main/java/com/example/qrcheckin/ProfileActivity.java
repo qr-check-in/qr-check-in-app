@@ -1,6 +1,5 @@
 package com.example.qrcheckin;
 
-import static android.content.ContentValues.TAG;
 import static com.example.qrcheckin.R.layout.show_profile;
 
 import android.content.Intent;
@@ -16,15 +15,12 @@ import android.widget.ImageView;
 import android.widget.Switch;
 import android.widget.TextView;
 
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.EventListener;
-import com.google.firebase.firestore.FirebaseFirestoreException;
 
 /**
  * Manages user profile view within the app.
@@ -117,6 +113,7 @@ public class ProfileActivity extends AppCompatActivity implements EditProfileFra
 
         // Set listener to updates of the attendee doc
         // Main purpose is to update the displayed profile pic to a generated one
+        /*
         dbManager.getDocRef().addSnapshotListener(new EventListener<DocumentSnapshot>() {
             @Override
             public void onEvent(@Nullable DocumentSnapshot value, @Nullable FirebaseFirestoreException error) {
@@ -129,12 +126,14 @@ public class ProfileActivity extends AppCompatActivity implements EditProfileFra
                     Attendee attendee = value.toObject(Attendee.class);
                     assert attendee != null;
                     // Update the profile picture currently displayed
-                    sharedViewModel.setSelectedImageUri(Uri.parse(attendee.getProfile().getProfilePicture().getUriString()));
+                    // sharedViewModel.setSelectedImageUri(Uri.parse(attendee.getProfile().getProfilePicture().getUriString()));
                 } else {
                     Log.d(TAG, "Current data: null");
                 }
             }
         });
+
+         */
 
         // Listener for the Geolocation tracking switch
         switchGeolocation.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -179,7 +178,10 @@ public class ProfileActivity extends AppCompatActivity implements EditProfileFra
             public void onClick(View v) {
                 // Call method to delete update the user's profile picture to a generated one
                 dbManager.updateAttendeeBoolean("profile.profilePicture.generated", true);
-                dbManager.callGenerateProfilePicture();
+
+                // ****SPECIAL CASE: calling generateprofilepicture bc pfp was deleted
+                dbManager.callGenerateProfilePicture(profileImageView);
+
                 }
         });
 
@@ -217,9 +219,9 @@ public class ProfileActivity extends AppCompatActivity implements EditProfileFra
      */
     @Override
     public void editDetails(String nameUpdated, String contactUpdated, String homepageUpdated) {
-        dbManager.updateProfileString("name", nameUpdated);
-        dbManager.updateProfileString("contact", contactUpdated);
-        dbManager.updateProfileString("homepage", homepageUpdated);
+        dbManager.updateProfileString("name", nameUpdated, profileImageView);
+        dbManager.updateProfileString("contact", contactUpdated, null);
+        dbManager.updateProfileString("homepage", homepageUpdated, null);
         setProfileFields(false);
 
     }

@@ -57,7 +57,7 @@ public class UpdatePictureFragment extends DialogFragment {
                     // Use ImageStorageManager to upload the image to firestore
                     ProfilePicture profilePicture = new ProfilePicture(uri.toString(), null);
                     ImageStorageManager storage = new ImageStorageManager(profilePicture,"/ProfilePictures");
-                    storage.uploadImage();
+                    storage.uploadImage(null);
 
                     // Use AttendeeDatabaseManager to delete the previous profile picture and update the Attendee's firebase doc
                     AttendeeDatabaseManager dbManager = new AttendeeDatabaseManager(fcmToken);
