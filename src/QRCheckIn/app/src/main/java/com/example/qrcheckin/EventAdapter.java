@@ -17,6 +17,7 @@ import com.google.firebase.firestore.DocumentSnapshot;
  * Syncs the recycler view displaying events with the firestore database
  */
 public class EventAdapter extends FirestoreRecyclerAdapter<Event, EventAdapter.EventViewHolder> {
+
     private OnItemClickListener listener;
 
     /**

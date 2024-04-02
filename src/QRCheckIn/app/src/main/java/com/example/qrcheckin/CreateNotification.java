@@ -123,7 +123,6 @@ public class CreateNotification extends AppCompatActivity {
                     // Add to eventdb
                     eventDb.addToArrayField("notifications", notiID);
 
-
                     // Once the notification is created, navigate back to OrganizersEventPageActivity
                     Intent intent = new Intent(getApplicationContext(), OrganizersEventPageActivity.class);
                     intent.putExtra("DOCUMENT_ID", documentId);
