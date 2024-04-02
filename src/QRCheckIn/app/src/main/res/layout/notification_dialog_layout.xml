@@ -28,7 +28,7 @@
                 android:padding="10dp"
                 android:textSize="28sp"
                 android:textStyle="bold"
-                android:text="Event Annoucements"
+                android:text="@string/event_annoucements"
                 android:gravity="center_horizontal"
                 android:visibility="visible"/>
 
