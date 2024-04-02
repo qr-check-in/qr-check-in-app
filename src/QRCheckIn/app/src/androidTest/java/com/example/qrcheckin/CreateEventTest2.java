@@ -17,6 +17,8 @@ import static androidx.test.espresso.intent.Intents.intended;
 import static org.hamcrest.CoreMatchers.anything;
 import static org.hamcrest.CoreMatchers.is;
 
+import com.example.qrcheckin.Event.CreateGenerateEventQR;
+
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;

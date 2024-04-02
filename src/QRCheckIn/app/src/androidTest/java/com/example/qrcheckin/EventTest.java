@@ -2,7 +2,11 @@
 package com.example.qrcheckin;
 
 import org.junit.Test;
-import static org.junit.Assert.*;
+
+import com.example.qrcheckin.ClassObjects.Attendee;
+import com.example.qrcheckin.ClassObjects.EventPoster;
+import com.example.qrcheckin.ClassObjects.PromoQRCode;
+import com.example.qrcheckin.ClassObjects.QRCode;
 
 public class EventTest {
 
