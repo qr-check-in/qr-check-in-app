@@ -139,9 +139,10 @@ public class AttendeeDatabaseManager extends DatabaseManager {
     }
 
     /**
-     * Deletes the Attendee's ProfilePicture in firestorage and replaces it with a generated one
+     * Deletes the Attendee's ProfilePicture in firestorage and replaces it with an uploaded image Uri
+     * @param uri Uri of the new profile picture uploaded by a user
      */
-    public void deleteProfilePicture(){
+    public void deleteProfilePicture(Uri uri){
         getDocRef().get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
@@ -151,9 +152,12 @@ public class AttendeeDatabaseManager extends DatabaseManager {
                 } else {
                     ProfilePicture pfp = attendee.getProfile().getProfilePicture();
                     if (pfp != null) {
-                        // Remove profile picture from storage
+                        // Remove previous profile picture from storage
                         ImageStorageManager storage = new ImageStorageManager(pfp, "/ProfilePictures");
                         storage.deleteImage();
+                        // Update Attendee doc with new picture
+                        updateProfilePicture(uri);
+                        updateAttendeeBoolean("profile.profilePicture.generated", false);
                     }
                 }
             }
