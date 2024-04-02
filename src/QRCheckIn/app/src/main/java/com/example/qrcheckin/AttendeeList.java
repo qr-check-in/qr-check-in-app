@@ -80,6 +80,10 @@ public class AttendeeList extends AppCompatActivity {
         // TODO: setup recycler view
 
         getMap = findViewById(R.id.mapLocation);
+        // Hide getMap button if we're viewing the signups
+        if (Objects.equals(fieldName, "signupEvents")){
+            getMap.setVisibility(View.INVISIBLE);
+        }
 
         getMap.setOnClickListener(new View.OnClickListener() {
             @Override
