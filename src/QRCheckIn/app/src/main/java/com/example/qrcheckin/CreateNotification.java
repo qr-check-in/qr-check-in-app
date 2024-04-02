@@ -2,6 +2,7 @@ package com.example.qrcheckin;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -29,11 +30,14 @@ public class CreateNotification extends AppCompatActivity {
     EditText notificationDescription;
     Button addNotificationBtn;
 
-    String notificationTxt;
-    String notificationDescrpTxt;
+    String notiTitle;
+    String notiDescription;
+    String notiDateTime;
+    private NotificationDatabaseManager notiDb;
     private EventDatabaseManager eventDb;
     private String fcmToken;
     private String documentId;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -91,15 +95,22 @@ public class CreateNotification extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 // Get the notification title and description from EditText fields
-                String title = notificationTitle.getText().toString();
-                String description = notificationDescription.getText().toString();
+                notiTitle = notificationTitle.getText().toString();
+                notiDescription = notificationDescription.getText().toString();
 
                 // Check if either title or description is empty
                 if (title.isEmpty() || description.isEmpty()) {
                     Toast.makeText(getApplicationContext(), "Please fill in both title and description", Toast.LENGTH_SHORT).show();
                 } else {
-
                     // Perform notification creation logic here (e.g., send notification to server)
+                    // openai,2024, chatgpt how to get the date and time
+                    SimpleDateFormat dateFormat = new SimpleDateFormat("MMM, dd, yyyy; h:mm a", Locale.getDefault());
+                    notiDateTime = dateFormat.format(new Date());
+
+                    Notification newNotification = new Notification(notiTitle, notiDescription, notiDateTime,documentId);
+                    Log.d("notification", String.format("storing Notification%s", newNotification.getTitle()));
+                    notiDb.storeNotification(newNotification);
+
 
 
                     // Once the notification is created, navigate back to OrganizersEventPageActivity

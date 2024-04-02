@@ -10,17 +10,16 @@ import java.util.ArrayList;
 public class Event implements Serializable {
     private ArrayList<String> attendee;
     private ArrayList<String> signups;
+    private ArrayList<String> notifications;
     private String organizer;
     private QRCode checkInQRCode;
     private PromoQRCode promoQRCode;
     private EventPoster poster;
-    private ArrayList<Notification> notifications;
     private String eventName;
     private String eventDate;
     private String eventTime;
     private String eventLocation;
     private String eventDescription;
-
     private int signupLimit;
     private boolean checkInStatus;
 
@@ -36,7 +35,7 @@ public class Event implements Serializable {
     /**
      * Constructs a new Event
      *
-     * @param organizer        the string FCM token of the organizer's device
+     * @param organizer        the string FCM t`oken of the organizer's device
      * @param checkInQRCode    the check-in QRCode
      * @param promoQRCode      the promotional PromoQRCode
      * @param poster           the Event's EventPoster
@@ -49,7 +48,6 @@ public class Event implements Serializable {
      */
     public Event(String organizer, QRCode checkInQRCode, PromoQRCode promoQRCode, EventPoster poster, String eventName, String eventDate, String eventTime, String eventLocation, String eventDescription, boolean checkInStatus, int signupLimit) {
         this.organizer = organizer;
-
         this.checkInQRCode = checkInQRCode;
         this.promoQRCode = promoQRCode;
         this.poster = poster;
@@ -62,6 +60,7 @@ public class Event implements Serializable {
         this.signupLimit = signupLimit;
         this.attendee = new ArrayList<String>();
         this.signups = new ArrayList<String>();
+        this.notifications = new ArrayList<String>();
     }
 
     /**
@@ -163,7 +162,7 @@ public class Event implements Serializable {
      *
      * @return
      */
-    public ArrayList<Notification> getNotifications() {
+    public ArrayList<String> getNotifications() {
         return notifications;
     }
 
@@ -171,7 +170,7 @@ public class Event implements Serializable {
      *
      * @param notifications
      */
-    public void setNotifications(ArrayList<Notification> notifications) {
+    public void setNotifications(ArrayList<String> notifications) {
         this.notifications = notifications;
     }
 
