@@ -98,7 +98,9 @@ public class CreateNotification extends AppCompatActivity {
                 if (title.isEmpty() || description.isEmpty()) {
                     Toast.makeText(getApplicationContext(), "Please fill in both title and description", Toast.LENGTH_SHORT).show();
                 } else {
+
                     // Perform notification creation logic here (e.g., send notification to server)
+
 
                     // Once the notification is created, navigate back to OrganizersEventPageActivity
                     Intent intent = new Intent(getApplicationContext(), OrganizersEventPageActivity.class);

@@ -17,11 +17,14 @@ public class Notification {
     private String message;
     // Notification date
     private String dateTime;
+    // event id
+    private String eventID;
 
-    public Notification(String title, String message, String dateTime) {
+    public Notification(String title, String message, String dateTime, String eventID) {
         this.title = title;
         this.message = message;
         this.dateTime = dateTime;
+        this.eventID = eventID;
     }
 
     public String getTitle() {
@@ -46,5 +49,13 @@ public class Notification {
 
     public void setDateTime(String dateTime) {
         this.dateTime = dateTime;
+    }
+
+    public String getEventID() {
+        return eventID;
+    }
+
+    public void setEventID(String eventID) {
+        this.eventID = eventID;
     }
 }

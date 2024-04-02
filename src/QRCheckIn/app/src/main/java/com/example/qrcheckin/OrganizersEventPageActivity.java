@@ -221,11 +221,11 @@ public class OrganizersEventPageActivity extends AppCompatActivity {
         ArrayList<Notification> notifications = new ArrayList<>();
 
         // Creating sample notification objects and adding them to the list
-        Notification notification1 = new Notification("Test Notification 1", "Description for Test Notification 1", "Date Time for Test Notification 1");
-        Notification notification2 = new Notification("Test Notification 2", "Description for Test Notification 2", "Date Time for Test Notification 2");
-        Notification notification3 = new Notification("Test Notification 3", "Description for Test Notification 3", "Date Time for Test Notification 3");
-        Notification notification4 = new Notification("Test Notification 4", "Description for Test Notification 4", "Date Time for Test Notification 4");
-        Notification notification5 = new Notification("Test Notification 5", "Description for Test Notification 5", "Date Time for Test Notification 5");
+        Notification notification1 = new Notification("Test Notification 1", "Description for Test Notification 1", "Date Time for Test Notification 1", documentId);
+        Notification notification2 = new Notification("Test Notification 2", "Description for Test Notification 2", "Date Time for Test Notification 2", documentId);
+        Notification notification3 = new Notification("Test Notification 3", "Description for Test Notification 3", "Date Time for Test Notification 3", documentId);
+        Notification notification4 = new Notification("Test Notification 4", "Description for Test Notification 4", "Date Time for Test Notification 4", documentId);
+        Notification notification5 = new Notification("Test Notification 5", "Description for Test Notification 5", "Date Time for Test Notification 5", documentId);
 
         // Adding the notifications to the list
         notifications.add(notification1);

@@ -44,6 +44,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         db.checkExistingAttendees();
 
     }
+
     /**
      * Retrieves and logs the Firebase Cloud Messaging (FCM) token for this app's installation
      * @param editor a SharedPreferences.Editor from the calling activity to save the token string value
