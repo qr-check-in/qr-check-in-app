@@ -4,13 +4,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".AdminViewImages">
+    tools:context=".AdminImageEvents">
     <include
         android:id="@+id/images"
         layout="@layout/toolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
-
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/image_recycler_view"
         android:layout_width="match_parent"
@@ -25,9 +24,11 @@
         android:id="@+id/back_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Back"
+        android:layout_below="@+id/images"
+        android:layout_marginTop="622dp"
+        android:layout_centerHorizontal="true"
         android:backgroundTint="@color/ChryslerBlue"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true" />
+        android:text="Back"
+        tools:layout_editor_absoluteX="173dp" />
 
 </RelativeLayout>

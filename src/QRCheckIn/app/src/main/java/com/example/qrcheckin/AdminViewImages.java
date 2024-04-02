@@ -1,7 +1,6 @@
 package com.example.qrcheckin;
 
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -17,20 +16,15 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class AdminViewImages extends AppCompatActivity {
     private RecyclerView imagesRecyclerView;
     private ImageAdapter adapter;
     private FirebaseFirestore db;
-    private List<String> imageUrls;
-    private List<String> imageUris = new ArrayList<>(); // Store fetched image URLs
-    Admin admin; // Ensure you have an Admin instance that includes the browseImages method
+    private List<Image> images = new ArrayList<>(); // Now storing Image objects
+    Admin admin;
     Button back;
-    private interface ImageFetchCallback {
-        void onImageUrlsFetched(List<String> urls);
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,13 +36,12 @@ public class AdminViewImages extends AppCompatActivity {
         getSupportActionBar().setDisplayShowTitleEnabled(false);
         TextView header = findViewById(R.id.mainHeader);
         header.setText("Images");
-        imagesRecyclerView = findViewById(R.id.image_recycler_view);
-        imagesRecyclerView.setLayoutManager(new GridLayoutManager(this, 3)); // Adjust the number of columns as needed
 
-        // Initialize FirebaseFirestore instance before fetching images
+        imagesRecyclerView = findViewById(R.id.image_recycler_view);
+        imagesRecyclerView.setLayoutManager(new GridLayoutManager(this, 3));
+
         db = FirebaseFirestore.getInstance();
 
-        // Now it's safe to fetch and display images
         fetchAndDisplayImages();
 
         back = findViewById(R.id.back_button);
@@ -62,7 +55,7 @@ public class AdminViewImages extends AppCompatActivity {
                         if (attendeeSnapshot.contains("profile.profilePicture")) {
                             String profilePicUri = attendeeSnapshot.getString("profile.profilePicture.uriString");
                             if (profilePicUri != null) {
-                                imageUris.add(profilePicUri);
+                                images.add(new Image(profilePicUri, null)); // Assuming Attendee not required here
                             }
                         }
                     }
@@ -72,22 +65,18 @@ public class AdminViewImages extends AppCompatActivity {
                                     if (eventSnapshot.contains("poster")) {
                                         String posterUri = eventSnapshot.getString("poster.uriString");
                                         if (posterUri != null) {
-                                            imageUris.add(posterUri);
+                                            images.add(new Image(posterUri, null)); // Again, assuming Attendee not needed
                                         }
                                     }
                                 }
-                                // Update adapter dataset
                                 if (adapter == null) {
-                                    adapter = new ImageAdapter(this, imageUris);
+                                    adapter = new ImageAdapter(this, images); // Ensure ImageAdapter is adapted for Image objects
                                     imagesRecyclerView.setAdapter(adapter);
                                 } else {
-                                    adapter.updateData(imageUris);
+                                    adapter.updateData(images);
                                 }
                             })
-                            .addOnFailureListener(e -> Log.e("AdminViewImages", "Error fetching event posters: " + e));
-                })
-                .addOnFailureListener(e -> Log.e("AdminViewImages", "Error fetching profile pictures: " + e));
+                            .addOnFailureListener(e -> Log.e("AdminViewImages", "Error fetching images: " + e));
+                });
     }
-
-
 }

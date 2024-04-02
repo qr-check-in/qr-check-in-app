@@ -9,6 +9,8 @@
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.INTERNET"/>
+
 
     <uses-feature
         android:name="android.hardware.camera"
@@ -83,6 +85,8 @@
         <activity android:name=".AdminViewProfiles"
             android:exported="false"/>
         <activity android:name=".AdminViewImages"/>
+        <activity android:name=".AdminImageProfiles"/>
+        <activity android:name=".AdminImageEvents"/>
         <activity
             android:name=".ProfileActivityAdmin"
             android:exported="false" />

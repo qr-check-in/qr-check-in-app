@@ -27,6 +27,20 @@ public class AdminEventAdapter extends FirestoreRecyclerAdapter<Event, AdminEven
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.admin_events_list, parent, false);
         return new EventViewHolder(view);
     }
+    @Override
+    public long getItemId(int position) {
+        return position;
+    }
+
+    /**
+     * Returns the position as the view type of the item
+     * @param position position to query
+     * @return position Int of the item's position
+     */
+    @Override
+    public int getItemViewType(int position) {
+        return position;
+    }
 
     @Override
     protected void onBindViewHolder(@NonNull EventViewHolder holder, int position, @NonNull Event model) {
