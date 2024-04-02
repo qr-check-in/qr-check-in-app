@@ -2,6 +2,7 @@ package com.example.qrcheckin;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
@@ -18,6 +19,12 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import org.w3c.dom.Text;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
+
 public class CreateNotification extends AppCompatActivity {
     // Main Bar buttons
     ImageButton qrButton;
@@ -26,8 +33,8 @@ public class CreateNotification extends AppCompatActivity {
     ImageButton profileButton;
 
     // Widgets and text on the activity
-    EditText notificationTitle;
-    EditText notificationDescription;
+    TextView notificationTitle;
+    TextView notificationDescription;
     Button addNotificationBtn;
 
     String notiTitle;
@@ -88,6 +95,7 @@ public class CreateNotification extends AppCompatActivity {
         // Retrieve the event passed from the previous activity
         documentId = getIntent().getStringExtra("EVENT_DOC_ID");
         eventDb = new EventDatabaseManager(documentId);
+        notiDb = new NotificationDatabaseManager();
 
         // Inside the addNotificationBtn.setOnClickListener method of CreateNotification activity
         // openai, 2024,  chatgpt: how to go back to the previous event
@@ -99,18 +107,21 @@ public class CreateNotification extends AppCompatActivity {
                 notiDescription = notificationDescription.getText().toString();
 
                 // Check if either title or description is empty
-                if (title.isEmpty() || description.isEmpty()) {
+                if (TextUtils.isEmpty(notiTitle) || TextUtils.isEmpty(notiDescription)) {
                     Toast.makeText(getApplicationContext(), "Please fill in both title and description", Toast.LENGTH_SHORT).show();
                 } else {
-                    // Perform notification creation logic here (e.g., send notification to server)
+                    // Perform notification creation logic
                     // openai,2024, chatgpt how to get the date and time
                     SimpleDateFormat dateFormat = new SimpleDateFormat("MMM, dd, yyyy; h:mm a", Locale.getDefault());
                     notiDateTime = dateFormat.format(new Date());
 
+                    // Create new object notification and add it to the db
                     Notification newNotification = new Notification(notiTitle, notiDescription, notiDateTime,documentId);
                     Log.d("notification", String.format("storing Notification%s", newNotification.getTitle()));
-                    notiDb.storeNotification(newNotification);
+                    String notiID = notiDb.storeNotification(newNotification);
 
+                    // Add to eventdb
+                    eventDb.addToArrayField("notifications", notiID);
 
 
                     // Once the notification is created, navigate back to OrganizersEventPageActivity
