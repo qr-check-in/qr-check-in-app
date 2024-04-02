@@ -52,6 +52,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         Log.d("MapLocations", "onMapReady: " + locationArrayList);
 
+        // Set initial camera position to Edmonton city
+        LatLng edmonton = new LatLng(53.5461, -113.4938);
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(edmonton, 10)); // Zoom level can be adjusted as needed
+
         // Iterate over the locationArrayList up to its size
         for (int i = 0; i < locationArrayList.size(); i++) {
             mMap.addMarker(new MarkerOptions().position(locationArrayList.get(i)).title(locationArrayList.get(i).toString())); // Set title as "Marker" instead of "Marker in Sydney"

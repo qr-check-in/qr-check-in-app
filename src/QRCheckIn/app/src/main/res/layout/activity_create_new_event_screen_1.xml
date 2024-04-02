@@ -157,7 +157,7 @@
                         android:hint="Event Location"
                         tools:layout_editor_absoluteX="30dp"
                         tools:layout_editor_absoluteY="78dp"
-                        android:drawableLeft="@drawable/locationresize"
+                        android:drawableLeft="@drawable/location_resize"
                         android:drawablePadding="5dp"
                         android:paddingStart="30dp">
                     </com.google.android.material.textfield.TextInputEditText>

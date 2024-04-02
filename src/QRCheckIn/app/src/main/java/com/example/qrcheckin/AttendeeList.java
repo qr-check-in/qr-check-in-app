@@ -6,6 +6,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -29,8 +30,9 @@ public class AttendeeList extends AppCompatActivity {
     private String fieldName;
     ArrayList<String> attendeeList = new ArrayList<>(); // List to hold attendee names
     final ArrayList<LatLng> attendeeListGeoPoints = new ArrayList<>(); // List hold all attendee's Coordinates
+    boolean booleanCheckInStatus = false;
     FirebaseFirestore db;
-
+    TextView header;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,30 +46,28 @@ public class AttendeeList extends AppCompatActivity {
             getSupportActionBar().setDisplayShowTitleEnabled(false);
         }
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        TextView header = findViewById(R.id.mainHeader);
-        header.setText("Total Participants: ");
+        header = findViewById(R.id.mainHeader);
 
         // Retrieve values passed by previous activity to determine if the event's signups list or attendee list should be displayed
         documentId = getIntent().getStringExtra("EVENT_DOC_ID");
         fieldName = getIntent().getStringExtra("FIELD_NAME");
 
-        Log.d("FieldName", "FieldName: " + fieldName + documentId);
-
-        //Log.d("ATTENDEE LIST", String.format("should display (%s) for (%s)", fieldName, documentId));
-
         // TODO: setup recycler view
 
+        getMap = findViewById(R.id.mapLocation);
+
+        // get all the attendees in the event from Firestore
         getAllAttendees();
 
-        getMap = findViewById(R.id.mapLocation);
         getMap.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (attendeeList != null){
+                if (!attendeeListGeoPoints.isEmpty()) {
                     Intent intent = new Intent(getApplicationContext(), MapsActivity.class);
                     intent.putExtra("AllGeoPoints", attendeeListGeoPoints);
-                    Log.d("PutAllGeo", "onClick: " + attendeeListGeoPoints);
                     startActivity(intent);
+                } else {
+                    Toast.makeText(AttendeeList.this, "No geolocation available!", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -80,7 +80,6 @@ public class AttendeeList extends AppCompatActivity {
         // Get the document reference using the document ID
         DocumentReference docRef = db.collection("events").document(documentId);
 
-        Log.d("DOCREF", "onSuccess: Founded");
         // Fetch the document
         docRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
@@ -88,7 +87,17 @@ public class AttendeeList extends AppCompatActivity {
                 if (documentSnapshot.exists()) {
                     // Retrieve the list of attendees from the document
                     attendeeList = (ArrayList<String>) documentSnapshot.get("attendee");
-                    Log.d("Attendees", "onSuccess: " + attendeeList);
+
+                    // get the checkInStatus from event
+                    booleanCheckInStatus = documentSnapshot.getBoolean("checkInStatus");
+
+                    if (booleanCheckInStatus) {
+                        // If CheckInStatus of event is true, show the getMap button
+                        getMap.setVisibility(View.VISIBLE);
+                    } else {
+                        // If CheckInStatus of event is false, hide the getMap button
+                        getMap.setVisibility(View.INVISIBLE);
+                    }
 
                     // Check if attendees list is  null
                     if (attendeeList == null) {
@@ -96,6 +105,7 @@ public class AttendeeList extends AppCompatActivity {
                     } else {
                         // If attendees list is not null, proceed to get geo points
                         getAllGeoPoints();
+                        header.setText("Total Participants: " + attendeeList.size());
                     }
                 } else {
                     Log.d("AttendeeList", "Document does not exist");
@@ -110,15 +120,11 @@ public class AttendeeList extends AppCompatActivity {
     }
 
     private void getAllGeoPoints() {
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
-        Log.d("getAllPoints", "getAllGeoPoints: Entered");
-        Log.d("attendeeList", "getAllGeoPoints: Entered" + attendeeList);
+        db = FirebaseFirestore.getInstance();
 
         // Loop through each attendee in the attendeeList
         for (String attendeeId : attendeeList) {
-            Log.d("attendeeList", "getAllGeoPoints: Entered 1");
             DocumentReference attendeeRef = db.collection("Attendees").document(attendeeId);
-            Log.d("attendeeList", "getAllGeoPoints: Entered");
 
             // Fetch the document for each attendee
             attendeeRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
@@ -127,12 +133,10 @@ public class AttendeeList extends AppCompatActivity {
                     if (documentSnapshot.exists()) {
                         // Retrieve the location field (assuming it's a GeoPoint) from the document
                         GeoPoint geoPoint = documentSnapshot.getGeoPoint("location");
-                        Log.d("GEOPOINTS", "onSuccess: " + geoPoint);
 
-                        if (geoPoint != null){
+                        if (geoPoint != null) {
                             // Create a LatLng object using the GeoPoint's latitude and longitude values
                             LatLng location = new LatLng(geoPoint.getLatitude(), geoPoint.getLongitude());
-                            Log.d("LatLng", "onSuccess: " + location);
 
                             // Add the LatLng to the attendeeListGeoPoints
                             attendeeListGeoPoints.add(location);
@@ -151,133 +155,4 @@ public class AttendeeList extends AppCompatActivity {
         }
         Log.d("AllGeoPoints", "getAllGeoPoints: " + attendeeListGeoPoints);
     }
-
-
-
-
-//    @Override
-//    protected void onCreate(Bundle savedInstanceState) {
-//        super.onCreate(savedInstanceState);
-//        setContentView(R.layout.activity_attendee_list);
-//
-//        // Manage Toolbar
-//        Toolbar toolbar = findViewById(R.id.attendee_toolbar);
-//        setSupportActionBar(toolbar);
-//        if (getSupportActionBar() != null) {
-//            getSupportActionBar().setDisplayShowTitleEnabled(false);
-//        }
-//        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-//        TextView header = findViewById(R.id.mainHeader);
-//        header.setText("Total Participants: ");
-//
-//        // Retrieve values passed by previous activity to determine if the event's signups list or attendee list should be displayed
-//        documentId = getIntent().getStringExtra("EVENT_DOC_ID");
-//        fieldName = getIntent().getStringExtra("FIELD_NAME");
-//
-//        Log.d("FieldName", "FieldName: " + fieldName + documentId);
-//
-//        //Log.d("ATTENDEE LIST", String.format("should display (%s) for (%s)", fieldName, documentId));
-//
-//        // TODO: setup recycler view
-//
-//        getAllAttendees();
-//
-//        if (attendeeList != null){
-//            Log.d("Attendees", "onSuccess2: " + attendeeList);
-//            getAllGeoPoints();
-//        }
-//
-//
-//        getMap = findViewById(R.id.mapLocation);
-//
-//        getMap.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                if (attendeeList != null){
-//                    Intent intent = new Intent(getApplicationContext(), MapsActivity.class);
-//                    intent.putExtra("AllGeoPoints", attendeeListGeoPoints);
-//                    Log.d("PutAllGeo", "onClick: " + attendeeListGeoPoints);
-//                    startActivity(intent);
-//                }
-//            }
-//        });
-//    }
-//
-//    public void getAllAttendees() {
-//        // Get a reference to the Firestore database
-//        db = FirebaseFirestore.getInstance();
-//
-//        // Get the document reference using the document ID
-//        DocumentReference docRef = db.collection("events").document(documentId);
-//
-//        Log.d("DOCREF", "onSuccess: Founded");
-//        // Fetch the document
-//        docRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-//            @Override
-//            public void onSuccess(DocumentSnapshot documentSnapshot) {
-//                if (documentSnapshot.exists()) {
-//                    // Retrieve the list of attendees from the document
-//                    attendeeList = (ArrayList<String>) documentSnapshot.get("attendee");
-//                    Log.d("Attendees", "onSuccess: " + attendeeList);
-//
-//                    // Check if attendees list is  null
-//                    if (attendeeList == null) {
-//                        Log.d("AttendeeList", "No attendees found");
-//                    }
-//                } else {
-//                    Log.d("AttendeeList", "Document does not exist");
-//                }
-//            }
-//        }).addOnFailureListener(new OnFailureListener() {
-//            @Override
-//            public void onFailure(@NonNull Exception e) {
-//                Log.e("AttendeeList", "Error getting attendees", e);
-//            }
-//        });
-//    }
-//
-//    public void getAllGeoPoints() {
-//        FirebaseFirestore db = FirebaseFirestore.getInstance();
-//        Log.d("getAllPoints", "getAllGeoPoints: Entered");
-//        Log.d("attendeeList", "getAllGeoPoints: Entered" + attendeeList);
-//
-//
-//        // Loop through each attendee in the attendeeList
-//        for (String attendeeId : attendeeList) {
-//            Log.d("attendeeList", "getAllGeoPoints: Entered 1");
-//            DocumentReference attendeeRef = db.collection("Attendees").document(attendeeId);
-//            Log.d("attendeeList", "getAllGeoPoints: Entered");
-//
-//            // Fetch the document for each attendee
-//            attendeeRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-//                @Override
-//                public void onSuccess(DocumentSnapshot documentSnapshot) {
-//                    if (documentSnapshot.exists()) {
-//                        // Retrieve the location field (assuming it's a GeoPoint) from the document
-//                        GeoPoint geoPoint = documentSnapshot.getGeoPoint("location");
-//                        Log.d("GEOPOINTS", "onSuccess: " + geoPoint);
-//
-//                        if (geoPoint != null){
-//                            // Create a LatLng object using the GeoPoint's latitude and longitude values
-//                            LatLng location = new LatLng(geoPoint.getLatitude(), geoPoint.getLongitude());
-//                            Log.d("LatLng", "onSuccess: " + location);
-//
-//
-//                            // Add the LatLng to the attendeeListGeoPoints
-//                            attendeeListGeoPoints.add(location);
-//                        }
-//
-//                    } else {
-//                        Log.d("AttendeeList", "Attendee document does not exist for ID: " + attendeeId);
-//                    }
-//                }
-//            }).addOnFailureListener(new OnFailureListener() {
-//                @Override
-//                public void onFailure(@NonNull Exception e) {
-//                    Log.e("AttendeeList", "Error getting attendee document for ID: " + attendeeId, e);
-//                }
-//            });
-//        }
-//        Log.d("AllGeoPoints", "getAllGeoPoints: " + attendeeListGeoPoints);
-//    }
 }
