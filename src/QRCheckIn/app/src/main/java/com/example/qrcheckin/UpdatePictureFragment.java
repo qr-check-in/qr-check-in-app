@@ -54,16 +54,15 @@ public class UpdatePictureFragment extends DialogFragment {
                 if (uri != null) {
                     sharedViewModel.setSelectedImageUri(uri);
                     dismiss();
+
                     // Use ImageStorageManager to upload the image to firestore
                     ProfilePicture profilePicture = new ProfilePicture(uri.toString(), null);
                     ImageStorageManager storage = new ImageStorageManager(profilePicture,"/ProfilePictures");
-                    storage.uploadImage();
+                    storage.uploadImage(null);
 
-                    // Use AttendeeDatabaseManager to delete the previous profile picture and update the Attendee's firebase doc
+                    // Use AttendeeDatabaseManager to delete the previous profile picture and replace it with the uploaded uri
                     AttendeeDatabaseManager dbManager = new AttendeeDatabaseManager(fcmToken);
-                    dbManager.deleteProfilePicture();
-                    dbManager.updateProfilePicture(uri);
-                    dbManager.updateAttendeeBoolean("profile.profilePicture.generated", false);
+                    dbManager.deleteProfilePicture(uri);
 
                 }
             });

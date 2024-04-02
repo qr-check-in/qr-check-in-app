@@ -52,13 +52,18 @@ public class ImageStorageManager {
 
     /**
      * Uploads a Uri to firestorage
+     * @param imageView ImageView for cases where a profile picture has been removed, we need to re-call displayImage() once
+     *                 the new profile picture has been successfully uploaded. Null in other cases.
      */
-    public void uploadImage(){
+    public void uploadImage(ImageView imageView){
         Uri uri = Uri.parse(image.getUriString());
         storageReference.putFile(uri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
             @Override
             public void onSuccess (UploadTask.TaskSnapshot taskSnapshot){
                 Log.d("UPLOAD", "successfully uploaded image");
+                if(imageView != null){
+                    displayImage(imageView);
+                }
             }
         }).addOnFailureListener(new OnFailureListener(){
             @Override

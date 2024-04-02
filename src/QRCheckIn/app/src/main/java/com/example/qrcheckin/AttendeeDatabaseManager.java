@@ -2,6 +2,7 @@ package com.example.qrcheckin;
 
 import android.net.Uri;
 import android.util.Log;
+import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
 
@@ -60,7 +61,7 @@ public class AttendeeDatabaseManager extends DatabaseManager {
      */
     public void storeAttendee(){
         Attendee attendee = new Attendee();
-        attendee.getProfile().generateProfilePicture();
+        attendee.getProfile().generateProfilePicture(null);
         attendee.getProfile().getProfilePicture().setGenerated(true);
         // The docID of the attendee object is the associated user's fcmToken string
         getCollectionRef().document(getDocumentID()).set(attendee);
@@ -112,8 +113,10 @@ public class AttendeeDatabaseManager extends DatabaseManager {
 
     /**
      * Retrieves the Attendee's profile and calls method to generate a new ProfilePicture of their initials
+     * @param imageView ImageView for cases where a profile picture has been removed, we need to re-call displayImage() once
+     *                  the new profile picture has been successfully uploaded. Null in other cases.
      */
-    public void callGenerateProfilePicture(){
+    public void callGenerateProfilePicture(ImageView imageView){
         getDocRef().get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
@@ -126,8 +129,8 @@ public class AttendeeDatabaseManager extends DatabaseManager {
                         ImageStorageManager storage = new ImageStorageManager(pfp, "/ProfilePictures");
                         // Remove profile picture from storage
                         storage.deleteImage();
-                        // Generate a new profile picture for cases where the user previously had a generated pfp, and has now changed their name
-                        attendee.getProfile().generateProfilePicture();
+                        // Generate a new profile picture and update the Attendee's document
+                        attendee.getProfile().generateProfilePicture(imageView);
                         updateProfilePicture(Uri.parse(attendee.getProfile().getProfilePicture().getUriString()));
                     }
                 }
@@ -136,9 +139,10 @@ public class AttendeeDatabaseManager extends DatabaseManager {
     }
 
     /**
-     * Deletes the Attendee's ProfilePicture in firestorage and replaces it with a generated one
+     * Deletes the Attendee's ProfilePicture in firestorage and replaces it with an uploaded image Uri
+     * @param uri Uri of the new profile picture uploaded by a user
      */
-    public void deleteProfilePicture(){
+    public void deleteProfilePicture(Uri uri){
         getDocRef().get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
@@ -148,9 +152,12 @@ public class AttendeeDatabaseManager extends DatabaseManager {
                 } else {
                     ProfilePicture pfp = attendee.getProfile().getProfilePicture();
                     if (pfp != null) {
-                        // Remove profile picture from storage
+                        // Remove previous profile picture from storage
                         ImageStorageManager storage = new ImageStorageManager(pfp, "/ProfilePictures");
                         storage.deleteImage();
+                        // Update Attendee doc with new picture
+                        updateProfilePicture(uri);
+                        updateAttendeeBoolean("profile.profilePicture.generated", false);
                     }
                 }
             }
@@ -162,15 +169,17 @@ public class AttendeeDatabaseManager extends DatabaseManager {
      * Updates a string field in an Attendee's Profile in firestore
      * @param field String of the field to be updated in Profile
      * @param value String of the new value the field is set to
+     * @param imageView ImageView for cases where a profile name has been updated, we need to re-call displayImage() once
+     *                  the new profile picture has been successfully uploaded. Null in other cases.
      */
-    public void updateProfileString(String field, String value){
+    public void updateProfileString(String field, String value, ImageView imageView){
         getDocRef().update("profile."+field, value).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void unused) {
                 Log.d("Firestore", "docsnapshot string updated");
                 if(field.equals("name")){
                     // For cases where the user updates their name, and thus their generated profile picture must get updated as well
-                    callGenerateProfilePicture();
+                    callGenerateProfilePicture(imageView);
                 }
             }
         }).addOnFailureListener(new OnFailureListener() {

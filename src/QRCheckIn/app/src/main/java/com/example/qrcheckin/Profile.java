@@ -6,6 +6,7 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.location.Location;
 import android.net.Uri;
+import android.widget.ImageView;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -33,8 +34,10 @@ public class Profile {
 
     /**
      * Creates a ProfilePicture of the user's name's initials and sets it as this Profile's profilePicture
+     * @param imageView ImageView for cases where a profile picture has been removed, we need to re-call displayImage() once
+     *                  the new profile picture has been successfully uploaded. Null in other cases.
      */
-    public void generateProfilePicture(){
+    public void generateProfilePicture(ImageView imageView){
         String initials = getInitials();
         // Create a bitmap canvas, set the background color
         // https://stackoverflow.com/questions/33522701/how-to-create-bitmap-from-string-text-inside-a-circle-using-canvas , dungtv, 2015
@@ -78,7 +81,7 @@ public class Profile {
             // Create and store the new ProfilePicture using the uri
             this.profilePicture = new ProfilePicture(uri.toString(), null);
             ImageStorageManager storage = new ImageStorageManager(profilePicture, "/ProfilePictures");
-            storage.uploadImage();
+            storage.uploadImage(imageView);
 
         } catch (IOException e){
             e.printStackTrace();

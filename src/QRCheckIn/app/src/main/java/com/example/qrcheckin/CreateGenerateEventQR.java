@@ -3,7 +3,6 @@ package com.example.qrcheckin;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
-import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -211,13 +210,13 @@ public class CreateGenerateEventQR extends AppCompatActivity {
                     if (incomingPosterString != null) {
                         inputEventPoster = new EventPoster(incomingPosterString, null);
                         ImageStorageManager posterStorage = new ImageStorageManager(inputEventPoster, "/EventPosters");
-                        posterStorage.uploadImage();
+                        posterStorage.uploadImage(null);
                     }
 
                     // Create and store a check-in QR code to firestore storage
                     if (checkInQRCode != null) {
                         ImageStorageManager storageQr = new ImageStorageManager(checkInQRCode, "/QRCodes");
-                        storageQr.uploadImage();
+                        storageQr.uploadImage(null);
                     }
 
                     Event newEvent = new Event(organizerFcm, checkInQRCode, promoQRCode, inputEventPoster, inputEventName, inputEventDate, inputEventTime, inputEventLocation, inputEventDescription, incomingEvent.isCheckInStatus(), numOfAttends);
