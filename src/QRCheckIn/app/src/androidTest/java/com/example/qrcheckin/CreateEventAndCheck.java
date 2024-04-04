@@ -3,17 +3,21 @@ package com.example.qrcheckin;
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.action.ViewActions.swipeUp;
+import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.intent.Intents.intended;
+import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withClassName;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
+import android.util.Log;
 
 import androidx.test.espresso.action.ViewActions;
 import androidx.test.espresso.intent.Intents;
 import androidx.test.espresso.intent.matcher.IntentMatchers;
+import androidx.test.espresso.matcher.ViewMatchers;
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.filters.LargeTest;
@@ -22,6 +26,7 @@ import com.example.qrcheckin.Event.CreateAddEventDetails;
 import com.example.qrcheckin.Event.CreateGenerateEventQR;
 import com.example.qrcheckin.Event.EventListView;
 
+import org.hamcrest.Matcher;
 import org.hamcrest.Matchers;
 import org.junit.After;
 import org.junit.Before;
@@ -29,7 +34,9 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Locale;
 
 @RunWith(AndroidJUnit4.class)
 @LargeTest
@@ -39,6 +46,7 @@ public class CreateEventAndCheck {
     String detail = "'AAA Annual Conference' is a premier event gathering professionals and experts from the field of Computer Science";
     Calendar currentDate;
     Calendar time;
+    String location = "Toronto, Canada";
 
     @Rule
     public ActivityScenarioRule<CreateAddEventDetails> scenario = new ActivityScenarioRule<CreateAddEventDetails>(CreateAddEventDetails.class);
@@ -78,9 +86,6 @@ public class CreateEventAndCheck {
         // Get the current date
         currentDate = Calendar.getInstance();
 
-        // Add two days to the current date
-        currentDate.add(Calendar.DAY_OF_MONTH, 2);
-
         // Click on the OK button of the DatePickerDialog to select the current date
         onView(withText("OK")).perform(click());
 
@@ -93,14 +98,11 @@ public class CreateEventAndCheck {
         // Use the current time as the default values for the picker.
         time = Calendar.getInstance();
 
-        // Add two hours to the current time
-        time.add(Calendar.HOUR_OF_DAY, 2);
-
         // Click on the OK button of the TimePickerDialog to select the time two hours from now
         onView(withText("OK")).perform(click());
 
         // Type the location
-        onView(withId(R.id.eventLocationText)).perform(ViewActions.typeText("Toronto, Canada"));
+        onView(withId(R.id.eventLocationText)).perform(ViewActions.typeText(location));
 
         // Test the switch by enabling it
         onView(withId(R.id.checkInSwitch)).perform(click()).perform(ViewActions.closeSoftKeyboard());
@@ -150,11 +152,31 @@ public class CreateEventAndCheck {
         // move to EventListView using intent
         intended(IntentMatchers.hasComponent(EventListView.class.getName()));
 
+        // press myEventsButton to see events created by user
+        onView(ViewMatchers.withId(R.id.eventsTabbar)).check(matches(isDisplayed())).perform(click());
+
+        onView(ViewMatchers.withId(R.id.myEventsButton))
+                .check(matches(isDisplayed())).perform(click());
+
         // Click on the event with text stored in title
         onView(withText(title)).perform(click());
 
-        //
-//        onView(withId(withId(R.id.mainHeader)), isDescendantOfA(withId(R.id.event_page_toolbar))))
-//                .check(matches(withText("Expected Text")));
+        // match details on poster with input details while creating event
+
+        // Create a SimpleDateFormat object with the desired format
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-M-d", Locale.getDefault());
+
+        // Format the currentDate using the SimpleDateFormat object
+        String formattedDate = dateFormat.format(currentDate.getTime());
+
+        // Match event date with the converted string
+        onView(withId(R.id.text_event_date)).check(matches(withText(formattedDate)));
+
+        // Match event location
+        onView(withId(R.id.text_event_location)).check(matches(withText(location)));
+
+        // Match event description
+        onView(withId(R.id.text_event_description)).check(matches(withText(detail)));
+
     }
 }
