@@ -65,8 +65,6 @@ public class MyNotificationManager {
         mManager.notify(id, builder.build());
     }
 
-<<<<<<< Updated upstream
-=======
     /**
      * Sends notification to Topic
      * @param topic
@@ -85,5 +83,4 @@ public class MyNotificationManager {
         // Send the message
         FirebaseMessaging.getInstance().send(remoteMessage);
     }
->>>>>>> Stashed changes
 }

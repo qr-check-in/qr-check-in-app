@@ -137,7 +137,7 @@ public class CreateNotification extends AppCompatActivity {
                                 if (topicName != null) {
                                     // Send notification to the topic
                                     MyNotificationManager notificationManager = MyNotificationManager.getInstance(getApplicationContext());
-//                                    notificationManager.sendNotificationToTopic(topicName, notiTitle, notiDescription);
+                                    notificationManager.sendNotificationToTopic(topicName, notiTitle, notiDescription);
                                     }
                                  else {
                                     Log.e("Notification", "Topic name is null");
