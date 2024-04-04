@@ -1,4 +1,4 @@
-package com.example.qrcheckin.Event;
+package com.example.qrcheckin.Common;
 
 import android.Manifest;
 import android.content.Intent;
@@ -21,7 +21,10 @@ import androidx.core.content.ContextCompat;
 import com.example.qrcheckin.Admin.AdminTokensDatabaseManager;
 import com.example.qrcheckin.Attendee.AttendeeDatabaseManager;
 import com.example.qrcheckin.Attendee.ProfileActivity;
-import com.example.qrcheckin.Common.MainActivity;
+import com.example.qrcheckin.Event.CreateAddEventDetails;
+import com.example.qrcheckin.Event.EventDatabaseManager;
+import com.example.qrcheckin.Event.EventListView;
+import com.example.qrcheckin.Event.OrganizersEventPageActivity;
 import com.example.qrcheckin.R;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
@@ -120,10 +123,12 @@ public class QRCodeScan extends AppCompatActivity {
      */
     private void startScanner() {
         IntentIntegrator integrator = new IntentIntegrator(this);
-        integrator.setOrientationLocked(false);
+        integrator.setOrientationLocked(true);
         integrator.setDesiredBarcodeFormats(IntentIntegrator.ALL_CODE_TYPES);
         integrator.setPrompt("Scan a QR code");
         integrator.setBeepEnabled(false);
+        // https://stackoverflow.com/questions/34983201/change-qr-scanner-orientation-with-zxing-in-android-studio, 2024, how to change the orientation of teh camera
+        integrator.setCaptureActivity(CaptureActivityProtrait.class);
         integrator.initiateScan();
 
         // get user geolocation

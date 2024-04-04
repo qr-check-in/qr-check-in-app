@@ -91,6 +91,7 @@ public class OrganizersEventPageActivity extends AppCompatActivity {
         }
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         TextView header = findViewById(R.id.mainHeader);
+        header.setSelected(true);
 
         eventButton.setPressed(true);
 

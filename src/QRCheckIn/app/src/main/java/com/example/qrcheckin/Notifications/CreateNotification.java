@@ -11,6 +11,7 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
@@ -18,6 +19,10 @@ import com.example.qrcheckin.Event.EventDatabaseManager;
 import com.example.qrcheckin.Event.OrganizersEventPageActivity;
 import com.example.qrcheckin.R;
 import com.example.qrcheckin.ClassObjects.Notification;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.messaging.FirebaseMessaging;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -42,6 +47,7 @@ public class CreateNotification extends AppCompatActivity {
     private EventDatabaseManager eventDb;
     private String fcmToken;
     private String documentId;
+    private String topicName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -120,6 +126,32 @@ public class CreateNotification extends AppCompatActivity {
 
                     // Add to eventdb
                     eventDb.addToArrayField("notifications", notiID);
+
+                    // Send notification to the topic
+                    // openai, 2024, chatgpt: how to connect the notificationmanager and messaging service to creating a notification
+                    eventDb.getDocRef().get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                        @Override
+                        public void onSuccess(DocumentSnapshot documentSnapshot) {
+                            if (documentSnapshot.exists()) {
+                                topicName = documentSnapshot.getString("topicName");
+                                if (topicName != null) {
+                                    // Send notification to the topic
+                                    MyNotificationManager notificationManager = MyNotificationManager.getInstance(getApplicationContext());
+                                    notificationManager.sendNotificationToTopic(topicName, notiTitle, notiDescription);
+                                    }
+                                 else {
+                                    Log.e("Notification", "Topic name is null");
+                                }
+                            } else {
+                                Log.e("Notification", "Document does not exist");
+                            }
+                        }
+                    }).addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            Log.e("Notification", "Error fetching document", e);
+                        }
+                    });
 
                     // Once the notification is created, navigate back to OrganizersEventPageActivity
                     Intent intent = new Intent(getApplicationContext(), OrganizersEventPageActivity.class);
