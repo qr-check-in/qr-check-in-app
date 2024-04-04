@@ -20,7 +20,6 @@ import com.example.qrcheckin.Admin.AdminTokensDatabaseManager;
 import com.example.qrcheckin.Attendee.AttendeeDatabaseManager;
 import com.example.qrcheckin.Event.CreateAddEventDetails;
 import com.example.qrcheckin.Event.EventListView;
-import com.example.qrcheckin.Event.QRCodeScan;
 
 /**
  * Entry point of the app, hosts main interface.

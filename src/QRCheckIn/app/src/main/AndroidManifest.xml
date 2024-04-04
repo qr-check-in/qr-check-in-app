@@ -80,7 +80,7 @@
             android:name=".Event.EventListView"
             android:exported="false" />
         <activity
-            android:name=".Event.QRCodeScan"
+            android:name=".Common.QRCodeScan"
             android:exported="false" />
         <activity
             android:name=".Admin.AdminActivity"

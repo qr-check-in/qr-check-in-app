@@ -1,4 +1,4 @@
-package com.example.qrcheckin.Event;
+package com.example.qrcheckin.Common;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -12,8 +12,11 @@ import android.widget.Toast;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.qrcheckin.Common.MainActivity;
 import com.example.qrcheckin.Attendee.ProfileActivity;
+import com.example.qrcheckin.Event.CreateAddEventDetails;
+import com.example.qrcheckin.Event.EventDatabaseManager;
+import com.example.qrcheckin.Event.EventListView;
+import com.example.qrcheckin.Event.OrganizersEventPageActivity;
 import com.example.qrcheckin.R;
 import com.example.qrcheckin.Admin.AdminTokensDatabaseManager;
 import com.example.qrcheckin.Attendee.AttendeeDatabaseManager;
@@ -98,7 +101,7 @@ public class QRCodeScan extends AppCompatActivity {
      */
     private void startScanner() {
         IntentIntegrator integrator = new IntentIntegrator(this);
-        integrator.setOrientationLocked(false);
+        integrator.setOrientationLocked(true);
         integrator.setDesiredBarcodeFormats(IntentIntegrator.ALL_CODE_TYPES);
         integrator.setPrompt("Scan a QR code");
         integrator.setBeepEnabled(false);
