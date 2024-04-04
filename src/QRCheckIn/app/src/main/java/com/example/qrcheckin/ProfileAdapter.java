@@ -56,15 +56,10 @@ public class ProfileAdapter extends RecyclerView.Adapter<ProfileAdapter.ProfileV
         Profile profile = profileList.get(position);
         Log.d("ProfileAdapter", "Binding profile: " + profile.getName());
         holder.nameTextView.setText(profile.getName());
-        ProfilePicture pic = profile.getProfilePicture(); // Adapt this line based on how you can get the URI
+        ProfilePicture pic = profile.getProfilePicture();
         if (pic != null) {
-            String uriString = profile.getProfilePicture().getUriString();
-            Glide.with(holder.itemView.getContext())
-                    .load(Uri.parse(uriString))
-                    .into(holder.photoImageView);
-        } else {
-            holder.photoImageView.setImageResource(R.drawable.baseline_account_circle_24); // Set a default image
-        }
+            ImageStorageManager storage = new ImageStorageManager(pic, "/ProfilePictures");
+            storage.displayImage(holder.photoImageView);}
 
     }
 

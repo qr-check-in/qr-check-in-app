@@ -103,9 +103,9 @@ public class AdminViewProfiles extends AppCompatActivity {
                 documentIds.clear(); // Clear previous IDs
                 for (QueryDocumentSnapshot document : task.getResult()) {
                     Map<String, Object> profileMap = (Map<String, Object>) document.get("profile");
-                    Map<String, Object> profilePictureMap = (Map<String, Object>) document.get("profilePicture");
-
-                    if (profileMap != null && profilePictureMap == null) {
+//                    Map<String, Object> profilePictureMap = (Map<String, Object>) document.get("profilePicture");
+                    String profilePicUrl = (String) document.get("profile.profilePicture.uriString");
+                    if (profileMap != null && profilePicUrl == null) {
                         String name = (String) profileMap.get("name");
                         if (name != null) {
                             Profile profile = new Profile();
@@ -114,13 +114,12 @@ public class AdminViewProfiles extends AppCompatActivity {
                             documentIds.add(document.getId()); // Store document ID
                         }
                     }
-                    else if (profileMap != null && profilePictureMap != null) {
+                    else if (profileMap != null && profilePicUrl != null) {
                         String name = (String) profileMap.get("name");
-                        String uri = (String)profilePictureMap.get("profilePicture");
                         if (name != null) {
                             Profile profile = new Profile();
                             Attendee attendee = new Attendee();
-                            ProfilePicture pic = new ProfilePicture(uri, attendee);
+                            ProfilePicture pic = new ProfilePicture(profilePicUrl, attendee);
                             profile.setName(name);
                             profile.setProfilePicture(pic);
                             profilesList.add(profile);

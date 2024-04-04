@@ -66,6 +66,7 @@ public class ProfileActivityAdmin extends AppCompatActivity {
         TextView header = findViewById(R.id.mainHeader);
         header.setText("Profile");
         admin = new Admin();
+        dbManager = new AttendeeDatabaseManager(documentId);
         sharedViewModel = new ViewModelProvider(this).get(SharedViewModel.class);
         sharedViewModel.getSelectedImageUri().observe(this, new androidx.lifecycle.Observer<Uri>() {
             @Override
@@ -90,18 +91,30 @@ public class ProfileActivityAdmin extends AppCompatActivity {
             }
         });
 
-        // Use the viewProfile method with the fetched document ID
+         //Use the viewProfile method with the fetched document ID
         admin.viewProfile(documentId, new Admin.ProfileCallback() {
             @Override
-            public void onProfileFetched(Map<String, Object> profile) {
+            public void onProfileFetched(Map<String, Object> profile, String profilePic) {
                 // Update UI with fetched profile data
-                runOnUiThread(() -> {
+                if (profile != null&&profilePic != null) {
+                    runOnUiThread(() -> {
+                        nameTextView.setText((String) profile.get("name"));
+                        nameTextView2.setText((String) profile.get("name"));
+                        contactTextView.setText((String) profile.get("contact"));
+                        homepageTextView.setText((String) profile.get("homepage"));
+                        if(profilePic != null){
+                            Log.d("profilePic1", "profilepic is:"+profilePic);
+                            ImageStorageManager storage = new ImageStorageManager(new Image(profilePic,null),"/ProfilePictures");
+                            storage.displayImage(profileImageView);
+                        }
+                    });
+                }else {
                     nameTextView.setText((String) profile.get("name"));
                     nameTextView2.setText((String) profile.get("name"));
                     contactTextView.setText((String) profile.get("contact"));
                     homepageTextView.setText((String) profile.get("homepage"));
-                    // Update other UI elements as needed
-                });
+                }
+
             }
 
             @Override
@@ -137,6 +150,7 @@ public class ProfileActivityAdmin extends AppCompatActivity {
                 fragment.show(getSupportFragmentManager(), "Edit Profile");
             }
         });
+
 
 
     }

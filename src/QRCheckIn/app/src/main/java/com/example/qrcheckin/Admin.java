@@ -26,7 +26,7 @@ public class Admin extends Attendee{
     }
 
     public interface ProfileCallback {
-        void onProfileFetched(Map<String, Object> profile);
+        void onProfileFetched(Map<String, Object> profile, String profilePic);
         void onError(Exception e);
     }
 
@@ -77,8 +77,10 @@ public class Admin extends Attendee{
                     if (documentSnapshot.exists()) {
                         // Access the nested profile field within the Attendees document
                         Map<String, Object> profile = (Map<String, Object>) documentSnapshot.get("profile");
+                        String profilePicUrl = (String) documentSnapshot.get("profile.profilePicture.uriString");
+                        Log.d("profilePicAdmin", "profile uri:"+profilePicUrl);
                         if (profile != null) {
-                            callback.onProfileFetched(profile);
+                            callback.onProfileFetched(profile, profilePicUrl);
                         } else {
                             callback.onError(new Exception("No profile data found!"));
                         }
