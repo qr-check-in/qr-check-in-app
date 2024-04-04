@@ -47,7 +47,6 @@ public class QRCodeScan extends AppCompatActivity {
     ImageButton profileButton;
     Boolean foundEvent = false;
     private EventDatabaseManager eventDb;
-    private String fcmToken;
 
     // For location
     FusedLocationProviderClient fusedLocationProviderClient;
@@ -276,7 +275,7 @@ public class QRCodeScan extends AppCompatActivity {
         String hashedAddAdminContent = "7743f40037ce1ee22e53c5e88f79f3b2b3a690458344d482bae6ab82cba1dd0c";
         if(scannedData.equals(hashedAddAdminContent)){
             // Add this user as an admin instead of checking into an event
-            AdminTokensDatabaseManager adminDb = new AdminTokensDatabaseManager(fcmToken);
+            AdminTokensDatabaseManager adminDb = new AdminTokensDatabaseManager(attendeeFcm);
             adminDb.storeAdminToken();
             // Return to MainActivity
             Intent intent = new Intent(getApplicationContext(), MainActivity.class);
