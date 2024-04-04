@@ -59,7 +59,7 @@ public class MyNotificationManager {
         PendingIntent pendingIntent = PendingIntent.getActivity(mContext, 0, intent, PendingIntent.FLAG_IMMUTABLE);
         Uri defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
         NotificationCompat.Builder builder = new NotificationCompat.Builder(mContext, channelId)
-                .setSmallIcon(R.drawable.app_icon_round)
+                .setSmallIcon(R.drawable.app_icon_resize_24)
                 .setContentTitle(title)
                 .setContentText(body)
                 .setAutoCancel(true)
