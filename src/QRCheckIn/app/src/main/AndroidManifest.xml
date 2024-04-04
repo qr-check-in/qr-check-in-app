@@ -135,7 +135,7 @@
 
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_icon"
-            android:resource="@drawable/appiconenlarged" />
+            android:resource="@drawable/app_icon_round" />
 
         <meta-data
             android:name="preloaded_fonts"
