@@ -19,6 +19,13 @@ public class AdminActivity extends AppCompatActivity {
     ImageButton addEventButton;
     ImageButton profileButton;
     Button imageListButton;
+    /**
+     * Sets up the AdminActivity's user interface and event listeners.
+     * This method initializes the activity, including toolbar setup, button initialization,
+     * and configuration of onClickListeners for navigating to other activities within the app.
+     *
+     * @param savedInstanceState contains the most recent data if re-initialized after shutdown; otherwise null.
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

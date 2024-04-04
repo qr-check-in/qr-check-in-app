@@ -50,25 +50,13 @@ public class AdminViewImages extends AppCompatActivity implements ImageAdapter.O
         adapter = new ImageAdapter(this, new HashMap<>()); // Use an empty map for initialization
         imagesRecyclerView.setAdapter(adapter);
         db = FirebaseFirestore.getInstance();
-        //adapter.setOnImageClickListener(this);
+        adapter.setOnImageClickListener(this);
         fetchAndDisplayImages();
 
         back = findViewById(R.id.back_button);
         back.setOnClickListener(v -> finish());
     }
-    @Override
-    public void onImageClick(int position) {
-        // Retrieve the clicked image
-        Image image = new ArrayList<>(imageUriToFolderMap.keySet()).get(position);
-        String folderName = imageUriToFolderMap.get(image);
-        selectedImage=imageUriToFolderMap;
 
-        // Start ViewImageActivity to display the image
-        Intent intent = new Intent(this, AdminImagePage.class);
-        intent.putExtra("ImageUri", image.getUriString());
-        intent.putExtra("FolderName", folderName);
-        startActivity(intent);
-    }
     private void fetchAndDisplayImages() {
         db.collection("Attendees").get()
                 .addOnSuccessListener(attendeesSnapshots -> {
@@ -101,4 +89,12 @@ public class AdminViewImages extends AppCompatActivity implements ImageAdapter.O
                 });
     }
 
+    @Override
+    public void onImageClick(Image image, int position) {
+        String folderName = imageUriToFolderMap.get(image);
+        Intent intent = new Intent(AdminViewImages.this, AdminImagePage.class);
+        intent.putExtra("ImageUri", image.getUriString());
+        intent.putExtra("FolderName", folderName);
+        startActivity(intent);
+    }
 }
