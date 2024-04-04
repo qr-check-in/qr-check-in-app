@@ -105,6 +105,8 @@ public class QRCodeScan extends AppCompatActivity {
         integrator.setDesiredBarcodeFormats(IntentIntegrator.ALL_CODE_TYPES);
         integrator.setPrompt("Scan a QR code");
         integrator.setBeepEnabled(false);
+        // https://stackoverflow.com/questions/34983201/change-qr-scanner-orientation-with-zxing-in-android-studio, 2024, how to change the orientation of teh camera
+        integrator.setCaptureActivity(CaptureActivityProtrait.class);
         integrator.initiateScan();
     }
 
