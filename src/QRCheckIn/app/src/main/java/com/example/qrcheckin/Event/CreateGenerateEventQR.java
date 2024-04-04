@@ -68,7 +68,7 @@ public class CreateGenerateEventQR extends AppCompatActivity {
     private String organizerFcm;
     private int numOfAttends;
     QRCode checkInQRCode = null;
-    PromoQRCode promoQRCode = null;
+    QRCode promoQRCode = null;
     Event incomingEvent;
     private String incomingPosterString;
 
@@ -179,7 +179,7 @@ public class CreateGenerateEventQR extends AppCompatActivity {
             public void onClick(View v) {
                 if(promoQRCode == null){
                     String unhashedContent = inputEventName + inputEventLocation + inputEventDate + inputEventTime + "promo";
-                    checkInQRCode = setQRCode(ivPromoQr, unhashedContent, true);
+                    promoQRCode = setQRCode(ivPromoQr, unhashedContent, true);
                 }
                 else {
                     Toast.makeText(CreateGenerateEventQR.this, "promotional QR already exists", Toast.LENGTH_SHORT).show();
@@ -246,11 +246,16 @@ public class CreateGenerateEventQR extends AppCompatActivity {
                         ImageStorageManager storageQr = new ImageStorageManager(checkInQRCode, "/QRCodes");
                         storageQr.uploadImage(null);
                     }
+                    // Create and store a promotional QRCode to firestore storage
+                    if(promoQRCode != null){
+                        ImageStorageManager storageQr = new ImageStorageManager(promoQRCode, "/PromoQRCodes");
+                        storageQr.uploadImage(null);
+                    }
 
                     // Add the newEvent to the db
                     Event newEvent = new Event(organizerFcm, checkInQRCode, promoQRCode, inputEventPoster, inputEventName, inputEventDate, inputEventTime, inputEventLocation, inputEventDescription, incomingEvent.isCheckInStatus(), numOfAttends);
-                    Log.d("event", String.format("storing event %s", newEvent.getEventName()));
                     String eventId = db.storeEvent(newEvent);
+                    Log.d("EVENT", String.format("Stored event ID:  %s", eventId));
 
                     // Create topicName for the event
                     String topicName = "event_" + eventId;
