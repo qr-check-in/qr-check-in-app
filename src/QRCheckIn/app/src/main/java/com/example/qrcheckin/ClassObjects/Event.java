@@ -22,7 +22,7 @@ public class Event implements Serializable {
     private String eventDescription;
     private int signupLimit;
     private boolean checkInStatus;
-
+    private String topicName;
 
     /**
      * No argument constructor used by firebase
@@ -61,6 +61,7 @@ public class Event implements Serializable {
         this.attendee = new ArrayList<String>();
         this.signups = new ArrayList<String>();
         this.notifications = new ArrayList<String>();
+        this.topicName = topicName;
     }
 
     /**
@@ -268,5 +269,13 @@ public class Event implements Serializable {
      */
     public void setOrganizer(String organizer) {
         this.organizer = organizer;
+    }
+
+    public String getTopicName() {
+        return topicName;
+    }
+
+    public void setTopicName(String topicName) {
+        this.topicName = topicName;
     }
 }
