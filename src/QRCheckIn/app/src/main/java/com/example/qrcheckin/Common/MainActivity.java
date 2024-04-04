@@ -196,6 +196,7 @@ public class MainActivity extends AppCompatActivity{
                 }
             });
 
+    //https://firebase.google.com/docs/cloud-messaging/android/client, 2024, how to enable permissions
     /**
      * 
      */
