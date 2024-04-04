@@ -55,9 +55,9 @@ public class UpdatePictureFragment extends DialogFragment {
                     sharedViewModel.setSelectedImageUri(uri);
                     dismiss();
                     // Use ImageStorageManager to upload the image to firestore
-                    ImageStorageManager storage = new ImageStorageManager();
                     ProfilePicture profilePicture = new ProfilePicture(uri.toString(), null);
-                    storage.uploadImage(profilePicture,"/ProfilePictures");
+                    ImageStorageManager storage = new ImageStorageManager(profilePicture,"/ProfilePictures");
+                    storage.uploadImage();
 
                     // Use AttendeeDatabaseManager to update the Attendee's profilePicture field
                     AttendeeDatabaseManager database = new AttendeeDatabaseManager(fcmToken);

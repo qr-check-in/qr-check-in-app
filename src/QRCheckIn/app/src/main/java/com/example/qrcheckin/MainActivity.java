@@ -30,6 +30,7 @@ public class MainActivity extends AppCompatActivity{
     ImageButton profileButton;
     private String fcmToken;
     Button scanButton;
+    Button adminButton;
     FirebaseFirestore db = FirebaseFirestore.getInstance();
     CollectionReference eventsRef = db.collection("events");
 
@@ -56,38 +57,35 @@ public class MainActivity extends AppCompatActivity{
         addEventButton = findViewById(R.id.addCalenderButton);
         profileButton = findViewById(R.id.profileButton);
         scanButton = findViewById(R.id.scanButton);
+        adminButton = findViewById(R.id.adminButton);
+        adminButton.setVisibility(View.INVISIBLE);
+
+        // SharedPreferences to save this app installation's fcmToken
+        // https://stackoverflow.com/questions/51834864/how-to-save-a-fcm-token-in-android , 2018, Whats Going On
+        SharedPreferences prefs = getSharedPreferences("TOKEN_PREF", MODE_PRIVATE);
+        SharedPreferences.Editor editor = prefs.edit();
 
         // Creates a sub applicaton. If app.hasCheckFcmToken is false, it means the app has just been opened
         OpenApp app = (OpenApp) this.getApplicationContext();
         if (!app.hasCheckedFcmToken){
-            // here we can call any methods we only want to occur once upon opening the app
-            // Get and store this app installation's fcm token string
-            // https://stackoverflow.com/questions/51834864/how-to-save-a-fcm-token-in-android , 2018, Whats Going On
-
-            SharedPreferences prefs = getSharedPreferences("TOKEN_PREF", MODE_PRIVATE);
-            fcmToken = prefs.getString("token", "missing token");
-            if ("missing token".equals(fcmToken)) {
-                // If there is no token saved, retrieve it and save it
-                SharedPreferences.Editor editor = prefs.edit();
+            // Here we can call any methods we only want to occur once upon opening the app
+            // If there is no token saved, retrieve it and save it to the SharedPreferences
+            if (prefs.getString("token", "missing token").equals("missing token")) {
                 getFcmToken(editor);
-            } else {
-                // If the token is found, check for admin privileges
-                checkAdminToken(fcmToken);
             }
-
-
-            SharedPreferences.Editor editor = getSharedPreferences("TOKEN_PREF", MODE_PRIVATE).edit();
-            getFcmToken(editor);
             fcmToken = prefs.getString("token", "missing token");
-
-            // Check if an Attendee object associated with this fcm token already exists
+            // checkExistingAttendees will store a new Attendee document if there's not already an existing doc for this fcmToken
             AttendeeDatabaseManager db = new AttendeeDatabaseManager(fcmToken);
             db.checkExistingAttendees();
-            Log.d("Firestore", String.format("fcmToken STRING (%s) stored", fcmToken));
             app.hasCheckedFcmToken = true;
         }
 
-//        Set the Header of the App
+        // Re-assign fcmToken in case we are opening this activity NOT upon launching the app,
+        // Check if the admin dashboard button should be visible
+        fcmToken = prefs.getString("token", "missing token");
+        Log.d("Firestore", String.format("your fcmToken is  (%s)", fcmToken));
+        checkAdminToken();
+        // Set the Header of the App
         Toolbar toolbar = findViewById(R.id.Toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
@@ -95,6 +93,12 @@ public class MainActivity extends AppCompatActivity{
         header.setText("QRCheckIN");
 
 
+        adminButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openAdminView();
+            }
+        });
         scanButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -162,20 +166,16 @@ public class MainActivity extends AppCompatActivity{
      * If the token does not exist, or an error occurs during the check, appropriate actions
      * or error handling can be implemented.
      *
-     * @param token The FCM token to check against the 'adminTokens' collection.
      */
-    private void checkAdminToken(String token) {
+    private void checkAdminToken() {
         // Reference to the 'adminTokens' collection
         CollectionReference adminTokensRef = db.collection("adminTokens");
 
         // Check if the current FCM token exists in the 'adminTokens' collection
-        adminTokensRef.document(token).get().addOnSuccessListener(documentSnapshot -> {
+        adminTokensRef.document(fcmToken).get().addOnSuccessListener(documentSnapshot -> {
             if (documentSnapshot.exists()) {
                 // The document exists, meaning this device is associated with an admin
-                openAdminView();
-            } else {
-                // The document does not exist, meaning this device is not associated with an admin
-                // Handle accordingly, perhaps by staying on the current activity or opening a user view
+                adminButton.setVisibility(View.VISIBLE);
             }
         }).addOnFailureListener(e -> {
             // Handle any errors here
@@ -191,7 +191,6 @@ public class MainActivity extends AppCompatActivity{
         // Open the AdminActivity
         Intent intent = new Intent(this, AdminActivity.class);
         startActivity(intent);
-        finish(); // Close the current activity if necessary
     }
 
 }

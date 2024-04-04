@@ -2,11 +2,15 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission
         android:name="android.permission.WRITE_EXTERNAL_STORAGE"
         android:maxSdkVersion="28" />
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.INTERNET"/>
+
 
     <uses-feature
         android:name="android.hardware.camera"
@@ -24,12 +28,19 @@
         android:theme="@style/Theme.QRCheckIn"
         tools:targetApi="31">
         <activity
-            android:name=".MyEvents"
+            android:name=".ViewPostedNotificationActivity"
             android:exported="false" />
         <activity
-            android:name=".SignedUpEvents"
+            android:name=".AttendeeList"
             android:exported="false"
-            android:theme="@style/Theme.QRCheckIn" />
+            android:parentActivityName=".OrganizersEventPage" />
+<!--        <activity-->
+<!--            android:name=".MyEventsActivity"-->
+<!--            android:exported="false" />-->
+<!--        <activity-->
+<!--            android:name=".SignedUpEvents"-->
+<!--            android:exported="false"-->
+<!--            android:theme="@style/Theme.QRCheckIn" />-->
         <activity
             android:name=".QrCodeImageView"
             android:exported="false" />
@@ -51,20 +62,32 @@
             android:name=".test"
             android:exported="false" />
         <activity
+            android:name=".CreateNotification"
+            android:exported="false"
+            android:parentActivityName=".OrganizersEventPage" />
+        <activity
             android:name=".CreateGenerateEventQR"
             android:exported="false"
             android:parentActivityName=".CreateAddEventDetails" />
         <activity
             android:name=".CreateAddEventDetails"
             android:exported="false" />
+        <activity android:name=".ProfileActivity"
+            android:exported="false"/>
+        <activity android:name=".UpdatePictureFragment"
+            android:exported="false"/>
+        <activity android:name=".SharedViewModel"
+            android:exported="false"/>
+
+        <activity android:name=".AdminViewEvent"/>
+        <activity android:name=".AdminEventPage"
+            android:exported="false"/>
+        <activity android:name=".AdminViewProfiles"
+            android:exported="false"/>
+        <activity android:name=".AdminViewImages"/>
+        <activity android:name=".AdminImagePage"/>
         <activity
-            android:name=".ProfileActivity"
-            android:exported="false" />
-        <activity
-            android:name=".UpdatePictureFragment"
-            android:exported="false" />
-        <activity
-            android:name=".SharedViewModel"
+            android:name=".ProfileActivityAdmin"
             android:exported="false" />
         <activity
             android:name=".EventListView"
@@ -75,6 +98,10 @@
         <activity
             android:name=".AdminActivity"
             android:exported="false" />
+        <activity
+            android:name=".OrganizersEventPage"
+            android:exported="false"
+            android:parentActivityName=".EventListView" />
         <activity
             android:name=".MainActivity"
             android:exported="true">

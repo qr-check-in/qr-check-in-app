@@ -59,12 +59,13 @@ public class EventPage extends AppCompatActivity {
         addEventButton = findViewById(R.id.addCalenderButton);
         profileButton = findViewById(R.id.profileButton);
 
-        Toolbar toolbar = findViewById(R.id.Toolbar);
+        Toolbar toolbar = findViewById(R.id.event_page_toolbar);
         setSupportActionBar(toolbar);
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayShowTitleEnabled(false);
         }
-        eventButton.setPressed(true);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        TextView header = findViewById(R.id.mainHeader);
 
         // Find the text views on the event page xml
         TextView tvEventName = findViewById(R.id.text_event_name);
@@ -91,15 +92,21 @@ public class EventPage extends AppCompatActivity {
                 // Get and display event details
                 Event event = documentSnapshot.toObject(Event.class);
                 if (documentSnapshot != null && event != null) {
-                    tvEventName.setText(event.getEventName());
+                    header.setText(event.getEventName());
                     tvEventLocation.setText(event.getEventLocation());
                     tvEventDate.setText(event.getEventDate());
                     tvEventDescription.setText(event.getEventDescription());
                     setSignupCheckBox(event.getSignupLimit(), event.getSignups());
                     // Set the ImageView for the Event's poster
                     if (event.getPoster() != null){
-                        ImageStorageManager storage = new ImageStorageManager();
-                        storage.displayImage(event.getPoster(), "/EventPosters/",ivEventPoster);
+                        ImageStorageManager storagePoster = new ImageStorageManager(event.getPoster(), "/EventPosters");
+                        storagePoster.displayImage(ivEventPoster);
+                    }
+                    // Set the ImageView for the Event's QR code
+                    // TODO: Display promo QR instead of check-in QR
+                    if (event.getCheckInQRCode() != null) {
+                        ImageStorageManager storageQr = new ImageStorageManager(event.getCheckInQRCode(), "/QRCodes");
+                        storageQr.displayImage(ivEventPromoQr);
                     }
                 } else {
                     Log.d("Firestore", String.format("No such document with id %s", documentId));
@@ -132,12 +139,15 @@ public class EventPage extends AppCompatActivity {
         signupCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                AttendeeDatabaseManager attendeeDb = new AttendeeDatabaseManager(fcmToken);
                 // Update signup array in event document
                 if (isChecked){
                     eventDb.addToArrayField("signups", fcmToken);
+                    attendeeDb.addToArrayField("signupEvents", documentId);
                 }
                 else{
                     eventDb.removeFromArrayField("signups", fcmToken);
+                    attendeeDb.removeFromArrayField("signupEvents", documentId);
                 }
             }
         });
