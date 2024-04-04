@@ -85,8 +85,7 @@
         <activity android:name=".AdminViewProfiles"
             android:exported="false"/>
         <activity android:name=".AdminViewImages"/>
-        <activity android:name=".AdminImageProfiles"/>
-        <activity android:name=".AdminImageEvents"/>
+        <activity android:name=".AdminImagePage"/>
         <activity
             android:name=".ProfileActivityAdmin"
             android:exported="false" />

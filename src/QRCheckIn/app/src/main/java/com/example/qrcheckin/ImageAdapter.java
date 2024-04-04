@@ -21,6 +21,7 @@ import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.storage.FileDownloadTask;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
@@ -29,17 +30,21 @@ import com.squareup.picasso.Picasso;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 // ImageAdapter.java
 public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ViewHolder> {
-    private List<Image> images;
+    private Map<Image, String> imageUriToFolderMap;
+    private OnImageClickListener imageClickListener; // Define the interface
+
     private LayoutInflater inflater; // No longer storing this as a field if not needed elsewhere
 
     // Ensure the context passed here is not null
-    public ImageAdapter(Context context, List<Image> images) {
-        this.images = images;
-        this.inflater = LayoutInflater.from(context); // This should not be null now
+    public ImageAdapter(Context context, Map<Image, String> imageUriToFolderMap) {
+        this.inflater = LayoutInflater.from(context);
+        this.imageUriToFolderMap = imageUriToFolderMap;
     }
 
     @Override
@@ -51,15 +56,35 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ViewHolder> 
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        Image image = images.get(position);
+        Image image = new ArrayList<>(imageUriToFolderMap.keySet()).get(position);
+        String folderName = imageUriToFolderMap.get(image);
 
-        ImageStorageManager manager = new ImageStorageManager(image, "images");
+        ImageStorageManager manager = new ImageStorageManager(image, folderName);
         manager.displayImage(holder.imageView);
+    }
+    /**
+     * Returns the position as the stable item ID
+     * @param position Adapter position to query
+     * @return position Int of the item's positon
+     */
+    @Override
+    public long getItemId(int position) {
+        return position;
+    }
+
+    /**
+     * Returns the position as the view type of the item
+     * @param position position to query
+     * @return position Int of the item's position
+     */
+    @Override
+    public int getItemViewType(int position) {
+        return position;
     }
 
     @Override
     public int getItemCount() {
-        return images.size();
+        return imageUriToFolderMap.size();
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
@@ -72,9 +97,22 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ViewHolder> 
     }
 
     // Ensure you update data and notify the adapter correctly
-    public void updateData(List<Image> newImages) {
-        images.clear();
-        images.addAll(newImages);
+    public void updateData(Map<Image, String> newImageUriToFolderMap) {
+        this.imageUriToFolderMap.clear();
+        this.imageUriToFolderMap.putAll(newImageUriToFolderMap);
         notifyDataSetChanged();
     }
+    public interface OnImageClickListener {
+        void onImageClick(int position);
+    }
+
+    /**
+     * Used in the Event Page activity to set a listener for an adapter
+     * @param listener The listener to set for an adapter
+     */
+    public void setOnImageClickListener(OnImageClickListener listener) {
+        this.imageClickListener = listener;
+    }
+
+
 }
