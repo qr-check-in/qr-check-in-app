@@ -83,7 +83,7 @@ public class EventPage extends AppCompatActivity {
         TextView tvEventLocation = findViewById(R.id.text_event_location);
         TextView tvEventDescription = findViewById(R.id.text_event_description);
         ImageView ivEventPoster = findViewById(R.id.image_event_poster);
-        ImageView ivEventPromoQr = findViewById(R.id.image_event_promo_qr);
+        ImageView ivEventPromoQr = findViewById(R.id.btnGenPromoQR);
         signupCheckBox = findViewById(R.id.signup_button);
         signupLimitReached = findViewById(R.id.signup_limit_text);
         signupLimitReached.setVisibility(View.INVISIBLE);

@@ -55,7 +55,7 @@ public class CreateGenerateEventQR extends AppCompatActivity {
     ImageView ivCheckInQR;
     ImageView ivPromoQr;
     Button finishButton;
-    Button genPromoQR;
+    Button btnGenPromoQR;
     Button btnGenCheckInQR;
     Button btnUploadCheckInQR;
     private EventDatabaseManager db;
@@ -73,7 +73,8 @@ public class CreateGenerateEventQR extends AppCompatActivity {
     private String incomingPosterString;
 
     // To save image in device
-    Bitmap bitmap;
+    private Bitmap checkInBitmap;
+    private Bitmap promoBitmap;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -93,6 +94,7 @@ public class CreateGenerateEventQR extends AppCompatActivity {
         ivPromoQr = findViewById(R.id.ivPromoQr);
         btnUploadCheckInQR = findViewById(R.id.btnUploadCheckInQR);
         btnGenCheckInQR = findViewById(R.id.btnGenCheckInQR);
+        btnGenPromoQR = findViewById(R.id.btnGenPromoQR);
 
         // ToolBar
         Toolbar toolbar = findViewById(R.id.addEventToolBar2);
@@ -160,29 +162,31 @@ public class CreateGenerateEventQR extends AppCompatActivity {
         btnGenCheckInQR.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Create and set a check-in QR code only if it doesn't exist yet
-                if (checkInQRCode == null) {
-                    // Generate a QR code bitmap using event details from previous page
+                Log.d("generateQrCode", "clicked, calling setQRCode");
+                if(checkInQRCode == null){
                     String unhashedContent = inputEventName + inputEventLocation + inputEventDate + inputEventTime;
-                    bitmap = generateQRCode(unhashedContent);
-                    assert bitmap != null;
-                    ivCheckInQR.setImageBitmap(bitmap);
-                    ivCheckInQR.setVisibility(View.VISIBLE);
-
-                    // Create the QR code object and set the ImageView to the new QR code
-                    String filename = String.format("%s_%s_%d.jpg", inputEventName, inputEventDate, System.currentTimeMillis());
-                    String QRCodeUri = saveBitmapImage(bitmap, filename).toString();
-                    checkInQRCode = new QRCode(QRCodeUri, null, unhashedContent);
-                } else {
-                    Toast.makeText(CreateGenerateEventQR.this, "checkInQR already exists", Toast.LENGTH_SHORT).show();
+                    checkInQRCode = setQRCode(ivCheckInQR, unhashedContent, false);
                 }
-
-                // Ensure check-in QR code and image view were set successfully
-                if ((checkInQRCode == null) || (ivCheckInQR.getDrawable() == null)) {
-                    Log.d("generateQrCode", "QR code generation failed");
+                else {
+                    Toast.makeText(CreateGenerateEventQR.this, "check-in QR already exists", Toast.LENGTH_SHORT).show();
                 }
             }
         });
+
+        // Listener for promotional QR code generator
+        btnGenPromoQR.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(promoQRCode == null){
+                    String unhashedContent = inputEventName + inputEventLocation + inputEventDate + inputEventTime + "promo";
+                    checkInQRCode = setQRCode(ivPromoQr, unhashedContent, true);
+                }
+                else {
+                    Toast.makeText(CreateGenerateEventQR.this, "promotional QR already exists", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+
         btnUploadCheckInQR.setOnClickListener(new View.OnClickListener() {
             // Listener to add/upload a QR from gallery
             // https://developer.android.com/jetpack/androidx/releases/activity#1.7.0, 2024, how to select a picture from gallery
@@ -200,8 +204,20 @@ public class CreateGenerateEventQR extends AppCompatActivity {
             public void onClick(View v) {
                 if (checkInQRCode != null) {
                     Intent activity = new Intent(getApplicationContext(), QrCodeImageView.class);
-                    activity.putExtra("QRCodeBitmap", bitmap); // Assuming 'bitmap' is the generated QR code bitmap
-                    activity.putExtra("EventName&Date", inputEventName + "_" + inputEventDate); // Assuming 'bitmap' is the generated QR code bitmap
+                    activity.putExtra("QRCodeBitmap", checkInBitmap);
+                    activity.putExtra("EventName&Date", inputEventName + "_" + inputEventDate);
+                    startActivity(activity);
+                }
+            }
+        });
+
+        ivPromoQr.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (promoQRCode != null) {
+                    Intent activity = new Intent(getApplicationContext(), QrCodeImageView.class);
+                    activity.putExtra("QRCodeBitmap", promoBitmap);
+                    activity.putExtra("EventName&Date", inputEventName + "_" + inputEventDate);
                     startActivity(activity);
                 }
             }
@@ -304,6 +320,36 @@ public class CreateGenerateEventQR extends AppCompatActivity {
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    public QRCode setQRCode(ImageView imageView, String unhashedContent, Boolean isPromo){
+        // Create and set a check-in QR code only if it doesn't exist yet
+            // Generate a QR code bitmap using event details from previous page
+        Log.d("generateQrCode", String.format("setQRCode called, making bitmap with %s", unhashedContent));
+
+        Bitmap bitmap = generateQRCode(unhashedContent);
+        assert bitmap != null;
+        //set the ImageView to the new QR code
+        imageView.setImageBitmap(bitmap);
+        imageView.setVisibility(View.VISIBLE);
+
+        // Create the QR code object and
+        String filename = String.format("%s_%s_%d.jpg", inputEventName, inputEventDate, System.currentTimeMillis());
+        String QRCodeUri = saveBitmapImage(bitmap, filename).toString();
+
+        // set bitmap attributes
+        if (isPromo){
+            promoBitmap = bitmap;
+        }
+        else{
+            checkInBitmap = bitmap;
+        }
+
+        // Ensure check-in QR code and image view were set successfully
+        if (imageView.getDrawable() == null) {
+            Log.d("generateQrCode", "QR code display failed");
+        }
+        return new QRCode(QRCodeUri, null, unhashedContent);
     }
 
     /**
