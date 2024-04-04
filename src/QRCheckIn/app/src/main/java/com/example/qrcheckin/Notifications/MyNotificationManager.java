@@ -1,5 +1,6 @@
 package com.example.qrcheckin.Notifications;
 
+import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
@@ -10,6 +11,10 @@ import android.net.Uri;
 import androidx.core.app.NotificationCompat;
 
 import com.example.qrcheckin.R;
+import com.google.firebase.messaging.FirebaseMessaging;
+import com.google.firebase.messaging.RemoteMessage;
+
+import java.util.Random;
 
 public class MyNotificationManager {
 
@@ -58,5 +63,24 @@ public class MyNotificationManager {
                 .setContentIntent(pendingIntent);
 
         mManager.notify(id, builder.build());
+    }
+
+    /**
+     * Sends notification to Topic
+     * @param topic
+     * @param title
+     * @param body
+     */
+    public void sendNotificationToTopic(String topic, String title, String body) {
+        // Create a RemoteMessage object with the necessary data
+        RemoteMessage.Builder messageBuilder = new RemoteMessage.Builder(topic);
+        messageBuilder
+                .setMessageId(Integer.toString(new Random().nextInt())) // Generate a random message ID
+                .addData("title", title)
+                .addData("body", body);
+        RemoteMessage remoteMessage = messageBuilder.build();
+
+        // Send the message
+        FirebaseMessaging.getInstance().send(remoteMessage);
     }
 }

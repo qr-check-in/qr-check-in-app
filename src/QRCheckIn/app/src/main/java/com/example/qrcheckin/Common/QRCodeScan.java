@@ -47,6 +47,7 @@ public class QRCodeScan extends AppCompatActivity {
     ImageButton profileButton;
     Boolean foundEvent = false;
     private EventDatabaseManager eventDb;
+
     // For location
     FusedLocationProviderClient fusedLocationProviderClient;
     private static final int REQUEST_CODE = 100;
