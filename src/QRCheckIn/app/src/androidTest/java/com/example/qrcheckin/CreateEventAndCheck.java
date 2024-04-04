@@ -3,15 +3,10 @@ package com.example.qrcheckin;
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.action.ViewActions.swipeUp;
-import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.intent.Intents.intended;
-import static androidx.test.espresso.matcher.ViewMatchers.isDescendantOfA;
 import static androidx.test.espresso.matcher.ViewMatchers.withClassName;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
-
-import static net.bytebuddy.implementation.bind.annotation.IgnoreForBinding.Verifier.check;
-import static java.util.EnumSet.allOf;
 
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
@@ -23,11 +18,9 @@ import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.filters.LargeTest;
 
-import com.firebase.ui.firestore.FirestoreRecyclerOptions;
-import com.google.firebase.firestore.Query;
-
-import com.example.qrcheckin.EventListView; // Import the class containing eventDb
-
+import com.example.qrcheckin.Event.CreateAddEventDetails;
+import com.example.qrcheckin.Event.CreateGenerateEventQR;
+import com.example.qrcheckin.Event.EventListView;
 
 import org.hamcrest.Matchers;
 import org.junit.After;
@@ -37,7 +30,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import java.util.Calendar;
-import java.util.Random;
 
 @RunWith(AndroidJUnit4.class)
 @LargeTest

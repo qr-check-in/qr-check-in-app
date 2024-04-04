@@ -123,7 +123,8 @@
 
                     <ScrollView
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent">
+                        android:layout_height="match_parent"
+                        android:scrollbars="vertical">
 
                         <LinearLayout
                             android:layout_width="match_parent"
@@ -191,7 +192,6 @@
                                     android:inputType="phone"
                                     android:paddingVertical="15dp"
                                     android:layout_marginEnd="10dp"
-
                                     android:textSize="17dp"
                                     android:textStyle="bold"
                                     android:layout_weight="1"/>

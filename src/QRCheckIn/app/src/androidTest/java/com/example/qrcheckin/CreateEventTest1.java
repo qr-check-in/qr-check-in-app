@@ -17,6 +17,8 @@ import static org.hamcrest.CoreMatchers.is;
 
 import androidx.test.espresso.action.ViewActions;
 
+import com.example.qrcheckin.Event.CreateAddEventDetails;
+
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;

@@ -17,42 +17,72 @@
         android:layout_width="300dp"
         android:layout_height="80dp"
         android:layout_marginTop="76dp"
+        android:backgroundTint="@color/NeonBlue"
+        android:drawableLeft="@drawable/calenderresize"
         android:text="EVENTS"
         android:textSize="35dp"
-        android:drawableLeft="@drawable/calenderresize"
         app:cornerRadius="5dp"
-        android:backgroundTint="@color/NeonBlue"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/dashboard"
-        tools:layout_editor_absoluteX="55dp" />
+        app:layout_constraintBottom_toTopOf="@id/profile_button"/>
+
     <com.google.android.material.button.MaterialButton
         android:id="@+id/profile_button"
         android:layout_width="300dp"
         android:layout_height="80dp"
         android:layout_marginTop="76dp"
+        android:backgroundTint="@color/NeonBlue"
+        android:drawableLeft="@drawable/baseline_account_circle_24"
         android:text="PROFILES"
         android:textSize="35dp"
-        android:drawableLeft="@drawable/baseline_account_circle_24"
         app:cornerRadius="5dp"
-        android:backgroundTint="@color/NeonBlue"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/btnEvent"
-        tools:layout_editor_absoluteX="55dp" />
+        app:layout_constraintBottom_toTopOf="@id/image_button"/>
+
     <com.google.android.material.button.MaterialButton
         android:id="@+id/image_button"
         android:layout_width="300dp"
         android:layout_height="80dp"
         android:layout_marginTop="76dp"
-        android:text="IMAGES"
-        android:textSize="35dp"
+        android:backgroundTint="@color/NeonBlue"
         android:drawableLeft="@drawable/baseline_image_24"
         android:drawableTint="@color/Black"
+        android:text="IMAGES"
+        android:textSize="35dp"
         app:cornerRadius="5dp"
-        android:backgroundTint="@color/NeonBlue"
-        app:layout_constraintTop_toBottomOf="@+id/profile_button"
-        tools:layout_editor_absoluteX="55dp" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/addAdminImageView"
+        app:layout_constraintTop_toBottomOf="@+id/profile_button" />
+    <ImageView
+        android:id="@+id/addAdminImageView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toTopOf="@id/addAdminTextView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/image_button"
+        android:layout_marginTop="30dp"
+        tools:srcCompat="@drawable/qr2" />
+
+    <TextView
+        android:id="@+id/addAdminTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/add_admin_text"
+        app:layout_constraintTop_toBottomOf="@id/addAdminImageView"
+        app:layout_constraintBottom_toTopOf="@id/mainappbar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginBottom="30dp" />
 
 
 
     <include
+        android:id="@+id/mainappbar"
         layout="@layout/mainappbar"
         android:layout_width="match_parent"
         android:layout_height="45dp"

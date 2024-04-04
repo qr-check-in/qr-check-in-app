@@ -28,7 +28,7 @@
                 android:padding="10dp"
                 android:textSize="28sp"
                 android:textStyle="bold"
-                android:text="Event Notifications"
+                android:text="@string/event_annoucements"
                 android:gravity="center_horizontal"
                 android:visibility="visible"/>
 
@@ -44,6 +44,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:visibility="visible"
+                android:scrollbars="vertical"
                 tools:listitem="@layout/notification_layout"/>
 
         </LinearLayout>

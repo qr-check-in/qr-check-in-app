@@ -14,7 +14,7 @@
         android:required="true" />
 
     <application
-        android:name=".OpenApp"
+        android:name=".Common.OpenApp"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
@@ -41,16 +41,13 @@
             android:value="AIzaSyDzkqgLOEGnrMdqqewk58XnYdw9SESZ6qU" />
 
         <activity
-            android:name=".MapsActivity"
+            android:name=".Event.MapsActivity"
             android:exported="false"
             android:label="@string/title_activity_maps" />
         <activity
-            android:name=".ViewPostedNotificationActivity"
-            android:exported="false" />
-        <activity
-            android:name=".AttendeeList"
+            android:name=".Attendee.AttendeeList"
             android:exported="false"
-            android:parentActivityName=".OrganizersEventPage" />
+            android:parentActivityName=".Event.OrganizersEventPageActivity"/>
         <activity
             android:name=".MyEventsActivity"
             android:exported="false" />
@@ -59,7 +56,7 @@
             android:exported="false"
             android:theme="@style/Theme.QRCheckIn" />
         <activity
-            android:name=".QrCodeImageView"
+            android:name=".Event.QrCodeImageView"
             android:exported="false" />
 
         <provider
@@ -73,47 +70,47 @@
         </provider>
 
         <activity
-            android:name=".EventPage"
+            android:name=".Event.EventPage"
             android:exported="false"
-            android:parentActivityName=".EventListView"/>
+            android:parentActivityName=".Event.EventListView"/>
         <activity
             android:name=".test"
             android:exported="false" />
         <activity
-            android:name=".CreateNotification"
+            android:name=".Notifications.CreateNotification"
             android:exported="false"
-            android:parentActivityName=".OrganizersEventPage" />
+            android:parentActivityName=".Event.OrganizersEventPageActivity"/>
         <activity
-            android:name=".CreateGenerateEventQR"
+            android:name=".Event.CreateGenerateEventQR"
             android:exported="false"
-            android:parentActivityName=".CreateAddEventDetails" />
+            android:parentActivityName=".Event.CreateAddEventDetails" />
         <activity
-            android:name=".CreateAddEventDetails"
+            android:name=".Event.CreateAddEventDetails"
             android:exported="false" />
         <activity
-            android:name=".ProfileActivity"
+            android:name=".Attendee.ProfileActivity"
             android:exported="false" />
         <activity
-            android:name=".UpdatePictureFragment"
+            android:name=".Attendee.UpdatePictureFragment"
             android:exported="false" />
         <activity
-            android:name=".SharedViewModel"
+            android:name=".Common.SharedViewModel"
             android:exported="false" />
         <activity
-            android:name=".EventListView"
+            android:name=".Event.EventListView"
             android:exported="false" />
         <activity
-            android:name=".QRCodeScan"
+            android:name=".Event.QRCodeScan"
             android:exported="false" />
         <activity
-            android:name=".AdminActivity"
+            android:name=".Admin.AdminActivity"
             android:exported="false" />
         <activity
-            android:name=".OrganizersEventPage"
+            android:name=".Event.OrganizersEventPageActivity"
             android:exported="false"
-            android:parentActivityName=".EventListView" />
+            android:parentActivityName=".Event.EventListView" />
         <activity
-            android:name=".MainActivity"
+            android:name=".Common.MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -123,7 +120,7 @@
         </activity>
 
         <service
-            android:name=".MyFirebaseMessagingService"
+            android:name=".Notifications.MyFirebaseMessagingService"
             android:exported="false">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
