@@ -14,6 +14,7 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.GeoPoint;
 
 /**
  * Controls storing and retrieving data from the Attendees firebase collection
@@ -192,5 +193,25 @@ public class AttendeeDatabaseManager extends DatabaseManager {
             }
         });
     }
+
+    /**
+     * Updates a string field in an Attendee's location in firestore
+     * @param field String of the field to be updated in Profile
+     * @param value GeoPoint of the new value the field is set to
+     */
+    public void updateAttendeeLocation(String field, GeoPoint value){
+        getDocRef().update(field, value).addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void unused) {
+                Log.d("Firestore", "docsnapshot geoPoint updated");
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Log.w("Firestore", "error updating doc",e);
+            }
+        });
+    }
+
 
 }

@@ -1,5 +1,8 @@
 package com.example.qrcheckin.ClassObjects;
 import android.location.Location;
+
+import com.google.firebase.firestore.GeoPoint;
+
 import java.util.ArrayList;
 
 /**
@@ -9,7 +12,7 @@ public class Attendee {
     private ArrayList<String> attendedEvents;
     private ArrayList<String> signupEvents;
     private Profile profile;
-    private Location location;
+    private GeoPoint location;
 
 
     /**
@@ -58,7 +61,7 @@ public class Attendee {
      * Returns the Location of the Attendee
      * @return Location of the Attendee
      */
-    public Location getLocation() {
+    public GeoPoint getLocation() {
         return location;
     }
 
@@ -66,7 +69,7 @@ public class Attendee {
      * Sets the Location of the Attendee
      * @param location Location of the Attendee
      */
-    public void setLocation(Location location) {
+    public void setLocation(GeoPoint location) {
         this.location = location;
     }
 }

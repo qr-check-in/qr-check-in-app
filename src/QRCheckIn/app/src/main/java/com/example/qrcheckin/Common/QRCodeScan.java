@@ -1,7 +1,10 @@
 package com.example.qrcheckin.Common;
 
+import android.Manifest;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
+import android.location.Location;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -9,18 +12,25 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
+import com.example.qrcheckin.Admin.AdminTokensDatabaseManager;
+import com.example.qrcheckin.Attendee.AttendeeDatabaseManager;
 import com.example.qrcheckin.Attendee.ProfileActivity;
 import com.example.qrcheckin.Event.CreateAddEventDetails;
 import com.example.qrcheckin.Event.EventDatabaseManager;
 import com.example.qrcheckin.Event.EventListView;
 import com.example.qrcheckin.Event.OrganizersEventPageActivity;
 import com.example.qrcheckin.R;
-import com.example.qrcheckin.Admin.AdminTokensDatabaseManager;
-import com.example.qrcheckin.Attendee.AttendeeDatabaseManager;
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.GeoPoint;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.zxing.integration.android.IntentIntegrator;
@@ -37,7 +47,14 @@ public class QRCodeScan extends AppCompatActivity {
     ImageButton profileButton;
     Boolean foundEvent = false;
     private EventDatabaseManager eventDb;
-    private String fcmToken;
+
+    // For location
+    FusedLocationProviderClient fusedLocationProviderClient;
+    private static final int REQUEST_CODE = 100;
+    String longitude = null, latitude = null;
+    private String attendeeFcm;
+    SharedPreferences prefs;
+    private AttendeeDatabaseManager dbManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,9 +72,13 @@ public class QRCodeScan extends AppCompatActivity {
         addEventButton = findViewById(R.id.addEvent);
         profileButton = findViewById(R.id.profile);
 
-        SharedPreferences prefs = getSharedPreferences("TOKEN_PREF", MODE_PRIVATE);
-        fcmToken = prefs.getString("token", "missing token");
+        // initialize fusedLocationProviderClient for location
+        fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
 
+        // Get user's fcm token (used for querying the right events in recycler view)
+        prefs = getSharedPreferences("TOKEN_PREF", MODE_PRIVATE);
+        attendeeFcm = prefs.getString("token", "missing token");
+        dbManager = new AttendeeDatabaseManager(attendeeFcm);
 
         // uses the ZXing library to open the camera and proceed scanning
         startScanner();
@@ -108,6 +129,9 @@ public class QRCodeScan extends AppCompatActivity {
         // https://stackoverflow.com/questions/34983201/change-qr-scanner-orientation-with-zxing-in-android-studio, 2024, how to change the orientation of teh camera
         integrator.setCaptureActivity(CaptureActivityProtrait.class);
         integrator.initiateScan();
+
+        // get user geolocation
+        getLastLocation();
     }
 
 
@@ -148,11 +172,9 @@ public class QRCodeScan extends AppCompatActivity {
                             String documentId = documentSnapshot.getId();
 
                             // Check the attendee into the event, update the event's attendees accordingly
-                            AttendeeDatabaseManager attendeeDbManager = new AttendeeDatabaseManager(fcmToken);
+                            AttendeeDatabaseManager attendeeDbManager = new AttendeeDatabaseManager(attendeeFcm);
                             EventDatabaseManager eventDbManager = new EventDatabaseManager(documentId);
-
                             attendeeDbManager.addToArrayField("attendedEvents", documentId); // Add event to attendee
-                            
                             String attendeeId = attendeeDbManager.getDocRef().getId();
                             eventDbManager.addToArrayField("attendee", attendeeId); // Add attendee to event
 
@@ -201,12 +223,59 @@ public class QRCodeScan extends AppCompatActivity {
         }
     }
 
+    private void getLastLocation() {
+        if (ContextCompat.checkSelfPermission(QRCodeScan.this, android.Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED){
+            fusedLocationProviderClient.getLastLocation().addOnSuccessListener(new OnSuccessListener<Location>() {
+                @Override
+                public void onSuccess(Location location) {
+                    if (location != null){
+                        try {
+                            // Convert latitude and longitude to GeoPoint
+                            GeoPoint geoPoint = new GeoPoint(location.getLatitude(), location.getLongitude());
+
+                            // updates the Attendee's GeoPoint location in firestore
+                            dbManager.updateAttendeeLocation("location",geoPoint);
+
+                            // updates the Attendee's geolocation attribute
+                            dbManager.updateAttendeeBoolean("profile.trackGeolocation",true);
+
+
+                        } catch (Exception e) {
+                            Log.e("getLastLocation", "Error getting last location", e);
+                        }
+                    }
+                }
+            });
+        }
+        else{
+            askPermission();
+        }
+    }
+
+    private void askPermission(){
+        ActivityCompat.requestPermissions(this, new String[]{
+                Manifest.permission.ACCESS_FINE_LOCATION
+        }, REQUEST_CODE);
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == REQUEST_CODE) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                getLastLocation();
+            } else {
+                Toast.makeText(this, "Permission Required", Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+
     public Boolean checkAddAdminQR(String scannedData){
         // The hashed content of the unique QR code to add an admin
         String hashedAddAdminContent = "7743f40037ce1ee22e53c5e88f79f3b2b3a690458344d482bae6ab82cba1dd0c";
         if(scannedData.equals(hashedAddAdminContent)){
             // Add this user as an admin instead of checking into an event
-            AdminTokensDatabaseManager adminDb = new AdminTokensDatabaseManager(fcmToken);
+            AdminTokensDatabaseManager adminDb = new AdminTokensDatabaseManager(attendeeFcm);
             adminDb.storeAdminToken();
             // Return to MainActivity
             Intent intent = new Intent(getApplicationContext(), MainActivity.class);

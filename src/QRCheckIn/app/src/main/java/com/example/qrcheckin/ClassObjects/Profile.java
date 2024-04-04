@@ -4,12 +4,13 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.location.Location;
 import android.net.Uri;
 import android.widget.ImageView;
 
 import com.example.qrcheckin.Common.ImageStorageManager;
 import com.example.qrcheckin.Attendee.ProfilePicture;
+
+import com.google.firebase.firestore.GeoPoint;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -23,7 +24,7 @@ public class Profile {
     private String homepage;
     private String contact;
     private ProfilePicture profilePicture;
-    private Location location;
+    private GeoPoint location;
     /**
      * Constructs a Profile for an Attendee
      */
@@ -136,7 +137,7 @@ public class Profile {
      * Returns the Location of the Profile
      * @return the Location of the Profile
      */
-    public Location getLocation() {
+    public GeoPoint getLocation() {
         return location;
     }
 
@@ -144,7 +145,7 @@ public class Profile {
      * Sets the Location of the Profile
      * @param location the Location of the Profile
      */
-    public void setLocation(Location location) {
+    public void setLocation(GeoPoint location) {
         this.location = location;
     }
 

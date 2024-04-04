@@ -16,12 +16,11 @@
             android:id="@+id/mainHeader"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
             android:text="Centered Title"
             android:textColor="@android:color/black"
             android:textSize="28dp"
-            android:textStyle="bold"
-            android:layout_centerInParent="true">
-        </TextView>
+            android:textStyle="bold" />
     </RelativeLayout>
 
 </androidx.appcompat.widget.Toolbar>

@@ -15,6 +15,7 @@ import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -23,16 +24,24 @@ import android.widget.Toast;
 
 import com.example.qrcheckin.Event.EventDatabaseManager;
 import com.example.qrcheckin.Common.LinearLayoutManagerWrapper;
+import com.example.qrcheckin.Event.MapsActivity;
 import com.example.qrcheckin.Event.OrganizersEventPageActivity;
 import com.example.qrcheckin.R;
 import com.example.qrcheckin.ClassObjects.Attendee;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.GeoPoint;
 import com.google.firebase.firestore.Query;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
@@ -40,15 +49,19 @@ import java.util.Objects;
 public class AttendeeList extends AppCompatActivity {
 
     Button getMap;
-    String latitude, longitude;
+    private String fieldName;
     RecyclerView recyclerView;
     AttendeeAdapter attendeeAdapter;
     AttendeeDatabaseManager attendeeDb;
     private static final int REQUEST_LOCATION = 101;
-
     private EventDatabaseManager eventDb;
     private String fcmToken;
     private String documentId;
+    ArrayList<String> attendeeList = new ArrayList<>(); // List to hold attendee names
+    final ArrayList<LatLng> attendeeListGeoPoints = new ArrayList<>(); // List hold all attendee's Coordinates
+    boolean booleanCheckInStatus = false;
+    FirebaseFirestore db;
+    TextView header;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,6 +70,7 @@ public class AttendeeList extends AppCompatActivity {
 
         // Set up recycler view of attendees
         recyclerView = findViewById(R.id.event_recycler_view);
+        getMap = findViewById(R.id.mapLocation);
 
         // Manage Toolbar
         Toolbar toolbar = findViewById(R.id.attendee_toolbar);
@@ -65,13 +79,16 @@ public class AttendeeList extends AppCompatActivity {
             getSupportActionBar().setDisplayShowTitleEnabled(false);
         }
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        TextView header = findViewById(R.id.mainHeader);
-        header.setText("Total Participants: ");
+        header = findViewById(R.id.mainHeader);
 
-        // Retrieve values passed by previous activity to determine if the event's
-        // signups list or attendee list should be displayed
+        // Retrieve values passed by previous activity to determine if the event's signups list or attendee list should be displayed
         documentId = getIntent().getStringExtra("EVENT_DOC_ID");
-        String fieldName = getIntent().getStringExtra("FIELD_NAME");
+        fieldName = getIntent().getStringExtra("FIELD_NAME");
+
+        // TODO: setup recycler view
+
+        // get all the attendees in the event from Firestore
+        getAllAttendees();
 
         // Set up the recycler view of events to be displayed (displays all by default)
         attendeeDb = new AttendeeDatabaseManager();
@@ -81,9 +98,6 @@ public class AttendeeList extends AppCompatActivity {
                 .whereArrayContains(fieldName, documentId);
         setUpRecyclerView(query, fieldName);
 
-        // TODO: setup recycler view
-
-        getMap = findViewById(R.id.mapLocation);
         // Hide getMap button if we're viewing the signups
         if (Objects.equals(fieldName, "signupEvents")){
             getMap.setVisibility(View.INVISIBLE);
@@ -92,58 +106,15 @@ public class AttendeeList extends AppCompatActivity {
         getMap.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                getMyLocation();
+                if (!attendeeListGeoPoints.isEmpty()) {
+                    Intent intent = new Intent(getApplicationContext(), MapsActivity.class);
+                    intent.putExtra("AllGeoPoints", attendeeListGeoPoints);
+                    startActivity(intent);
+                } else {
+                    Toast.makeText(AttendeeList.this, "No geolocation available!", Toast.LENGTH_SHORT).show();
+                }
             }
         });
-    }
-
-    private void getMyLocation() {
-        FusedLocationProviderClient fusedLocationProviderClient;
-        fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
-        if (ContextCompat.checkSelfPermission(AttendeeList.this,
-                Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-            fusedLocationProviderClient.getLastLocation().addOnSuccessListener(new OnSuccessListener<Location>() {
-                @Override
-                public void onSuccess(Location location) {
-                    if (location != null) {
-                        Geocoder geocoder = new Geocoder(getApplicationContext(), Locale.getDefault());
-                        try {
-                            List<Address> addresses = geocoder.getFromLocation(location.getLatitude(),
-                                    location.getLongitude(), 1);
-                            assert addresses != null;
-                            latitude = String.valueOf(addresses.get(0).getLatitude());
-                            longitude = String.valueOf(addresses.get(0).getLongitude());
-                            Toast.makeText(AttendeeList.this, "latitude= " + latitude, Toast.LENGTH_SHORT).show();
-                            Toast.makeText(AttendeeList.this, "longitude= " + longitude, Toast.LENGTH_SHORT).show();
-
-                        } catch (IOException e) {
-                            throw new RuntimeException(e);
-                        }
-                    }
-                }
-            });
-        } else {
-            askPermission();
-        }
-    }
-
-    private void askPermission() {
-        ActivityCompat.requestPermissions(this, new String[] {
-                Manifest.permission.ACCESS_FINE_LOCATION
-        }, REQUEST_LOCATION);
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
-            @NonNull int[] grantResults) {
-        if (requestCode == REQUEST_LOCATION) {
-            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                getMyLocation();
-            } else {
-                Toast.makeText(this, "Permission Required", Toast.LENGTH_SHORT).show();
-            }
-        }
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
     }
 
     /**
@@ -206,89 +177,87 @@ public class AttendeeList extends AppCompatActivity {
         }
     }
 
-}
 
-// package com.example.qrcheckin;
-//
-// import androidx.annotation.NonNull;
-// import androidx.appcompat.app.AppCompatActivity;
-// import androidx.core.app.ActivityCompat;
-// import androidx.core.content.ContextCompat;
-//
-// import android.Manifest;
-// import android.annotation.SuppressLint;
-// import android.content.Intent;
-// import android.content.pm.PackageManager;
-// import android.location.Location;
-// import android.location.LocationListener;
-// import android.location.LocationManager;
-// import android.os.Bundle;
-// import android.view.View;
-// import android.widget.Button;
-// import android.widget.Toast;
-//
-//
-// public class AttendeeList extends AppCompatActivity implements
-// LocationListener {
-//
-// Button getMap;
-// LocationManager locationManager;
-//
-// @Override
-// protected void onCreate(Bundle savedInstanceState) {
-// super.onCreate(savedInstanceState);
-// setContentView(R.layout.attendee_list);
-//
-// getMap = findViewById(R.id.mapLocation);
-//
-// // Runtime Permissions
-// if (ContextCompat.checkSelfPermission(AttendeeList.this,
-// Manifest.permission.ACCESS_FINE_LOCATION) !=
-// PackageManager.PERMISSION_GRANTED){
-// ActivityCompat.requestPermissions(AttendeeList.this, new String[]{
-// Manifest.permission.ACCESS_FINE_LOCATION
-// }, 100);
-// }
-//
-// getMap.setOnClickListener(new View.OnClickListener() {
-// @Override
-// public void onClick(View v) {
-// getLocation();
-// }
-// });
-// }
-//
-// @SuppressLint("MissingPermission")
-// private void getLocation(){
-// try {
-// locationManager = (LocationManager)
-// getApplicationContext().getSystemService(LOCATION_SERVICE);
-// locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 5000, 5,
-// AttendeeList.this);
-// }
-// catch (Exception e){
-// e.printStackTrace();
-// }
-// }
-//
-// @Override
-// public void onLocationChanged(@NonNull Location location) {
-// Toast.makeText(this, location.getLatitude() + ", " + location.getLongitude(),
-// Toast.LENGTH_SHORT).show();
-// }
-//
-// @Override
-// public void onStatusChanged(String provider, int status, Bundle extras) {
-// LocationListener.super.onStatusChanged(provider, status, extras);
-// }
-//
-// @Override
-// public void onProviderEnabled(@NonNull String provider) {
-// LocationListener.super.onProviderEnabled(provider);
-// }
-//
-// @Override
-// public void onProviderDisabled(@NonNull String provider) {
-// LocationListener.super.onProviderDisabled(provider);
-// }
-// }
+    private void getAllAttendees() {
+        // Get a reference to the Firestore database
+        db = FirebaseFirestore.getInstance();
+
+        // Get the document reference using the document ID
+        DocumentReference docRef = db.collection("events").document(documentId);
+
+        // Fetch the document
+        docRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                if (documentSnapshot.exists()) {
+                    // Retrieve the list of attendees from the document
+                    attendeeList = (ArrayList<String>) documentSnapshot.get("attendee");
+
+                    // get the checkInStatus from event
+                    booleanCheckInStatus = documentSnapshot.getBoolean("checkInStatus");
+
+                    if (booleanCheckInStatus) {
+                        // If CheckInStatus of event is true, show the getMap button
+                        getMap.setVisibility(View.VISIBLE);
+                    } else {
+                        // If CheckInStatus of event is false, hide the getMap button
+                        getMap.setVisibility(View.INVISIBLE);
+                    }
+
+                    // Check if attendees list is  null
+                    if (attendeeList == null) {
+                        Log.d("AttendeeList", "No attendees found");
+                    } else {
+                        // If attendees list is not null, proceed to get geo points
+                        getAllGeoPoints();
+                        header.setText("Total Participants: " + attendeeList.size());
+                    }
+                } else {
+                    Log.d("AttendeeList", "Document does not exist");
+                }
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Log.e("AttendeeList", "Error getting attendees", e);
+            }
+        });
+    }
+
+    private void getAllGeoPoints() {
+        db = FirebaseFirestore.getInstance();
+
+        // Loop through each attendee in the attendeeList
+        for (String attendeeId : attendeeList) {
+            DocumentReference attendeeRef = db.collection("Attendees").document(attendeeId);
+
+            // Fetch the document for each attendee
+            attendeeRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                @Override
+                public void onSuccess(DocumentSnapshot documentSnapshot) {
+                    if (documentSnapshot.exists()) {
+                        // Retrieve the location field (assuming it's a GeoPoint) from the document
+                        GeoPoint geoPoint = documentSnapshot.getGeoPoint("location");
+
+                        if (geoPoint != null) {
+                            // Create a LatLng object using the GeoPoint's latitude and longitude values
+                            LatLng location = new LatLng(geoPoint.getLatitude(), geoPoint.getLongitude());
+
+                            // Add the LatLng to the attendeeListGeoPoints
+                            attendeeListGeoPoints.add(location);
+                        }
+
+                    } else {
+                        Log.d("AttendeeList", "Attendee document does not exist for ID: " + attendeeId);
+                    }
+                }
+            }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    Log.e("AttendeeList", "Error getting attendee document for ID: " + attendeeId, e);
+                }
+            });
+        }
+        Log.d("AllGeoPoints", "getAllGeoPoints: " + attendeeListGeoPoints);
+    }
+}
