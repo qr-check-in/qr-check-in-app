@@ -2,8 +2,13 @@ package com.example.qrcheckin.Event;
 
 import android.util.Log;
 
+import androidx.annotation.NonNull;
+
 import com.example.qrcheckin.Common.DatabaseManager;
 import com.example.qrcheckin.ClassObjects.Event;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.firestore.DocumentReference;
 
 /**
  * Controls storing and retrieving data from the events firebase collection
@@ -27,9 +32,25 @@ public class EventDatabaseManager extends DatabaseManager {
     /**
      * Stores an Event object to the Events collection
      * @param event the Event to be stored
+     * @return the docID of the new event created
      */
-    public void storeEvent(Event event){
-        getCollectionRef().document().set(event);
-        Log.d("Firestore", String.format("Event(%s) stored", event.getEventName()));
+    public String storeEvent(Event event){
+        DocumentReference docRef = getCollectionRef().document();
+        docRef.set(event)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.d("Firestore", "Notification stored successfully");
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.e("Firestore", "Error storing notification", e);
+                    }
+                });
+
+        // Return the document ID of the newly created notification
+        return docRef.getId();
     }
 }
