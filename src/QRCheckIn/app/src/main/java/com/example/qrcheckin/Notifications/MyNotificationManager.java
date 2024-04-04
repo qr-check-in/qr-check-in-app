@@ -8,11 +8,15 @@ import android.content.Intent;
 import android.media.RingtoneManager;
 import android.net.Uri;
 
+import androidx.annotation.NonNull;
 import androidx.core.app.NotificationCompat;
 
 import com.example.qrcheckin.R;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.firebase.messaging.RemoteMessage;
+
 
 import java.util.Random;
 
@@ -55,7 +59,7 @@ public class MyNotificationManager {
         PendingIntent pendingIntent = PendingIntent.getActivity(mContext, 0, intent, PendingIntent.FLAG_IMMUTABLE);
         Uri defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
         NotificationCompat.Builder builder = new NotificationCompat.Builder(mContext, channelId)
-                .setSmallIcon(R.drawable.ic_launcher_foreground) // TODO: Replace this with the notification image
+                .setSmallIcon(R.drawable.appiconenlarged)
                 .setContentTitle(title)
                 .setContentText(body)
                 .setAutoCancel(true)
