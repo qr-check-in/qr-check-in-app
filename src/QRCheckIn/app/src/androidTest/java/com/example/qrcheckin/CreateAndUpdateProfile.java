@@ -2,15 +2,16 @@ package com.example.qrcheckin;
 
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
+import static androidx.test.espresso.action.ViewActions.swipeUp;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
-import static androidx.test.espresso.intent.Intents.intended;
-import static androidx.test.espresso.intent.matcher.IntentMatchers.hasAction;
-import static androidx.test.espresso.intent.matcher.IntentMatchers.hasType;
+import static androidx.test.espresso.matcher.ViewMatchers.isChecked;
 import static androidx.test.espresso.matcher.ViewMatchers.isDescendantOfA;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.CoreMatchers.allOf;
+
+import android.content.SharedPreferences;
 
 import androidx.test.core.app.ActivityScenario;
 import androidx.test.espresso.action.ViewActions;
@@ -38,7 +39,6 @@ public class CreateAndUpdateProfile {
         String contact = "5877789979";
         String homepage = "SkilledRupam.com";
 
-
         // Check if the show_profile is displayed
         onView(withId(R.id.showProfile)).check(matches(isDisplayed()));
 
@@ -58,19 +58,39 @@ public class CreateAndUpdateProfile {
         onView(withId(R.id.contact1)).check(matches(withText(contact)));
         onView(withId(R.id.homepage1)).check(matches(withText(homepage)));
 
+        // Scroll up to locate switch
+        onView(withId(R.id.userInfoView)).perform(swipeUp());
+
         // Perform a click action to enable the switch
-//        onView(withId(R.id.geoswitch)).perform(click());
+        onView(withId(R.id.geoswitch)).perform(click());
 
         // Close the app
         activityScenarioRule.getScenario().close();
 
+        // Sleep for 1 second load the activity
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
         // Reopen the app
         ActivityScenario<ProfileActivity> scenario = ActivityScenario.launch(ProfileActivity.class);
+
+//        // Scroll down to locate User name
+//        onView(withId(R.id.userInfoView)).perform(swipeDown());
+
 
         // matching if the changes still appear correctly
         onView(withId(R.id.profileName1)).check(matches(withText(name)));
         onView(withId(R.id.contact1)).check(matches(withText(contact)));
         onView(withId(R.id.homepage1)).check(matches(withText(homepage)));
+
+        // Scroll up to locate switch again
+        onView(withId(R.id.userInfoView)).perform(swipeUp());
+
+        // Check if the switch is enabled
+        onView(withId(R.id.geoswitch)).check(matches(isChecked()));
 
         // Perform a click action on the 'Update Picture' button
         onView(withId(R.id.btnUpdatePicture)).perform(click());

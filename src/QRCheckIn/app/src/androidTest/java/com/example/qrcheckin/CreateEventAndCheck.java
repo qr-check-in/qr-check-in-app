@@ -25,6 +25,7 @@ import androidx.test.filters.LargeTest;
 import com.example.qrcheckin.Event.CreateAddEventDetails;
 import com.example.qrcheckin.Event.CreateGenerateEventQR;
 import com.example.qrcheckin.Event.EventListView;
+import com.example.qrcheckin.Event.EventPage;
 
 import org.hamcrest.Matcher;
 import org.hamcrest.Matchers;
@@ -69,10 +70,11 @@ public class CreateEventAndCheck {
      * Create a Event and generate QR Code for check-in
      * Finally, check if the event exists
      */
-
-
     @Test
     public void testCreateEventInputFields() {
+
+        // Check if the activity is being displayed is correct
+        onView(withId(R.id.createAddEventDetails)).check(matches(isDisplayed()));
 
         // Test the text boxes
         onView(withId(R.id.eventNameText)).perform(ViewActions.typeText(title));
@@ -101,6 +103,13 @@ public class CreateEventAndCheck {
         // Click on the OK button of the TimePickerDialog to select the time two hours from now
         onView(withText("OK")).perform(click());
 
+        // Sleep for 1 second load the activity
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
         // Type the location
         onView(withId(R.id.eventLocationText)).perform(ViewActions.typeText(location));
 
@@ -122,6 +131,13 @@ public class CreateEventAndCheck {
         // Perform action that triggers the new activity
         onView(withId(R.id.nextButton)).perform(click());
 
+        // Sleep for 1 second load the activity
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
     }
 
     @Test
@@ -133,11 +149,21 @@ public class CreateEventAndCheck {
         // Check that the intended activity is started
         intended(IntentMatchers.hasComponent(CreateGenerateEventQR.class.getName()));
 
+        // Check if the activity is being displayed
+        onView(withId(R.id.genertaeQrCodeActivity)).check(matches(isDisplayed()));
+
         // perform click on btnGenCheckInQR to generate QR Code
         onView(withId(R.id.btnGenCheckInQR)).perform(click());
 
         // perform click on finishButton to create event
         onView(withId(R.id.finishButton)).perform(click());
+
+        // Sleep for 1 second load the activity
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
 
     }
 
@@ -152,6 +178,9 @@ public class CreateEventAndCheck {
         // move to EventListView using intent
         intended(IntentMatchers.hasComponent(EventListView.class.getName()));
 
+        // Check if the activity is being displayed
+        onView(withId(R.id.eventListView)).check(matches(isDisplayed()));
+
         // press myEventsButton to see events created by user
         onView(ViewMatchers.withId(R.id.eventsTabbar)).check(matches(isDisplayed())).perform(click());
 
@@ -160,6 +189,15 @@ public class CreateEventAndCheck {
 
         // Click on the event with text stored in title
         onView(withText(title)).perform(click());
+
+
+    }
+
+    @Test
+    public void testMatchPosterDetails() {
+
+        // First run this test to get event Poster
+        testSearchEventInList();
 
         // match details on poster with input details while creating event
 

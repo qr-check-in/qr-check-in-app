@@ -28,10 +28,19 @@
           </targetsSelectedWithDialog>
         </State>
       </entry>
-      <entry key="testButtonsAndTextboxes()">
+      <entry key="testCreateEventInputFields()">
         <State />
       </entry>
-      <entry key="testButtonsAndTextboxes() (1)">
+      <entry key="testEditButton()">
+        <State />
+      </entry>
+      <entry key="testGenerateQrCode()">
+        <State />
+      </entry>
+      <entry key="testMatchPosterDetails()">
+        <State />
+      </entry>
+      <entry key="testSearchEventInList()">
         <State />
       </entry>
     </value>
