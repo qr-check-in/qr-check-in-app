@@ -22,6 +22,7 @@ import com.example.qrcheckin.ClassObjects.Notification;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.messaging.FirebaseMessaging;
 
 import org.json.JSONArray;
@@ -129,12 +130,29 @@ public class CreateNotification extends AppCompatActivity {
                     Log.d("notification", String.format("storing Notification%s", newNotification.getTitle()));
                     String notiID = notiDb.storeNotification(newNotification);
 
-                    // if switch is checked = push notification
-                    // Push notification annoucement to users
-                    createAnnoucement();
-
-                    // else silent
-
+                    // Retrieve the list of attendees from the event document
+                    // openai, 2024, chatgpt, how to fetch a field from the db
+                    eventDb.getCollectionRef().document(documentId).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                        @Override
+                        public void onSuccess(DocumentSnapshot documentSnapshot) {
+                            if (documentSnapshot.exists()) {
+                                List<String> attendees = (List<String>) documentSnapshot.get("attendee");
+                                if (attendees != null) {
+                                    // Create JSONArray from attendees list
+                                    JSONArray regArray = new JSONArray(attendees);
+                                    // Print the contents of regArray
+                                    Log.d("CreateNotification", "Attendees: " + regArray.toString());
+                                    // Call createAnnoucement method with the list of attendees
+                                    createAnnoucement(regArray);
+                                }
+                            }
+                        }
+                    }).addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            Log.e("CreateNotification", "Error getting attendees: " + e.getMessage());
+                        }
+                    });
 
                     // Add to eventdb
                     eventDb.addToArrayField("notifications", notiID);
@@ -170,72 +188,13 @@ public class CreateNotification extends AppCompatActivity {
         }
     }
 
-    public void subscribeUsersToTopic(){
-        // These registration tokens come from the client FCM SDKs.
-        List<String> registrationTokens = Arrays.asList(
-                "YOUR_REGISTRATION_TOKEN_1",
-                // ...
-                "YOUR_REGISTRATION_TOKEN_n"
-        );
 
-        String[] registrationTokensArray = registrationTokens.toArray(new String[0]);
-
-
-
-        // Subscribe the devices corresponding to the registration tokens to the topic.
-//        FirebaseMessaging.getInstance().subscribeToTopic(
-//                        registrationTokensArray, topicName);
-//                .addOnCompleteListener(task -> {
-//                if (task.isSuccessful()) {
-//                    TopicManagementResponse response = task.getResult();
-//                    // Handle the success count
-//                    System.out.println(response.getSuccessCount() + " tokens were subscribed successfully");
-//                } else {
-//                    // Handle the failure
-//                    System.out.println("Failed to subscribe tokens to topic: " + task.getException().getMessage());
-//                }
-//            });
-    }
-
-    public void createAnnoucement(){
+    public void createAnnoucement(JSONArray regArray){
         // Send notification to the topic
         // openai, 2024, chatgpt: how to connect the notificationmanager and messaging service to creating a notification
-        eventDb.getDocRef().get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-            @Override
-            public void onSuccess(DocumentSnapshot documentSnapshot) {
-                if (documentSnapshot.exists()) {
-                    topicName = documentSnapshot.getString("topicName");
-                    if (topicName != null) {
-                        // Send notification to the topic
-                        JSONArray regArray = new JSONArray();
+//        JSONArray regArray = new JSONArray();
 
-                        // Retrieve the FCM token of the current device
-                        FirebaseMessaging.getInstance().getToken()
-                                .addOnCompleteListener(task -> {
-                                    if (task.isSuccessful() && task.getResult() != null) {
-                                        String fcmToken = task.getResult();
-                                        regArray.put(fcmToken);
-                                        // Send notification to the topic
-                                        MyNotificationManager firebaseMessaging = new MyNotificationManager(getApplicationContext());
-                                        firebaseMessaging.sendMessageToTopic(regArray, topicName, notiTitle, notiDescription, documentId);
-                                    } else {
-                                        Log.e("FCM", "Failed to get FCM token");
-                                    }
-                                });
-                    }
-                    else {
-                        Log.e("Notification", "Topic name is null");
-                    }
-                } else {
-                    Log.e("Notification", "Document does not exist");
-                }
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                Log.e("Notification", "Error fetching document", e);
-            }
-        });
-
+        MyNotificationManager firebaseMessaging = new MyNotificationManager(getApplicationContext());
+        firebaseMessaging.sendMessageToClient(regArray, notiTitle, notiDescription, documentId);
     }
 }

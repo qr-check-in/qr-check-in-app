@@ -96,14 +96,7 @@ public class MyNotificationManager {
 
     // https://stackoverflow.com/questions/37990140/how-to-send-one-to-one-message-using-firebase-messaging?noredirect=1&lq=1, 2024, how to send push notifications
 
-    /**
-     * Send a notification to the topic or user
-     * @param topic
-     * @param title
-     * @param body
-     * @param eventID
-     */
-    public void sendMessageToTopic(final JSONArray recipients, final String topic, final String title, final String body, final String eventID) {
+    public void sendMessageToClient(final JSONArray recipients, final String title, final String body, final String eventID) {
         new AsyncTask<Void, Void, String>() {
             @Override
             protected String doInBackground(Void... params) {
@@ -117,13 +110,8 @@ public class MyNotificationManager {
                     data.put("eventID", eventID);
                     root.put("notification", notification);
                     root.put("data", data);
-                    if (recipients == null || recipients.length() == 0) {
-                        // Send to topic
-                        root.put("to", "/topics/" + topic);
-                    } else {
-                        // Send to individual recipients
-                        root.put("registration_ids", recipients);
-                    }
+                    // Send to recipients
+                    root.put("registration_ids", recipients);
 
                     String result = postToFCM(root.toString());
                     Log.d("MyFirebaseMessagingSystem", "Result: " + result);
@@ -136,10 +124,10 @@ public class MyNotificationManager {
             @Override
             protected void onPostExecute(String result) {
                 if (result != null) {
-                    Log.d("MyFirebaseMessagingSystem", "Message sent successfully to topic:: " + body);
+                    Log.d("MyFirebaseMessagingSystem", "Message sent successfully to clients: " + body);
                     Toast.makeText(mContext, "Annoucement Posted", Toast.LENGTH_SHORT).show();
                 } else {
-                    Log.d("MyFirebaseMessagingSystem", "Failed to send message to topic: " + body);
+                    Log.d("MyFirebaseMessagingSystem", "Failed to send message to clients: " + body);
                     Toast.makeText(mContext, "Failed to Post Annoucement", Toast.LENGTH_SHORT).show();
 
                 }

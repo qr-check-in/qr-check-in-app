@@ -44,7 +44,13 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Date;
+import java.util.Locale;
 import java.util.Objects;
 
 /**
@@ -270,6 +276,24 @@ public class OrganizersEventPageActivity extends AppCompatActivity {
                         notifications.add(notification);
                     }
                 }
+                // Sort notifications by dateTime field
+                // openai, 2024, chatgpt: how to sort the list based on date
+                Collections.sort(notifications, new Comparator<Notification>() {
+                    @Override
+                    public int compare(Notification n1, Notification n2) {
+                        // Parse dateTime strings to Date objects for comparison
+                        SimpleDateFormat dateFormat = new SimpleDateFormat("MMM, dd, yyyy; h:mm a", Locale.getDefault());
+                        try {
+                            Date date1 = dateFormat.parse(n1.getDateTime());
+                            Date date2 = dateFormat.parse(n2.getDateTime());
+                            // Compare Date objects in descending order
+                            return date2.compareTo(date1);
+                        } catch (ParseException e) {
+                            e.printStackTrace();
+                            return 0;
+                        }
+                    }
+                });
                 // Create dialog recycler view to display notifications
                 DialogRecyclerView listDialog = new DialogRecyclerView(
                         context, notifications) {

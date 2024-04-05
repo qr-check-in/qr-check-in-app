@@ -28,6 +28,7 @@ import com.example.qrcheckin.ClassObjects.EventPoster;
 import com.example.qrcheckin.ClassObjects.QRCode;
 import com.example.qrcheckin.Common.ImageStorageManager;
 import com.example.qrcheckin.Common.Utils;
+import com.example.qrcheckin.Notifications.MyNotificationManager;
 import com.example.qrcheckin.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -249,29 +250,9 @@ public class CreateGenerateEventQR extends AppCompatActivity {
                     // Add the newEvent to the db
                     Event newEvent = new Event(organizerFcm, checkInQRCode, promoQRCode, inputEventPoster, inputEventName, inputEventDate, inputEventTime, inputEventLocation, inputEventDescription, incomingEvent.isCheckInStatus(), numOfAttends);
                     String eventId = db.storeEvent(newEvent);
-                    Log.d("EVENT", String.format("Stored event ID:  %s", eventId));
+                    EventDatabaseManager eventDb = new EventDatabaseManager(eventId);
 
-                    // Create topicName for the event
-                    String topicName = "event_" + eventId;
-
-                    // Add the topicName to the event
-                    FirebaseFirestore db = FirebaseFirestore.getInstance();
-                    DocumentReference eventDocRef = db.collection("events").document(eventId);
-                    eventDocRef.update("topicName", topicName);
-
-                    // Organizer subscribes to the topic
-                    FirebaseMessaging.getInstance().subscribeToTopic(topicName)
-                            .addOnCompleteListener(new OnCompleteListener<Void>() {
-                                @Override
-                                public void onComplete(@NonNull Task<Void> task) {
-                                    String msg = "Subscribed";
-                                    if (!task.isSuccessful()) {
-                                        msg = "Subscribe failed";
-                                    }
-                                    Log.d("Subscription: ", msg);
-                                    Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_SHORT).show();
-                                }
-                            });
+                    eventDb.addToArrayField("attendee", organizerFcm);
 
                     Intent activity = new Intent(getApplicationContext(), EventListView.class);
                     startActivity(activity);
