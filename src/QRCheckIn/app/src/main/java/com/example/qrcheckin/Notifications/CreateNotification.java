@@ -18,18 +18,13 @@ import androidx.appcompat.widget.Toolbar;
 import com.example.qrcheckin.Event.EventDatabaseManager;
 import com.example.qrcheckin.Event.OrganizersEventPageActivity;
 import com.example.qrcheckin.R;
-import com.example.qrcheckin.ClassObjects.Notification;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.QuerySnapshot;
-import com.google.firebase.messaging.FirebaseMessaging;
 
 import org.json.JSONArray;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;

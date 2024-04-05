@@ -1,5 +1,4 @@
-package com.example.qrcheckin.ClassObjects;
-import android.location.Location;
+package com.example.qrcheckin.Attendee;
 
 import com.google.firebase.firestore.GeoPoint;
 

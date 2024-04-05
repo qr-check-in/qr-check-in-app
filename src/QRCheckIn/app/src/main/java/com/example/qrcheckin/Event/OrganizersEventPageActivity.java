@@ -30,9 +30,7 @@ import androidx.appcompat.widget.Toolbar;
 
 import com.example.qrcheckin.Attendee.AttendeeDatabaseManager;
 import com.example.qrcheckin.Attendee.ProfileActivity;
-import com.example.qrcheckin.ClassObjects.Event;
-import com.example.qrcheckin.ClassObjects.Notification;
-import com.example.qrcheckin.ClassObjects.QRCode;
+import com.example.qrcheckin.Notifications.Notification;
 import com.example.qrcheckin.Common.ImageStorageManager;
 import com.example.qrcheckin.Common.MainActivity;
 import com.example.qrcheckin.Notifications.CreateNotification;

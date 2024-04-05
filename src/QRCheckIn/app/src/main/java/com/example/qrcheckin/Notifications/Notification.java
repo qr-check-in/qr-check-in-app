@@ -1,4 +1,4 @@
-package com.example.qrcheckin.ClassObjects;
+package com.example.qrcheckin.Notifications;
 
 /**
  * Represents a notification message intended for multiple recipients.

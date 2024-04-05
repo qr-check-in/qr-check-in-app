@@ -1,4 +1,4 @@
-package com.example.qrcheckin.ClassObjects;
+package com.example.qrcheckin.Attendee;
 
 import android.graphics.Bitmap;
 import android.graphics.Canvas;

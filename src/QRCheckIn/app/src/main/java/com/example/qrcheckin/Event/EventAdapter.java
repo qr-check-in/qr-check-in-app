@@ -11,7 +11,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.qrcheckin.Common.ImageStorageManager;
 import com.example.qrcheckin.R;
-import com.example.qrcheckin.ClassObjects.Event;
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.firebase.firestore.DocumentSnapshot;

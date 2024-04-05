@@ -12,7 +12,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.qrcheckin.R;
-import com.example.qrcheckin.ClassObjects.Notification;
 
 import java.util.ArrayList;
 

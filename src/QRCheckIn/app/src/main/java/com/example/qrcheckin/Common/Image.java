@@ -1,5 +1,6 @@
-package com.example.qrcheckin.ClassObjects;
+package com.example.qrcheckin.Common;
 
+import com.example.qrcheckin.Attendee.Attendee;
 import com.google.android.material.progressindicator.LinearProgressIndicator;
 
 /**

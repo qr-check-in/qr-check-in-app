@@ -23,18 +23,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import com.bumptech.glide.Glide;
-import com.example.qrcheckin.ClassObjects.Event;
-import com.example.qrcheckin.ClassObjects.EventPoster;
-import com.example.qrcheckin.ClassObjects.QRCode;
 import com.example.qrcheckin.Common.ImageStorageManager;
 import com.example.qrcheckin.Common.Utils;
-import com.example.qrcheckin.Notifications.MyNotificationManager;
 import com.example.qrcheckin.R;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.WriterException;
 import com.google.zxing.common.BitMatrix;

@@ -6,37 +6,15 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context=".Event.QrCodeImageView">
-
-    <LinearLayout
+    <include
+        android:id="@+id/addEventToolBar2"
+        layout="@layout/toolbar"
         android:layout_width="match_parent"
+        android:layout_marginEnd="30dp"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:background="@color/ChryslerBlue">
-
-        <ImageButton
-            android:id="@+id/goBack"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_marginLeft="15dp"
-            android:layout_marginTop="10dp"
-            app:srcCompat="@drawable/backarrow"
-            android:tint="@color/White"
-            android:scaleType="fitCenter"
-            android:background="@color/ChryslerBlue"
-            android:paddingHorizontal="5dp">
-        </ImageButton>
-
-        <include
-            android:id="@+id/addEventToolBar2"
-            layout="@layout/toolbar"
-            android:layout_width="match_parent"
-            android:layout_marginEnd="30dp"
-            android:layout_height="wrap_content"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent" />
-
-    </LinearLayout>
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
 
 
 
@@ -56,6 +34,7 @@
             android:layout_marginTop="20dp"
             android:layout_marginEnd="20dp"
             android:background="@android:color/transparent"
+            android:tint="@color/White"
             android:paddingHorizontal="5dp">
         </ImageButton>
 

@@ -1,4 +1,7 @@
-package com.example.qrcheckin.ClassObjects;
+package com.example.qrcheckin.Event;
+
+import com.example.qrcheckin.Attendee.Attendee;
+import com.example.qrcheckin.Common.Image;
 
 import java.io.Serializable;
 

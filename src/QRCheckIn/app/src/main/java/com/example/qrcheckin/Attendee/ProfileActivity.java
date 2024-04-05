@@ -21,8 +21,6 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.example.qrcheckin.R;
 import com.example.qrcheckin.Common.SharedViewModel;
-import com.example.qrcheckin.ClassObjects.Attendee;
-import com.example.qrcheckin.ClassObjects.Profile;
 import com.example.qrcheckin.Common.ImageStorageManager;
 import com.example.qrcheckin.Common.MainActivity;
 import com.example.qrcheckin.Event.CreateAddEventDetails;
