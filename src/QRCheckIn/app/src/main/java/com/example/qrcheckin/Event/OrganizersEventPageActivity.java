@@ -36,11 +36,13 @@ import com.example.qrcheckin.Common.ImageStorageManager;
 import com.example.qrcheckin.Common.MainActivity;
 import com.example.qrcheckin.Notifications.CreateNotification;
 import com.example.qrcheckin.Notifications.DialogRecyclerView;
+import com.example.qrcheckin.Notifications.NotificationDatabaseManager;
 import com.example.qrcheckin.R;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.Query;
 
 import java.util.ArrayList;
 import java.util.Objects;
@@ -258,6 +260,11 @@ public class OrganizersEventPageActivity extends AppCompatActivity {
     public void NotificationListDialog(){
         // Temporary Notifications list
         ArrayList<Notification> notifications = new ArrayList<>();
+
+        NotificationDatabaseManager db = new NotificationDatabaseManager();
+        Query query = db.getCollectionRef()
+                .whereEqualTo("eventID", documentId)
+                .orderBy("dateTime", Query.Direction.ASCENDING);
 
         // Creating sample notification objects and adding them to the list
         Notification notification1 = new Notification("Test Notification 1", "Description for Test Notification 1", "Date Time for Test Notification 1", documentId);
