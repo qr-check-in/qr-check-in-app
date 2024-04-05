@@ -1,8 +1,12 @@
 package com.example.qrcheckin.Common;
 
+import android.content.ContentResolver;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.ImageDecoder;
 import android.net.Uri;
+import android.os.Build;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.widget.ImageView;
 
@@ -114,5 +118,29 @@ public class ImageStorageManager {
                 Log.e("Firestore", "picture deletion error");
             }
         });
+    }
+
+    /**
+     * Converts an image to a Bitmap
+     * @param contentResolver ContentResolver of the calling activity
+     * @return Bitmap of the image
+     */
+    public Bitmap convertToBitmap(ContentResolver contentResolver){
+        Bitmap bitmap = null;
+        Uri uri = Uri.parse(image.getUriString());
+        // Converts Uri to Bitmap
+        // https://stackoverflow.com/questions/65210522/how-to-get-bitmap-from-imageuri-in-api-level-30, HB., 2020
+        try{
+            if(Build.VERSION.SDK_INT < 28) {
+                bitmap = MediaStore.Images.Media.getBitmap(contentResolver, uri);
+            }
+            else{
+                ImageDecoder.Source source = ImageDecoder.createSource(contentResolver, uri);
+                bitmap = ImageDecoder.decodeBitmap(source);
+            }
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+        return bitmap;
     }
 }
