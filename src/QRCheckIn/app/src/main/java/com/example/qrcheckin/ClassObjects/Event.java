@@ -13,7 +13,7 @@ public class Event implements Serializable {
     private ArrayList<String> notifications;
     private String organizer;
     private QRCode checkInQRCode;
-    private PromoQRCode promoQRCode;
+    private QRCode promoQRCode;
     private EventPoster poster;
     private String eventName;
     private String eventDate;
@@ -46,7 +46,7 @@ public class Event implements Serializable {
      * @param eventDescription the Event's description String
      * @param signupLimit the max number of signups for an event
      */
-    public Event(String organizer, QRCode checkInQRCode, PromoQRCode promoQRCode, EventPoster poster, String eventName, String eventDate, String eventTime, String eventLocation, String eventDescription, boolean checkInStatus, int signupLimit) {
+    public Event(String organizer, QRCode checkInQRCode, QRCode promoQRCode, EventPoster poster, String eventName, String eventDate, String eventTime, String eventLocation, String eventDescription, boolean checkInStatus, int signupLimit) {
         this.organizer = organizer;
         this.checkInQRCode = checkInQRCode;
         this.promoQRCode = promoQRCode;
@@ -131,7 +131,7 @@ public class Event implements Serializable {
      *
      * @return
      */
-    public PromoQRCode getPromoQRCode() {
+    public QRCode getPromoQRCode() {
         return promoQRCode;
     }
 
@@ -139,7 +139,7 @@ public class Event implements Serializable {
      *
      * @param promoQRCode
      */
-    public void setPromoQRCode(PromoQRCode promoQRCode) {
+    public void setPromoQRCode(QRCode promoQRCode) {
         this.promoQRCode = promoQRCode;
     }
 

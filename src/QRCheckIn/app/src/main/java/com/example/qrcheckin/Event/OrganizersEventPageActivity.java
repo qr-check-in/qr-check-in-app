@@ -3,8 +3,10 @@ package com.example.qrcheckin.Event;
 import static android.content.ContentValues.TAG;
 
 import android.app.Dialog;
+import android.content.ContentResolver;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -25,15 +27,16 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
-import com.example.qrcheckin.Common.ImageStorageManager;
-import com.example.qrcheckin.Common.MainActivity;
-import com.example.qrcheckin.Attendee.ProfileActivity;
-import com.example.qrcheckin.R;
 import com.example.qrcheckin.Attendee.AttendeeDatabaseManager;
+import com.example.qrcheckin.Attendee.ProfileActivity;
 import com.example.qrcheckin.ClassObjects.Event;
 import com.example.qrcheckin.ClassObjects.Notification;
+import com.example.qrcheckin.ClassObjects.QRCode;
+import com.example.qrcheckin.Common.ImageStorageManager;
+import com.example.qrcheckin.Common.MainActivity;
 import com.example.qrcheckin.Notifications.CreateNotification;
 import com.example.qrcheckin.Notifications.DialogRecyclerView;
+import com.example.qrcheckin.R;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
@@ -59,9 +62,15 @@ public class OrganizersEventPageActivity extends AppCompatActivity {
     TextView signupLimitReached;
     ImageButton openBottomSheetBtn;
     ImageButton openNotifications;
+    private ImageView ivEventPromoQr;
     private EventDatabaseManager eventDb;
     private String fcmToken;
     private String documentId;
+
+    private String eventName;
+    private String eventDate;
+    private QRCode promoQRCode;
+    private QRCode checkInQRCode;
 
     /**
      * Init activity, sets content view, and configures the toolbar with navigation buttons.
@@ -99,7 +108,7 @@ public class OrganizersEventPageActivity extends AppCompatActivity {
         TextView tvEventLocation = findViewById(R.id.text_event_location);
         TextView tvEventDescription = findViewById(R.id.text_event_description);
         ImageView ivEventPoster = findViewById(R.id.image_event_poster);
-        ImageView ivEventPromoQr = findViewById(R.id.image_event_promo_qr);
+        ivEventPromoQr = findViewById(R.id.btnGenPromoQR);
         openNotifications = findViewById(R.id.notificationIconBtn);
         openBottomSheetBtn = findViewById(R.id.openBottomSheetButton);
         signupCheckBox = findViewById(R.id.signup_button);
@@ -122,9 +131,16 @@ public class OrganizersEventPageActivity extends AppCompatActivity {
                 // Get and display event details
                 Event event = documentSnapshot.toObject(Event.class);
                 if (documentSnapshot != null && event != null) {
-                    header.setText(event.getEventName());
+
+                    // set attributes that are used if user clicks QR code(s) to share it
+                    eventName = event.getEventName();
+                    eventDate = event.getEventDate();
+                    promoQRCode = event.getPromoQRCode();
+                    checkInQRCode = event.getCheckInQRCode();
+
+                    header.setText(eventName);
                     tvEventLocation.setText(event.getEventLocation());
-                    tvEventDate.setText(event.getEventDate());
+                    tvEventDate.setText(eventDate);
                     tvEventDescription.setText(event.getEventDescription());
                     setSignupCheckBox(event.getSignupLimit(), event.getSignups());
                     // Set the ImageView for the Event's poster
@@ -132,11 +148,15 @@ public class OrganizersEventPageActivity extends AppCompatActivity {
                         ImageStorageManager storagePoster = new ImageStorageManager(event.getPoster(), "/EventPosters");
                         storagePoster.displayImage(ivEventPoster);
                     }
-                    // Set the ImageView for the Event's QR code
-                    // TODO: Display promo QR instead of check-in QR
-                    if (event.getCheckInQRCode() != null) {
-                        ImageStorageManager storageQr = new ImageStorageManager(event.getCheckInQRCode(), "/QRCodes");
+                    // Set the ImageView for the Event's promotional QR code
+                    if (promoQRCode != null) {
+                        ImageStorageManager storageQr = new ImageStorageManager(promoQRCode, "/QRCodes");
                         storageQr.displayImage(ivEventPromoQr);
+                    }
+                    else{
+                        // Set TextView to inform user that this event does not have a promotional QR code
+                        TextView promoTextView = findViewById(R.id.promo_qr_description);
+                        promoTextView.setText(R.string.no_promo_text);
                     }
                     // Check if current event is organized by this user
                     if (Objects.equals(event.getOrganizer(), fcmToken)) {
@@ -187,6 +207,15 @@ public class OrganizersEventPageActivity extends AppCompatActivity {
                     eventDb.removeFromArrayField("signups", fcmToken);
                     attendeeDb.removeFromArrayField("signupEvents", documentId);
                 }
+            }
+        });
+
+        // set Listener for the promotional QR code ImageView
+        ivEventPromoQr.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Call method to display acitivty to share the promotional QR code
+                shareQRCode(promoQRCode);
             }
         });
 
@@ -288,10 +317,20 @@ public class OrganizersEventPageActivity extends AppCompatActivity {
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setContentView(R.layout.bottom_sheet_layout);
 
+        LinearLayout viewCheckInQRCode = dialog.findViewById(R.id.viewCheckInQRCode);
         LinearLayout editEventDetails = dialog.findViewById(R.id.editEventDetails);
         LinearLayout createEventNotification = dialog.findViewById(R.id.createEventNotification);
         LinearLayout viewEventSignups = dialog.findViewById(R.id.viewSignedUp);
         LinearLayout viewEventParticipants = dialog.findViewById(R.id.viewEventCheckin);
+
+        // Listener for view check-in QR code layout
+        viewCheckInQRCode.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Call method to display acitivty to share the promotional QR code
+                shareQRCode(checkInQRCode);
+            }
+        });
 
         editEventDetails.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -341,6 +380,24 @@ public class OrganizersEventPageActivity extends AppCompatActivity {
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
         dialog.getWindow().setGravity(Gravity.BOTTOM);
+    }
+
+    /**
+     * Starts activity to share a QR code
+     * @param qrCode QRCode to be shared
+     */
+    public void shareQRCode(QRCode qrCode){
+        if(qrCode != null){
+            // Get bitmap of the QR code to pass to new activity
+            ContentResolver contentResolver = getContentResolver();
+            ImageStorageManager storage = new ImageStorageManager(qrCode , "/QRCodes");
+            Bitmap bitmap = storage.convertToBitmap(contentResolver);
+            // Start new activity
+            Intent activity = new Intent(getApplicationContext(), QrCodeImageView.class);
+            activity.putExtra("QRCodeBitmap", bitmap);
+            activity.putExtra("EventName&Date", eventName + "_" + eventDate);
+            startActivity(activity);
+        }
     }
 
 }

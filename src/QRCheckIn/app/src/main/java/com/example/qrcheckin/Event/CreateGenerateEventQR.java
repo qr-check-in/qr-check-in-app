@@ -23,13 +23,12 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import com.bumptech.glide.Glide;
-import com.example.qrcheckin.ClassObjects.EventPoster;
-import com.example.qrcheckin.Common.ImageStorageManager;
-import com.example.qrcheckin.R;
-import com.example.qrcheckin.Common.Utils;
 import com.example.qrcheckin.ClassObjects.Event;
-import com.example.qrcheckin.ClassObjects.PromoQRCode;
+import com.example.qrcheckin.ClassObjects.EventPoster;
 import com.example.qrcheckin.ClassObjects.QRCode;
+import com.example.qrcheckin.Common.ImageStorageManager;
+import com.example.qrcheckin.Common.Utils;
+import com.example.qrcheckin.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentReference;
@@ -55,7 +54,7 @@ public class CreateGenerateEventQR extends AppCompatActivity {
     ImageView ivCheckInQR;
     ImageView ivPromoQr;
     Button finishButton;
-    Button genPromoQR;
+    Button btnGenPromoQR;
     Button btnGenCheckInQR;
     Button btnUploadCheckInQR;
     private EventDatabaseManager db;
@@ -68,12 +67,13 @@ public class CreateGenerateEventQR extends AppCompatActivity {
     private String organizerFcm;
     private int numOfAttends;
     QRCode checkInQRCode = null;
-    PromoQRCode promoQRCode = null;
+    QRCode promoQRCode = null;
     Event incomingEvent;
     private String incomingPosterString;
 
     // To save image in device
-    Bitmap bitmap;
+    private Bitmap checkInBitmap;
+    private Bitmap promoBitmap;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -93,6 +93,7 @@ public class CreateGenerateEventQR extends AppCompatActivity {
         ivPromoQr = findViewById(R.id.ivPromoQr);
         btnUploadCheckInQR = findViewById(R.id.btnUploadCheckInQR);
         btnGenCheckInQR = findViewById(R.id.btnGenCheckInQR);
+        btnGenPromoQR = findViewById(R.id.btnGenPromoQR);
 
         // ToolBar
         Toolbar toolbar = findViewById(R.id.addEventToolBar2);
@@ -160,29 +161,31 @@ public class CreateGenerateEventQR extends AppCompatActivity {
         btnGenCheckInQR.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Create and set a check-in QR code only if it doesn't exist yet
-                if (checkInQRCode == null) {
-                    // Generate a QR code bitmap using event details from previous page
+                Log.d("generateQrCode", "clicked, calling setQRCode");
+                if(checkInQRCode == null){
                     String unhashedContent = inputEventName + inputEventLocation + inputEventDate + inputEventTime;
-                    bitmap = generateQRCode(unhashedContent);
-                    assert bitmap != null;
-                    ivCheckInQR.setImageBitmap(bitmap);
-                    ivCheckInQR.setVisibility(View.VISIBLE);
-
-                    // Create the QR code object and set the ImageView to the new QR code
-                    String filename = String.format("%s_%s_%d.jpg", inputEventName, inputEventDate, System.currentTimeMillis());
-                    String QRCodeUri = saveBitmapImage(bitmap, filename).toString();
-                    checkInQRCode = new QRCode(QRCodeUri, null, unhashedContent);
-                } else {
-                    Toast.makeText(CreateGenerateEventQR.this, "checkInQR already exists", Toast.LENGTH_SHORT).show();
+                    checkInQRCode = setQRCode(ivCheckInQR, unhashedContent, false);
                 }
-
-                // Ensure check-in QR code and image view were set successfully
-                if ((checkInQRCode == null) || (ivCheckInQR.getDrawable() == null)) {
-                    Log.d("generateQrCode", "QR code generation failed");
+                else {
+                    Toast.makeText(CreateGenerateEventQR.this, "check-in QR already exists", Toast.LENGTH_SHORT).show();
                 }
             }
         });
+
+        // Listener for promotional QR code generator
+        btnGenPromoQR.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(promoQRCode == null){
+                    String unhashedContent = inputEventName + inputEventLocation + inputEventDate + inputEventTime + "promo";
+                    promoQRCode = setQRCode(ivPromoQr, unhashedContent, true);
+                }
+                else {
+                    Toast.makeText(CreateGenerateEventQR.this, "promotional QR already exists", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+
         btnUploadCheckInQR.setOnClickListener(new View.OnClickListener() {
             // Listener to add/upload a QR from gallery
             // https://developer.android.com/jetpack/androidx/releases/activity#1.7.0, 2024, how to select a picture from gallery
@@ -195,15 +198,22 @@ public class CreateGenerateEventQR extends AppCompatActivity {
             }
 
         });
+
+        // Listener for the check-in QR code ImageView
         ivCheckInQR.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (checkInQRCode != null) {
-                    Intent activity = new Intent(getApplicationContext(), QrCodeImageView.class);
-                    activity.putExtra("QRCodeBitmap", bitmap); // Assuming 'bitmap' is the generated QR code bitmap
-                    activity.putExtra("EventName&Date", inputEventName + "_" + inputEventDate); // Assuming 'bitmap' is the generated QR code bitmap
-                    startActivity(activity);
-                }
+                // Start QR code share activity
+                shareQRCode(checkInQRCode, checkInBitmap);
+            }
+        });
+
+        // Listener for the Check-in QR code ImageView
+        ivPromoQr.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Start QR code share activity
+                shareQRCode(promoQRCode, promoBitmap);
             }
         });
 
@@ -230,11 +240,16 @@ public class CreateGenerateEventQR extends AppCompatActivity {
                         ImageStorageManager storageQr = new ImageStorageManager(checkInQRCode, "/QRCodes");
                         storageQr.uploadImage(null);
                     }
+                    // Create and store a promotional QRCode to firestore storage
+                    if(promoQRCode != null){
+                        ImageStorageManager storageQr = new ImageStorageManager(promoQRCode, "/QRCodes");
+                        storageQr.uploadImage(null);
+                    }
 
                     // Add the newEvent to the db
                     Event newEvent = new Event(organizerFcm, checkInQRCode, promoQRCode, inputEventPoster, inputEventName, inputEventDate, inputEventTime, inputEventLocation, inputEventDescription, incomingEvent.isCheckInStatus(), numOfAttends);
-                    Log.d("event", String.format("storing event %s", newEvent.getEventName()));
                     String eventId = db.storeEvent(newEvent);
+                    Log.d("EVENT", String.format("Stored event ID:  %s", eventId));
 
                     // Create topicName for the event
                     String topicName = "event_" + eventId;
@@ -307,6 +322,38 @@ public class CreateGenerateEventQR extends AppCompatActivity {
     }
 
     /**
+     * Calls methods to get a QR code image and save it to the device, then creates a corresponding QRCode object
+     * @param imageView ImageView for the QR Code to be displayed
+     * @param unhashedContent String of the event details
+     * @param isPromo Boolean indicating if we are creating a promotional QR
+     * @return QRCode to check-in/promote the Event being created
+     */
+    public QRCode setQRCode(ImageView imageView, String unhashedContent, Boolean isPromo){
+        // Create and set a check-in or promo QR code only if it doesn't exist yet
+        // Generate a QR code bitmap using event details from previous page
+        Log.d("generateQrCode", String.format("setQRCode called, making bitmap with %s", unhashedContent));
+
+        Bitmap bitmap = generateQRCode(unhashedContent);
+        assert bitmap != null;
+        //set the ImageView to the new QR code
+        imageView.setImageBitmap(bitmap);
+        imageView.setVisibility(View.VISIBLE);
+
+        // Create the QR code object and
+        String filename = String.format("%s_%s_%d.jpg", inputEventName, inputEventDate, System.currentTimeMillis());
+        String QRCodeUri = saveBitmapImage(bitmap, filename).toString();
+
+        // set bitmap attributes
+        if (isPromo){
+            promoBitmap = bitmap;
+        }
+        else{
+            checkInBitmap = bitmap;
+        }
+        return new QRCode(QRCodeUri, null, unhashedContent);
+    }
+
+    /**
      * Encodes the unhashed content into a QR code image
      * @param unhashedContent   String to encode into QR code
      * @return                  Bitmap of the QR code image OR null (if generation failed)
@@ -368,6 +415,20 @@ public class CreateGenerateEventQR extends AppCompatActivity {
         }
 
         return Uri.fromFile(outfile);
+    }
+
+    /**
+     * Starts activity to share a QR Code
+     * @param qrCode QRCode to be shared
+     * @param bitmap bitmap of the QRCode to be shared
+     */
+    public void shareQRCode(QRCode qrCode, Bitmap bitmap){
+        if (qrCode != null) {
+            Intent activity = new Intent(getApplicationContext(), QrCodeImageView.class);
+            activity.putExtra("QRCodeBitmap", bitmap);
+            activity.putExtra("EventName&Date", inputEventName + "_" + inputEventDate);
+            startActivity(activity);
+        }
     }
 
 }

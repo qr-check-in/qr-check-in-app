@@ -93,7 +93,7 @@
                 app:layout_constraintVertical_chainStyle="packed" />
 
             <ImageView
-                android:id="@+id/image_event_promo_qr"
+                android:id="@+id/btnGenPromoQR"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
@@ -117,7 +117,7 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/image_event_promo_qr" />
+                app:layout_constraintTop_toBottomOf="@+id/btnGenPromoQR" />
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>
