@@ -183,18 +183,18 @@ public class CreateNotification extends AppCompatActivity {
 
 
         // Subscribe the devices corresponding to the registration tokens to the topic.
-        FirebaseMessaging.getInstance().subscribeToTopic(
-                        registrationTokensArray, topicName)
-                .addOnCompleteListener(task -> {
-                if (task.isSuccessful()) {
-                    TopicManagementResponse response = task.getResult();
-                    // Handle the success count
-                    System.out.println(response.getSuccessCount() + " tokens were subscribed successfully");
-                } else {
-                    // Handle the failure
-                    System.out.println("Failed to subscribe tokens to topic: " + task.getException().getMessage());
-                }
-            });
+//        FirebaseMessaging.getInstance().subscribeToTopic(
+//                        registrationTokensArray, topicName);
+//                .addOnCompleteListener(task -> {
+//                if (task.isSuccessful()) {
+//                    TopicManagementResponse response = task.getResult();
+//                    // Handle the success count
+//                    System.out.println(response.getSuccessCount() + " tokens were subscribed successfully");
+//                } else {
+//                    // Handle the failure
+//                    System.out.println("Failed to subscribe tokens to topic: " + task.getException().getMessage());
+//                }
+//            });
     }
 
     public void createAnnoucement(){
@@ -214,6 +214,7 @@ public class CreateNotification extends AppCompatActivity {
                                 .addOnCompleteListener(task -> {
                                     if (task.isSuccessful() && task.getResult() != null) {
                                         String fcmToken = task.getResult();
+                                        regArray.put(fcmToken);
                                         // Send notification to the topic
                                         MyNotificationManager firebaseMessaging = new MyNotificationManager(getApplicationContext());
                                         firebaseMessaging.sendMessageToTopic(regArray, topicName, notiTitle, notiDescription, documentId);
