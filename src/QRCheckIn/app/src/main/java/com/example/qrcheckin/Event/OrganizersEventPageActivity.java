@@ -4,6 +4,7 @@ import static android.content.ContentValues.TAG;
 
 import android.app.Dialog;
 import android.content.ContentResolver;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
@@ -36,6 +37,7 @@ import com.example.qrcheckin.Common.ImageStorageManager;
 import com.example.qrcheckin.Common.MainActivity;
 import com.example.qrcheckin.Notifications.CreateNotification;
 import com.example.qrcheckin.Notifications.DialogRecyclerView;
+import com.example.qrcheckin.Notifications.NotificationDatabaseManager;
 import com.example.qrcheckin.R;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -253,33 +255,31 @@ public class OrganizersEventPageActivity extends AppCompatActivity {
     }
 
     /**
-     * This handles the interactions with opening the dialog for notifcations
+     * Opens dialog with list of notifications/announcements for the event
      */
     public void NotificationListDialog(){
-        // Temporary Notifications list
         ArrayList<Notification> notifications = new ArrayList<>();
-
-        // Creating sample notification objects and adding them to the list
-        Notification notification1 = new Notification("Test Notification 1", "Description for Test Notification 1", "Date Time for Test Notification 1", documentId);
-        Notification notification2 = new Notification("Test Notification 2", "Description for Test Notification 2", "Date Time for Test Notification 2", documentId);
-        Notification notification3 = new Notification("Test Notification 3", "Description for Test Notification 3", "Date Time for Test Notification 3", documentId);
-        Notification notification4 = new Notification("Test Notification 4", "Description for Test Notification 4", "Date Time for Test Notification 4", documentId);
-        Notification notification5 = new Notification("Test Notification 5", "Description for Test Notification 5", "Date Time for Test Notification 5", documentId);
-
-        // Adding the notifications to the list
-        notifications.add(notification1);
-        notifications.add(notification2);
-        notifications.add(notification3);
-        notifications.add(notification4);
-        notifications.add(notification5);
-        DialogRecyclerView listDialog = new DialogRecyclerView(
-                this, notifications) {
-            @Override
-            public void onCreate(Bundle savedInstanceState) {
-                super.onCreate(savedInstanceState);
-            }
-        };
-        listDialog.show();
+        Context context = this;
+        NotificationDatabaseManager db = new NotificationDatabaseManager();
+        // Get all notifications
+        db.getCollectionRef().get().addOnSuccessListener(notificationSnapshots -> {
+                for(DocumentSnapshot snapshot : notificationSnapshots){
+                    Notification notification = snapshot.toObject(Notification.class);
+                    // If a notification belongs to this Event, add it to the list to be displayed
+                    if(Objects.equals(notification.getEventID(), documentId)){
+                        notifications.add(notification);
+                    }
+                }
+                // Create dialog recycler view to display notifications
+                DialogRecyclerView listDialog = new DialogRecyclerView(
+                        context, notifications) {
+                    @Override
+                    public void onCreate(Bundle savedInstanceState) {
+                        super.onCreate(savedInstanceState);
+                    }
+                };
+                listDialog.show();
+        });
     }
 
     /**
