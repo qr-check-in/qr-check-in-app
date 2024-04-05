@@ -54,7 +54,6 @@ public class MyNotificationManager {
      * @param intent    The activity you intend the user to open when they click the notification.
      */
     public void sendNotification(int id, String channelId, String title, String body, Intent intent) {
-
         // Build notification
         PendingIntent pendingIntent = PendingIntent.getActivity(mContext, 0, intent, PendingIntent.FLAG_IMMUTABLE);
         Uri defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
@@ -67,24 +66,5 @@ public class MyNotificationManager {
                 .setContentIntent(pendingIntent);
 
         mManager.notify(id, builder.build());
-    }
-
-    /**
-     * Sends notification to Topic
-     * @param topic
-     * @param title
-     * @param body
-     */
-    public void sendNotificationToTopic(String topic, String title, String body) {
-        // Create a RemoteMessage object with the necessary data
-        RemoteMessage.Builder messageBuilder = new RemoteMessage.Builder(topic);
-        messageBuilder
-                .setMessageId(Integer.toString(new Random().nextInt())) // Generate a random message ID
-                .addData("title", title)
-                .addData("body", body);
-        RemoteMessage remoteMessage = messageBuilder.build();
-
-        // Send the message
-        FirebaseMessaging.getInstance().send(remoteMessage);
     }
 }

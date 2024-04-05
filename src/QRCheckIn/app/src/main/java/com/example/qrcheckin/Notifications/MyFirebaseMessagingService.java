@@ -2,11 +2,15 @@ package com.example.qrcheckin.Notifications;
 
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.nfc.Tag;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.util.Log;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
@@ -14,11 +18,32 @@ import com.example.qrcheckin.Common.MainActivity;
 import com.example.qrcheckin.R;
 import com.example.qrcheckin.Common.Utils;
 import com.example.qrcheckin.Attendee.AttendeeDatabaseManager;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Random;
+
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
+
+import okhttp3.MediaType;
+import okhttp3.OkHttpClient;
+import okhttp3.RequestBody;
+
 
 public class MyFirebaseMessagingService extends FirebaseMessagingService {
     /**
@@ -137,5 +162,101 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         } else {
             Log.w(Utils.TAG, "API 26+ required to use NotificationChannel class");
         }
+    }
+
+
+    /**
+     * Sends notification to a specific topic.
+     * @param topic The topic to send the notification to.
+     * @param title The title of the notification.
+     * @param body The body of the notification.
+     */
+    public void sendNotificationToTopic(String topic, String title, String body) {
+        //https://stackoverflow.com/questions/55948318/how-to-send-a-firebase-message-to-topic-from-android
+        RequestQueue mRequestQue = Volley.newRequestQueue(this);
+
+        JSONObject json = new JSONObject();
+        try {
+            json.put("to", "/topics/" + topic);
+            JSONObject notificationObj = new JSONObject();
+            notificationObj.put("title", title);
+            notificationObj.put("body", body);
+            //replace notification with data when went send data
+//            json.put("notification", notificationObj);
+
+            String URL = "https://fcm.googleapis.com/fcm/send";
+            JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, URL,
+                    json,
+                    response -> Log.d("MUR", "onResponse: "),
+                    error -> Log.d("MUR", "onError: " + error.networkResponse)
+            ) {
+                @Override
+                public Map<String, String> getHeaders() {
+                    Map<String, String> header = new HashMap<>();
+                    header.put("content-type", "application/json");
+
+                    // https://www.youtube.com/watch?v=gCQOlkw8YTA, 2024, how to get the server key
+                    header.put("authorization", "AAAAJ-wSUZg:APA91bESByqbcdYeTLPXw4NYXsW8KhT8SkNfLmYw839LdvZSbdn_04pMZkwX7oIH4WwxTHI8KAMUyLJbQcy6T1Px75mZ4KJU__J-vIdF01_ExJZzdmVCIRB7GhMQ-tgojToKEYzOD72x");
+                    return header;
+                }
+            };
+
+            mRequestQue.add(request);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static final String FCM_MESSAGE_URL = "https://fcm.googleapis.com/fcm/send";
+    OkHttpClient mClient = new OkHttpClient();
+    public static final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
+
+    public void sendMessageToTopic(final JSONArray recipients, final String title, final String body, final String eventID) {
+        new AsyncTask<Void, Void, String>() {
+            @Override
+            protected String doInBackground(Void... params) {
+                try {
+                    JSONObject root = new JSONObject();
+                    JSONObject notification = new JSONObject();
+                    notification.put("body", body);
+                    notification.put("title", title);
+
+                    JSONObject data = new JSONObject();
+                    data.put("eventID", eventID);
+                    root.put("notification", notification);
+                    root.put("data", data);
+                    root.put("registration_ids", recipients);
+//                    root.put("to", "/topics/" + topic);
+
+                    String result = postToFCM(root.toString());
+                    Log.d("MyFirebaseMessagingSystem", "Result: " + result);
+                    return result;
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
+                return null;
+            }
+
+            @Override
+            protected void onPostExecute(String result) {
+                if (result != null) {
+                    Log.d("MyFirebaseMessagingSystem", "Message sent successfully to topic:: " + body);
+                } else {
+                    Log.d("MyFirebaseMessagingSystem", "Failed to send message to topic: " + body);
+
+                }
+            }
+        }.execute();
+    }
+
+    public String postToFCM(String bodyString) throws IOException {
+        RequestBody body = RequestBody.create(JSON, bodyString);
+        okhttp3.Request request = new okhttp3.Request.Builder()
+                .url(FCM_MESSAGE_URL)
+                .post(body)
+                .addHeader("Authorization", "key=" + getString(R.string.server_key))
+                .build();
+        okhttp3.Response response = mClient.newCall(request).execute();
+        return response.body().string();
     }
 }

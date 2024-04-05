@@ -17,7 +17,7 @@ import com.example.qrcheckin.ClassObjects.Notification;
 import java.util.ArrayList;
 
 public class DialogRecyclerView extends Dialog {
-    private ArrayList<Notification> notifications;
+    private ArrayList<Notification> notifications = new ArrayList<>();
     private NotificationAdapter notificationsAdapter;
     private Context context;
 

@@ -24,6 +24,8 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.messaging.FirebaseMessaging;
 
+import org.json.JSONArray;
+
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
@@ -136,8 +138,24 @@ public class CreateNotification extends AppCompatActivity {
                                 topicName = documentSnapshot.getString("topicName");
                                 if (topicName != null) {
                                     // Send notification to the topic
-                                    MyNotificationManager notificationManager = MyNotificationManager.getInstance(getApplicationContext());
-//                                    notificationManager.sendNotificationToTopic(topicName, notiTitle, notiDescription);
+//                                    MyFirebaseMessagingService firebaseMessaging = new MyFirebaseMessagingService();
+//                                    firebaseMessaging.sendNotificationToTopic(topicName, notiTitle, notiDescription);
+                                    JSONArray regArray = new JSONArray();
+
+                                    // Retrieve the FCM token of the current device
+                                    FirebaseMessaging.getInstance().getToken()
+                                            .addOnCompleteListener(task -> {
+                                                if (task.isSuccessful() && task.getResult() != null) {
+                                                    String fcmToken = task.getResult();
+                                                    // Add the FCM token to the array
+                                                    regArray.put(fcmToken);
+                                                    // Send notification to the topic
+                                                    MyFirebaseMessagingService firebaseMessaging = new MyFirebaseMessagingService();
+                                                    firebaseMessaging.sendMessageToTopic(regArray, notiTitle, notiDescription, documentId);
+                                                } else {
+                                                    Log.e("FCM", "Failed to get FCM token");
+                                                }
+                                            });
                                     }
                                  else {
                                     Log.e("Notification", "Topic name is null");
