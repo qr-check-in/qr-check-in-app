@@ -17,7 +17,9 @@ import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.firebase.firestore.DocumentSnapshot;
 
+import java.util.ArrayList;
 import java.util.Locale;
+import java.util.Objects;
 import java.util.function.Function;
 
 /**
@@ -26,17 +28,24 @@ import java.util.function.Function;
 public class AttendeeAdapter extends FirestoreRecyclerAdapter<Attendee, AttendeeAdapter.AttendeeViewHolder> {
     private EventAdapter.OnItemClickListener listener;
     private final Function<Integer, Boolean> viewTypeDeterminer;
+    private final String eventDocId;
 
     /**
      * Create a new RecyclerView adapter that listens to a Firestore Query.  See {@link
      * FirestoreRecyclerOptions} for configuration options.
      *
-     * @param options
-     * @param viewTypeDeterminer
+     * @param options               The FirestoreRecyclerOptions<Attendee> options for the query
+     *                                  that returns the desired attendees from Firestore
+     * @param viewTypeDeterminer    A lambda function that returns 0 if you want attendee signups
+     *                                  and returns 1 if you want attendee check-ins
      */
-    public AttendeeAdapter(@NonNull FirestoreRecyclerOptions<Attendee> options, Function<Integer, Boolean> viewTypeDeterminer) {
+    public AttendeeAdapter(@NonNull FirestoreRecyclerOptions<Attendee> options,
+                           Function<Integer, Boolean> viewTypeDeterminer,
+                           String eventDocId) {
         super(options);
         this.viewTypeDeterminer = viewTypeDeterminer;
+        this.eventDocId = eventDocId;
+
     }
 
     /**
@@ -69,9 +78,9 @@ public class AttendeeAdapter extends FirestoreRecyclerAdapter<Attendee, Attendee
     @Override
     protected void onBindViewHolder(@NonNull AttendeeAdapter.AttendeeViewHolder holder, int position, @NonNull Attendee model) {
         if (getItemViewType(position) == 0) {
-            ((AttendeeViewHolder) holder).bind(model);
+            ((AttendeeViewHolder) holder).bind(model, eventDocId);
         } else {
-            ((AttendeeCheckInViewHolder) holder).bind(model);
+            ((AttendeeCheckInViewHolder) holder).bind(model, eventDocId);
         }
 
     }
@@ -130,7 +139,7 @@ public class AttendeeAdapter extends FirestoreRecyclerAdapter<Attendee, Attendee
          *      onBindViewHolder()
          * @param model The Attendee class instance
          */
-        public void bind(Attendee model) {
+        public void bind(Attendee model, String eventDocId) {
             tvName.setText(model.getProfile().getName());
             if (model.getProfile().getProfilePicture() != null) {
                 ImageStorageManager storage = new ImageStorageManager(model.getProfile().getProfilePicture(), "/ProfilePictures");
@@ -154,9 +163,19 @@ public class AttendeeAdapter extends FirestoreRecyclerAdapter<Attendee, Attendee
          * @param model The Attendee class instance
          */
         @Override
-        public void bind(Attendee model) {
+        public void bind(Attendee model, String eventDocId) {
+            int checkInCount = 0;
+
+            // Count the number of times the attendee checked into this event
+            ArrayList<String> checkedInEvents = model.getAttendedEvents();
+            for (String event : checkedInEvents) {
+                if (Objects.equals(event, eventDocId)){
+                    checkInCount += 1;
+                }
+            }
+
             tvName.setText(model.getProfile().getName());
-            String checkInString = String.format(Locale.CANADA, "Checked in: %d", model.getAttendedEvents().size());
+            String checkInString = String.format(Locale.CANADA, "%d", checkInCount);
             tvCheckIns.setText(checkInString);
             if (model.getProfile().getProfilePicture() != null) {
                 ImageStorageManager storage = new ImageStorageManager(model.getProfile().getProfilePicture(), "/ProfilePictures");
