@@ -27,7 +27,10 @@ import com.google.firebase.messaging.FirebaseMessaging;
 import org.json.JSONArray;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 
 public class CreateNotification extends AppCompatActivity {
@@ -175,11 +178,23 @@ public class CreateNotification extends AppCompatActivity {
                 "YOUR_REGISTRATION_TOKEN_n"
         );
 
+        String[] registrationTokensArray = registrationTokens.toArray(new String[0]);
+
+
+
         // Subscribe the devices corresponding to the registration tokens to the topic.
-        TopicManagementResponse response = FirebaseMessaging.getInstance().subscribeToTopic(
-                registrationTokens, topic);
-        // See the TopicManagementResponse reference documentation for the contents of response.
-        System.out.println(response.getSuccessCount() + " tokens were subscribed successfully");
+        FirebaseMessaging.getInstance().subscribeToTopic(
+                        registrationTokensArray, topicName)
+                .addOnCompleteListener(task -> {
+                if (task.isSuccessful()) {
+                    TopicManagementResponse response = task.getResult();
+                    // Handle the success count
+                    System.out.println(response.getSuccessCount() + " tokens were subscribed successfully");
+                } else {
+                    // Handle the failure
+                    System.out.println("Failed to subscribe tokens to topic: " + task.getException().getMessage());
+                }
+            });
     }
 
     public void createAnnoucement(){
