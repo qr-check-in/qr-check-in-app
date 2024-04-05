@@ -9,7 +9,6 @@ import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.util.Log;
-import android.widget.RemoteViews;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -79,24 +78,14 @@ public class MyNotificationManager {
 
         Uri defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
 
-        // Create a custom layout for the expanded notification
-        RemoteViews remoteViews = new RemoteViews(mContext.getPackageName(), R.layout.notification_extendable_layout);
-
-        // Set content for the custom layout
-        remoteViews.setTextViewText(R.id.notificationTitleText, title);
-        remoteViews.setTextViewText(R.id.notificationDescriptionText, body);
-
-        // Build the notification with custom layout
         NotificationCompat.Builder builder = new NotificationCompat.Builder(mContext, channelId)
                 .setSmallIcon(R.drawable.app_icon_resize_24)
                 .setContentTitle(title)
                 .setContentText(body)
                 .setAutoCancel(true)
                 .setSound(defaultSoundUri)
-                .setContentIntent(pendingIntent)
-                .setCustomBigContentView(remoteViews); // Set custom layout for expanded notification
+                .setContentIntent(pendingIntent);
 
-        // Show the notification
         mManager.notify(id, builder.build());
     }
 
