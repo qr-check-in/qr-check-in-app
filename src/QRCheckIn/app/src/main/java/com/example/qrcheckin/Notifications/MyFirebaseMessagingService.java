@@ -130,6 +130,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         }
 
         Intent intent;
+        // if and eventID was passed then open the event page for respective to the id
         if (message.getData().containsKey("eventID")) {
             // Create an intent that will open the OrganizersEventPageActivity
             intent = new Intent(this, OrganizersEventPageActivity.class);
@@ -137,7 +138,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         }
         else {
-            // Create an intent that will open the main activity
+            // otherwise open the app and to home page MainActivity
             intent = new Intent(this, MainActivity.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         }

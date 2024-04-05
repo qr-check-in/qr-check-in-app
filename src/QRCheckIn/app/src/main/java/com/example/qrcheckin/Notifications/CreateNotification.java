@@ -167,6 +167,21 @@ public class CreateNotification extends AppCompatActivity {
         }
     }
 
+    public void subscribeUsersToTopic(){
+        // These registration tokens come from the client FCM SDKs.
+        List<String> registrationTokens = Arrays.asList(
+                "YOUR_REGISTRATION_TOKEN_1",
+                // ...
+                "YOUR_REGISTRATION_TOKEN_n"
+        );
+
+        // Subscribe the devices corresponding to the registration tokens to the topic.
+        TopicManagementResponse response = FirebaseMessaging.getInstance().subscribeToTopic(
+                registrationTokens, topic);
+        // See the TopicManagementResponse reference documentation for the contents of response.
+        System.out.println(response.getSuccessCount() + " tokens were subscribed successfully");
+    }
+
     public void createAnnoucement(){
         // Send notification to the topic
         // openai, 2024, chatgpt: how to connect the notificationmanager and messaging service to creating a notification
