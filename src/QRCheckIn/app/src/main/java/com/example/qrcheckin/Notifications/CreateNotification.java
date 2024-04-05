@@ -150,7 +150,7 @@ public class CreateNotification extends AppCompatActivity {
                                                     // Add the FCM token to the array
                                                     regArray.put(fcmToken);
                                                     // Send notification to the topic
-                                                    MyFirebaseMessagingService firebaseMessaging = new MyFirebaseMessagingService();
+                                                    MyNotificationManager firebaseMessaging = new MyNotificationManager(getApplicationContext());
                                                     firebaseMessaging.sendMessageToTopic(regArray, notiTitle, notiDescription, documentId);
                                                 } else {
                                                     Log.e("FCM", "Failed to get FCM token");
