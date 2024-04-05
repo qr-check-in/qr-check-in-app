@@ -8,7 +8,6 @@ import androidx.annotation.NonNull;
 
 import com.example.qrcheckin.Common.DatabaseManager;
 import com.example.qrcheckin.Common.ImageStorageManager;
-import com.example.qrcheckin.ClassObjects.Attendee;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;

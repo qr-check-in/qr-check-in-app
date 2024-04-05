@@ -16,7 +16,6 @@ import com.example.qrcheckin.Common.LinearLayoutManagerWrapper;
 import com.example.qrcheckin.Common.MainActivity;
 import com.example.qrcheckin.Attendee.ProfileActivity;
 import com.example.qrcheckin.R;
-import com.example.qrcheckin.ClassObjects.Event;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.android.material.button.MaterialButton;
 import com.google.firebase.firestore.DocumentSnapshot;

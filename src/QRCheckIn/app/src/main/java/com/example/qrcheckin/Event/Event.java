@@ -1,4 +1,4 @@
-package com.example.qrcheckin.ClassObjects;
+package com.example.qrcheckin.Event;
 
 import java.io.Serializable;
 import java.util.ArrayList;

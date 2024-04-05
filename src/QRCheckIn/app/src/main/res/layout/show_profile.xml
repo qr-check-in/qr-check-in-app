@@ -256,15 +256,16 @@
                                     tools:ignore="UseSwitchCompatOrMaterialXml"
                                     android:layout_marginStart="40dp"/>
                             </LinearLayout>
-
                         </LinearLayout>
-
-
                     </ScrollView>
-
                 </LinearLayout>
 
-
+                <Button
+                    android:id="@+id/userPreferencesBtn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="User Preferences"
+                    android:layout_gravity="center"/>
             </LinearLayout>
 
 

@@ -12,12 +12,11 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.qrcheckin.R;
-import com.example.qrcheckin.ClassObjects.Notification;
 
 import java.util.ArrayList;
 
 public class DialogRecyclerView extends Dialog {
-    private ArrayList<Notification> notifications;
+    private ArrayList<Notification> notifications = new ArrayList<>();
     private NotificationAdapter notificationsAdapter;
     private Context context;
 

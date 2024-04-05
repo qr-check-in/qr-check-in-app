@@ -19,6 +19,7 @@ import com.example.qrcheckin.Attendee.AttendeeDatabaseManager;
 import com.example.qrcheckin.ClassObjects.Attendee;
 import com.example.qrcheckin.Common.LinearLayoutManagerWrapper;
 import com.example.qrcheckin.R;
+import com.example.qrcheckin.ClassObjects.Attendee;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.OnFailureListener;

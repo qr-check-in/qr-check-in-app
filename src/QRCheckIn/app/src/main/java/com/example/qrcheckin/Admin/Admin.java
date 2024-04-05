@@ -1,5 +1,6 @@
-package com.example.qrcheckin.ClassObjects;
+package com.example.qrcheckin.Admin;
 
+import com.example.qrcheckin.Attendee.Attendee;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldValue;
@@ -12,7 +13,7 @@ import java.util.Map;
  * Admin class responsible for administrative actions such as viewing and deleting events, profiles, and images.
  */
 
-public class Admin extends Attendee{
+public class Admin extends Attendee {
     private final FirebaseFirestore db;
 
     /**

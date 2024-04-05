@@ -1,15 +1,10 @@
 package com.example.qrcheckin;
 
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import com.example.qrcheckin.Attendee.AttendeeDatabaseManager;
-import com.example.qrcheckin.Attendee.ProfileActivity;
-import com.example.qrcheckin.ClassObjects.Attendee;
-import com.example.qrcheckin.ClassObjects.Profile;
-import com.google.firebase.firestore.DocumentSnapshot;
+import com.example.qrcheckin.Attendee.Profile;
 import com.google.firebase.firestore.GeoPoint;
 
 public class ProfileTest {
