@@ -2,6 +2,7 @@ package com.example.qrcheckin;
 
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
+import static androidx.test.espresso.action.ViewActions.swipeDown;
 import static androidx.test.espresso.action.ViewActions.swipeUp;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.isChecked;
@@ -21,6 +22,7 @@ import androidx.test.filters.LargeTest;
 
 import com.example.qrcheckin.Attendee.ProfileActivity;
 
+import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -75,10 +77,10 @@ public class CreateAndUpdateProfile {
         }
 
         // Reopen the app
-        ActivityScenario<ProfileActivity> scenario = ActivityScenario.launch(ProfileActivity.class);
+        ActivityScenario.launch(ProfileActivity.class);
 
-//        // Scroll down to locate User name
-//        onView(withId(R.id.userInfoView)).perform(swipeDown());
+        // Scroll down to locate User name
+        onView(withId(R.id.userInfoView)).perform(swipeDown());
 
 
         // matching if the changes still appear correctly
