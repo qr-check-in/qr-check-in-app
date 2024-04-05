@@ -153,6 +153,11 @@ public class OrganizersEventPageActivity extends AppCompatActivity {
                         ImageStorageManager storageQr = new ImageStorageManager(promoQRCode, "/QRCodes");
                         storageQr.displayImage(ivEventPromoQr);
                     }
+                    else{
+                        // Set TextView to inform user that this event does not have a promotional QR code
+                        TextView promoTextView = findViewById(R.id.promo_qr_description);
+                        promoTextView.setText(R.string.no_promo_text);
+                    }
                     // Check if current event is organized by this user
                     if (Objects.equals(event.getOrganizer(), fcmToken)) {
                         openBottomSheetBtn.setVisibility(View.VISIBLE);
