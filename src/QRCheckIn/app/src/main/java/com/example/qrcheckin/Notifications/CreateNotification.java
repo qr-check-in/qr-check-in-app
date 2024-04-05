@@ -126,50 +126,15 @@ public class CreateNotification extends AppCompatActivity {
                     Log.d("notification", String.format("storing Notification%s", newNotification.getTitle()));
                     String notiID = notiDb.storeNotification(newNotification);
 
+                    // if switch is checked = push notification
+                    // Push notification annoucement to users
+                    createAnnoucement();
+
+                    // else silent
+
+
                     // Add to eventdb
                     eventDb.addToArrayField("notifications", notiID);
-
-                    // Send notification to the topic
-                    // openai, 2024, chatgpt: how to connect the notificationmanager and messaging service to creating a notification
-                    eventDb.getDocRef().get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-                        @Override
-                        public void onSuccess(DocumentSnapshot documentSnapshot) {
-                            if (documentSnapshot.exists()) {
-                                topicName = documentSnapshot.getString("topicName");
-                                if (topicName != null) {
-                                    // Send notification to the topic
-//                                    MyFirebaseMessagingService firebaseMessaging = new MyFirebaseMessagingService();
-//                                    firebaseMessaging.sendNotificationToTopic(topicName, notiTitle, notiDescription);
-                                    JSONArray regArray = new JSONArray();
-
-                                    // Retrieve the FCM token of the current device
-                                    FirebaseMessaging.getInstance().getToken()
-                                            .addOnCompleteListener(task -> {
-                                                if (task.isSuccessful() && task.getResult() != null) {
-                                                    String fcmToken = task.getResult();
-                                                    // Add the FCM token to the array
-                                                    regArray.put(fcmToken);
-                                                    // Send notification to the topic
-                                                    MyNotificationManager firebaseMessaging = new MyNotificationManager(getApplicationContext());
-                                                    firebaseMessaging.sendMessageToTopic(regArray, notiTitle, notiDescription, documentId);
-                                                } else {
-                                                    Log.e("FCM", "Failed to get FCM token");
-                                                }
-                                            });
-                                    }
-                                 else {
-                                    Log.e("Notification", "Topic name is null");
-                                }
-                            } else {
-                                Log.e("Notification", "Document does not exist");
-                            }
-                        }
-                    }).addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception e) {
-                            Log.e("Notification", "Error fetching document", e);
-                        }
-                    });
 
                     // Once the notification is created, navigate back to OrganizersEventPageActivity
                     Intent intent = new Intent(getApplicationContext(), OrganizersEventPageActivity.class);
@@ -200,5 +165,46 @@ public class CreateNotification extends AppCompatActivity {
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    public void createAnnoucement(){
+        // Send notification to the topic
+        // openai, 2024, chatgpt: how to connect the notificationmanager and messaging service to creating a notification
+        eventDb.getDocRef().get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                if (documentSnapshot.exists()) {
+                    topicName = documentSnapshot.getString("topicName");
+                    if (topicName != null) {
+                        // Send notification to the topic
+                        JSONArray regArray = new JSONArray();
+
+                        // Retrieve the FCM token of the current device
+                        FirebaseMessaging.getInstance().getToken()
+                                .addOnCompleteListener(task -> {
+                                    if (task.isSuccessful() && task.getResult() != null) {
+                                        String fcmToken = task.getResult();
+                                        // Send notification to the topic
+                                        MyNotificationManager firebaseMessaging = new MyNotificationManager(getApplicationContext());
+                                        firebaseMessaging.sendMessageToTopic(regArray, topicName, notiTitle, notiDescription, documentId);
+                                    } else {
+                                        Log.e("FCM", "Failed to get FCM token");
+                                    }
+                                });
+                    }
+                    else {
+                        Log.e("Notification", "Topic name is null");
+                    }
+                } else {
+                    Log.e("Notification", "Document does not exist");
+                }
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Log.e("Notification", "Error fetching document", e);
+            }
+        });
+
     }
 }

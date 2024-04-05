@@ -9,6 +9,7 @@ import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.util.Log;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.core.app.NotificationCompat;
@@ -86,11 +87,21 @@ public class MyNotificationManager {
         mManager.notify(id, builder.build());
     }
 
+    // https://stackoverflow.com/questions/37990140/how-to-send-one-to-one-message-using-firebase-messaging?noredirect=1&lq=1, 2024, how to send push notifications
     public static final String FCM_MESSAGE_URL = "https://fcm.googleapis.com/fcm/send";
     OkHttpClient mClient = new OkHttpClient();
     public static final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
 
-    public void sendMessageToTopic(final JSONArray recipients, final String title, final String body, final String eventID) {
+    // https://stackoverflow.com/questions/37990140/how-to-send-one-to-one-message-using-firebase-messaging?noredirect=1&lq=1, 2024, how to send push notifications
+
+    /**
+     * Send a notification to the topic or user
+     * @param topic
+     * @param title
+     * @param body
+     * @param eventID
+     */
+    public void sendMessageToTopic(final JSONArray recipients, final String topic, final String title, final String body, final String eventID) {
         new AsyncTask<Void, Void, String>() {
             @Override
             protected String doInBackground(Void... params) {
@@ -104,8 +115,13 @@ public class MyNotificationManager {
                     data.put("eventID", eventID);
                     root.put("notification", notification);
                     root.put("data", data);
-                    root.put("registration_ids", recipients);
-//                    root.put("to", "/topics/" + topic);
+                    if (recipients == null || recipients.length() == 0) {
+                        // Send to topic
+                        root.put("to", "/topics/" + topic);
+                    } else {
+                        // Send to individual recipients
+                        root.put("registration_ids", recipients);
+                    }
 
                     String result = postToFCM(root.toString());
                     Log.d("MyFirebaseMessagingSystem", "Result: " + result);
@@ -115,19 +131,21 @@ public class MyNotificationManager {
                 }
                 return null;
             }
-
             @Override
             protected void onPostExecute(String result) {
                 if (result != null) {
                     Log.d("MyFirebaseMessagingSystem", "Message sent successfully to topic:: " + body);
+                    Toast.makeText(mContext, "Annoucement Posted", Toast.LENGTH_SHORT).show();
                 } else {
                     Log.d("MyFirebaseMessagingSystem", "Failed to send message to topic: " + body);
+                    Toast.makeText(mContext, "Failed to Post Annoucement", Toast.LENGTH_SHORT).show();
 
                 }
             }
         }.execute();
     }
 
+    // https://stackoverflow.com/questions/37990140/how-to-send-one-to-one-message-using-firebase-messaging?noredirect=1&lq=1, 2024, how to send push notifications
     public String postToFCM(String bodyString) throws IOException {
         RequestBody body = RequestBody.create(JSON, bodyString);
         okhttp3.Request request = new okhttp3.Request.Builder()
