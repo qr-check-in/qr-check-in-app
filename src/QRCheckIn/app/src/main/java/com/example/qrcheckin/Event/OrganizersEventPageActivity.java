@@ -174,6 +174,11 @@ public class OrganizersEventPageActivity extends AppCompatActivity {
                             showDialog();
                         });
                     }
+
+                    if (Objects.equals(event.getOrganizer(), fcmToken)) {
+
+                    }
+
                 } else {
                     Log.d("Firestore", String.format("No such document with id %s", documentId));
                 }

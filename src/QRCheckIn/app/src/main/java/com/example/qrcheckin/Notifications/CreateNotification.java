@@ -188,12 +188,11 @@ public class CreateNotification extends AppCompatActivity {
         }
     }
 
-
+    /**
+     * Server takes the data and sends the notification to attendees
+     * @param regArray list of FCM tokens of the participants
+     */
     public void createAnnoucement(JSONArray regArray){
-        // Send notification to the topic
-        // openai, 2024, chatgpt: how to connect the notificationmanager and messaging service to creating a notification
-//        JSONArray regArray = new JSONArray();
-
         MyNotificationManager firebaseMessaging = new MyNotificationManager(getApplicationContext());
         firebaseMessaging.sendMessageToClient(regArray, notiTitle, notiDescription, documentId);
     }
