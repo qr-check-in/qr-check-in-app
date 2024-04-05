@@ -3,5 +3,6 @@
     <item
         android:drawable="@drawable/qr2"
         android:width="50dp"
-        android:height="50dp" />
+        android:height="50dp"
+        />
 </layer-list>

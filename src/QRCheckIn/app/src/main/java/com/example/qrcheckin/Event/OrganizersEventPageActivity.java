@@ -290,10 +290,18 @@ public class OrganizersEventPageActivity extends AppCompatActivity {
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setContentView(R.layout.bottom_sheet_layout);
 
+        LinearLayout viewCheckInQRCode = dialog.findViewById(R.id.viewCheckInQRCode);
         LinearLayout editEventDetails = dialog.findViewById(R.id.editEventDetails);
         LinearLayout createEventNotification = dialog.findViewById(R.id.createEventNotification);
         LinearLayout viewEventSignups = dialog.findViewById(R.id.viewSignedUp);
         LinearLayout viewEventParticipants = dialog.findViewById(R.id.viewEventCheckin);
+
+        viewCheckInQRCode.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d("VIEW QR", "clicked view qrcode");
+            }
+        });
 
         editEventDetails.setOnClickListener(new View.OnClickListener() {
             @Override
