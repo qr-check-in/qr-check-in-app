@@ -13,6 +13,11 @@ public class Notification {
     // event id
     private String eventID;
 
+    /**
+     * Empty constructor for firestore purposes
+     */
+    public Notification(){}
+
     public Notification(String title, String message, String dateTime, String eventID) {
         this.title = title;
         this.message = message;
