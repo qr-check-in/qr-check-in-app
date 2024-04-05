@@ -132,14 +132,16 @@ public class OrganizersEventPageActivity extends AppCompatActivity {
                         ImageStorageManager storagePoster = new ImageStorageManager(event.getPoster(), "/EventPosters");
                         storagePoster.displayImage(ivEventPoster);
                     }
-                    // Set the ImageView for the Event's QR code
-                    // TODO: Display promo QR instead of check-in QR
-                    if (event.getCheckInQRCode() != null) {
-                        ImageStorageManager storageQr = new ImageStorageManager(event.getCheckInQRCode(), "/QRCodes");
+                    // Set the ImageView for the Event's promotional QR code
+                    if (event.getPromoQRCode() != null) {
+                        ImageStorageManager storageQr = new ImageStorageManager(event.getPromoQRCode(), "/PromoQRCodes");
                         storageQr.displayImage(ivEventPromoQr);
                     }
                     // Check if current event is organized by this user
                     if (Objects.equals(event.getOrganizer(), fcmToken)) {
+
+                        // TODO: Display check-in QR as well
+
                         openBottomSheetBtn.setVisibility(View.VISIBLE);
                         // Set open Bottom Sheet Listner
                         openBottomSheetBtn.setOnClickListener(v -> {
