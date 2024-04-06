@@ -1,8 +1,11 @@
 // Corrected EventTest.java
 package com.example.qrcheckin;
 
+import com.example.qrcheckin.Attendee.Attendee;
+import com.example.qrcheckin.Event.EventPoster;
+import com.example.qrcheckin.Event.QRCode;
+
 import org.junit.Test;
-import static org.junit.Assert.*;
 
 public class EventTest {
 
@@ -17,8 +20,6 @@ public class EventTest {
         String organizer = "OrganiserMockString";
         QRCode checkInQRCode = new QRCode(qrCodeValue, attendeeExample, qrCodeAdditionalInfo);
 
-        // Create a PromoQRCode object
-        PromoQRCode promoQRCode = new PromoQRCode();
 
         // Create an EventPoster object with required parameters
         String posterImage = "SamplePosterImage";

@@ -3,51 +3,53 @@ package com.example.qrcheckin;
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.action.ViewActions.swipeUp;
+import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.intent.Intents.intended;
-import static androidx.test.espresso.matcher.ViewMatchers.isAssignableFrom;
-import static androidx.test.espresso.matcher.ViewMatchers.isDescendantOfA;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
+import static androidx.test.espresso.matcher.ViewMatchers.withClassName;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
-import static org.hamcrest.CoreMatchers.allOf;
-import static org.junit.Assert.assertTrue;
+import static androidx.test.espresso.matcher.ViewMatchers.withText;
 
+import android.app.DatePickerDialog;
+import android.app.TimePickerDialog;
 import android.util.Log;
-import android.view.View;
 
-import androidx.recyclerview.widget.RecyclerView;
-import androidx.test.core.app.ActivityScenario;
-import androidx.test.espresso.NoMatchingViewException;
-import androidx.test.espresso.UiController;
-import androidx.test.espresso.ViewAction;
-import androidx.test.espresso.ViewInteraction;
 import androidx.test.espresso.action.ViewActions;
-//import androidx.test.espresso.contrib.RecyclerViewActions;
 import androidx.test.espresso.intent.Intents;
 import androidx.test.espresso.intent.matcher.IntentMatchers;
+import androidx.test.espresso.matcher.ViewMatchers;
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.filters.LargeTest;
-//import static androidx.test.espresso.contrib.RecyclerViewActions.actionOnItemAtPosition;
 
+import com.example.qrcheckin.Event.CreateAddEventDetails;
+import com.example.qrcheckin.Event.CreateGenerateEventQR;
+import com.example.qrcheckin.Event.EventListView;
 
 import org.hamcrest.Matcher;
+import org.hamcrest.Matchers;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import java.util.Random;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Locale;
 
 @RunWith(AndroidJUnit4.class)
 @LargeTest
 public class CreateEventAndCheck {
+
+    String title = "AAA Annual Conference";
+    String detail = "'AAA Annual Conference' is a premier event gathering professionals and experts from the field of Computer Science";
+    Calendar currentDate;
+    Calendar time;
+    String location = "Toronto, Canada";
+
     @Rule
     public ActivityScenarioRule<CreateAddEventDetails> scenario = new ActivityScenarioRule<CreateAddEventDetails>(CreateAddEventDetails.class);
-
-    private EventAdapter adapter;
-    private RecyclerView recyclerView;
-    public int rand = 2000 + (new Random().nextInt(1000));
 
 
     @Before
@@ -67,15 +69,40 @@ public class CreateEventAndCheck {
      * Create a Event and generate QR Code for check-in
      * Finally, check if the event exists
      */
+
+
     @Test
-    public void testButtonsAndTextboxes() {
-        String title = "Happy Birthday Dear";
+    public void testCreateEventInputFields() {
 
         // Test the text boxes
         onView(withId(R.id.eventNameText)).perform(ViewActions.typeText(title));
-        onView(withId(R.id.eventDateText)).perform(ViewActions.typeText("2024-3-20"));
-        onView(withId(R.id.eventTimeText)).perform(ViewActions.typeText("15:30"));
-        onView(withId(R.id.eventLocationText)).perform(ViewActions.typeText("Toronto, Canada"));
+
+        // Open the SelectDateFragment by clicking on a button
+        onView(withId(R.id.eventDateText)).perform(click());
+
+        // Wait for the DatePickerDialog to be displayed
+        onView(withClassName(Matchers.equalTo(DatePickerDialog.class.getName())));
+
+        // Get the current date
+        currentDate = Calendar.getInstance();
+
+        // Click on the OK button of the DatePickerDialog to select the current date
+        onView(withText("OK")).perform(click());
+
+        // Open the TimePickerFragment by clicking on a button
+        onView(withId(R.id.eventTimeText)).perform(click());
+
+        // Wait for the TimePickerDialog to be displayed
+        onView(withClassName(Matchers.equalTo(TimePickerDialog.class.getName())));
+
+        // Use the current time as the default values for the picker.
+        time = Calendar.getInstance();
+
+        // Click on the OK button of the TimePickerDialog to select the time two hours from now
+        onView(withText("OK")).perform(click());
+
+        // Type the location
+        onView(withId(R.id.eventLocationText)).perform(ViewActions.typeText(location));
 
         // Test the switch by enabling it
         onView(withId(R.id.checkInSwitch)).perform(click()).perform(ViewActions.closeSoftKeyboard());
@@ -90,14 +117,18 @@ public class CreateEventAndCheck {
         onView(withId(R.id.scrollView2)).perform(swipeUp());
 
         // Test event description
-        onView(withId(R.id.eventDescriptionText)).perform(ViewActions.typeText("Welcome! Bless me with best wishes."));
-
+        onView(withId(R.id.eventDescriptionText)).perform(ViewActions.typeText(detail));
 
         // Perform action that triggers the new activity
         onView(withId(R.id.nextButton)).perform(click());
 
-        // A random delay (So, that it do too fast)
-//        Thread.sleep(rand);
+    }
+
+    @Test
+    public void testGenerateQrCode() {
+
+        // First run this test to get event details
+        testCreateEventInputFields();
 
         // Check that the intended activity is started
         intended(IntentMatchers.hasComponent(CreateGenerateEventQR.class.getName()));
@@ -108,62 +139,44 @@ public class CreateEventAndCheck {
         // perform click on finishButton to create event
         onView(withId(R.id.finishButton)).perform(click());
 
-        // A random delay (So, that it do too fast)
-//        Thread.sleep(rand);
+    }
 
+    @Test
+    public void testSearchEventInList() {
+
+        // First run this test to get better setup;
+        testGenerateQrCode();
 
         // Now check in the events page if the created event exists or not
 
-        // move to EventListView using intend
+        // move to EventListView using intent
         intended(IntentMatchers.hasComponent(EventListView.class.getName()));
 
-        // click on My Events to see events created by user (YOU)
-        ViewInteraction myEventsView = onView(allOf(withId(R.id.myEventsButton), isDescendantOfA(withId(R.id.eventsTabbar))));
-        myEventsView.perform(click());
+        // press myEventsButton to see events created by user
+        onView(ViewMatchers.withId(R.id.eventsTabbar)).check(matches(isDisplayed())).perform(click());
 
-        // Delay to ensure the view is loaded
-//        Thread.sleep(1000);
+        onView(ViewMatchers.withId(R.id.myEventsButton))
+                .check(matches(isDisplayed())).perform(click());
 
-        // Find the position of the event with the name containing "Happy"
-        int position = findEventPosition(title);
+        // Click on the event with text stored in title
+        onView(withText(title)).perform(click());
 
-        // Perform action on the item at the obtained position
-        Log.d("Position", "event position: " + position);
-        assertTrue("Event with title containing '" + title + "' not found.", position != -1);
+        // match details on poster with input details while creating event
 
-        // Perform action on the item at the obtained position
-        Log.d("Position", "event position: " + position);
+        // Create a SimpleDateFormat object with the desired format
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-M-d", Locale.getDefault());
 
-        // Scroll to and click on the event
-//        onView(withId(R.id.event_recycler_view)).perform(actionOnItemAtPosition(position, click()));
+        // Format the currentDate using the SimpleDateFormat object
+        String formattedDate = dateFormat.format(currentDate.getTime());
 
+        // Match event date with the converted string
+        onView(withId(R.id.text_event_date)).check(matches(withText(formattedDate)));
+
+        // Match event location
+        onView(withId(R.id.text_event_location)).check(matches(withText(location)));
+
+        // Match event description
+        onView(withId(R.id.text_event_description)).check(matches(withText(detail)));
 
     }
-
-
-    private int findEventPosition(String title) {
-        ActivityScenario<EventListView> scenario = ActivityScenario.launch(EventListView.class);
-        int[] position = {-1}; // Using an array to store the position since it needs to be final or effectively final in the lambda expression
-        scenario.onActivity(activity -> {
-            RecyclerView recyclerView = activity.findViewById(R.id.event_recycler_view);
-            if (recyclerView != null) {
-                RecyclerView.Adapter adapter = recyclerView.getAdapter();
-                if (adapter instanceof EventAdapter) {
-                    EventAdapter eventAdapter = (EventAdapter) adapter;
-                    Log.d("EventAdapter", "Item Count: " + eventAdapter.getItemCount());
-                    for (int i = 0; i < eventAdapter.getItemCount(); i++) {
-                        Event event = eventAdapter.getItem(i);
-                        Log.d("EventName", "EventName[" + i + "] : " + event.getEventName());
-                        if (event != null && event.getEventName().contains(title)) {
-                            position[0] = i;
-                            break;
-                        }
-                    }
-                }
-            }
-        });
-        scenario.close(); // Close the activity after performing the actions
-        return position[0];
-    }
-
 }

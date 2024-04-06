@@ -14,6 +14,27 @@
         android:layout_gravity="center_horizontal"
         android:textColor="@color/White"
         android:padding="15dp"/>
+
+    <LinearLayout
+        android:id="@+id/viewCheckInQRCode"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="5dp">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_gravity="center_horizontal"
+            android:drawableLeft="@drawable/qrresize"
+            android:drawablePadding="15dp"
+            android:drawableTint="@color/Black"
+            android:paddingStart="20dp"
+            android:paddingBottom="10dp"
+            android:text="View Check-in QR Code"
+            android:textColor="@color/White"
+            android:textSize="20dp" />
+    </LinearLayout>
     
     <LinearLayout
         android:id="@+id/editEventDetails"

@@ -1,11 +1,16 @@
 plugins {
     id("com.android.application")
     id("com.google.gms.google-services")
+    id("com.google.android.libraries.mapsplatform.secrets-gradle-plugin")
 }
 
 android {
     namespace = "com.example.qrcheckin"
     compileSdk = 34
+
+    tasks.withType<Test>{
+        useJUnitPlatform()
+    }
 
     defaultConfig {
         applicationId = "com.example.qrcheckin"
@@ -58,6 +63,7 @@ dependencies {
     implementation("androidx.navigation:navigation-fragment:2.6.0")
     implementation("androidx.navigation:navigation-ui:2.6.0")
     implementation("com.google.android.gms:play-services-location:21.2.0")
+    implementation("com.google.android.gms:play-services-maps:18.2.0")
 
 
     implementation("com.github.bumptech.glide:glide:4.12.0")
@@ -99,5 +105,8 @@ dependencies {
     // Glide
     implementation ("com.github.bumptech.glide:glide:4.12.0")
     annotationProcessor ("com.github.bumptech.glide:compiler:4.12.0")
+
+    // Notifications
+    implementation ("com.android.volley:volley:1.2.0")
 
 }

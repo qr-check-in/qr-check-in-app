@@ -12,7 +12,7 @@
         android:layout_height="wrap_content">
 
         <ImageButton
-            android:id="@+id/notificationIcon"
+            android:id="@+id/notificationIconBtn"
             android:layout_width="wrap_content"
             android:layout_height="50dp"
             android:background="@color/zxing_transparent"
@@ -26,18 +26,27 @@
         <!-- Centered Title -->
         <TextView
             android:id="@+id/mainHeader"
-            android:layout_width="wrap_content"
+            android:layout_width="300dp"
             android:layout_height="wrap_content"
             android:text="Centered Title"
             android:textColor="@android:color/black"
             android:textSize="28dp"
             android:textStyle="bold"
+            android:gravity="center"
+
+            android:ellipsize="marquee"
+            android:fadingEdge="horizontal"
+            android:marqueeRepeatLimit="marquee_forever"
+            android:scrollHorizontally="true"
+            android:singleLine="true"
+            android:layout_alignParentRight="true"
+
             android:layout_centerHorizontal="true"
             android:layout_centerVertical="true"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/notificationIcon">
+            app:layout_constraintEnd_toStartOf="@+id/notificationIconBtn">
         </TextView>
 
     </androidx.constraintlayout.widget.ConstraintLayout>

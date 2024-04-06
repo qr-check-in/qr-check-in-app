@@ -2,10 +2,45 @@
 <project version="4">
   <component name="deploymentTargetDropDown">
     <value>
+      <entry key="CreateEventAndCheck">
+        <State />
+      </entry>
       <entry key="ProfileFragmentTest">
         <State />
       </entry>
       <entry key="app">
+        <State>
+          <runningDeviceTargetsSelectedWithDialog>
+            <Target>
+              <type value="RUNNING_DEVICE_TARGET" />
+              <deviceKey>
+                <Key>
+                  <type value="VIRTUAL_DEVICE_PATH" />
+                  <value value="C:\Users\Daniel Thai\.android\avd\Pixel_6_API_34.avd" />
+                </Key>
+              </deviceKey>
+            </Target>
+          </runningDeviceTargetsSelectedWithDialog>
+          <targetsSelectedWithDialog>
+            <Target>
+              <type value="QUICK_BOOT_TARGET" />
+              <deviceKey>
+                <Key>
+                  <type value="VIRTUAL_DEVICE_PATH" />
+                  <value value="C:\Users\Daniel Thai\.android\avd\Pixel_6_API_34.avd" />
+                </Key>
+              </deviceKey>
+            </Target>
+          </targetsSelectedWithDialog>
+        </State>
+      </entry>
+      <entry key="testButtonsAndTextboxes()">
+        <State />
+      </entry>
+      <entry key="testButtonsAndTextboxes() (1)">
+        <State />
+      </entry>
+      <entry key="testSearchEventInList()">
         <State />
       </entry>
     </value>

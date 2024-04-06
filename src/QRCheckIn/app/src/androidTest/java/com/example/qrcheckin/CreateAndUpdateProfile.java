@@ -12,16 +12,13 @@ import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.CoreMatchers.allOf;
 
-import android.content.Intent;
-
 import androidx.test.core.app.ActivityScenario;
-import androidx.test.espresso.ViewInteraction;
 import androidx.test.espresso.action.ViewActions;
-import androidx.test.espresso.matcher.RootMatchers;
-import androidx.test.espresso.matcher.ViewMatchers;
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.filters.LargeTest;
+
+import com.example.qrcheckin.Attendee.ProfileActivity;
 
 import org.junit.Rule;
 import org.junit.Test;
@@ -84,10 +81,5 @@ public class CreateAndUpdateProfile {
         // Click on the "Choose from Gallery" option
         onView(withId(R.id.gallery)).perform(click());
 
-        // Check if the intent to pick an image from the gallery is sent
-//        intended(allOf(
-//                hasAction(Intent.ACTION_GET_CONTENT),
-//                hasType("image/*")
-//        ));
     }
 }

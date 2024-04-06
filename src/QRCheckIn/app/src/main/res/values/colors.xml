@@ -1,18 +1,43 @@
 <?xml version="1.0" encoding="utf-8"?>  <!--https://stackoverflow.com/questions/3769762/web-colors-in-an-android-color-xml-resource-file, .xml file of colors-->
 <resources>
-    <color name="Surface">#F5FCFC</color>
+    <!-- Surface colors -->
+    <color name="Surface">#14142b</color>
 
-    <color name="Primary">#7EBFBF</color>
-    <color name="PrimaryContainer">#A0D0D0</color>
-    <color name="OnPrimary">#022424</color>
+    <!-- For text/icons on surface -->
+    <color name="OnSurface">#EEEEEE</color> <!-- A darker shade for high emphasis -->
+    <color name="OnSurfaceVariant">#5F5353</color> <!-- A muted shade for lower emphasis -->
 
-    <color name="Secondary">#ACDCDC</color>
-    <color name="SecondaryContainer">#D0EBEB</color>
-    <color name="OnSecondary">#054444</color>
+    <!-- For the surface containers -->
 
-    <color name="Tertiary">#8BDC8B</color>
-    <color name="TertiaryContainer">#B2E8B2</color>
-    <color name="OnTertiary">#003f00</color>
+    <color name="SurfaceContainerLow">#F5E9E9</color> <!-- Low-emphasis container color -->
+    <color name="SurfaceContainer">#24263a</color> <!-- Default container for toolbars -->
+    <color name="SurfaceContainerHigh">#343755</color> <!-- High-emphasis container color -->
+    <color name="SurfaceContainerHighest">#AF9A9A</color> <!-- Highest-emphasis container color, still soft -->
+
+    <!-- Colors for error messages -->
+    <color name="Error">#B3261E</color> <!-- Error color, should be noticeable -->
+    <color name="ErrorContainer">#F9DEDC</color> <!-- Error container -->
+    <color name="OnError">#FFFFFF</color> <!-- For text/icons on error -->
+
+    <!-- Outline and shadow colors for elevation and borders -->
+    <color name="Outline">#BF7E7E</color> <!-- Can be used for outlines -->
+    <color name="Shadow">#000000</color> <!-- For drop shadows, if needed -->
+
+    <!-- Use primary roles for the most prominent components across the UI,
+        such as the FAB, high-emphasis buttons, and active states. -->
+    <color name="Primary">#531516</color>           <!-- High-emphasis fills, texts, and icons against surface -->
+    <color name="PrimaryContainer">#CB8282</color>  <!-- Standout fill color against surface, for key components like FAB -->
+    <color name="OnPrimary">#EEEEEE</color>         <!-- Text and icons against primary container -->
+
+    <!-- Use secondary roles for less prominent components in the UI such as filter chips. -->
+    <color name="Secondary">#935F5F</color>
+    <color name="SecondaryContainer">#E7C0C0</color>
+    <color name="OnSecondary">#EEEEEE</color>
+
+    <color name="Tertiary">#828DCB</color>
+    <color name="TertiaryContainer">#CCD1ED</color>
+    <color name="OnTertiary">#EEEEEE</color>
+    <color name="OnTertiaryContainer">#3F0000</color>
     
     <color name="White">#FFFFFF</color>
     <color name="Ivory">#FFFFF0</color>

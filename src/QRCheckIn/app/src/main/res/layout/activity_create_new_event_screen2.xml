@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".CreateAddEventDetails">
+    android:id="@+id/genertaeQrCodeActivity"
+    tools:context=".Event.CreateAddEventDetails">
 
     <include
         android:id="@+id/addEventToolBar2"
@@ -93,7 +94,7 @@
                 android:id="@+id/ivPromoQr"
                 android:layout_width="200dp"
                 android:layout_height="200dp"
-                android:scaleType="fitXY"></ImageView>
+                android:scaleType="fitXY" />
 
         </androidx.cardview.widget.CardView>
 
@@ -105,7 +106,7 @@
             android:layout_weight="1">
 
             <Button
-                android:id="@+id/image_event_promo_qr"
+                android:id="@+id/btnGenPromoQR"
                 android:layout_width="185dp"
                 android:layout_height="wrap_content"
                 android:backgroundTint="@color/NeonBlue"

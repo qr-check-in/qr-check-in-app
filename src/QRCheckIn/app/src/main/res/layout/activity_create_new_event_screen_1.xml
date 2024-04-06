@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".CreateAddEventDetails">
+    tools:context=".Event.CreateAddEventDetails">
 
 
     <include
@@ -104,6 +104,8 @@
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_vertical"
                             android:layout_weight="5"
+                            android:textColorHint="@color/White"
+                            android:textColor="@color/White"
                             android:gravity="center_horizontal"
                             android:hint="Event Date"
                             android:inputType="date" />
@@ -135,7 +137,9 @@
                             android:layout_weight="5"
                             android:gravity="center_horizontal"
                             android:hint="Event Time"
-                            android:inputType="time" />
+                            android:inputType="time"
+                            android:textColorHint="@color/White"
+                            android:textColor="@color/White"/>
                     </LinearLayout>
                 </LinearLayout>
 
@@ -157,7 +161,7 @@
                         android:hint="Event Location"
                         tools:layout_editor_absoluteX="30dp"
                         tools:layout_editor_absoluteY="78dp"
-                        android:drawableLeft="@drawable/locationresize"
+                        android:drawableLeft="@drawable/location_resize"
                         android:drawablePadding="5dp"
                         android:paddingStart="30dp">
                     </com.google.android.material.textfield.TextInputEditText>
