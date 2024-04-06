@@ -9,6 +9,7 @@ import android.graphics.Color;
 import android.nfc.Tag;
 import android.os.AsyncTask;
 import android.os.Build;
+import android.text.TextUtils;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -131,7 +132,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
         Intent intent;
         // if and eventID was passed then open the event page for respective to the id
-        if (message.getData().containsKey("eventID")) {
+        if (message.getData().containsKey("eventID") && !TextUtils.isEmpty(eventId)) {
             // Create an intent that will open the OrganizersEventPageActivity
             intent = new Intent(this, OrganizersEventPageActivity.class);
             intent.putExtra("DOCUMENT_ID", eventId); // Pass the eventId to the intent

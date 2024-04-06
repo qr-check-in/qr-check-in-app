@@ -417,7 +417,6 @@ public class OrganizersEventPageActivity extends AppCompatActivity {
             public void onClick(View v) {
                 dialog.dismiss();
                 showDeleteConfirmationDialog();
-
             }
         });
 
@@ -428,13 +427,15 @@ public class OrganizersEventPageActivity extends AppCompatActivity {
         dialog.getWindow().setGravity(Gravity.BOTTOM);
     }
 
+    // openai, 2024, chatgpt: how to create an alert dialog for delete
     private void showDeleteConfirmationDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setMessage("Are you sure you want to delete this event?");
         builder.setPositiveButton("Delete", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-                // User clicked the Delete button
+                // User clicked the Delete
+                // Alert those who have signed up for the event
 //                MyNotificationManager firebaseMessaging = new MyNotificationManager(getApplicationContext());
 //                JSONArray regArray = new JSONArray(get);
 //                firebaseMessaging.sendMessageToClient(, "Event Shutdown", "An event you have signed up for has been shut down", "");
@@ -452,6 +453,9 @@ public class OrganizersEventPageActivity extends AppCompatActivity {
         dialog.show();
     }
 
+    /**
+     * Delete event from firebase
+     */
     private void deleteEvent() {
         // Delete the document
         // openai, 2024, chatgpt: how to delete from doc
