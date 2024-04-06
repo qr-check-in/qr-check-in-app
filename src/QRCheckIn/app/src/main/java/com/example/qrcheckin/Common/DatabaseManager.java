@@ -10,10 +10,10 @@ import com.google.firebase.firestore.FirebaseFirestore;
  */
 
 public abstract class DatabaseManager {
-    private final FirebaseFirestore db;
-    private final CollectionReference collectionRef;
-    private String documentID;
-    private DocumentReference docRef;
+    protected final FirebaseFirestore db;
+    protected final CollectionReference collectionRef;
+    protected String documentID;
+    protected DocumentReference docRef;
 
 
     /**

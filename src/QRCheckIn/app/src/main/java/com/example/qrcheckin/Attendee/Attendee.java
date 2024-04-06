@@ -3,12 +3,13 @@ package com.example.qrcheckin.Attendee;
 import com.google.firebase.firestore.GeoPoint;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  * A class that defines an app user as an Attendee
  */
 public class Attendee {
-    private ArrayList<String> attendedEvents;
+    private HashMap<String, Integer> attendedEvents;
     private ArrayList<String> signupEvents;
     private Profile profile;
     private GeoPoint location;
@@ -18,16 +19,17 @@ public class Attendee {
      * Constructs a new Attendee
      */
     public Attendee(){
-        this.attendedEvents = new ArrayList<String>();
+        this.attendedEvents = new HashMap<>();
         this.signupEvents = new ArrayList<String>();
         this.profile = new Profile();
     }
 
     /**
      * Returns a list of Events the Attendee has checked-in to
+     *
      * @return EventList of attended Events
      */
-    public ArrayList<String> getAttendedEvents() {
+    public HashMap<String, Integer> getAttendedEvents() {
         return attendedEvents;
     }
 
