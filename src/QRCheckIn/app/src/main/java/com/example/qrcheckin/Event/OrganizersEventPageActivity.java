@@ -2,9 +2,11 @@ package com.example.qrcheckin.Event;
 
 import static android.content.ContentValues.TAG;
 
+import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.ContentResolver;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
@@ -31,6 +33,7 @@ import androidx.appcompat.widget.Toolbar;
 
 import com.example.qrcheckin.Attendee.AttendeeDatabaseManager;
 import com.example.qrcheckin.Attendee.ProfileActivity;
+import com.example.qrcheckin.Notifications.MyNotificationManager;
 import com.example.qrcheckin.Notifications.Notification;
 import com.example.qrcheckin.Common.ImageStorageManager;
 import com.example.qrcheckin.Common.MainActivity;
@@ -44,6 +47,8 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestoreException;
+
+import org.json.JSONArray;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -411,24 +416,8 @@ public class OrganizersEventPageActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 dialog.dismiss();
+                showDeleteConfirmationDialog();
 
-                // Delete the document
-                eventDb.getDocRef().delete()
-                        .addOnSuccessListener(new OnSuccessListener<Void>() {
-                            @Override
-                            public void onSuccess(Void aVoid) {
-                                Log.d(TAG, "DocumentSnapshot successfully deleted!");
-                                Toast.makeText(getApplicationContext(),"Event Deleted",Toast.LENGTH_SHORT).show();
-                            }
-                        })
-                        .addOnFailureListener(new OnFailureListener() {
-                            @Override
-                            public void onFailure(@NonNull Exception e) {
-                                Log.w(TAG, "Error deleting document", e);
-                                // Handle any errors, such as displaying an error message to the user
-                            }
-                        });
-                finish();
             }
         });
 
@@ -437,6 +426,51 @@ public class OrganizersEventPageActivity extends AppCompatActivity {
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
         dialog.getWindow().setGravity(Gravity.BOTTOM);
+    }
+
+    private void showDeleteConfirmationDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage("Are you sure you want to delete this event?");
+        builder.setPositiveButton("Delete", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                // User clicked the Delete button
+//                MyNotificationManager firebaseMessaging = new MyNotificationManager(getApplicationContext());
+//                JSONArray regArray = new JSONArray(get);
+//                firebaseMessaging.sendMessageToClient(, "Event Shutdown", "An event you have signed up for has been shut down", "");
+                deleteEvent();
+            }
+        });
+        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                // User clicked the Cancel button, so dismiss the dialog
+                dialogInterface.dismiss();
+            }
+        });
+        AlertDialog dialog = builder.create();
+        dialog.show();
+    }
+
+    private void deleteEvent() {
+        // Delete the document
+        // openai, 2024, chatgpt: how to delete from doc
+        eventDb.getDocRef().delete()
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.d(TAG, "DocumentSnapshot successfully deleted!");
+                        Toast.makeText(getApplicationContext(),"Event Deleted",Toast.LENGTH_SHORT).show();
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.w(TAG, "Error deleting document", e);
+                        // Handle any errors, such as displaying an error message to the user
+                    }
+                });
+        finish();
     }
 
     /**
