@@ -1,8 +1,10 @@
+
 package com.example.qrcheckin.Event;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.FileProvider;
 
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
@@ -19,6 +21,8 @@ import com.example.qrcheckin.R;
 
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.IOException;
+import java.util.Objects;
 
 public class QrCodeImageView extends AppCompatActivity {
 
@@ -31,7 +35,10 @@ public class QrCodeImageView extends AppCompatActivity {
 
     ImageView qrCodeImage;
     ImageButton shareImage;
-    String eventText;
+    static String eventText;
+    String eventName;
+    String eventDate;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,14 +58,18 @@ public class QrCodeImageView extends AppCompatActivity {
         qrCodeImage = findViewById(R.id.qrCodeImageView);
         shareImage = findViewById(R.id.shareQR);
 
+
         // Retrieve the QR code bitmap from the Intent extras
         Bitmap qrCodeBitmap = getIntent().getParcelableExtra("QRCodeBitmap");
         // Retrieve event name and date
-        eventText = getIntent().getStringExtra("eventName&Date");
+        eventText = getIntent().getStringExtra("EventName&Date");
+        // Retrieve event name only
+        eventName = getIntent().getStringExtra("EventName");
+        // Retrieve event date only
+        eventDate = getIntent().getStringExtra("EventDate");
 
         // Display the QR code bitmap in an ImageView
         qrCodeImage.setImageBitmap(qrCodeBitmap);
-
 
 
         shareImage.setOnClickListener(new View.OnClickListener() {
@@ -66,7 +77,7 @@ public class QrCodeImageView extends AppCompatActivity {
             public void onClick(View v) {
                 BitmapDrawable bitmapDrawable = (BitmapDrawable) qrCodeImage.getDrawable();
                 Bitmap bitmap = bitmapDrawable.getBitmap();
-                shareImageandText(bitmap);
+                shareImageAndText(bitmap);
             }
         });
 
@@ -103,35 +114,39 @@ public class QrCodeImageView extends AppCompatActivity {
         });
     }
 
-    private void shareImageandText(Bitmap bitmap) {
-        Uri uri = getImageToShare(bitmap);
+    private void shareImageAndText(Bitmap bitmap) {
 
         Intent intent = new Intent(Intent.ACTION_SEND);
+        intent.setType("qrCode/jpeg");
 
+        Uri uri = getImageToShare(bitmap, getApplicationContext());;
+        String textToShare = "Scan and Share QR Code to CheckIn for " + eventName;
+
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         intent.putExtra(Intent.EXTRA_STREAM, uri);
-        intent.putExtra(Intent.EXTRA_TEXT, eventText);
-        intent.putExtra(Intent.EXTRA_SUBJECT, "Scan and Share this QR Code to attend an event.");
-        intent.setType("qrCode/*");
+        intent.putExtra(Intent.EXTRA_TEXT, textToShare);
+        intent.putExtra(Intent.EXTRA_SUBJECT, "Attend " + eventName + " on " + eventDate + "." );
+
         startActivity(Intent.createChooser(intent, "Share via"));
 
     }
 
-    private Uri getImageToShare(Bitmap bitmap) {
-        File folder = new File (getCacheDir(), "images");
+    private static Uri getImageToShare(Bitmap bitmap, Context context) {
+        File folder = new File (context.getCacheDir(), "images");
         Uri uri = null;
 
         try{
             Log.d("folder", String.format("created: " + folder.mkdirs() ));
 
             folder.mkdirs();
-            File file = new File(folder, "qrCode.jpg");
+            File file = new File(folder, eventText);
             FileOutputStream fileOutputStream = new FileOutputStream(file);
 
             bitmap.compress(Bitmap.CompressFormat.JPEG,90, fileOutputStream);
             fileOutputStream.flush();
             fileOutputStream.close();
 
-            uri = FileProvider.getUriForFile(this, "com.example.qrcheckin", file);
+            uri = FileProvider.getUriForFile(Objects.requireNonNull(context.getApplicationContext()), "com.example.qrcheckin" + ".provider", file);
         }
         catch (Exception e){
             e.printStackTrace();

@@ -427,6 +427,8 @@ public class CreateGenerateEventQR extends AppCompatActivity {
             Intent activity = new Intent(getApplicationContext(), QrCodeImageView.class);
             activity.putExtra("QRCodeBitmap", bitmap);
             activity.putExtra("EventName&Date", inputEventName + "_" + inputEventDate);
+            activity.putExtra("EventName", inputEventName);
+            activity.putExtra("EventDate", inputEventDate);
             startActivity(activity);
         }
     }
