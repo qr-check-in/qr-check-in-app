@@ -59,7 +59,7 @@ public class QRCodeScan extends AppCompatActivity {
     SharedPreferences prefs;
     private AttendeeDatabaseManager dbManager;
     private FirebaseFirestore db;
-    Boolean trackGeolocation;
+    Boolean trackGeolocation = false;
 
 
     @Override
@@ -221,7 +221,6 @@ public class QRCodeScan extends AppCompatActivity {
                         Log.d("QueryError", "Error getting documents: ", task.getException());
                     }
                 });
-
             }
         } else {
             // QR code scanner wasn't the returning activity, so handle the return normally
@@ -231,27 +230,49 @@ public class QRCodeScan extends AppCompatActivity {
 
     private void getLastLocation() {
         if (ContextCompat.checkSelfPermission(QRCodeScan.this, android.Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED){
-            if (getUserGeolocationStatus()) {
-                fusedLocationProviderClient.getLastLocation().addOnSuccessListener(new OnSuccessListener<Location>() {
-                    @Override
-                    public void onSuccess(Location location) {
-                        if (location != null) {
-                            try {
-                                // Convert latitude and longitude to GeoPoint
-                                GeoPoint geoPoint = new GeoPoint(location.getLatitude(), location.getLongitude());
+            // Initialize Firestore
+            db = FirebaseFirestore.getInstance();
 
-                                // updates the Attendee's GeoPoint location in firestore
-                                dbManager.updateAttendeeLocation("location", geoPoint);
+            // Get the document reference for the user's profile
+            DocumentReference docRef = db.collection("Attendees").document(attendeeFcm);
 
-                            } catch (Exception e) {
-                                Log.e("getLastLocation", "Error getting last location", e);
-                            }
+            // Fetch the document
+            docRef.get().addOnCompleteListener(task -> {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+                    if (document.exists()) {
+                        // Get the value of the trackGeolocation field
+                        trackGeolocation = document.getBoolean("profile.trackGeolocation");
+                        if (trackGeolocation != null && trackGeolocation) {
+                            // If geolocation tracking is enabled, get the last location
+                            fusedLocationProviderClient.getLastLocation().addOnSuccessListener(new OnSuccessListener<Location>() {
+                                @Override
+                                public void onSuccess(Location location) {
+                                    if (location != null) {
+                                        try {
+                                            // Convert latitude and longitude to GeoPoint
+                                            GeoPoint geoPoint = new GeoPoint(location.getLatitude(), location.getLongitude());
+
+                                            // updates the Attendee's GeoPoint location in firestore
+                                            dbManager.updateAttendeeLocation("location", geoPoint);
+
+                                        } catch (Exception e) {
+                                            Log.e("getLastLocation", "Error getting last location", e);
+                                        }
+                                    }
+                                }
+                            });
                         }
+                    } else {
+                        Log.d("getLastLocation", "No such document");
+                        // Handle case where document does not exist
                     }
-                });
-            }
-        }
-        else{
+                } else {
+                    Log.d("getLastLocation", "get failed with ", task.getException());
+                    // Handle failure case
+                }
+            });
+        } else {
             askPermission();
         }
     }
@@ -289,31 +310,5 @@ public class QRCodeScan extends AppCompatActivity {
             return true;
         }
         return false;
-    }
-
-    // Method to retrieve the user's geolocation status from Firestore
-    private boolean getUserGeolocationStatus() {
-        // Initialize Firestore
-        db = FirebaseFirestore.getInstance();
-
-        // Get the document reference for the user's profile
-        DocumentReference docRef = db.collection("Attendees").document(attendeeFcm);
-
-        // Fetch the document
-        docRef.get().addOnCompleteListener(task -> {
-            if (task.isSuccessful()) {
-                DocumentSnapshot document = task.getResult();
-                if (document.exists()) {
-                    // Get the value of the trackGeolocation field
-                    trackGeolocation = document.getBoolean("profile.trackGeolocation");
-                }
-                else {
-                    Log.d("getUserGeolocationStatus", "No such document");
-                }
-            } else {
-                Log.d("getUserGeolocationStatus", "get failed with ", task.getException());
-            }
-        });
-        return trackGeolocation;
     }
 }

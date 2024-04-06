@@ -64,6 +64,7 @@ dependencies {
     implementation("androidx.navigation:navigation-ui:2.6.0")
     implementation("com.google.android.gms:play-services-location:21.2.0")
     implementation("com.google.android.gms:play-services-maps:18.2.0")
+    implementation("androidx.test.uiautomator:uiautomator:2.3.0")
 
 
     testImplementation ("org.junit.jupiter:junit-jupiter-api:5.0.1")
@@ -102,5 +103,7 @@ dependencies {
     // Glide
     implementation ("com.github.bumptech.glide:glide:4.12.0")
     annotationProcessor ("com.github.bumptech.glide:compiler:4.12.0")
+    androidTestImplementation ("androidx.test.uiautomator:uiautomator:2.2.0")
+
 
 }

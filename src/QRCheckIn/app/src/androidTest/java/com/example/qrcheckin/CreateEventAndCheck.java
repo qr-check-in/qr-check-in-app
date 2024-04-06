@@ -43,8 +43,8 @@ import java.util.Locale;
 @LargeTest
 public class CreateEventAndCheck {
 
-    String title = "AAA Annual Conference";
-    String detail = "'AAA Annual Conference' is a premier event gathering professionals and experts from the field of Computer Science";
+    String title = "ZZZ+ Annual Conference";
+    String detail = "'ZZZ+ Annual Conference' is a premier event gathering professionals and experts from the field of Computer Science";
     Calendar currentDate;
     Calendar time;
     String location = "Toronto, Canada";
