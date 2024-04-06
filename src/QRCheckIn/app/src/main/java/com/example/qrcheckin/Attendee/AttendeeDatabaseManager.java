@@ -13,6 +13,7 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.GeoPoint;
 
 /**
@@ -210,6 +211,28 @@ public class AttendeeDatabaseManager extends DatabaseManager {
                 Log.w("Firestore", "error updating doc",e);
             }
         });
+    }
+
+    /**
+     * Increments the check-in count for an attendee in a map field.
+     * @param fieldName The name of the map field ("attendedEvents")
+     * @param eventId The ID of the event to increment the check-in count for.
+     */
+    public void incrementCheckInCount(String fieldName, String eventId) {
+        // Use FieldValue.increment to atomically increment the check-in count
+        docRef.update(fieldName + "." + eventId, FieldValue.increment(1))
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.d("Firestore", "docsnapshot checkIns updated");
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.w("Firestore", "error updating doc",e);
+                    }
+                });
     }
 
 
