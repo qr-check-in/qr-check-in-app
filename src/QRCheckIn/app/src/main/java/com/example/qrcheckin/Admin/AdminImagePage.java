@@ -1,69 +1,50 @@
-package com.example.qrcheckin;
+package com.example.qrcheckin.Admin;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.qrcheckin.Common.Image;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
-public class AdminActivity extends AppCompatActivity {
+import com.example.qrcheckin.Attendee.ProfileActivity;
+import com.example.qrcheckin.Common.ImageStorageManager;
+import com.example.qrcheckin.Common.MainActivity;
+import com.example.qrcheckin.Event.CreateAddEventDetails;
+import com.example.qrcheckin.Event.EventListView;
+import com.example.qrcheckin.R;
 
-    Button eventListButton;
-    Button profileListButton;
-    Admin admin;
+
+public class AdminImagePage extends AppCompatActivity {
+    ImageView imageView;
+    String imageUriString, folderName;
     ImageButton qrButton;
     ImageButton eventButton;
     ImageButton addEventButton;
     ImageButton profileButton;
-    Button imageListButton;
-    /**
-     * Sets up the AdminActivity's user interface and event listeners.
-     * This method initializes the activity, including toolbar setup, button initialization,
-     * and configuration of onClickListeners for navigating to other activities within the app.
-     *
-     * @param savedInstanceState contains the most recent data if re-initialized after shutdown; otherwise null.
-     */
+
+    Admin admin;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.admin_main);
-        admin = new Admin();
-        eventListButton = findViewById(R.id.btn_admin_event);
-        profileListButton = findViewById(R.id.profile_admin_button);
-        imageListButton = findViewById(R.id.image_admin_button);
+        setContentView(R.layout.admin_image_activity);
         Toolbar toolbar = findViewById(R.id.dashboard);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
         TextView header = findViewById(R.id.mainHeader);
-        header.setText("DASHBOARD");
+        header.setText("Images");
+        imageView = findViewById(R.id.imageView);
+        imageUriString = getIntent().getStringExtra("ImageUri");
+        folderName = getIntent().getStringExtra("FolderName");
         qrButton = findViewById(R.id.qrButton);
         eventButton = findViewById(R.id.calenderButton);
         addEventButton = findViewById(R.id.addCalenderButton);
         profileButton = findViewById(R.id.profileButton);
-        eventListButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent event = new Intent(getApplicationContext(), AdminViewEvent.class);
-                startActivity(event);
-            }
-        });
-        profileListButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent event = new Intent(getApplicationContext(), AdminViewProfiles.class);
-                startActivity(event);
-            }
-        });
-        imageListButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent event = new Intent(getApplicationContext(), AdminViewImages.class);
-                startActivity(event);
-            }
-        });
         qrButton.setOnClickListener(v -> {
             Intent event = new Intent(getApplicationContext(), MainActivity.class);
             startActivity(event);
@@ -89,6 +70,20 @@ public class AdminActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent event = new Intent(getApplicationContext(), EventListView.class);
                 startActivity(event);
+            }
+        });
+        // Display the image using Glide or Picasso
+        ImageStorageManager storage = new ImageStorageManager(new Image(imageUriString, null), folderName);
+        storage.displayImage(imageView);
+        admin = new Admin();
+        Button deleteButton = findViewById(R.id.delete_button);
+        deleteButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ImageStorageManager storage = new ImageStorageManager(new Image(imageUriString, null), folderName);
+                storage.deleteImage();
+                Intent intent = new Intent(AdminImagePage.this, AdminViewImages.class);
+                startActivity(intent);
             }
         });
     }

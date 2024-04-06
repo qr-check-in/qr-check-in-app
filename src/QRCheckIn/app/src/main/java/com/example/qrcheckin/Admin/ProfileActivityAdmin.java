@@ -1,28 +1,33 @@
-package com.example.qrcheckin;
+package com.example.qrcheckin.Admin;
 
-import static com.example.qrcheckin.R.layout.show_profile;
 import static com.example.qrcheckin.R.layout.show_profile_admin;
-
+import com.example.qrcheckin.Admin.Admin;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.CompoundButton;
-import android.widget.ImageButton;
+
+import com.example.qrcheckin.Admin.AdminViewProfiles;
+import com.example.qrcheckin.Common.Image;
+
 import android.widget.ImageView;
-import android.widget.Switch;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.example.qrcheckin.Attendee.Attendee;
+import com.example.qrcheckin.Attendee.AttendeeDatabaseManager;
+import com.example.qrcheckin.Attendee.EditProfileFragment;
+import com.example.qrcheckin.Attendee.Profile;
+import com.example.qrcheckin.Common.ImageStorageManager;
+import com.example.qrcheckin.Common.SharedViewModel;
+import com.example.qrcheckin.R;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.Map;
 

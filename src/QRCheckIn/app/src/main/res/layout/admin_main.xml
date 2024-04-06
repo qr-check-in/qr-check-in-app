@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".AdminActivity">
+    tools:context=".Admin.AdminActivity$AdminActivity">
     <include
         android:id="@+id/dashboard"
         layout="@layout/toolbar"
@@ -61,10 +61,6 @@
         android:backgroundTint="@color/JordyBlue"
         app:layout_constraintTop_toBottomOf="@+id/profile_admin_button"
          />
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/addAdminImageView"
-        app:layout_constraintTop_toBottomOf="@+id/profile_button" />
     <ImageView
         android:id="@+id/addAdminImageView"
         android:layout_width="wrap_content"
@@ -72,7 +68,7 @@
         app:layout_constraintBottom_toTopOf="@id/addAdminTextView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/image_button"
+        app:layout_constraintTop_toBottomOf="@id/image_admin_button"
         android:layout_marginTop="30dp"
         tools:srcCompat="@drawable/qr2" />
 
@@ -82,7 +78,6 @@
         android:layout_height="wrap_content"
         android:text="@string/add_admin_text"
         app:layout_constraintTop_toBottomOf="@id/addAdminImageView"
-        app:layout_constraintBottom_toTopOf="@id/mainappbar"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         android:layout_marginBottom="30dp" />

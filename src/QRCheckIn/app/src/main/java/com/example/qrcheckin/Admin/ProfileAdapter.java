@@ -1,6 +1,5 @@
-package com.example.qrcheckin;
+package com.example.qrcheckin.Admin;
 
-import android.net.Uri;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,11 +8,11 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+import com.example.qrcheckin.Attendee.Profile;
+import com.example.qrcheckin.Attendee.ProfilePicture;
+import com.example.qrcheckin.Common.ImageStorageManager;
+import com.example.qrcheckin.R;
 
-import com.bumptech.glide.Glide;
-import com.google.firebase.firestore.DocumentSnapshot;
-
-import java.util.ArrayList;
 import java.util.List;
 
 public class ProfileAdapter extends RecyclerView.Adapter<ProfileAdapter.ProfileViewHolder> {

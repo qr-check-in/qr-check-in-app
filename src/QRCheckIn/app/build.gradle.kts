@@ -43,7 +43,7 @@ android {
 dependencies {
     implementation(platform("com.google.firebase:firebase-bom:32.7.2"))
     implementation("com.google.firebase:firebase-analytics")
-    implementation("androidx.activity:activity:1.7.0")
+    implementation("androidx.activity:activity:1.8.2")
     implementation ("com.github.bumptech.glide:glide:4.15.1")
     implementation("de.hdodenhof:circleimageview:3.1.0")
     implementation("com.squareup.picasso:picasso:2.71828")

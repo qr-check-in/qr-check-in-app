@@ -1,7 +1,6 @@
-package com.example.qrcheckin;
+package com.example.qrcheckin.Admin;
 
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -13,14 +12,20 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.firebase.firestore.DocumentSnapshot;
+import com.example.qrcheckin.Attendee.Profile;
+import com.example.qrcheckin.Attendee.Attendee;
+import com.example.qrcheckin.Attendee.ProfileActivity;
+import com.example.qrcheckin.Attendee.ProfilePicture;
+import com.example.qrcheckin.Common.MainActivity;
+import com.example.qrcheckin.Event.CreateAddEventDetails;
+import com.example.qrcheckin.Event.EventListView;
+import com.example.qrcheckin.R;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 public class AdminViewProfiles extends AppCompatActivity {
     private RecyclerView recyclerView;
@@ -29,7 +34,6 @@ public class AdminViewProfiles extends AppCompatActivity {
     ImageButton qrButton;
     ImageButton eventButton;
     ImageButton addEventButton;
-    private SharedViewModel sharedViewModel;
     ImageButton profileButton;
     private List<String> documentIds = new ArrayList<>();
 

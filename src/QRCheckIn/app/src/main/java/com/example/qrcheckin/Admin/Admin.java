@@ -1,14 +1,14 @@
 package com.example.qrcheckin.Admin;
 
 import android.util.Log;
-
+import com.example.qrcheckin.Event.Event;
 import com.example.qrcheckin.Attendee.Attendee;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
-
+import com.example.qrcheckin.Attendee.Profile;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;

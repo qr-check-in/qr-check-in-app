@@ -1,13 +1,11 @@
-package com.example.qrcheckin;
-
+package com.example.qrcheckin.Admin;
+import com.example.qrcheckin.Common.Image;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ImageView;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -15,23 +13,26 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.bumptech.glide.Glide;
+import com.example.qrcheckin.Attendee.ProfileActivity;
+import com.example.qrcheckin.Common.MainActivity;
+import com.example.qrcheckin.Event.CreateAddEventDetails;
+import com.example.qrcheckin.Event.EventListView;
+import com.example.qrcheckin.R;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-import androidx.appcompat.app.AlertDialog;
-public class AdminViewImages extends AppCompatActivity implements ImageAdapter.OnImageClickListener{
+
+public class AdminViewImages extends AppCompatActivity implements ImageAdapter.OnImageClickListener {
     private RecyclerView imagesRecyclerView;
+    ImageButton qrButton;
+    ImageButton eventButton;
+    ImageButton addEventButton;
+    ImageButton profileButton;
     private ImageAdapter adapter;
     private FirebaseFirestore db;
-    private List<Image> images = new ArrayList<>(); // Now storing Image objects
-    Admin admin;
     Map<Image, String> imageUriToFolderMap = new HashMap<>();
-    Map<Image, String> selectedImage = new HashMap<>();
     Button back;
 
     @Override
@@ -52,7 +53,37 @@ public class AdminViewImages extends AppCompatActivity implements ImageAdapter.O
         db = FirebaseFirestore.getInstance();
         adapter.setOnImageClickListener(this);
         fetchAndDisplayImages();
+        qrButton = findViewById(R.id.qrButton);
+        eventButton = findViewById(R.id.calenderButton);
+        addEventButton = findViewById(R.id.addCalenderButton);
+        profileButton = findViewById(R.id.profileButton);
+        qrButton.setOnClickListener(v -> {
+            Intent event = new Intent(getApplicationContext(), MainActivity.class);
+            startActivity(event);
+        });
 
+        // Set the "Add event" toolbar button listener
+        addEventButton.setOnClickListener(v -> {
+            Intent event = new Intent(getApplicationContext(), CreateAddEventDetails.class);
+            startActivity(event);
+        });
+
+        // Set the "Profile" toolbar button listener
+        profileButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent event = new Intent(getApplicationContext(), ProfileActivity.class);
+                startActivity(event);
+
+            }
+        });
+        eventButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent event = new Intent(getApplicationContext(), EventListView.class);
+                startActivity(event);
+            }
+        });
         back = findViewById(R.id.back_button);
         back.setOnClickListener(v -> finish());
     }

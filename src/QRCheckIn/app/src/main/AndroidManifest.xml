@@ -80,6 +80,7 @@
         <activity
             android:name=".test"
             android:exported="false" />
+        <activity android:name=".Common.SharedViewModel"/>
         <activity
             android:name=".Notifications.CreateNotification"
             android:exported="false"
@@ -91,20 +92,14 @@
         <activity
             android:name=".Event.CreateAddEventDetails"
             android:exported="false" />
-        <activity android:name=".ProfileActivity"
-            android:exported="false"/>
-        <activity android:name=".UpdatePictureFragment"
-            android:exported="false"/>
-        <activity android:name=".SharedViewModel"
-            android:exported="false"/>
 
-        <activity android:name=".AdminViewEvent"/>
-        <activity android:name=".AdminEventPage"
+        <activity android:name=".Admin.AdminViewEvent"/>
+        <activity android:name=".Admin.AdminEventPage"
             android:exported="false"/>
-        <activity android:name=".AdminViewProfiles"
+        <activity android:name=".Admin.AdminViewProfiles"
             android:exported="false"/>
-        <activity android:name=".AdminViewImages"/>
-        <activity android:name=".AdminImagePage"/>
+        <activity android:name=".Admin.AdminViewImages"/>
+        <activity android:name=".Admin.AdminImagePage"/>
         <activity
             android:name=".Attendee.ProfileActivity"
             android:exported="false" />
@@ -112,8 +107,7 @@
             android:name=".Attendee.UpdatePictureFragment"
             android:exported="false" />
         <activity
-            android:name=".ProfileActivityAdmin"
-            android:name=".Common.SharedViewModel"
+            android:name=".Admin.ProfileActivityAdmin"
             android:exported="false" />
         <activity
             android:name=".Event.EventListView"
