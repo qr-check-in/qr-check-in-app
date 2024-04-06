@@ -64,7 +64,7 @@ public class CreateNotification extends AppCompatActivity {
         }
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         TextView header = findViewById(R.id.mainHeader);
-        header.setText("Create New Annoucement");
+        header.setText("");
 
         // find widgets and views
         notificationTitle = findViewById(R.id.notificationTitleText);

@@ -24,6 +24,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -37,7 +38,9 @@ import com.example.qrcheckin.Notifications.CreateNotification;
 import com.example.qrcheckin.Notifications.DialogRecyclerView;
 import com.example.qrcheckin.Notifications.NotificationDatabaseManager;
 import com.example.qrcheckin.R;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestoreException;
@@ -349,6 +352,7 @@ public class OrganizersEventPageActivity extends AppCompatActivity {
         LinearLayout createEventNotification = dialog.findViewById(R.id.createEventNotification);
         LinearLayout viewEventSignups = dialog.findViewById(R.id.viewSignedUp);
         LinearLayout viewEventParticipants = dialog.findViewById(R.id.viewEventCheckin);
+        LinearLayout deleteEvent = dialog.findViewById(R.id.deleteEvent);
 
         // Listener for view check-in QR code layout
         viewCheckInQRCode.setOnClickListener(new View.OnClickListener() {
@@ -399,6 +403,32 @@ public class OrganizersEventPageActivity extends AppCompatActivity {
                 intent.putExtra("EVENT_DOC_ID", documentId);
                 intent.putExtra("FIELD_NAME", "attendedEvents");
                 startActivity(intent);
+            }
+        });
+
+        // Listener for the View Event Participants layout (checked-in attendees)
+        deleteEvent.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+
+                // Delete the document
+                eventDb.getDocRef().delete()
+                        .addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void aVoid) {
+                                Log.d(TAG, "DocumentSnapshot successfully deleted!");
+                                Toast.makeText(getApplicationContext(),"Event Deleted",Toast.LENGTH_SHORT).show();
+                            }
+                        })
+                        .addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                Log.w(TAG, "Error deleting document", e);
+                                // Handle any errors, such as displaying an error message to the user
+                            }
+                        });
+                finish();
             }
         });
 
