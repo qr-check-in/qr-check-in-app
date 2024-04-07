@@ -1,4 +1,5 @@
 package com.example.qrcheckin;
+import com.example.qrcheckin.Common.DatabaseManager;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;

@@ -16,12 +16,15 @@ import static androidx.test.espresso.intent.Intents.intended;
 import static androidx.test.espresso.intent.matcher.IntentMatchers.hasComponent;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 
+import com.example.qrcheckin.Admin.AdminActivity;
+import com.example.qrcheckin.Admin.AdminViewEvent;
+
 @RunWith(AndroidJUnit4.class)
 @LargeTest
 public class AdminDisplayEventsTest {
 
     @Rule
-    public IntentsTestRule<AdminActivity> intentsTestRule = new IntentsTestRule<>(AdminActivity.class);
+    public IntentsTestRule<AdminActivity> intentsTestRule = new IntentsTestRule<>(AdminActivity .class);
 
     @Test
     public void eventsButtonOpensEventsView() {
