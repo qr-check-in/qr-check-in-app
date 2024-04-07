@@ -1,5 +1,6 @@
 package com.example.qrcheckin;
 
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -48,9 +49,9 @@ public class ProfileTest {
         Assertions.assertEquals(true, profile.getTrackGeolocation());
     }
 
-    @Test
-    void testEditDetails() {
-//        // Create an instance of ProfileActivity
+//    @Test
+//    void testEditDetails() {
+////        // Create an instance of ProfileActivity
 //        ProfileActivity profileActivity = new ProfileActivity();
 //
 //        // Create a mock AttendeeDatabaseManager
@@ -69,5 +70,5 @@ public class ProfileTest {
 //        Mockito.when(mockDocumentSnapshot.toObject(Attendee.class)).thenReturn(mockAttendee);
 //        Mockito.when(mockAttendee.getProfile()).thenReturn(mockProfile);
 
-    }
+//    }
 }

@@ -28,6 +28,13 @@ public class AdminDashboardTest {
 
         Espresso.onView(ViewMatchers.withId(R.id.btn_admin_event))
                 .check(matches(isDisplayed()));
+
+        // Sleep for 1 second load the activity
+        try {
+            Thread.sleep(5000); // Adjust the sleep duration as needed
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         Espresso.onView(withId(R.id.profile_admin_button))
                 .check(matches(isDisplayed()));
         Espresso.onView(withId(R.id.image_admin_button))

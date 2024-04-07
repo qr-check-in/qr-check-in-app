@@ -18,24 +18,8 @@
           <timeTargetWasSelectedWithDropDown value="2024-04-07T21:17:30.573479Z" />
         </State>
       </entry>
-      <entry key="testEditButton()">
+      <entry key="testButtonsExist()">
         <State />
-      </entry>
-      <entry key="testSignUps()">
-        <State>
-          <targetSelectedWithDropDown>
-            <Target>
-              <type value="QUICK_BOOT_TARGET" />
-              <deviceKey>
-                <Key>
-                  <type value="VIRTUAL_DEVICE_PATH" />
-                  <value value="$USER_HOME$/.android/avd/Pixel_6_Pro_API_34.avd" />
-                </Key>
-              </deviceKey>
-            </Target>
-          </targetSelectedWithDropDown>
-          <timeTargetWasSelectedWithDropDown value="2024-04-07T21:19:17.270174Z" />
-        </State>
       </entry>
     </value>
   </component>

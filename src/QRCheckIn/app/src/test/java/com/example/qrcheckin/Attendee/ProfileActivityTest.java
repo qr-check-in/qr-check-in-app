@@ -1,30 +1,22 @@
 package com.example.qrcheckin.Attendee;
 
-import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.ArgumentMatchers.isNull;
 import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 
-import android.widget.ImageView;
-
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import org.junit.jupiter.api.Test;
 
 import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.mockito.Mock;
-import org.mockito.Mockito;
+import org.mockito.MockitoAnnotations;
 import org.mockito.invocation.InvocationOnMock;
-import org.mockito.junit.MockitoJUnitRunner;
 import org.mockito.stubbing.Answer;
 
+import java.io.IOException;
 
-@RunWith(MockitoJUnitRunner.class)
+
 class ProfileActivityTest {
 
     @Mock
@@ -39,7 +31,9 @@ class ProfileActivityTest {
     private Attendee attendee;
 
     @Before
-    public void setUp() {
+    public void setUp() throws IOException {
+        MockitoAnnotations.initMocks(this);
+
         mockDatabaseManager = mock(AttendeeDatabaseManager.class);
         mockDocumentSnapshot = mock(DocumentSnapshot.class);
         mockDocumentReference = mock(DocumentReference.class);
@@ -49,13 +43,10 @@ class ProfileActivityTest {
         attendee = new Attendee();
         profileActivity.dbManager = mockDatabaseManager; // Inject the mock database manager
 
-
-
-
     }
 
     @Test
-    public void testEditDetails() {
+    public void testEditDetails() throws IOException {
         // Mock updated profile details
         String updatedName = "John Doe";
         String updatedContact = "5877783704";
