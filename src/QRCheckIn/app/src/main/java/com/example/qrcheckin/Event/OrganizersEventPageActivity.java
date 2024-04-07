@@ -497,7 +497,6 @@ public class OrganizersEventPageActivity extends AppCompatActivity {
             // Pass QR code and text, start new activity
             Intent activity = new Intent(getApplicationContext(), QrCodeImageView.class);
             activity.putExtra("QRCode", qrCode);
-            activity.putExtra("EventName&Date", eventName + "_" + eventDate);
             activity.putExtra("headerText", headerText);
             activity.putExtra("EventName", eventName);
             activity.putExtra("EventDate", eventDate);

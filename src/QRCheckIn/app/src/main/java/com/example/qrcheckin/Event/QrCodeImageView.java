@@ -1,11 +1,6 @@
 
 package com.example.qrcheckin.Event;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-import androidx.core.content.FileProvider;
-
-import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -23,10 +18,6 @@ import androidx.appcompat.widget.Toolbar;
 
 import com.example.qrcheckin.Common.ImageStorageManager;
 import com.example.qrcheckin.R;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.util.Objects;
 
 public class QrCodeImageView extends AppCompatActivity {
 
@@ -39,7 +30,6 @@ public class QrCodeImageView extends AppCompatActivity {
     ImageView qrCodeImage;
     ImageButton shareImage;
     private QRCode qrCode;
-    static String eventText;
     String eventName;
     String eventDate;
 
@@ -62,16 +52,13 @@ public class QrCodeImageView extends AppCompatActivity {
         Bundle extras = getIntent().getExtras();
         if (extras != null){
             qrCode = (QRCode) getIntent().getSerializableExtra("QRCode");
-            Log.d("SHARE QR", String.format("after passing image uri is %s", qrCode.getUriString()));
         }
         // Display the QR code bitmap in an ImageView
         ImageStorageManager storage = new ImageStorageManager(qrCode, "/QRCodes");
         storage.displayImage(qrCodeImage);
-        // Retrieve event name and date
-        eventText = getIntent().getStringExtra("EventName&Date");
-        // Retrieve event name only
+        // Retrieve event name
         eventName = getIntent().getStringExtra("EventName");
-        // Retrieve event date only
+        // Retrieve event date
         eventDate = getIntent().getStringExtra("EventDate");
 
         // ToolBar
@@ -88,7 +75,7 @@ public class QrCodeImageView extends AppCompatActivity {
         shareImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                shareImageandText();
+                shareImageAndText();
             }
         });
 
@@ -135,7 +122,7 @@ public class QrCodeImageView extends AppCompatActivity {
      * Takes the image in the QR Code ImageView and start a share sheet activity to share
      * a QR code on other apps.
      */
-    private void shareImageandText() {
+    private void shareImageAndText() {
         // Get the image from the QR code ImageView
         // https://stackoverflow.com/questions/44178771/how-can-i-share-an-image-from-firebase-to-whatsapp-instagram-etc-android-studi#comment75382216_44178771 , Amr, 2018
         ImageView content = findViewById(R.id.qrCodeImageView);
@@ -148,8 +135,8 @@ public class QrCodeImageView extends AppCompatActivity {
         intent.putExtra(Intent.EXTRA_STREAM, uri);
         intent.setType("image/*");
         intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-        intent.putExtra(Intent.EXTRA_TEXT, eventText);
-        intent.putExtra(Intent.EXTRA_SUBJECT, "Scan and Share this QR Code to attend an event.");
+        intent.putExtra(Intent.EXTRA_TEXT, "Scan and Share QR Code for " + eventName);
+        intent.putExtra(Intent.EXTRA_SUBJECT, "Attend " + eventName + " on " + eventDate + ".");
         startActivity(Intent.createChooser(intent, "Share via"));
     }
 }
