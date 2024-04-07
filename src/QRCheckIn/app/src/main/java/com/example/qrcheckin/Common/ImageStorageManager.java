@@ -147,7 +147,9 @@ public class ImageStorageManager {
         } catch (Exception e){
             e.printStackTrace();
         }
-        return bitmap;
+        assert bitmap != null;
+        // Rescale image to be 200 x 200, so that it bitmap can be used by QrCodeImageView
+        return Bitmap.createScaledBitmap(bitmap, 200, 200, false);
     }
 
     /**

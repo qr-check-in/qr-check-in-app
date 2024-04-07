@@ -1,9 +1,5 @@
 package com.example.qrcheckin.Event;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-import androidx.core.content.FileProvider;
-
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
@@ -16,6 +12,10 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.core.content.FileProvider;
 
 import com.example.qrcheckin.R;
 
@@ -62,7 +62,10 @@ public class QrCodeImageView extends AppCompatActivity {
         getSupportActionBar().setDisplayShowTitleEnabled(false);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         TextView header = findViewById(R.id.mainHeader);
-        header.setText("Check-In QrCode");
+
+        // Retrieves the header text to show if the QR code is a check-in or promotional code
+        String headerText = getIntent().getStringExtra("headerText");
+        header.setText(headerText);
 
         shareImage.setOnClickListener(new View.OnClickListener() {
             @Override

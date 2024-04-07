@@ -201,7 +201,7 @@ public class CreateGenerateEventQR extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 // Start QR code share activity
-                shareQRCode(checkInQRCode, checkInBitmap);
+                shareQRCode(checkInQRCode, checkInBitmap, "Check-in QR Code");
             }
         });
 
@@ -210,7 +210,7 @@ public class CreateGenerateEventQR extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 // Start QR code share activity
-                shareQRCode(promoQRCode, promoBitmap);
+                shareQRCode(promoQRCode, promoBitmap, "Promotional QR Code");
             }
         });
 
@@ -399,11 +399,12 @@ public class CreateGenerateEventQR extends AppCompatActivity {
      * @param qrCode QRCode to be shared
      * @param bitmap bitmap of the QRCode to be shared
      */
-    public void shareQRCode(QRCode qrCode, Bitmap bitmap){
+    public void shareQRCode(QRCode qrCode, Bitmap bitmap, String headerText){
         if (qrCode != null) {
             Intent activity = new Intent(getApplicationContext(), QrCodeImageView.class);
             activity.putExtra("QRCodeBitmap", bitmap);
             activity.putExtra("EventName&Date", inputEventName + "_" + inputEventDate);
+            activity.putExtra("headerText", headerText);
             startActivity(activity);
         }
     }
@@ -490,6 +491,9 @@ public class CreateGenerateEventQR extends AppCompatActivity {
      */
     public void acceptUploadedQRCode(String readContent){
         checkInQRCode = new QRCode(uploadedUri.toString(), null, readContent, false);
+        ImageStorageManager bitmapConverter = new ImageStorageManager(checkInQRCode, "/QRCodes");
+        ContentResolver contentResolver = getContentResolver();
+        checkInBitmap = bitmapConverter.convertToBitmap(contentResolver);
         // Load the selected image into the ImageView using Glide
         // openai, 2024, chatgpt, how to display the image
         Glide.with(this)
