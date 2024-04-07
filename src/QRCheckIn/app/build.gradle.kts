@@ -50,34 +50,36 @@ dependencies {
     implementation("androidx.appcompat:appcompat:1.6.1")
     implementation("com.google.android.material:material:1.11.0")
     implementation("androidx.constraintlayout:constraintlayout:2.1.4")
-    implementation("com.google.firebase:firebase-firestore:24.10.2")
+    implementation("com.google.firebase:firebase-firestore:24.11.0")
     implementation("com.google.firebase:firebase-messaging:23.4.1")
     implementation("com.firebaseui:firebase-ui-firestore:8.0.2")
-    implementation("androidx.camera:camera-core:1.3.1")
-    implementation("androidx.camera:camera-camera2:1.0.0")
-    implementation("androidx.camera:camera-lifecycle:1.0.0")
-    implementation("androidx.camera:camera-view:1.0.0-alpha24")
+    implementation("androidx.camera:camera-core:1.3.2")
+    implementation("androidx.camera:camera-camera2:1.3.2")
+    implementation("androidx.camera:camera-lifecycle:1.3.2")
+    implementation("androidx.camera:camera-view:1.3.2")
     implementation ("com.google.api:api-common:2.2.1")
     implementation("com.google.firebase:firebase-storage:20.3.0")
-    implementation("org.mockito:mockito-core:4.0.0")
-    implementation("androidx.navigation:navigation-fragment:2.6.0")
-    implementation("androidx.navigation:navigation-ui:2.6.0")
+    implementation("org.mockito:mockito-core:5.10.0")
+    implementation("androidx.navigation:navigation-fragment:2.7.7")
+    implementation("androidx.navigation:navigation-ui:2.7.7")
     implementation("com.google.android.gms:play-services-location:21.2.0")
     implementation("com.google.android.gms:play-services-maps:18.2.0")
+    testImplementation ("org.mockito:mockito-core:5.10.0")
+    testImplementation ("com.google.firebase:firebase-firestore:24.11.0")
 
 
-    implementation("com.github.bumptech.glide:glide:4.12.0")
-    annotationProcessor("com.github.bumptech.glide:compiler:4.12.0")
-    implementation("com.google.firebase:firebase-database:19.3.1")
-    testImplementation ("org.junit.jupiter:junit-jupiter-api:5.0.1")
-    testRuntimeOnly ("org.junit.jupiter:junit-jupiter-engine:5.0.1")
+    implementation("com.github.bumptech.glide:glide:4.15.1")
+    annotationProcessor("com.github.bumptech.glide:compiler:4.15.1")
+    implementation("com.google.firebase:firebase-database:20.3.1")
+    testImplementation ("org.junit.jupiter:junit-jupiter-api:5.10.2")
+    testRuntimeOnly ("org.junit.jupiter:junit-jupiter-engine:5.10.2")
+    androidTestImplementation("androidx.test.espresso:espresso-contrib:3.5.1")
 
     androidTestImplementation ("androidx.test.espresso:espresso-intents:3.5.1")
     androidTestImplementation ("org.mockito:mockito-android:4.0.0") //
-    androidTestImplementation ("androidx.test.espresso:espresso-core:3.3.0")
-    androidTestImplementation ("androidx.test:runner:1.3.0")
-    androidTestImplementation ("androidx.test:rules:1.3.0")
-    androidTestImplementation ("org.mockito:mockito-android:3.3.3")
+    androidTestImplementation ("androidx.test.espresso:espresso-core:3.5.1")
+    androidTestImplementation ("androidx.test:runner:1.5.2")
+    androidTestImplementation ("androidx.test:rules:1.5.0")
 
     // If you need additional functionality, consider adding extensions
     // implementation "androidx.camera:camera-extensions:1.0.0-alpha24"
@@ -87,13 +89,12 @@ dependencies {
 
 
     // QRCode Scanner
-    implementation ("com.google.android.gms:play-services-auth:16.0.0")
+    implementation ("com.google.android.gms:play-services-auth:21.0.0")
     implementation("com.journeyapps:zxing-android-embedded:4.3.0")
     implementation("com.google.mlkit:barcode-scanning:17.2.0")
 
     // Bottom Sheet
-    implementation ("com.google.android.material:material:1.4.0")
-    implementation ("com.google.android.material:material:1.2.0-alpha02")
+    implementation ("com.google.android.material:material:1.11.0")
 
     // Expresso Intent
     implementation ("androidx.test.espresso:espresso-intents:3.5.1")
@@ -103,8 +104,8 @@ dependencies {
     implementation ("androidx.test.espresso:espresso-core:3.5.1")
 
     // Glide
-    implementation ("com.github.bumptech.glide:glide:4.12.0")
-    annotationProcessor ("com.github.bumptech.glide:compiler:4.12.0")
+    implementation ("com.github.bumptech.glide:glide:4.15.1")
+    annotationProcessor ("com.github.bumptech.glide:compiler:4.15.1")
 
     // Notifications
     implementation ("com.android.volley:volley:1.2.0")
