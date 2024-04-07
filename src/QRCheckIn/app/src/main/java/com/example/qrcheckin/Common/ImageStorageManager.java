@@ -142,4 +142,42 @@ public class ImageStorageManager {
         }
         return bitmap;
     }
+    /*
+    public String readUploadedImage(){
+        ContentResolver contentResolver = getContentResolver();
+        Bitmap immutableBitmap = convertToBitmap(contentResolver);
+        String contents = null;
+
+        int[] intArray = new int[immutableBitmap.getWidth()*immutableBitmap.getHeight()];
+        //copy pixel data from the Bitmap into the 'intArray' array
+
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.P) {
+            ImageDecoder.Source source = ImageDecoder.createSource(contentResolver, uri);
+            try {
+                Bitmap uploadedBitmap = ImageDecoder.decodeBitmap(ImageDecoder.createSource(contentResolver,uri)).copy(Bitmap.Config.ARGB_8888, true);
+                //ImageDecoder.decodeBitmap(source).copy(Bitmap.Config.RGBA_F16, true);
+
+                uploadedBitmap.getPixels(intArray, 0, uploadedBitmap.getWidth(), 0, 0, uploadedBitmap.getWidth(), uploadedBitmap.getHeight());
+
+                LuminanceSource source1 = new RGBLuminanceSource(uploadedBitmap.getWidth(), uploadedBitmap.getHeight(), intArray);
+                BinaryBitmap binaryBitmap = new BinaryBitmap(new HybridBinarizer(source1));
+
+                MultiFormatReader reader = new MultiFormatReader();
+                Result result = null;
+                try {
+                    result = reader.decode(binaryBitmap);
+                } catch (NotFoundException e) {
+                    throw new RuntimeException(e);
+                }
+                contents = result.getText();
+
+                Log.d("READER UPLOAD", String.format("read: %s", contents));
+
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
+    }
+
+     */
 }
