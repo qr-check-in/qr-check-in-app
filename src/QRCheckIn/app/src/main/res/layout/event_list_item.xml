@@ -21,7 +21,7 @@
             android:background="@drawable/rounded_image"
             android:contentDescription="@string/description_event_poster"
             android:scaleType="centerCrop"
-            app:srcCompat="@drawable/fest1" />
+            app:srcCompat="@drawable/default_poster" />
 
         <TextView
             android:id="@+id/text_event_title"

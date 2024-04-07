@@ -176,6 +176,9 @@ public class OrganizersEventPageActivity extends AppCompatActivity {
                         ImageStorageManager storagePoster = new ImageStorageManager(event.getPoster(), "/EventPosters");
                         storagePoster.displayImage(ivEventPoster);
                     }
+                    else{
+                        ivEventPoster.setImageResource(R.drawable.default_poster);
+                    }
                     // Set the ImageView for the Event's promotional QR code
                     if (promoQRCode != null) {
                         ImageStorageManager storageQr = new ImageStorageManager(promoQRCode, "/QRCodes");

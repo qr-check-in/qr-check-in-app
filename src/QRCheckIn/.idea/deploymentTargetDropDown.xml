@@ -2,27 +2,9 @@
 <project version="4">
   <component name="deploymentTargetDropDown">
     <value>
-      <entry key="CreateEventAndCheck">
-        <State />
-      </entry>
-      <entry key="ProfileFragmentTest">
-      <entry key="AdminDashboardTest">
-        <State />
-      </entry>
-      <entry key="AdminDbTest">
-        <State />
-      </entry>
-      <entry key="AdminDisplayImagesTest">
-        <State />
-      </entry>
-      <entry key="AdminDisplayProfilesTest">
-        <State />
-      </entry>
-      <entry key="FirestoreWrapperTest">
-        <State />
-      </entry>
       <entry key="app">
         <State>
+          <multipleDevicesSelectedInDropDown value="true" />
           <runningDeviceTargetsSelectedWithDialog>
             <Target>
               <type value="RUNNING_DEVICE_TARGET" />
@@ -30,6 +12,15 @@
                 <Key>
                   <type value="VIRTUAL_DEVICE_PATH" />
                   <value value="C:\Users\Daniel Thai\.android\avd\Pixel_6_API_34.avd" />
+                </Key>
+              </deviceKey>
+            </Target>
+            <Target>
+              <type value="RUNNING_DEVICE_TARGET" />
+              <deviceKey>
+                <Key>
+                  <type value="SERIAL_NUMBER" />
+                  <value value="R3CTB0BJSTB" />
                 </Key>
               </deviceKey>
             </Target>
@@ -46,15 +37,6 @@
             </Target>
           </targetsSelectedWithDialog>
         </State>
-      </entry>
-      <entry key="testButtonsAndTextboxes()">
-        <State />
-      </entry>
-      <entry key="testButtonsAndTextboxes() (1)">
-        <State />
-      </entry>
-      <entry key="testSearchEventInList()">
-        <State />
       </entry>
     </value>
   </component>
