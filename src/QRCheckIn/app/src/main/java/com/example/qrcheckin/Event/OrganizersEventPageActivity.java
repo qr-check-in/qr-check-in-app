@@ -2,15 +2,18 @@ package com.example.qrcheckin.Event;
 
 import static android.content.ContentValues.TAG;
 
+import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.ContentResolver;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
@@ -24,12 +27,14 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import com.example.qrcheckin.Attendee.AttendeeDatabaseManager;
 import com.example.qrcheckin.Attendee.ProfileActivity;
+import com.example.qrcheckin.Notifications.MyNotificationManager;
 import com.example.qrcheckin.Notifications.Notification;
 import com.example.qrcheckin.Common.ImageStorageManager;
 import com.example.qrcheckin.Common.MainActivity;
@@ -37,10 +42,14 @@ import com.example.qrcheckin.Notifications.CreateNotification;
 import com.example.qrcheckin.Notifications.DialogRecyclerView;
 import com.example.qrcheckin.Notifications.NotificationDatabaseManager;
 import com.example.qrcheckin.R;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestoreException;
+
+import org.json.JSONArray;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -114,6 +123,12 @@ public class OrganizersEventPageActivity extends AppCompatActivity {
         TextView tvEventLocation = findViewById(R.id.text_event_location);
         TextView tvEventDescription = findViewById(R.id.text_event_description);
         ImageView ivEventPoster = findViewById(R.id.image_event_poster);
+        //https://stackoverflow.com/questions/18826870/how-to-animate-the-textview-very-very-long-text-scroll-automatically-horizonta, 2024, how to get the horizontal scrolling text
+        TextView locationsStatus = findViewById(R.id.locationStatusTxt);
+        locationsStatus.setEllipsize(TextUtils.TruncateAt.MARQUEE);
+        locationsStatus.setSelected(true);
+        locationsStatus.setSingleLine(true);
+
         ivEventPromoQr = findViewById(R.id.btnGenPromoQR);
         openNotifications = findViewById(R.id.notificationIconBtn);
         openBottomSheetBtn = findViewById(R.id.openBottomSheetButton);
@@ -143,6 +158,12 @@ public class OrganizersEventPageActivity extends AppCompatActivity {
                     eventDate = event.getEventDate();
                     promoQRCode = event.getPromoQRCode();
                     checkInQRCode = event.getCheckInQRCode();
+
+                    if (event.isCheckInStatus()) {
+                        locationsStatus.setText("Event is using your location           Event is using your location            Event is using your location");
+                    } else {
+                        locationsStatus.setText("Event is not using your location           Event is not using your location            Event is not using your location");
+                    }
 
                     header.setText(eventName);
                     tvEventLocation.setText(event.getEventLocation());
@@ -349,6 +370,7 @@ public class OrganizersEventPageActivity extends AppCompatActivity {
         LinearLayout createEventNotification = dialog.findViewById(R.id.createEventNotification);
         LinearLayout viewEventSignups = dialog.findViewById(R.id.viewSignedUp);
         LinearLayout viewEventParticipants = dialog.findViewById(R.id.viewEventCheckin);
+        LinearLayout deleteEvent = dialog.findViewById(R.id.deleteEvent);
 
         // Listener for view check-in QR code layout
         viewCheckInQRCode.setOnClickListener(new View.OnClickListener() {
@@ -402,11 +424,70 @@ public class OrganizersEventPageActivity extends AppCompatActivity {
             }
         });
 
+        // Listener for the View Event Participants layout (checked-in attendees)
+        deleteEvent.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+                showDeleteConfirmationDialog();
+            }
+        });
+
         dialog.show();
         dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.WRAP_CONTENT);
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
         dialog.getWindow().setGravity(Gravity.BOTTOM);
+    }
+
+    // openai, 2024, chatgpt: how to create an alert dialog for delete
+    private void showDeleteConfirmationDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage("Are you sure you want to delete this event?");
+        builder.setPositiveButton("Delete", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                // User clicked the Delete
+                // Alert those who have signed up for the event
+//                MyNotificationManager firebaseMessaging = new MyNotificationManager(getApplicationContext());
+//                JSONArray regArray = new JSONArray(get);
+//                firebaseMessaging.sendMessageToClient(, "Event Shutdown", "An event you have signed up for has been shut down", "");
+                deleteEvent();
+            }
+        });
+        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                // User clicked the Cancel button, so dismiss the dialog
+                dialogInterface.dismiss();
+            }
+        });
+        AlertDialog dialog = builder.create();
+        dialog.show();
+    }
+
+    /**
+     * Delete event from firebase
+     */
+    private void deleteEvent() {
+        // Delete the document
+        // openai, 2024, chatgpt: how to delete from doc
+        eventDb.getDocRef().delete()
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.d(TAG, "DocumentSnapshot successfully deleted!");
+                        Toast.makeText(getApplicationContext(),"Event Deleted",Toast.LENGTH_SHORT).show();
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.w(TAG, "Error deleting document", e);
+                        // Handle any errors, such as displaying an error message to the user
+                    }
+                });
+        finish();
     }
 
     /**
