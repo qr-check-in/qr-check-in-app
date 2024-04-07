@@ -424,7 +424,8 @@ public class CreateGenerateEventQR extends AppCompatActivity {
             queryCheckInQR(readContent);
         }
         else{
-            // TODO: Could not read uploaded image, ask user to try again or soemthing
+            // Uploaded image couldn't be read as a qr code
+            Toast.makeText(CreateGenerateEventQR.this, "Could not read QR code", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -443,7 +444,7 @@ public class CreateGenerateEventQR extends AppCompatActivity {
                         if(task.isSuccessful()){
                             if(!task.getResult().isEmpty()){
                                 // QR code is already in use as some event's check-in qr code
-                                Log.d("READER", "QR code is already in use as some event's CHECK IN qr code!");
+                                Toast.makeText(CreateGenerateEventQR.this, "QR Code is already in use", Toast.LENGTH_SHORT).show();
                             }else{
                                 // Check promo qr codes.
                                 queryPromoQR(readContent);
@@ -471,11 +472,10 @@ public class CreateGenerateEventQR extends AppCompatActivity {
                         if(task.isSuccessful()){
                             if(!task.getResult().isEmpty()){
                                 // QR code is already in use as some event's promo qr code!
-                                Log.d("READER", "QR code is already in use as some event's PROMO qr code!");
+                                Toast.makeText(CreateGenerateEventQR.this, "QR Code is already in use", Toast.LENGTH_SHORT).show();
                             }else{
-                                // we are free to use this uploaded qr code
+                                // uploaded QR is not in use by any event, good to be used
                                 acceptUploadedQRCode(readContent);
-                                Log.d("READER", "good to go");
                             }
                         }
                         else{
