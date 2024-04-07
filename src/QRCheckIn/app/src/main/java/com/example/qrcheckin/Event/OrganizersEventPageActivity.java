@@ -117,6 +117,7 @@ public class OrganizersEventPageActivity extends AppCompatActivity {
         TextView tvEventLocation = findViewById(R.id.text_event_location);
         TextView tvEventDescription = findViewById(R.id.text_event_description);
         ImageView ivEventPoster = findViewById(R.id.image_event_poster);
+
         //https://stackoverflow.com/questions/18826870/how-to-animate-the-textview-very-very-long-text-scroll-automatically-horizonta, 2024, how to get the horizontal scrolling text
         TextView locationsStatus = findViewById(R.id.locationStatusTxt);
         locationsStatus.setEllipsize(TextUtils.TruncateAt.MARQUEE);
@@ -168,6 +169,9 @@ public class OrganizersEventPageActivity extends AppCompatActivity {
                     if (event.getPoster() != null){
                         ImageStorageManager storagePoster = new ImageStorageManager(event.getPoster(), "/EventPosters");
                         storagePoster.displayImage(ivEventPoster);
+                    }
+                    else{
+                        ivEventPoster.setImageResource(R.drawable.default_poster);
                     }
                     // Set the ImageView for the Event's promotional QR code
                     if (promoQRCode != null) {
@@ -495,6 +499,8 @@ public class OrganizersEventPageActivity extends AppCompatActivity {
             activity.putExtra("QRCode", qrCode);
             activity.putExtra("EventName&Date", eventName + "_" + eventDate);
             activity.putExtra("headerText", headerText);
+            activity.putExtra("EventName", eventName);
+            activity.putExtra("EventDate", eventDate);
             startActivity(activity);
         }
     }

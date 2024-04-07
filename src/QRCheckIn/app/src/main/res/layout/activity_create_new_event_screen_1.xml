@@ -5,7 +5,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Event.CreateAddEventDetails">
+    tools:context=".Event.CreateAddEventDetails"
+    android:id="@+id/createAddEventDetails">
 
 
     <include
@@ -96,7 +97,7 @@
                             android:layout_marginEnd="5dp"
                             android:background="@drawable/button_background"
                             android:padding="10dp"
-                            app:srcCompat="@drawable/calenderresize"></ImageButton>
+                            app:srcCompat="@drawable/calenderresize" />
 
                         <TextView
                             android:id="@+id/eventDateText"

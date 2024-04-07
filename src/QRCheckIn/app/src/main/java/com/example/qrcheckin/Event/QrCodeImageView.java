@@ -1,5 +1,11 @@
+
 package com.example.qrcheckin.Event;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.core.content.FileProvider;
+
+import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -17,6 +23,10 @@ import androidx.appcompat.widget.Toolbar;
 
 import com.example.qrcheckin.Common.ImageStorageManager;
 import com.example.qrcheckin.R;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.util.Objects;
 
 public class QrCodeImageView extends AppCompatActivity {
 
@@ -28,8 +38,11 @@ public class QrCodeImageView extends AppCompatActivity {
 
     ImageView qrCodeImage;
     ImageButton shareImage;
-    String eventText;
     private QRCode qrCode;
+    static String eventText;
+    String eventName;
+    String eventDate;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,7 +68,11 @@ public class QrCodeImageView extends AppCompatActivity {
         ImageStorageManager storage = new ImageStorageManager(qrCode, "/QRCodes");
         storage.displayImage(qrCodeImage);
         // Retrieve event name and date
-        eventText = getIntent().getStringExtra("eventName&Date");
+        eventText = getIntent().getStringExtra("EventName&Date");
+        // Retrieve event name only
+        eventName = getIntent().getStringExtra("EventName");
+        // Retrieve event date only
+        eventDate = getIntent().getStringExtra("EventDate");
 
         // ToolBar
         Toolbar toolbar = findViewById(R.id.addEventToolBar2);

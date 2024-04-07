@@ -55,6 +55,10 @@ public class Image implements Serializable {
 
     }
 
+    public void setUriString(String string) {
+        this.uriString = string;
+    }
+
     /**
      * Converts the image file to a BITMAP Base64 encoded string.
      *
