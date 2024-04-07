@@ -28,6 +28,9 @@ import com.example.qrcheckin.Common.Image;
 import com.example.qrcheckin.Common.ImageStorageManager;
 import com.example.qrcheckin.Common.Utils;
 import com.example.qrcheckin.R;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.WriterException;
 import com.google.zxing.common.BitMatrix;
@@ -139,11 +142,7 @@ public class CreateGenerateEventQR extends AppCompatActivity {
                     // Callback is invoked after the user selects a media item or closes the
                     // photo picker.
                     if (uri != null) {
-                        Image uploadedImage = new Image(uri.toString(), null);
-                        ImageStorageManager storage = new ImageStorageManager(uploadedImage, "/QRCodes");
-                        ContentResolver contentResolver = getContentResolver();
-                        String readContent = storage.readUploadedImage(contentResolver);
-                        Log.d("READER UPLOAD", String.format("read in createEvent: %s", readContent));
+                        validateUploadedImage(uri);
 
 
                         // Load the selected image into the ImageView using Glide
@@ -411,4 +410,70 @@ public class CreateGenerateEventQR extends AppCompatActivity {
             startActivity(activity);
         }
     }
+
+    public void validateUploadedImage(Uri uri){
+        // Read the contents of the uploaded image
+        Image uploadedImage = new Image(uri.toString(), null);
+        ImageStorageManager storage = new ImageStorageManager(uploadedImage, "/QRCodes");
+        ContentResolver contentResolver = getContentResolver();
+        String readContent = storage.readUploadedImage(contentResolver);
+        Log.d("READER UPLOAD", String.format("read in createEvent: %s", readContent));
+
+        if (readContent != null){
+            // Uploaded image was a valid qr code, search if its already in use
+            queryCheckInQR(readContent);
+        }
+        else{
+            // TODO: Could not read uploaded image, ask user to try again or soemthing
+        }
+    }
+
+    public void queryCheckInQR(String readContent){
+        EventDatabaseManager eventDb = new EventDatabaseManager();
+        eventDb.getCollectionRef()
+                .whereEqualTo("checkInQRCode.hashedContent", readContent)
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if(task.isSuccessful()){
+                            if(!task.getResult().isEmpty()){
+                                // QR code is already in use as some event's check-in qr code
+                                Log.d("READER", "QR code is already in use as some event's CHECK IN qr code!");
+                            }else{
+                                // Check promo qr codes.
+                                queryPromoQR(readContent);
+                            }
+                        }
+                        else{
+                            Log.e("READER", "event query failed");
+                        }
+                    }
+                });
+    }
+
+    public void queryPromoQR(String readContent){
+        EventDatabaseManager eventDb = new EventDatabaseManager();
+        eventDb.getCollectionRef()
+                .whereEqualTo("promoQRCode.hashedContent", readContent)
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if(task.isSuccessful()){
+                            if(!task.getResult().isEmpty()){
+                                // QR code is already in use as some event's promo qr code!
+                                Log.d("READER", "QR code is already in use as some event's PROMO qr code!");
+                            }else{
+                                // we are free to use this uploaded qr code
+                                Log.d("READER", "good to go");
+                            }
+                        }
+                        else{
+                            Log.e("READER", "event query failed");
+                        }
+                    }
+                });
+    }
+
 }
