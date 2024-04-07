@@ -4,7 +4,6 @@ import android.content.ContentResolver;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
-import android.graphics.ImageDecoder;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -30,15 +29,8 @@ import com.example.qrcheckin.Common.ImageStorageManager;
 import com.example.qrcheckin.Common.Utils;
 import com.example.qrcheckin.R;
 import com.google.zxing.BarcodeFormat;
-import com.google.zxing.BinaryBitmap;
-import com.google.zxing.LuminanceSource;
-import com.google.zxing.MultiFormatReader;
-import com.google.zxing.NotFoundException;
-import com.google.zxing.RGBLuminanceSource;
-import com.google.zxing.Result;
 import com.google.zxing.WriterException;
 import com.google.zxing.common.BitMatrix;
-import com.google.zxing.common.HybridBinarizer;
 import com.journeyapps.barcodescanner.BarcodeEncoder;
 
 import java.io.File;
@@ -147,7 +139,11 @@ public class CreateGenerateEventQR extends AppCompatActivity {
                     // Callback is invoked after the user selects a media item or closes the
                     // photo picker.
                     if (uri != null) {
-                        readUploadedImage(uri);
+                        Image uploadedImage = new Image(uri.toString(), null);
+                        ImageStorageManager storage = new ImageStorageManager(uploadedImage, "/QRCodes");
+                        ContentResolver contentResolver = getContentResolver();
+                        String readContent = storage.readUploadedImage(contentResolver);
+                        Log.d("READER UPLOAD", String.format("read in createEvent: %s", readContent));
 
 
                         // Load the selected image into the ImageView using Glide
@@ -415,43 +411,4 @@ public class CreateGenerateEventQR extends AppCompatActivity {
             startActivity(activity);
         }
     }
-
-    public void readUploadedImage(Uri uri){
-        Image uploadedImage = new Image(uri.toString(), null);
-        ImageStorageManager storage = new ImageStorageManager(uploadedImage, "/QRCodes");
-        ContentResolver contentResolver = getContentResolver();
-        //Bitmap immutableBitmap = storage.convertToBitmap(contentResolver);
-        String contents = null;
-
-        //int[] intArray = new int[immutableBitmap.getWidth()*immutableBitmap.getHeight()];
-        //copy pixel data from the Bitmap into the 'intArray' array
-
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.P) {
-            try {
-                Bitmap uploadedBitmap = ImageDecoder.decodeBitmap(ImageDecoder.createSource(contentResolver,uri)).copy(Bitmap.Config.ARGB_8888, true);
-                int[] intArray = new int[uploadedBitmap.getWidth()*uploadedBitmap.getHeight()];
-                uploadedBitmap.getPixels(intArray, 0, uploadedBitmap.getWidth(), 0, 0, uploadedBitmap.getWidth(), uploadedBitmap.getHeight());
-
-                LuminanceSource source1 = new RGBLuminanceSource(uploadedBitmap.getWidth(), uploadedBitmap.getHeight(), intArray);
-                BinaryBitmap binaryBitmap = new BinaryBitmap(new HybridBinarizer(source1));
-
-                MultiFormatReader reader = new MultiFormatReader();
-                Result result = null;
-                try {
-                    result = reader.decode(binaryBitmap);
-                } catch (NotFoundException e) {
-                    throw new RuntimeException(e);
-                }
-                contents = result.getText();
-
-                Log.d("READER UPLOAD", String.format("read: %s", contents));
-
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-        }
-
-
-    }
-
 }

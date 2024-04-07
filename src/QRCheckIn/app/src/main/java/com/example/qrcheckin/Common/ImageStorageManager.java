@@ -18,6 +18,13 @@ import com.google.firebase.storage.FileDownloadTask;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+import com.google.zxing.BinaryBitmap;
+import com.google.zxing.LuminanceSource;
+import com.google.zxing.MultiFormatReader;
+import com.google.zxing.NotFoundException;
+import com.google.zxing.RGBLuminanceSource;
+import com.google.zxing.Result;
+import com.google.zxing.common.HybridBinarizer;
 
 import java.io.File;
 import java.io.IOException;
@@ -142,42 +149,43 @@ public class ImageStorageManager {
         }
         return bitmap;
     }
-    /*
-    public String readUploadedImage(){
-        ContentResolver contentResolver = getContentResolver();
-        Bitmap immutableBitmap = convertToBitmap(contentResolver);
+
+    /**
+     * Reads the content of an Image. Returns null if no contents found
+     * @param contentResolver ContentResolver of the calling activity
+     * @return String of Image's contents
+     */
+    public String readUploadedImage(ContentResolver contentResolver){
+        Uri uri = Uri.parse(image.getUriString());
         String contents = null;
-
-        int[] intArray = new int[immutableBitmap.getWidth()*immutableBitmap.getHeight()];
-        //copy pixel data from the Bitmap into the 'intArray' array
-
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.P) {
-            ImageDecoder.Source source = ImageDecoder.createSource(contentResolver, uri);
             try {
+                // Must get a mutable bitmap (so don't use convertToBitmap method)
+                // https://stackoverflow.com/questions/60462841/java-lang-illegalstateexception-unable-to-getpixels-pixel-access-is-not-supp, мalay мeнтa, 2021
                 Bitmap uploadedBitmap = ImageDecoder.decodeBitmap(ImageDecoder.createSource(contentResolver,uri)).copy(Bitmap.Config.ARGB_8888, true);
-                //ImageDecoder.decodeBitmap(source).copy(Bitmap.Config.RGBA_F16, true);
 
+                // Read the contents of the bitmap by copying pixel data from the Bitmap into the 'intArray' array
+                //https://stackoverflow.com/questions/29649673/scan-barcode-from-an-image-in-gallery-android, LaurentY, 2015
+                int[] intArray = new int[uploadedBitmap.getWidth()*uploadedBitmap.getHeight()];
                 uploadedBitmap.getPixels(intArray, 0, uploadedBitmap.getWidth(), 0, 0, uploadedBitmap.getWidth(), uploadedBitmap.getHeight());
-
                 LuminanceSource source1 = new RGBLuminanceSource(uploadedBitmap.getWidth(), uploadedBitmap.getHeight(), intArray);
                 BinaryBitmap binaryBitmap = new BinaryBitmap(new HybridBinarizer(source1));
-
                 MultiFormatReader reader = new MultiFormatReader();
                 Result result = null;
                 try {
+                    // Return the read string
                     result = reader.decode(binaryBitmap);
                 } catch (NotFoundException e) {
-                    throw new RuntimeException(e);
+                    // Return null if nothing could be read
+                    return null;
                 }
                 contents = result.getText();
-
-                Log.d("READER UPLOAD", String.format("read: %s", contents));
+                return contents;
 
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
         }
+        return null;
     }
-
-     */
 }
