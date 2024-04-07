@@ -3,7 +3,6 @@ package com.example.qrcheckin;
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.action.ViewActions.pressBack;
-import static androidx.test.espresso.action.ViewActions.swipeUp;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.intent.Intents.intended;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
@@ -11,14 +10,7 @@ import static androidx.test.espresso.matcher.ViewMatchers.isRoot;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 
-import androidx.test.espresso.ViewAction;
-import androidx.test.espresso.action.GeneralLocation;
-import androidx.test.espresso.action.GeneralSwipeAction;
-import androidx.test.espresso.action.Press;
-import androidx.test.espresso.action.Swipe;
-import androidx.test.espresso.action.ViewActions;
 import androidx.test.espresso.intent.Intents;
-import androidx.test.espresso.intent.matcher.IntentMatchers;
 import androidx.test.espresso.matcher.ViewMatchers;
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
@@ -34,7 +26,7 @@ import org.junit.runner.RunWith;
 
 @RunWith(AndroidJUnit4.class)
 @LargeTest
-public class CheckInTest {
+public class SignUpTest {
     String eventName = "ZZZ+ Annual Conference";
 
     @Rule

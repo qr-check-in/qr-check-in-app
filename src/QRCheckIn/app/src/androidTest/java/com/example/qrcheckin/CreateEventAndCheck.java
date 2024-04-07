@@ -25,9 +25,7 @@ import androidx.test.filters.LargeTest;
 import com.example.qrcheckin.Event.CreateAddEventDetails;
 import com.example.qrcheckin.Event.CreateGenerateEventQR;
 import com.example.qrcheckin.Event.EventListView;
-import com.example.qrcheckin.Event.EventPage;
 
-import org.hamcrest.Matcher;
 import org.hamcrest.Matchers;
 import org.junit.After;
 import org.junit.Before;
@@ -77,7 +75,7 @@ public class CreateEventAndCheck {
         onView(withId(R.id.createAddEventDetails)).check(matches(isDisplayed()));
 
         // Test the text boxes
-        onView(withId(R.id.eventNameText)).perform(ViewActions.typeText(title));
+        onView(withId(R.id.eventNameText)).perform(ViewActions.typeText(title), ViewActions.closeSoftKeyboard());
 
         // Open the SelectDateFragment by clicking on a button
         onView(withId(R.id.eventDateText)).perform(click());
@@ -111,22 +109,19 @@ public class CreateEventAndCheck {
         }
 
         // Type the location
-        onView(withId(R.id.eventLocationText)).perform(ViewActions.typeText(location));
+        onView(withId(R.id.eventLocationText)).perform(ViewActions.typeText(location), ViewActions.closeSoftKeyboard());
 
         // Test the switch by enabling it
         onView(withId(R.id.checkInSwitch)).perform(click()).perform(ViewActions.closeSoftKeyboard());
 
         // Test the event size text box
-        onView(withId(R.id.numOfAttendeeText)).perform(ViewActions.typeText("100"));
-
-        // Close the keyboard
-        onView(withId(R.id.eventDescriptionText)).perform(ViewActions.closeSoftKeyboard());
+        onView(withId(R.id.numOfAttendeeText)).perform(ViewActions.typeText("100"), ViewActions.closeSoftKeyboard());
 
         // Scroll to the bottom of the page
         onView(withId(R.id.scrollView2)).perform(swipeUp());
 
         // Test event description
-        onView(withId(R.id.eventDescriptionText)).perform(ViewActions.typeText(detail));
+        onView(withId(R.id.eventDescriptionText)).perform(ViewActions.typeText(detail), ViewActions.closeSoftKeyboard());
 
         // Perform action that triggers the new activity
         onView(withId(R.id.nextButton)).perform(click());
@@ -206,6 +201,8 @@ public class CreateEventAndCheck {
 
         // Format the currentDate using the SimpleDateFormat object
         String formattedDate = dateFormat.format(currentDate.getTime());
+
+        Log.d("CurrentDate", "testMatchPosterDetails: " + formattedDate);
 
         // Match event date with the converted string
         onView(withId(R.id.text_event_date)).check(matches(withText(formattedDate)));

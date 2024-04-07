@@ -6,12 +6,16 @@ import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 
+import androidx.test.espresso.intent.Intents;
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.filters.LargeTest;
 
+import com.example.qrcheckin.Event.CreateAddEventDetails;
 import com.example.qrcheckin.Event.CreateGenerateEventQR;
 
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -21,24 +25,47 @@ import org.junit.runner.RunWith;
 public class ShareQrTest {
 
     @Rule
-    public ActivityScenarioRule<CreateGenerateEventQR> scenario = new ActivityScenarioRule<CreateGenerateEventQR>(CreateGenerateEventQR.class);
+    public ActivityScenarioRule<CreateAddEventDetails> scenario = new ActivityScenarioRule<CreateAddEventDetails>(CreateAddEventDetails.class);
+
+    private CreateEventAndCheck createEventAndCheck;
+
+    @Before
+    public void setUp() {
+        // Initialize Intents
+        Intents.init();
+
+        // setup for testing notifications
+        // creates a event to push notifications
+        createEventAndCheck = new CreateEventAndCheck();
+        createEventAndCheck.testMatchPosterDetails();
+    }
+
+    @After
+    public void tearDown() {
+        // Release Intents
+        Intents.release();
+    }
 
     @Test
     public void testSharingQrWithApps() {
 
-        // perform click on btnGenCheckInQR to generate QR Code
-        onView(withId(R.id.btnGenCheckInQR)).perform(click());
+        // Check if the activity is being displayed is correct
+        onView(withId(R.id.organizerEventPoster)).check(matches(isDisplayed()));
 
-        // perform click on firstBox to get full view of QR Code
-        onView(withId(R.id.firstBox)).perform(click());
+        // Open the bottomSheetButton by clicking on a button
+        onView(withId(R.id.openBottomSheetButton)).perform(click());
 
-        // perform click on goBack to check if it works
-        onView(withId(R.id.goBack)).perform(click());
+        // Sleep for 1 second load the activity
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
 
-        // perform click on firstBox to get full view of QR Code
-        onView(withId(R.id.firstBox)).perform(click());
+        // perform click on viewCheckInQRCode to get QR code view
+        onView(withId(R.id.viewCheckInQRCode)).perform(click());
 
-        // check if the image view is present in onView
+        // Check if the activity is being displayed is correct
         onView(withId(R.id.qrCodeImageView)).check(matches(isDisplayed()));
 
         // perform click on shareQR to generate QR Code

@@ -491,6 +491,8 @@ public class OrganizersEventPageActivity extends AppCompatActivity {
             Intent activity = new Intent(getApplicationContext(), QrCodeImageView.class);
             activity.putExtra("QRCodeBitmap", bitmap);
             activity.putExtra("EventName&Date", eventName + "_" + eventDate);
+            activity.putExtra("EventName", eventName);
+            activity.putExtra("EventDate", eventDate);
             startActivity(activity);
         }
     }

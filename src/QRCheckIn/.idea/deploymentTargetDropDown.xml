@@ -28,7 +28,7 @@
           </targetsSelectedWithDialog>
         </State>
       </entry>
-      <entry key="testMainBarScan()">
+      <entry key="testGenerateQrCode()">
         <State />
       </entry>
       <entry key="testMatchPosterDetails()">
@@ -47,10 +47,13 @@
           <timeTargetWasSelectedWithDropDown value="2024-04-05T20:05:58.769105Z" />
         </State>
       </entry>
-      <entry key="testSearchEventInList()">
+      <entry key="testNotification()">
         <State />
       </entry>
       <entry key="testSharingQrWithApps()">
+        <State />
+      </entry>
+      <entry key="testSignUps()">
         <State />
       </entry>
     </value>
