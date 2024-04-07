@@ -13,6 +13,7 @@ import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
@@ -122,6 +123,12 @@ public class OrganizersEventPageActivity extends AppCompatActivity {
         TextView tvEventLocation = findViewById(R.id.text_event_location);
         TextView tvEventDescription = findViewById(R.id.text_event_description);
         ImageView ivEventPoster = findViewById(R.id.image_event_poster);
+        //https://stackoverflow.com/questions/18826870/how-to-animate-the-textview-very-very-long-text-scroll-automatically-horizonta, 2024, how to get the horizontal scrolling text
+        TextView locationsStatus = findViewById(R.id.locationStatusTxt);
+        locationsStatus.setEllipsize(TextUtils.TruncateAt.MARQUEE);
+        locationsStatus.setSelected(true);
+        locationsStatus.setSingleLine(true);
+
         ivEventPromoQr = findViewById(R.id.btnGenPromoQR);
         openNotifications = findViewById(R.id.notificationIconBtn);
         openBottomSheetBtn = findViewById(R.id.openBottomSheetButton);
@@ -151,6 +158,12 @@ public class OrganizersEventPageActivity extends AppCompatActivity {
                     eventDate = event.getEventDate();
                     promoQRCode = event.getPromoQRCode();
                     checkInQRCode = event.getCheckInQRCode();
+
+                    if (event.isCheckInStatus()) {
+                        locationsStatus.setText("Event is using your location           Event is using your location            Event is using your location");
+                    } else {
+                        locationsStatus.setText("Event is not using your location           Event is not using your location            Event is not using your location");
+                    }
 
                     header.setText(eventName);
                     tvEventLocation.setText(event.getEventLocation());
