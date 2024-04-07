@@ -85,7 +85,13 @@ public class AdminViewImages extends AppCompatActivity implements ImageAdapter.O
             }
         });
         back = findViewById(R.id.back_button);
-        back.setOnClickListener(v -> finish());
+        back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent event = new Intent(getApplicationContext(), AdminActivity.class);
+                startActivity(event);
+            }
+            });
     }
 
     private void fetchAndDisplayImages() {
