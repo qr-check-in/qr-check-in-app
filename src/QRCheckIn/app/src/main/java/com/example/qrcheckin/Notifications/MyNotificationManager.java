@@ -7,14 +7,37 @@ import android.content.Context;
 import android.content.Intent;
 import android.media.RingtoneManager;
 import android.net.Uri;
+import android.os.AsyncTask;
+import android.util.Log;
+import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.core.app.NotificationCompat;
 
 import com.example.qrcheckin.R;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.firebase.messaging.RemoteMessage;
 
+
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import java.io.IOException;
 import java.util.Random;
+
+import okhttp3.MediaType;
+import okhttp3.OkHttpClient;
+import okhttp3.RequestBody;
+
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
+
 
 public class MyNotificationManager {
 
@@ -22,7 +45,7 @@ public class MyNotificationManager {
     private static MyNotificationManager mInstance;
     private final NotificationManager mManager;
 
-    private MyNotificationManager(Context context) {
+    public MyNotificationManager(Context context) {
         mContext = context;
         mManager = context.getSystemService(NotificationManager.class);
     }
@@ -50,12 +73,13 @@ public class MyNotificationManager {
      * @param intent    The activity you intend the user to open when they click the notification.
      */
     public void sendNotification(int id, String channelId, String title, String body, Intent intent) {
-
         // Build notification
         PendingIntent pendingIntent = PendingIntent.getActivity(mContext, 0, intent, PendingIntent.FLAG_IMMUTABLE);
+
         Uri defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+
         NotificationCompat.Builder builder = new NotificationCompat.Builder(mContext, channelId)
-                .setSmallIcon(R.drawable.ic_launcher_foreground) // TODO: Replace this with the notification image
+                .setSmallIcon(R.drawable.app_icon_resize_24)
                 .setContentTitle(title)
                 .setContentText(body)
                 .setAutoCancel(true)
@@ -65,22 +89,61 @@ public class MyNotificationManager {
         mManager.notify(id, builder.build());
     }
 
-    /**
-     * Sends notification to Topic
-     * @param topic
-     * @param title
-     * @param body
-     */
-    public void sendNotificationToTopic(String topic, String title, String body) {
-        // Create a RemoteMessage object with the necessary data
-        RemoteMessage.Builder messageBuilder = new RemoteMessage.Builder(topic);
-        messageBuilder
-                .setMessageId(Integer.toString(new Random().nextInt())) // Generate a random message ID
-                .addData("title", title)
-                .addData("body", body);
-        RemoteMessage remoteMessage = messageBuilder.build();
+    // https://stackoverflow.com/questions/37990140/how-to-send-one-to-one-message-using-firebase-messaging?noredirect=1&lq=1, 2024, how to send push notifications
+    public static final String FCM_MESSAGE_URL = "https://fcm.googleapis.com/fcm/send";
+    OkHttpClient mClient = new OkHttpClient();
+    public static final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
 
-        // Send the message
-        FirebaseMessaging.getInstance().send(remoteMessage);
+    // https://stackoverflow.com/questions/37990140/how-to-send-one-to-one-message-using-firebase-messaging?noredirect=1&lq=1, 2024, how to send push notifications
+
+    public void sendMessageToClient(final JSONArray recipients, final String title, final String body, final String eventID) {
+        new AsyncTask<Void, Void, String>() {
+            @Override
+            protected String doInBackground(Void... params) {
+                try {
+                    JSONObject root = new JSONObject();
+                    JSONObject notification = new JSONObject();
+                    notification.put("body", body);
+                    notification.put("title", title);
+
+                    JSONObject data = new JSONObject();
+                    data.put("eventID", eventID);
+                    root.put("notification", notification);
+                    root.put("data", data);
+                    // Send to recipients
+                    root.put("registration_ids", recipients);
+
+                    String result = postToFCM(root.toString());
+                    Log.d("MyFirebaseMessagingSystem", "Result: " + result);
+                    return result;
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
+                return null;
+            }
+            @Override
+            protected void onPostExecute(String result) {
+                if (result != null) {
+                    Log.d("MyFirebaseMessagingSystem", "Message sent successfully to clients: " + body);
+                    Toast.makeText(mContext, "Annoucement Posted", Toast.LENGTH_SHORT).show();
+                } else {
+                    Log.d("MyFirebaseMessagingSystem", "Failed to send message to clients: " + body);
+                    Toast.makeText(mContext, "Failed to Post Annoucement", Toast.LENGTH_SHORT).show();
+
+                }
+            }
+        }.execute();
+    }
+
+    // https://stackoverflow.com/questions/37990140/how-to-send-one-to-one-message-using-firebase-messaging?noredirect=1&lq=1, 2024, how to send push notifications
+    public String postToFCM(String bodyString) throws IOException {
+        RequestBody body = RequestBody.create(JSON, bodyString);
+        okhttp3.Request request = new okhttp3.Request.Builder()
+                .url(FCM_MESSAGE_URL)
+                .post(body)
+                .addHeader("Authorization", "key=" + mContext.getString(R.string.server_key))
+                .build();
+        okhttp3.Response response = mClient.newCall(request).execute();
+        return response.body().string();
     }
 }

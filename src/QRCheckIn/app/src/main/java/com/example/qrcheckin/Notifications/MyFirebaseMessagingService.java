@@ -2,23 +2,50 @@ package com.example.qrcheckin.Notifications;
 
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.nfc.Tag;
+import android.os.AsyncTask;
 import android.os.Build;
+import android.text.TextUtils;
 import android.util.Log;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
 import com.example.qrcheckin.Common.MainActivity;
+import com.example.qrcheckin.Event.OrganizersEventPageActivity;
 import com.example.qrcheckin.R;
 import com.example.qrcheckin.Common.Utils;
 import com.example.qrcheckin.Attendee.AttendeeDatabaseManager;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Random;
+
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
+
+import okhttp3.MediaType;
+import okhttp3.OkHttpClient;
+import okhttp3.RequestBody;
+
 
 public class MyFirebaseMessagingService extends FirebaseMessagingService {
     /**
@@ -90,17 +117,32 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
             Log.d(Utils.TAG, "Message Notification Body: " + message.getNotification().getBody());
         }
 
-        // Extract message text and title, set to default if there is nothing
+        // Extract message title, body, eventID, set to default if there is nothing
         String title = "New Message";
         String messageBody = "You've got a new message.";
+        String eventId = "";
+        if (message.getData().containsKey("eventID")) {
+            eventId = message.getData().get("eventID");
+        }
+
         if (message.getNotification() != null) {
             title = message.getNotification().getTitle() == null ? title : message.getNotification().getTitle();
             messageBody = message.getNotification().getBody() == null ? messageBody : message.getNotification().getBody();
         }
 
-        // Create an intent that will open the main activity
-        Intent intent = new Intent(this, MainActivity.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        Intent intent;
+        // if and eventID was passed then open the event page for respective to the id
+        if (message.getData().containsKey("eventID") && !TextUtils.isEmpty(eventId)) {
+            // Create an intent that will open the OrganizersEventPageActivity
+            intent = new Intent(this, OrganizersEventPageActivity.class);
+            intent.putExtra("DOCUMENT_ID", eventId); // Pass the eventId to the intent
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        }
+        else {
+            // otherwise open the app and to home page MainActivity
+            intent = new Intent(this, MainActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        }
 
         // Create the "Event Updates" channel (if necessary)
         String channelId = getString(R.string.notification_channel_event_updates_id);

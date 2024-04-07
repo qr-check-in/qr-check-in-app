@@ -37,7 +37,6 @@ import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
-import com.example.qrcheckin.ClassObjects.Profile;
 
 
 public class QRCodeScan extends AppCompatActivity {
@@ -180,7 +179,8 @@ public class QRCodeScan extends AppCompatActivity {
                             // Check the attendee into the event, update the event's attendees accordingly
                             AttendeeDatabaseManager attendeeDbManager = new AttendeeDatabaseManager(attendeeFcm);
                             EventDatabaseManager eventDbManager = new EventDatabaseManager(documentId);
-                            attendeeDbManager.addToArrayField("attendedEvents", documentId); // Add event to attendee
+
+                            attendeeDbManager.incrementCheckInCount("attendedEvents", documentId); // Add event to attendee
                             String attendeeId = attendeeDbManager.getDocRef().getId();
                             eventDbManager.addToArrayField("attendee", attendeeId); // Add attendee to event
 

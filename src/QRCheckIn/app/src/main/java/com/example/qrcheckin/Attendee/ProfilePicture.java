@@ -1,7 +1,6 @@
 package com.example.qrcheckin.Attendee;
 
-import com.example.qrcheckin.ClassObjects.Attendee;
-import com.example.qrcheckin.ClassObjects.Image;
+import com.example.qrcheckin.Common.Image;
 
 public class ProfilePicture extends Image {
     //private Profile profile; // Reference to the associated profile

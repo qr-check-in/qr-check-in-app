@@ -2,6 +2,7 @@
 package com.example.qrcheckin.Event;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.FileProvider;
 
 import android.content.Context;
@@ -11,6 +12,7 @@ import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -31,7 +33,6 @@ public class QrCodeImageView extends AppCompatActivity {
     ImageButton eventButton;
     ImageButton addEventButton;
     ImageButton profileButton;
-    ImageButton backButton;
 
     ImageView qrCodeImage;
     ImageButton shareImage;
@@ -45,15 +46,11 @@ public class QrCodeImageView extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_qr_code_image_view);
 
-        TextView header = findViewById(R.id.mainHeader);
-        header.setText("QR Code Image");
-
         // Initialize Mainbar Attributes
         qrButton = findViewById(R.id.qrButton);
         eventButton = findViewById(R.id.calenderButton);
         addEventButton = findViewById(R.id.addCalenderButton);
         profileButton = findViewById(R.id.profileButton);
-        backButton = findViewById(R.id.goBack);
 
         qrCodeImage = findViewById(R.id.qrCodeImageView);
         shareImage = findViewById(R.id.shareQR);
@@ -71,6 +68,13 @@ public class QrCodeImageView extends AppCompatActivity {
         // Display the QR code bitmap in an ImageView
         qrCodeImage.setImageBitmap(qrCodeBitmap);
 
+        // ToolBar
+        Toolbar toolbar = findViewById(R.id.addEventToolBar2);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        TextView header = findViewById(R.id.mainHeader);
+        header.setText("Check-In QrCode");
 
         shareImage.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -78,15 +82,6 @@ public class QrCodeImageView extends AppCompatActivity {
                 BitmapDrawable bitmapDrawable = (BitmapDrawable) qrCodeImage.getDrawable();
                 Bitmap bitmap = bitmapDrawable.getBitmap();
                 shareImageAndText(bitmap);
-            }
-        });
-
-
-
-        backButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
             }
         });
 
@@ -114,6 +109,22 @@ public class QrCodeImageView extends AppCompatActivity {
         });
     }
 
+    // openai, 2024, chatgpt: how to define a different action for the back button
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle presses on the action bar items
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                // Define the behavior when the back button is pressed
+                // For example, navigate back to the previous activity or perform any other action
+                finish();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+
     private void shareImageAndText(Bitmap bitmap) {
 
         Intent intent = new Intent(Intent.ACTION_SEND);
@@ -136,10 +147,8 @@ public class QrCodeImageView extends AppCompatActivity {
         Uri uri = null;
 
         try{
-            Log.d("folder", String.format("created: " + folder.mkdirs() ));
-
             folder.mkdirs();
-            File file = new File(folder, eventText);
+            File file = new File(folder, eventText + ".jpeg");
             FileOutputStream fileOutputStream = new FileOutputStream(file);
 
             bitmap.compress(Bitmap.CompressFormat.JPEG,90, fileOutputStream);

@@ -1,4 +1,4 @@
-package com.example.qrcheckin.ClassObjects;
+package com.example.qrcheckin.Event;
 import android.media.metrics.Event;
 
 import com.google.firebase.firestore.FirebaseFirestore;

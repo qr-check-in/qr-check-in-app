@@ -18,14 +18,15 @@ import androidx.appcompat.widget.Toolbar;
 import com.example.qrcheckin.Event.EventDatabaseManager;
 import com.example.qrcheckin.Event.OrganizersEventPageActivity;
 import com.example.qrcheckin.R;
-import com.example.qrcheckin.ClassObjects.Notification;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.messaging.FirebaseMessaging;
+
+import org.json.JSONArray;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 
 public class CreateNotification extends AppCompatActivity {
@@ -63,7 +64,7 @@ public class CreateNotification extends AppCompatActivity {
         }
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         TextView header = findViewById(R.id.mainHeader);
-        header.setText("Create New Annoucement");
+        header.setText("");
 
         // find widgets and views
         notificationTitle = findViewById(R.id.notificationTitleText);
@@ -124,34 +125,32 @@ public class CreateNotification extends AppCompatActivity {
                     Log.d("notification", String.format("storing Notification%s", newNotification.getTitle()));
                     String notiID = notiDb.storeNotification(newNotification);
 
-                    // Add to eventdb
-                    eventDb.addToArrayField("notifications", notiID);
-
-                    // Send notification to the topic
-                    // openai, 2024, chatgpt: how to connect the notificationmanager and messaging service to creating a notification
-                    eventDb.getDocRef().get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                    // Retrieve the list of attendees from the event document
+                    // openai, 2024, chatgpt, how to fetch a field from the db
+                    eventDb.getCollectionRef().document(documentId).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                         @Override
                         public void onSuccess(DocumentSnapshot documentSnapshot) {
                             if (documentSnapshot.exists()) {
-                                topicName = documentSnapshot.getString("topicName");
-                                if (topicName != null) {
-                                    // Send notification to the topic
-                                    MyNotificationManager notificationManager = MyNotificationManager.getInstance(getApplicationContext());
-//                                    notificationManager.sendNotificationToTopic(topicName, notiTitle, notiDescription);
-                                    }
-                                 else {
-                                    Log.e("Notification", "Topic name is null");
+                                List<String> attendees = (List<String>) documentSnapshot.get("attendee");
+                                if (attendees != null) {
+                                    // Create JSONArray from attendees list
+                                    JSONArray regArray = new JSONArray(attendees);
+                                    // Print the contents of regArray
+                                    Log.d("CreateNotification", "Attendees: " + regArray.toString());
+                                    // Call createAnnoucement method with the list of attendees
+                                    createAnnoucement(regArray);
                                 }
-                            } else {
-                                Log.e("Notification", "Document does not exist");
                             }
                         }
                     }).addOnFailureListener(new OnFailureListener() {
                         @Override
                         public void onFailure(@NonNull Exception e) {
-                            Log.e("Notification", "Error fetching document", e);
+                            Log.e("CreateNotification", "Error getting attendees: " + e.getMessage());
                         }
                     });
+
+                    // Add to eventdb
+                    eventDb.addToArrayField("notifications", notiID);
 
                     // Once the notification is created, navigate back to OrganizersEventPageActivity
                     Intent intent = new Intent(getApplicationContext(), OrganizersEventPageActivity.class);
@@ -182,5 +181,14 @@ public class CreateNotification extends AppCompatActivity {
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    /**
+     * Server takes the data and sends the notification to attendees
+     * @param regArray list of FCM tokens of the participants
+     */
+    public void createAnnoucement(JSONArray regArray){
+        MyNotificationManager firebaseMessaging = new MyNotificationManager(getApplicationContext());
+        firebaseMessaging.sendMessageToClient(regArray, notiTitle, notiDescription, documentId);
     }
 }

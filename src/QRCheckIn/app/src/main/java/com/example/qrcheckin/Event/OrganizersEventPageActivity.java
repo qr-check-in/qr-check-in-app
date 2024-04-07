@@ -2,8 +2,11 @@ package com.example.qrcheckin.Event;
 
 import static android.content.ContentValues.TAG;
 
+import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.ContentResolver;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
@@ -23,26 +26,37 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import com.example.qrcheckin.Attendee.AttendeeDatabaseManager;
 import com.example.qrcheckin.Attendee.ProfileActivity;
-import com.example.qrcheckin.ClassObjects.Event;
-import com.example.qrcheckin.ClassObjects.Notification;
-import com.example.qrcheckin.ClassObjects.QRCode;
+import com.example.qrcheckin.Notifications.MyNotificationManager;
+import com.example.qrcheckin.Notifications.Notification;
 import com.example.qrcheckin.Common.ImageStorageManager;
 import com.example.qrcheckin.Common.MainActivity;
 import com.example.qrcheckin.Notifications.CreateNotification;
 import com.example.qrcheckin.Notifications.DialogRecyclerView;
+import com.example.qrcheckin.Notifications.NotificationDatabaseManager;
 import com.example.qrcheckin.R;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 
+import org.json.JSONArray;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Date;
+import java.util.Locale;
 import java.util.Objects;
 
 /**
@@ -166,6 +180,11 @@ public class OrganizersEventPageActivity extends AppCompatActivity {
                             showDialog();
                         });
                     }
+
+                    if (Objects.equals(event.getOrganizer(), fcmToken)) {
+
+                    }
+
                 } else {
                     Log.d("Firestore", String.format("No such document with id %s", documentId));
                 }
@@ -253,33 +272,49 @@ public class OrganizersEventPageActivity extends AppCompatActivity {
     }
 
     /**
-     * This handles the interactions with opening the dialog for notifcations
+     * Opens dialog with list of notifications/announcements for the event
      */
     public void NotificationListDialog(){
-        // Temporary Notifications list
         ArrayList<Notification> notifications = new ArrayList<>();
-
-        // Creating sample notification objects and adding them to the list
-        Notification notification1 = new Notification("Test Notification 1", "Description for Test Notification 1", "Date Time for Test Notification 1", documentId);
-        Notification notification2 = new Notification("Test Notification 2", "Description for Test Notification 2", "Date Time for Test Notification 2", documentId);
-        Notification notification3 = new Notification("Test Notification 3", "Description for Test Notification 3", "Date Time for Test Notification 3", documentId);
-        Notification notification4 = new Notification("Test Notification 4", "Description for Test Notification 4", "Date Time for Test Notification 4", documentId);
-        Notification notification5 = new Notification("Test Notification 5", "Description for Test Notification 5", "Date Time for Test Notification 5", documentId);
-
-        // Adding the notifications to the list
-        notifications.add(notification1);
-        notifications.add(notification2);
-        notifications.add(notification3);
-        notifications.add(notification4);
-        notifications.add(notification5);
-        DialogRecyclerView listDialog = new DialogRecyclerView(
-                this, notifications) {
-            @Override
-            public void onCreate(Bundle savedInstanceState) {
-                super.onCreate(savedInstanceState);
-            }
-        };
-        listDialog.show();
+        Context context = this;
+        NotificationDatabaseManager db = new NotificationDatabaseManager();
+        // Get all notifications
+        db.getCollectionRef().get().addOnSuccessListener(notificationSnapshots -> {
+                for(DocumentSnapshot snapshot : notificationSnapshots){
+                    Notification notification = snapshot.toObject(Notification.class);
+                    // If a notification belongs to this Event, add it to the list to be displayed
+                    if(Objects.equals(notification.getEventID(), documentId)){
+                        notifications.add(notification);
+                    }
+                }
+                // Sort notifications by dateTime field
+                // openai, 2024, chatgpt: how to sort the list based on date
+                Collections.sort(notifications, new Comparator<Notification>() {
+                    @Override
+                    public int compare(Notification n1, Notification n2) {
+                        // Parse dateTime strings to Date objects for comparison
+                        SimpleDateFormat dateFormat = new SimpleDateFormat("MMM, dd, yyyy; h:mm a", Locale.getDefault());
+                        try {
+                            Date date1 = dateFormat.parse(n1.getDateTime());
+                            Date date2 = dateFormat.parse(n2.getDateTime());
+                            // Compare Date objects in descending order
+                            return date2.compareTo(date1);
+                        } catch (ParseException e) {
+                            e.printStackTrace();
+                            return 0;
+                        }
+                    }
+                });
+                // Create dialog recycler view to display notifications
+                DialogRecyclerView listDialog = new DialogRecyclerView(
+                        context, notifications) {
+                    @Override
+                    public void onCreate(Bundle savedInstanceState) {
+                        super.onCreate(savedInstanceState);
+                    }
+                };
+                listDialog.show();
+        });
     }
 
     /**
@@ -322,6 +357,7 @@ public class OrganizersEventPageActivity extends AppCompatActivity {
         LinearLayout createEventNotification = dialog.findViewById(R.id.createEventNotification);
         LinearLayout viewEventSignups = dialog.findViewById(R.id.viewSignedUp);
         LinearLayout viewEventParticipants = dialog.findViewById(R.id.viewEventCheckin);
+        LinearLayout deleteEvent = dialog.findViewById(R.id.deleteEvent);
 
         // Listener for view check-in QR code layout
         viewCheckInQRCode.setOnClickListener(new View.OnClickListener() {
@@ -375,11 +411,70 @@ public class OrganizersEventPageActivity extends AppCompatActivity {
             }
         });
 
+        // Listener for the View Event Participants layout (checked-in attendees)
+        deleteEvent.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+                showDeleteConfirmationDialog();
+            }
+        });
+
         dialog.show();
         dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.WRAP_CONTENT);
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
         dialog.getWindow().setGravity(Gravity.BOTTOM);
+    }
+
+    // openai, 2024, chatgpt: how to create an alert dialog for delete
+    private void showDeleteConfirmationDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage("Are you sure you want to delete this event?");
+        builder.setPositiveButton("Delete", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                // User clicked the Delete
+                // Alert those who have signed up for the event
+//                MyNotificationManager firebaseMessaging = new MyNotificationManager(getApplicationContext());
+//                JSONArray regArray = new JSONArray(get);
+//                firebaseMessaging.sendMessageToClient(, "Event Shutdown", "An event you have signed up for has been shut down", "");
+                deleteEvent();
+            }
+        });
+        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                // User clicked the Cancel button, so dismiss the dialog
+                dialogInterface.dismiss();
+            }
+        });
+        AlertDialog dialog = builder.create();
+        dialog.show();
+    }
+
+    /**
+     * Delete event from firebase
+     */
+    private void deleteEvent() {
+        // Delete the document
+        // openai, 2024, chatgpt: how to delete from doc
+        eventDb.getDocRef().delete()
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.d(TAG, "DocumentSnapshot successfully deleted!");
+                        Toast.makeText(getApplicationContext(),"Event Deleted",Toast.LENGTH_SHORT).show();
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.w(TAG, "Error deleting document", e);
+                        // Handle any errors, such as displaying an error message to the user
+                    }
+                });
+        finish();
     }
 
     /**

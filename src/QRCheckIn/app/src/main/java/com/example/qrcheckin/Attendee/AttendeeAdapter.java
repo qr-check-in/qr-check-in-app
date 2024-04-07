@@ -9,14 +9,14 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.qrcheckin.Event.EventAdapter;
 import com.example.qrcheckin.Common.ImageStorageManager;
+import com.example.qrcheckin.Event.EventAdapter;
 import com.example.qrcheckin.R;
-import com.example.qrcheckin.ClassObjects.Attendee;
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.firebase.firestore.DocumentSnapshot;
 
+import java.util.HashMap;
 import java.util.Locale;
 import java.util.function.Function;
 
@@ -26,17 +26,24 @@ import java.util.function.Function;
 public class AttendeeAdapter extends FirestoreRecyclerAdapter<Attendee, AttendeeAdapter.AttendeeViewHolder> {
     private EventAdapter.OnItemClickListener listener;
     private final Function<Integer, Boolean> viewTypeDeterminer;
+    private final String eventDocId;
 
     /**
      * Create a new RecyclerView adapter that listens to a Firestore Query.  See {@link
      * FirestoreRecyclerOptions} for configuration options.
      *
-     * @param options
-     * @param viewTypeDeterminer
+     * @param options               The FirestoreRecyclerOptions<Attendee> options for the query
+     *                                  that returns the desired attendees from Firestore
+     * @param viewTypeDeterminer    A lambda function that returns 0 if you want attendee signups
+     *                                  and returns 1 if you want attendee check-ins
      */
-    public AttendeeAdapter(@NonNull FirestoreRecyclerOptions<Attendee> options, Function<Integer, Boolean> viewTypeDeterminer) {
+    public AttendeeAdapter(@NonNull FirestoreRecyclerOptions<Attendee> options,
+                           String eventDocId,
+                           Function<Integer, Boolean> viewTypeDeterminer) {
         super(options);
         this.viewTypeDeterminer = viewTypeDeterminer;
+        this.eventDocId = eventDocId;
+
     }
 
     /**
@@ -68,10 +75,11 @@ public class AttendeeAdapter extends FirestoreRecyclerAdapter<Attendee, Attendee
      */
     @Override
     protected void onBindViewHolder(@NonNull AttendeeAdapter.AttendeeViewHolder holder, int position, @NonNull Attendee model) {
-        if (getItemViewType(position) == 0) {
-            ((AttendeeViewHolder) holder).bind(model);
+        int viewType = getItemViewType(position);
+        if (viewType == 0) {
+            ((AttendeeViewHolder) holder).bind(model, eventDocId);
         } else {
-            ((AttendeeCheckInViewHolder) holder).bind(model);
+            ((AttendeeCheckInViewHolder) holder).bind(model, eventDocId);
         }
 
     }
@@ -95,7 +103,8 @@ public class AttendeeAdapter extends FirestoreRecyclerAdapter<Attendee, Attendee
      */
     @Override
     public int getItemViewType(int position) {
-        return viewTypeDeterminer.apply(position) ? 1 : 0;
+        int viewType = viewTypeDeterminer.apply(position) ? 1 : 0;
+        return viewType;
     }
 
     /**
@@ -130,7 +139,7 @@ public class AttendeeAdapter extends FirestoreRecyclerAdapter<Attendee, Attendee
          *      onBindViewHolder()
          * @param model The Attendee class instance
          */
-        public void bind(Attendee model) {
+        public void bind(Attendee model, String eventDocId) {
             tvName.setText(model.getProfile().getName());
             if (model.getProfile().getProfilePicture() != null) {
                 ImageStorageManager storage = new ImageStorageManager(model.getProfile().getProfilePicture(), "/ProfilePictures");
@@ -154,9 +163,15 @@ public class AttendeeAdapter extends FirestoreRecyclerAdapter<Attendee, Attendee
          * @param model The Attendee class instance
          */
         @Override
-        public void bind(Attendee model) {
+        public void bind(Attendee model, String eventDocId) {
+            // Count the number of times the attendee checked into this event
+            HashMap<String, Integer> checkedInEvents = model.getAttendedEvents();
+            Integer count = checkedInEvents.getOrDefault(eventDocId, 1);
+            int checkInCount = (count != null) ? count : 1;
+
             tvName.setText(model.getProfile().getName());
-            String checkInString = String.format(Locale.CANADA, "Checked in: %d", model.getAttendedEvents().size());
+            String checkInString = String.format(Locale.CANADA, "%d", checkInCount);
+
             tvCheckIns.setText(checkInString);
             if (model.getProfile().getProfilePicture() != null) {
                 ImageStorageManager storage = new ImageStorageManager(model.getProfile().getProfilePicture(), "/ProfilePictures");

@@ -1,7 +1,5 @@
 package com.example.qrcheckin.Event;
 
-import com.example.qrcheckin.ClassObjects.Event;
-
 import java.util.ArrayList;
 
 /**

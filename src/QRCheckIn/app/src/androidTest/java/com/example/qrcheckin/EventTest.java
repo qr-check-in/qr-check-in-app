@@ -1,9 +1,9 @@
 // Corrected EventTest.java
 package com.example.qrcheckin;
 
-import com.example.qrcheckin.ClassObjects.Attendee;
-import com.example.qrcheckin.ClassObjects.EventPoster;
-import com.example.qrcheckin.ClassObjects.QRCode;
+import com.example.qrcheckin.Attendee.Attendee;
+import com.example.qrcheckin.Event.EventPoster;
+import com.example.qrcheckin.Event.QRCode;
 
 import org.junit.Test;
 

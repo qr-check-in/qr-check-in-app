@@ -1,10 +1,5 @@
 package com.example.qrcheckin.Event;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -14,11 +9,16 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.recyclerview.widget.RecyclerView;
+
+import com.example.qrcheckin.Attendee.Attendee;
 import com.example.qrcheckin.Attendee.AttendeeAdapter;
 import com.example.qrcheckin.Attendee.AttendeeDatabaseManager;
 import com.example.qrcheckin.Common.LinearLayoutManagerWrapper;
 import com.example.qrcheckin.R;
-import com.example.qrcheckin.ClassObjects.Attendee;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -55,7 +55,6 @@ public class AttendeeList extends AppCompatActivity {
         setContentView(R.layout.activity_attendee_list);
 
         // Set up recycler view of attendees
-        recyclerView = findViewById(R.id.event_recycler_view);
         getMap = findViewById(R.id.mapLocation);
 
         // Manage Toolbar
@@ -71,36 +70,42 @@ public class AttendeeList extends AppCompatActivity {
         documentId = getIntent().getStringExtra("EVENT_DOC_ID");
         fieldName = getIntent().getStringExtra("FIELD_NAME");
 
-        // TODO: setup recycler view
-
         // get all the attendees in the event from Firestore
         getAllAttendees();
 
-        // Set up the recycler view of events to be displayed (displays all by default)
+        // Set up the recycler view of attendees to be displayed
         attendeeDb = new AttendeeDatabaseManager();
         assert documentId != null;
         assert fieldName != null;
-        Query query = attendeeDb.getCollectionRef()
-                .whereArrayContains(fieldName, documentId);
-        setUpRecyclerView(query, fieldName);
+        Query query;
+        if (fieldName.equals("signupEvents")) {
+            query = attendeeDb.getCollectionRef()
+                    .whereArrayContains(fieldName, documentId);
+            // Hide getMap button if we're viewing the signups
+            getMap.setVisibility(View.GONE);
+        } else {
+            // Set the search query
+            String searchString = String.format("%s.%s", fieldName, documentId);
+            query = attendeeDb.getCollectionRef()
+                    .whereGreaterThan(searchString, 0);
 
-        // Hide getMap button if we're viewing the signups
-        if (Objects.equals(fieldName, "signupEvents")){
-            getMap.setVisibility(View.INVISIBLE);
+            // Set the map button listener
+            getMap.setVisibility(View.VISIBLE);
+            getMap.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (!attendeeListGeoPoints.isEmpty()) {
+                        Intent intent = new Intent(getApplicationContext(), MapsActivity.class);
+                        intent.putExtra("AllGeoPoints", attendeeListGeoPoints);
+                        startActivity(intent);
+                    } else {
+                        Toast.makeText(AttendeeList.this, "No geolocation available!", Toast.LENGTH_SHORT).show();
+                    }
+                }
+            });
         }
 
-        getMap.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (!attendeeListGeoPoints.isEmpty()) {
-                    Intent intent = new Intent(getApplicationContext(), MapsActivity.class);
-                    intent.putExtra("AllGeoPoints", attendeeListGeoPoints);
-                    startActivity(intent);
-                } else {
-                    Toast.makeText(AttendeeList.this, "No geolocation available!", Toast.LENGTH_SHORT).show();
-                }
-            }
-        });
+        setUpRecyclerView(query, fieldName, documentId);
     }
 
     /**
@@ -108,12 +113,12 @@ public class AttendeeList extends AppCompatActivity {
      * query. Do not call
      * this method more than once
      * 
-     * @param query     The query the recycler view will use to display events
-     * @param fieldName String from options: ["signupEvents", "attendedEvents"] to
-     *                  display
+     * @param query         The query the recycler view will use to display events
+     * @param fieldName     String from options: ["signupEvents", "attendedEvents"] to
+     *                          display
+     * @param documentId    The String document id of the event to get the attendee list for
      */
-    private void setUpRecyclerView(Query query, String fieldName) {
-
+    private void setUpRecyclerView(Query query, String fieldName, String documentId) {
         // Put the desired query into the adapter so it can use it to find the specified
         // events
         FirestoreRecyclerOptions<Attendee> options = new FirestoreRecyclerOptions.Builder<Attendee>()
@@ -121,14 +126,16 @@ public class AttendeeList extends AppCompatActivity {
                 .setLifecycleOwner(this)
                 .build();
 
-        attendeeAdapter = new AttendeeAdapter(options, position -> {
+        // Returns true if the adapter should display attendees who have checked-in/attended the
+        // event, return false for attendees who have signed up for the event
+        attendeeAdapter = new AttendeeAdapter(options, documentId, position -> {
             if (Objects.equals(fieldName, "attendedEvents")) {
                 return true;
             } else if (Objects.equals(fieldName, "signupEvents")) {
                 return false;
+            } else {
+                return true;
             }
-            return true; // Return the default attendedEvents if the fieldName is invalid
-
         });
 
         // Connect the recycler view to it's adapter and layout manager
@@ -187,7 +194,7 @@ public class AttendeeList extends AppCompatActivity {
                         getMap.setVisibility(View.VISIBLE);
                     } else {
                         // If CheckInStatus of event is false, hide the getMap button
-                        getMap.setVisibility(View.INVISIBLE);
+                        getMap.setVisibility(View.GONE);
                     }
 
                     // Check if attendees list is  null

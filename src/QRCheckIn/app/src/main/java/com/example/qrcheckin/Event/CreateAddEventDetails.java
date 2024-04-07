@@ -19,11 +19,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import com.bumptech.glide.Glide;
-import com.example.qrcheckin.ClassObjects.EventPoster;
 import com.example.qrcheckin.Common.MainActivity;
 import com.example.qrcheckin.Attendee.ProfileActivity;
 import com.example.qrcheckin.R;
-import com.example.qrcheckin.ClassObjects.Event;
 
 /**
  * Creates new event.

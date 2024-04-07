@@ -4,7 +4,7 @@ package com.example.qrcheckin;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
-import com.example.qrcheckin.ClassObjects.Attendee;
+import com.example.qrcheckin.Attendee.Attendee;
 
 import org.junit.Before;
 import org.junit.Test;

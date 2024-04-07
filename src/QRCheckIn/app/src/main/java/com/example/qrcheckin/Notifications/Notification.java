@@ -1,4 +1,4 @@
-package com.example.qrcheckin.ClassObjects;
+package com.example.qrcheckin.Notifications;
 
 /**
  * Represents a notification message intended for multiple recipients.
@@ -12,6 +12,11 @@ public class Notification {
     private String dateTime;
     // event id
     private String eventID;
+
+    /**
+     * Empty constructor for firestore purposes
+     */
+    public Notification(){}
 
     public Notification(String title, String message, String dateTime, String eventID) {
         this.title = title;

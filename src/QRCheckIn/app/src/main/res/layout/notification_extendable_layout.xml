@@ -57,6 +57,14 @@
 
         </LinearLayout>
 
+        <ImageView
+            android:id="@+id/eventPoster"
+            android:layout_width="50dp"
+            android:layout_height="75dp"
+            android:src="@drawable/fest1"
+            android:scaleType="fitXY"
+            android:layout_gravity="center_vertical"/>
+
     </LinearLayout>
 
 </androidx.cardview.widget.CardView>

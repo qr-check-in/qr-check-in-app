@@ -106,4 +106,7 @@ dependencies {
     androidTestImplementation ("androidx.test.uiautomator:uiautomator:2.2.0")
 
 
+    // Notifications
+    implementation ("com.android.volley:volley:1.2.0")
+
 }
