@@ -1,5 +1,6 @@
 package com.example.qrcheckin.Notifications;
 
+import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -10,6 +11,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.util.Log;
 import android.widget.Toast;
+import android.widget.RemoteViews;
 
 import androidx.annotation.NonNull;
 import androidx.core.app.NotificationCompat;
@@ -76,7 +78,10 @@ public class MyNotificationManager {
         // Build notification
         PendingIntent pendingIntent = PendingIntent.getActivity(mContext, 0, intent, PendingIntent.FLAG_IMMUTABLE);
 
+        RemoteViews customLayout = getCustomNotificationLayout(title, body);
+
         Uri defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+        long[] DEFAULT_VIBRATE_PATTERN = {0, 100, 200, 300};
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(mContext, channelId)
                 .setSmallIcon(R.drawable.app_icon_resize_24)
@@ -84,9 +89,19 @@ public class MyNotificationManager {
                 .setContentText(body)
                 .setAutoCancel(true)
                 .setSound(defaultSoundUri)
-                .setContentIntent(pendingIntent);
+                .setVibrate(DEFAULT_VIBRATE_PATTERN)
+                .setPriority(Notification.PRIORITY_HIGH)
+                .setContentIntent(pendingIntent)
+                .setContent(customLayout);
 
         mManager.notify(id, builder.build());
+    }
+
+    public RemoteViews getCustomNotificationLayout(String title, String body) {
+        RemoteViews remoteViews = new RemoteViews(mContext.getPackageName(), R.layout.notification_layout);
+        remoteViews.setTextViewText(R.id.notificationTitleText, title);
+        remoteViews.setTextViewText(R.id.notificationDescriptionText, body);
+        return remoteViews;
     }
 
     // https://stackoverflow.com/questions/37990140/how-to-send-one-to-one-message-using-firebase-messaging?noredirect=1&lq=1, 2024, how to send push notifications

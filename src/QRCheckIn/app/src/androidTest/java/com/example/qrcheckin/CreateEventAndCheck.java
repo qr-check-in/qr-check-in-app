@@ -177,9 +177,9 @@ public class CreateEventAndCheck {
         onView(withId(R.id.eventListView)).check(matches(isDisplayed()));
 
         // press myEventsButton to see events created by user
-        onView(ViewMatchers.withId(R.id.eventsTabbar)).check(matches(isDisplayed())).perform(click());
+        onView(withId(R.id.eventsTabbar)).check(matches(isDisplayed())).perform(click());
 
-        onView(ViewMatchers.withId(R.id.myEventsButton))
+        onView(withId(R.id.myEventsButton))
                 .check(matches(isDisplayed())).perform(click());
 
         // Click on the event with text stored in title

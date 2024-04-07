@@ -107,12 +107,19 @@ public class ParticipantAndSignUpTest {
         // Get back to event poster page
         pressBack();
 
+        // Sleep for 1 second load the activity
+        try {
+            Thread.sleep(2000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
         // Scroll up to locate switch
         onView(withId(R.id.scrollOrganizerPage)).perform(swipeUp());
 
         // Sleep for 1 second load the activity
         try {
-            Thread.sleep(1000);
+            Thread.sleep(2000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }

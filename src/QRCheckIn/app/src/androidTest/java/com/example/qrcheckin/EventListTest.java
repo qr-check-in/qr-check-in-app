@@ -17,6 +17,7 @@ import static org.hamcrest.CoreMatchers.anything;
 import static org.hamcrest.CoreMatchers.is;
 
 import com.example.qrcheckin.Event.EventListView;
+import com.example.qrcheckin.R;
 
 import org.junit.Rule;
 import org.junit.Test;

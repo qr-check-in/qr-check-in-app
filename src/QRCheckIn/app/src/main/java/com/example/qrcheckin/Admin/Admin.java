@@ -1,12 +1,16 @@
 package com.example.qrcheckin.Admin;
 
+import android.util.Log;
+import com.example.qrcheckin.Event.Event;
 import com.example.qrcheckin.Attendee.Attendee;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
-
+import com.example.qrcheckin.Attendee.Profile;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -15,6 +19,17 @@ import java.util.Map;
 
 public class Admin extends Attendee {
     private final FirebaseFirestore db;
+    public interface EventsCallback {
+        void onEventsFetched(List<Event> events);
+    }
+    public interface ImageFetchCallback {
+        void onImagesFetched(List<String> imageUris);
+    }
+
+    public interface ProfileCallback {
+        void onProfileFetched(Map<String, Object> profile, String profilePic);
+        void onError(Exception e);
+    }
 
     /**
      * Constructor for admin initializes firestore instance.
@@ -51,28 +66,30 @@ public class Admin extends Attendee {
                 .addOnSuccessListener(aVoid -> System.out.println("Event successfully deleted!"))
                 .addOnFailureListener(e -> System.out.println("Error deleting event: " + e));
     }
- 
+
     /**
      * Retrieves and prints the details of a user profile.
      *
      * @param userId the ID of the user profile to view.
      */
-    public void viewProfile(String userId) {
+    public void viewProfile(String userId, ProfileCallback callback) {
         db.collection("Attendees").document(userId).get()
                 .addOnSuccessListener(documentSnapshot -> {
                     if (documentSnapshot.exists()) {
                         // Access the nested profile field within the Attendees document
                         Map<String, Object> profile = (Map<String, Object>) documentSnapshot.get("profile");
-                        if (profile != null) { // Check if the profile field exists
-                            System.out.println("Profile data: " + profile);
+                        String profilePicUrl = (String) documentSnapshot.get("profile.profilePicture.uriString");
+                        Log.d("profilePicAdmin", "profile uri:"+profilePicUrl);
+                        if (profile != null) {
+                            callback.onProfileFetched(profile, profilePicUrl);
                         } else {
-                            System.out.println("No profile data found!");
+                            callback.onError(new Exception("No profile data found!"));
                         }
                     } else {
-                        System.out.println("No such profile exists!");
+                        callback.onError(new Exception("No such profile exists!"));
                     }
                 })
-                .addOnFailureListener(e -> System.out.println("Error fetching profile: " + e));
+                .addOnFailureListener(callback::onError);
     }
 
 
@@ -169,38 +186,67 @@ public class Admin extends Attendee {
      * Retrieves & prints the list of all events.
      * US 04.04.01
      */
-    public void browseEvents() {
+    public void browseEvents(EventsCallback callback) {
         db.collection("events").get()
                 .addOnSuccessListener(queryDocumentSnapshots -> {
+                    List<Event> events = new ArrayList<>();
                     for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
-                        System.out.println("Event ID: " + documentSnapshot.getId() + ", Data: " + documentSnapshot.getData());
+                        Event event = documentSnapshot.toObject(Event.class);
+                        events.add(event);
                     }
+                    callback.onEventsFetched(events);
                 })
-                .addOnFailureListener(e -> System.out.println("Error fetching events: " + e));
+                .addOnFailureListener(e -> {
+                    System.out.println("Error fetching events: " + e);
+                    callback.onEventsFetched(new ArrayList<>()); // In case of failure, return an empty list
+                });
     }
 
     /**
      * Retrieves & prints the list of all profiles.
      * US 04.05.01.
      */
-    public void browseProfiles() {
+    public void browseProfiles(final ProfileCallback callback) {
         db.collection("Attendees").get()
                 .addOnSuccessListener(queryDocumentSnapshots -> {
+                    List<Profile> profilesList = new ArrayList<>();
+                    List<String> documentIds = new ArrayList<>();
                     for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
-                        Map<String, Object> profile = (Map<String, Object>) documentSnapshot.get("profile");
-                        if (profile != null) {
-                            System.out.println("Profile ID: " + documentSnapshot.getId() + ", Data: " + profile);
+                        Map<String, Object> profileMap = (Map<String, Object>) documentSnapshot.get("profile");
+                        if (profileMap != null) {
+                            String name = (String) profileMap.get("name");
+                            if (name != null) {
+                                Profile profile = new Profile();
+                                profile.setName(name);
+                                profilesList.add(profile);
+                                documentIds.add(documentSnapshot.getId());
+                                Log.d("AdminViewProfiles", "Fetched profile - Name: " + name);
+                            } else {
+                                Log.d("AdminViewProfiles", "Name field is missing in the profile document with ID: " + documentSnapshot.getId());
+                            }
+                        } else {
+                            Log.d("AdminViewProfiles", "Profile map is missing in the document with ID: " + documentSnapshot.getId());
                         }
                     }
+//                    if (callback != null) {
+//                        callback.onProfilesFetched(profilesList, documentIds);
+//                    }
                 })
-                .addOnFailureListener(e -> System.out.println("Error fetching profiles: " + e));
+                .addOnFailureListener(e -> {
+                    Log.e("Admin", "Error fetching profiles", e);
+//                    if (callback != null) {
+//                        callback.onProfilesFetched(new ArrayList<>(), documentIds); // Callback with an empty list in case of failure
+//                    }
+                });
     }
 
     /**
      * Retrieves & prints the list of all images.
      * US 04.06.01
      */
-    public void browseImages() {
+    public void browseImages(final ImageFetchCallback callback) {
+        List<String> imageUris = new ArrayList<>();
+
         // Browse profile pictures
         db.collection("Attendees").get()
                 .addOnSuccessListener(attendeesSnapshots -> {
@@ -208,24 +254,29 @@ public class Admin extends Attendee {
                         if (attendeeSnapshot.contains("profile.profilePicture")) {
                             String profilePicUri = attendeeSnapshot.getString("profile.profilePicture.uriString");
                             if (profilePicUri != null) {
-                                System.out.println("Attendee ID: " + attendeeSnapshot.getId() + ", Profile Picture URI: " + profilePicUri);
+                                imageUris.add(profilePicUri);
                             }
                         }
                     }
+                    // Continue to browse event posters after fetching profile pictures
+                    db.collection("events").get()
+                            .addOnSuccessListener(eventsSnapshots -> {
+                                for (DocumentSnapshot eventSnapshot : eventsSnapshots) {
+                                    if (eventSnapshot.contains("poster")) {
+                                        String posterUri = eventSnapshot.getString("poster.uriString");
+                                        if (posterUri != null) {
+                                            imageUris.add(posterUri);
+                                        }
+                                    }
+                                }
+                                if (callback != null) {
+                                    callback.onImagesFetched(imageUris);
+                                }
+                            })
+                            .addOnFailureListener(e -> System.out.println("Error fetching event posters: " + e));
                 })
                 .addOnFailureListener(e -> System.out.println("Error fetching profile pictures: " + e));
-        // Browse event posters
-        db.collection("events").get()
-                .addOnSuccessListener(eventsSnapshots -> {
-                    for (DocumentSnapshot eventSnapshot : eventsSnapshots) {
-                        if (eventSnapshot.contains("poster")) {
-                            String posterUri = eventSnapshot.getString("poster.uriString");
-                            if (posterUri != null) {
-                                System.out.println("Event ID: " + eventSnapshot.getId() + ", Poster URI: " + posterUri);
-                            }
-                        }
-                    }
-                })
-                .addOnFailureListener(e -> System.out.println("Error fetching event posters: " + e));
     }
+
+
 }

@@ -53,6 +53,10 @@ public class Image{
 
     }
 
+    public void setUriString(String string) {
+        this.uriString = string;
+    }
+
     /**
      * Converts the image file to a BITMAP Base64 encoded string.
      *
