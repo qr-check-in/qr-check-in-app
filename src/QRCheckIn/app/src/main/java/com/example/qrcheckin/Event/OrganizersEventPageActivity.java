@@ -4,12 +4,10 @@ import static android.content.ContentValues.TAG;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.content.ContentResolver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -493,12 +491,14 @@ public class OrganizersEventPageActivity extends AppCompatActivity {
     public void shareQRCode(QRCode qrCode, String headerText){
         if(qrCode != null){
             // Get bitmap of the QR code to pass to new activity
-            ContentResolver contentResolver = getContentResolver();
-            ImageStorageManager storage = new ImageStorageManager(qrCode , "/QRCodes");
-            Bitmap bitmap = storage.convertToBitmap(contentResolver);
+            //ContentResolver contentResolver = getContentResolver();
+            //ImageStorageManager storage = new ImageStorageManager(qrCode , "/QRCodes");
+            //Bitmap bitmap = storage.convertToBitmap(contentResolver);
             // Start new activity
             Intent activity = new Intent(getApplicationContext(), QrCodeImageView.class);
-            activity.putExtra("QRCodeBitmap", bitmap);
+            //activity.putExtra("QRCodeBitmap", bitmap);
+            Log.d("EVENT PAGE", String.format("before passing image uri is %s", qrCode.getUriString()));
+            activity.putExtra("QRCode", qrCode);
             activity.putExtra("EventName&Date", eventName + "_" + eventDate);
             activity.putExtra("headerText", headerText);
             startActivity(activity);

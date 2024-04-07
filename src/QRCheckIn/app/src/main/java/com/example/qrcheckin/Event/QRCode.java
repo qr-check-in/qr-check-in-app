@@ -5,7 +5,9 @@ import com.example.qrcheckin.Attendee.Attendee;
 import com.example.qrcheckin.Common.Image;
 import com.example.qrcheckin.Common.Utils;
 
-public class QRCode extends Image {
+import java.io.Serializable;
+
+public class QRCode extends Image implements Serializable {
     private String hashedContent;
     private String unhashContent;
 

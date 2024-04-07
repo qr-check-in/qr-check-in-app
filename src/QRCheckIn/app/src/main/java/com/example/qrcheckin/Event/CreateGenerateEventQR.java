@@ -246,6 +246,7 @@ public class CreateGenerateEventQR extends AppCompatActivity {
                     // Add the newEvent to the db
                     Event newEvent = new Event(organizerFcm, checkInQRCode, promoQRCode, inputEventPoster, inputEventName, inputEventDate, inputEventTime, inputEventLocation, inputEventDescription, incomingEvent.isCheckInStatus(), numOfAttends);
                     String eventId = db.storeEvent(newEvent);
+                    Log.d("CREATED EVENT", String.format("stored event doc ID %s", eventId));
                     EventDatabaseManager eventDb = new EventDatabaseManager(eventId);
 
                     eventDb.addToArrayField("attendee", organizerFcm);
