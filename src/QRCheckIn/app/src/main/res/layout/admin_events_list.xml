@@ -11,6 +11,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="370dp"
         android:layout_height="50dp"
+        android:layout_marginStart="0dp"
         android:layout_margin="15dp"
         android:layout_marginTop="12dp"
         android:background="@color/JordyBlue"
@@ -22,6 +23,7 @@
             android:id="@+id/qrCodeImageView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="parent"
             android:src="@drawable/qrresize" />
 
         <TextView
@@ -48,18 +50,12 @@
             android:id="@+id/eventTimeTextView"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_marginStart="55dp"
-            app:layout_constraintLeft_toRightOf="@id/eventNameTextView"
             android:text="Time"
-            android:textColor="@color/Black" />
-
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="70dp"
-            android:paddingTop="20dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            android:src="@drawable/baseline_delete_outline_24" />
+            android:textColor="@color/Black"
+            app:layout_constraintHorizontal_bias="0.925"
+            app:layout_constraintLeft_toRightOf="@+id/eventNameTextView"
+            app:layout_constraintRight_toRightOf="parent"
+            tools:layout_editor_absoluteY="0dp" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

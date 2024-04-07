@@ -5,6 +5,7 @@ import static android.content.ContentValues.TAG;
 import com.example.qrcheckin.Event.Event;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -123,6 +124,16 @@ public class AdminEventPage extends AppCompatActivity {
         // Retrieve the event passed from the previous activity
         Intent intent = getIntent();
         String documentId = intent.getStringExtra("DOCUMENT_ID");
+        if(documentId == null) {
+            Log.e(TAG, "Document ID is null");
+            // Handle the error, maybe finish the activity
+            finish();
+            return;
+        }
+        SharedPreferences prefs = getSharedPreferences("TOKEN_PREF", MODE_PRIVATE);
+        fcmToken = prefs.getString("token", "missing token");
+        Log.d(TAG, "Document ID: " + documentId + ", FCM Token: " + fcmToken);
+        eventDb = new EventDatabaseManager(documentId);
         signupCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
