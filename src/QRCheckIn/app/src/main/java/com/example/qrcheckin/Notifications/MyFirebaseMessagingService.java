@@ -1,5 +1,6 @@
 package com.example.qrcheckin.Notifications;
 
+import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.content.Context;
@@ -147,7 +148,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         // Create the "Event Updates" channel (if necessary)
         String channelId = getString(R.string.notification_channel_event_updates_id);
         String channelName = getString(R.string.notification_channel_event_updates_name);
-        int importance = NotificationManager.IMPORTANCE_DEFAULT;
+        int importance = NotificationManager.IMPORTANCE_HIGH;
         createNotificationChannel(channelId, channelName, importance);
 
         // Send the notification
@@ -172,6 +173,8 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
             channel.enableLights(true);
             channel.setLightColor(Color.RED);
             channel.enableVibration(true);
+            channel.setShowBadge(true);
+            channel.setLockscreenVisibility(Notification.VISIBILITY_PUBLIC);
 
             // Create manager
             NotificationManager manager = this.getSystemService(NotificationManager.class);

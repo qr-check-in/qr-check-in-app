@@ -123,6 +123,7 @@ public class OrganizersEventPageActivity extends AppCompatActivity {
         TextView tvEventLocation = findViewById(R.id.text_event_location);
         TextView tvEventDescription = findViewById(R.id.text_event_description);
         ImageView ivEventPoster = findViewById(R.id.image_event_poster);
+
         //https://stackoverflow.com/questions/18826870/how-to-animate-the-textview-very-very-long-text-scroll-automatically-horizonta, 2024, how to get the horizontal scrolling text
         TextView locationsStatus = findViewById(R.id.locationStatusTxt);
         locationsStatus.setEllipsize(TextUtils.TruncateAt.MARQUEE);

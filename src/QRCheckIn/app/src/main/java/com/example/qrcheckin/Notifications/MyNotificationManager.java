@@ -1,5 +1,6 @@
 package com.example.qrcheckin.Notifications;
 
+import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -77,6 +78,7 @@ public class MyNotificationManager {
         PendingIntent pendingIntent = PendingIntent.getActivity(mContext, 0, intent, PendingIntent.FLAG_IMMUTABLE);
 
         Uri defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+        long[] DEFAULT_VIBRATE_PATTERN = {0, 100, 200, 300};
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(mContext, channelId)
                 .setSmallIcon(R.drawable.app_icon_resize_24)
@@ -84,6 +86,8 @@ public class MyNotificationManager {
                 .setContentText(body)
                 .setAutoCancel(true)
                 .setSound(defaultSoundUri)
+                .setVibrate(DEFAULT_VIBRATE_PATTERN)
+                .setPriority(Notification.PRIORITY_HIGH)
                 .setContentIntent(pendingIntent);
 
         mManager.notify(id, builder.build());
