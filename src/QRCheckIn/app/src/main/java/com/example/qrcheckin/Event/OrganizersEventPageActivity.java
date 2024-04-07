@@ -490,14 +490,8 @@ public class OrganizersEventPageActivity extends AppCompatActivity {
      */
     public void shareQRCode(QRCode qrCode, String headerText){
         if(qrCode != null){
-            // Get bitmap of the QR code to pass to new activity
-            //ContentResolver contentResolver = getContentResolver();
-            //ImageStorageManager storage = new ImageStorageManager(qrCode , "/QRCodes");
-            //Bitmap bitmap = storage.convertToBitmap(contentResolver);
-            // Start new activity
+            // Pass QR code and text, start new activity
             Intent activity = new Intent(getApplicationContext(), QrCodeImageView.class);
-            //activity.putExtra("QRCodeBitmap", bitmap);
-            Log.d("EVENT PAGE", String.format("before passing image uri is %s", qrCode.getUriString()));
             activity.putExtra("QRCode", qrCode);
             activity.putExtra("EventName&Date", eventName + "_" + eventDate);
             activity.putExtra("headerText", headerText);

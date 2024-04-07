@@ -5,8 +5,6 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.ImageDecoder;
 import android.net.Uri;
-import android.os.Build;
-import android.provider.MediaStore;
 import android.util.Log;
 import android.widget.ImageView;
 
@@ -127,32 +125,6 @@ public class ImageStorageManager {
     }
 
     /**
-     * Converts an image to a Bitmap
-     * @param contentResolver ContentResolver of the calling activity
-     * @return Bitmap of the image
-     */
-    public Bitmap convertToBitmap(ContentResolver contentResolver){
-        Bitmap bitmap = null;
-        Uri uri = Uri.parse(image.getUriString());
-        // Converts Uri to Bitmap
-        // https://stackoverflow.com/questions/65210522/how-to-get-bitmap-from-imageuri-in-api-level-30, HB., 2020
-        try{
-            if(Build.VERSION.SDK_INT < 28) {
-                bitmap = MediaStore.Images.Media.getBitmap(contentResolver, uri);
-            }
-            else{
-                ImageDecoder.Source source = ImageDecoder.createSource(contentResolver, uri);
-                bitmap = ImageDecoder.decodeBitmap(source);
-            }
-        } catch (Exception e){
-            e.printStackTrace();
-        }
-        assert bitmap != null;
-        // Rescale image to be 200 x 200, so that it bitmap can be used by QrCodeImageView
-        return Bitmap.createScaledBitmap(bitmap, 200, 200, false);
-    }
-
-    /**
      * Reads the content of an Image. Returns null if no contents found
      * @param contentResolver ContentResolver of the calling activity
      * @return String of Image's contents
@@ -162,7 +134,7 @@ public class ImageStorageManager {
         String contents = null;
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.P) {
             try {
-                // Must get a mutable bitmap (so don't use convertToBitmap method)
+                // Get a mutable bitmap
                 // https://stackoverflow.com/questions/60462841/java-lang-illegalstateexception-unable-to-getpixels-pixel-access-is-not-supp, мalay мeнтa, 2021
                 Bitmap uploadedBitmap = ImageDecoder.decodeBitmap(ImageDecoder.createSource(contentResolver,uri)).copy(Bitmap.Config.ARGB_8888, true);
 

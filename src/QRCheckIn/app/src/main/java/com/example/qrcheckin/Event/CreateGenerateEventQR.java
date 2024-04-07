@@ -67,10 +67,6 @@ public class CreateGenerateEventQR extends AppCompatActivity {
     QRCode promoQRCode = null;
     Event incomingEvent;
     private String incomingPosterString;
-
-    // To save image in device
-    private Bitmap checkInBitmap;
-    private Bitmap promoBitmap;
     private Uri uploadedUri;
 
     @Override
@@ -196,24 +192,6 @@ public class CreateGenerateEventQR extends AppCompatActivity {
 
         });
 
-        // Listener for the check-in QR code ImageView
-        ivCheckInQR.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // Start QR code share activity
-                shareQRCode(checkInQRCode, checkInBitmap, "Check-in QR Code");
-            }
-        });
-
-        // Listener for the Check-in QR code ImageView
-        ivPromoQr.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // Start QR code share activity
-                shareQRCode(promoQRCode, promoBitmap, "Promotional QR Code");
-            }
-        });
-
         // Set listener to finish creating an event after generating it's QRCode(s)
         finishButton.setOnClickListener(new View.OnClickListener() {
             /**
@@ -306,29 +284,23 @@ public class CreateGenerateEventQR extends AppCompatActivity {
      * @param isPromo Boolean indicating if we are creating a promotional QR
      * @return QRCode to check-in/promote the Event being created
      */
-    public QRCode setQRCode(ImageView imageView, String unhashedContent, Boolean isPromo){
+    public QRCode setQRCode(ImageView imageView, String unhashedContent, Boolean isPromo) {
         // Create and set a check-in or promo QR code only if it doesn't exist yet
         // Generate a QR code bitmap using event details from previous page
         Log.d("generateQrCode", String.format("setQRCode called, making bitmap with %s", unhashedContent));
 
         Bitmap bitmap = generateQRCode(unhashedContent);
-        assert bitmap != null;
         //set the ImageView to the new QR code
         imageView.setImageBitmap(bitmap);
         imageView.setVisibility(View.VISIBLE);
 
         // Create the QR code object and
-        String filename = String.format("%s_%s_%d.jpg", inputEventName, inputEventDate, System.currentTimeMillis());
-        String QRCodeUri = saveBitmapImage(bitmap, filename).toString();
-
-        // set bitmap attributes
-        if (isPromo){
-            promoBitmap = bitmap;
+        String uriString = null;
+        if (bitmap != null) {
+            String filename = String.format("%s_%s_%d.jpg", inputEventName, inputEventDate, System.currentTimeMillis());
+            uriString = saveBitmapImage(bitmap, filename).toString();
         }
-        else{
-            checkInBitmap = bitmap;
-        }
-        return new QRCode(QRCodeUri, null, unhashedContent, true);
+        return new QRCode(uriString, null, unhashedContent, true);
     }
 
     /**
@@ -393,21 +365,6 @@ public class CreateGenerateEventQR extends AppCompatActivity {
         }
 
         return Uri.fromFile(outfile);
-    }
-
-    /**
-     * Starts activity to share a QR Code
-     * @param qrCode QRCode to be shared
-     * @param bitmap bitmap of the QRCode to be shared
-     */
-    public void shareQRCode(QRCode qrCode, Bitmap bitmap, String headerText){
-        if (qrCode != null) {
-            Intent activity = new Intent(getApplicationContext(), QrCodeImageView.class);
-            activity.putExtra("QRCodeBitmap", bitmap);
-            activity.putExtra("EventName&Date", inputEventName + "_" + inputEventDate);
-            activity.putExtra("headerText", headerText);
-            startActivity(activity);
-        }
     }
 
     /**
@@ -492,9 +449,6 @@ public class CreateGenerateEventQR extends AppCompatActivity {
      */
     public void acceptUploadedQRCode(String readContent){
         checkInQRCode = new QRCode(uploadedUri.toString(), null, readContent, false);
-        ImageStorageManager bitmapConverter = new ImageStorageManager(checkInQRCode, "/QRCodes");
-        ContentResolver contentResolver = getContentResolver();
-        checkInBitmap = bitmapConverter.convertToBitmap(contentResolver);
         // Load the selected image into the ImageView using Glide
         // openai, 2024, chatgpt, how to display the image
         Glide.with(this)
