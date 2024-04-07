@@ -5,6 +5,22 @@
       <entry key="CreateEventAndCheck">
         <State />
       </entry>
+      <entry key="ProfileFragmentTest">
+      <entry key="AdminDashboardTest">
+        <State />
+      </entry>
+      <entry key="AdminDbTest">
+        <State />
+      </entry>
+      <entry key="AdminDisplayImagesTest">
+        <State />
+      </entry>
+      <entry key="AdminDisplayProfilesTest">
+        <State />
+      </entry>
+      <entry key="FirestoreWrapperTest">
+        <State />
+      </entry>
       <entry key="app">
         <State>
           <runningDeviceTargetsSelectedWithDialog>

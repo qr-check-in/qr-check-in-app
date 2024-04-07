@@ -5,21 +5,30 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".Admin.AdminViewEvent">
+    tools:context=".Admin.AdminViewProfiles">
     <include
-        android:id="@+id/events"
+        android:id="@+id/profiles"
         layout="@layout/toolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
+    <TextView
+        android:layout_width="match_parent"
+        android:id="@+id/lines"
+        android:layout_height="2dp"
+        android:background="@color/Black"
+        app:layout_constraintTop_toBottomOf="@+id/profiles"/>
+
+
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/event_recycler_view"
+        android:id="@+id/profile_recycler_view"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/events"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintBottom_toTopOf="@+id/main_app_bar"
-        tools:listitem="@layout/admin_events_list"/>
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/lines"
+        tools:listitem="@layout/profile_list_item" />
     <Button
         android:id="@+id/back_button"
         android:layout_width="wrap_content"

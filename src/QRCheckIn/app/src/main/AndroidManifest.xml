@@ -2,12 +2,16 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"
+        tools:ignore="CoarseFineLocation" />
     <uses-permission
         android:name="android.permission.WRITE_EXTERNAL_STORAGE"
         android:maxSdkVersion="28" />
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.INTERNET"/>
+
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
 
     <uses-feature
@@ -77,6 +81,7 @@
         <activity
             android:name=".test"
             android:exported="false" />
+        <activity android:name=".Common.SharedViewModel"/>
         <activity
             android:name=".Notifications.CreateNotification"
             android:exported="false"
@@ -88,6 +93,14 @@
         <activity
             android:name=".Event.CreateAddEventDetails"
             android:exported="false" />
+
+        <activity android:name=".Admin.AdminViewEvent"/>
+        <activity android:name=".Admin.AdminEventPage"
+            android:exported="false"/>
+        <activity android:name=".Admin.AdminViewProfiles"
+            android:exported="false"/>
+        <activity android:name=".Admin.AdminViewImages"/>
+        <activity android:name=".Admin.AdminImagePage"/>
         <activity
             android:name=".Attendee.ProfileActivity"
             android:exported="false" />
@@ -95,7 +108,7 @@
             android:name=".Attendee.UpdatePictureFragment"
             android:exported="false" />
         <activity
-            android:name=".Common.SharedViewModel"
+            android:name=".Admin.ProfileActivityAdmin"
             android:exported="false" />
         <activity
             android:name=".Event.EventListView"

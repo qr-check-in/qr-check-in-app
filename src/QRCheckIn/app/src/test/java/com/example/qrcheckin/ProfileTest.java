@@ -35,17 +35,17 @@ public class ProfileTest {
         Profile profile = createDummyProfile();
 
         // Assert that profile details are correctly set
-        assertEquals(name, profile.getName());
-        assertEquals(homepage, profile.getHomepage());
-        assertEquals(contact, profile.getContact()); // Verify Canadian phone number
+        Assertions.assertEquals(name, profile.getName());
+        Assertions.assertEquals(homepage, profile.getHomepage());
+        Assertions.assertEquals(contact, profile.getContact()); // Verify Canadian phone number
 
         // Assert location details
-        assertNotNull(profile.getLocation());
-        assertEquals(latitude, profile.getLocation().getLatitude());
-        assertEquals(longitude, profile.getLocation().getLongitude());
+        Assertions.assertNotNull(profile.getLocation());
+        Assertions.assertEquals(latitude, profile.getLocation().getLatitude());
+        Assertions.assertEquals(longitude, profile.getLocation().getLongitude());
 
         // Assert geolocation tracking permission
-        assertEquals(true, profile.getTrackGeolocation());
+        Assertions.assertEquals(true, profile.getTrackGeolocation());
     }
 
     @Test
