@@ -5,6 +5,7 @@ import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.Espresso.pressBack;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.action.ViewActions.swipeUp;
+import static androidx.test.espresso.assertion.ViewAssertions.doesNotExist;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.isDescendantOfA;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
@@ -109,15 +110,16 @@ public class ParticipantAndSignUpTest {
         // Scroll up to locate switch
         onView(withId(R.id.scrollOrganizerPage)).perform(swipeUp());
 
-        // Open the viewSignedUp by clicking on a button
-        onView(withId(R.id.signup_button)).perform(click());
-
         // Sleep for 1 second load the activity
         try {
-            Thread.sleep(5000);
+            Thread.sleep(1000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+
+        // Open the viewSignedUp by clicking on a button
+        onView(withId(R.id.signup_button)).perform(click());
+
 
         // Open the bottomSheetButton by clicking on a button
         onView(withId(R.id.openBottomSheetButton)).perform(click());
@@ -142,6 +144,20 @@ public class ParticipantAndSignUpTest {
         // Match the user name after signup
         onView(withText(userName)).check(matches(isDisplayed()));
 
+        // Get back to event poster page
+        pressBack();
+
+        // Get back to ongoing events
+        pressBack();
+
+        // Click on signed-Up in ongoing events
+        onView(allOf(withId(R.id.signedUpVEventsButton), isDescendantOfA(withId(R.id.eventsTabbar))))
+                .perform(click());
+
+        // Check if an event with the specific name exists
+        onView(withText("ZZZ+ Annual Conference")).check(matches(isDisplayed()));
+
+
     }
 
     @Test
@@ -160,6 +176,18 @@ public class ParticipantAndSignUpTest {
             e.printStackTrace();
         }
 
+        // Click on viewEventCheckin button to view participants
+        onView(withId(R.id.viewEventCheckin)).perform(click());
+
+        // Check if the activity is being displayed is correct
+        onView(withId(R.id.attendeeListView)).check(matches(isDisplayed()));
+
+        // Check there should be one participant as the event is just created (should be 1)
+        onView(allOf(withId(R.id.mainHeader), isDescendantOfA(withId(R.id.attendee_toolbar))))
+                .check(matches(withText("Total Participants: 1")));
+
+        // Match the user name after checkIn
+        onView(withText(userName)).check(matches(isDisplayed()));
     }
 
 }
