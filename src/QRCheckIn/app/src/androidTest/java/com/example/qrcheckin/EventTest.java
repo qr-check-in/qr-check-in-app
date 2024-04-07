@@ -18,7 +18,7 @@ public class EventTest {
         String qrCodeValue = "SampleQRCodeValue";
         String qrCodeAdditionalInfo = "SampleAdditionalInfo";
         String organizer = "OrganiserMockString";
-        QRCode checkInQRCode = new QRCode(qrCodeValue, attendeeExample, qrCodeAdditionalInfo);
+        QRCode checkInQRCode = new QRCode(qrCodeValue, attendeeExample, qrCodeAdditionalInfo, false);
 
 
         // Create an EventPoster object with required parameters

@@ -71,6 +71,7 @@ public class CreateGenerateEventQR extends AppCompatActivity {
     // To save image in device
     private Bitmap checkInBitmap;
     private Bitmap promoBitmap;
+    private Uri uploadedUri;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -142,15 +143,11 @@ public class CreateGenerateEventQR extends AppCompatActivity {
                     // Callback is invoked after the user selects a media item or closes the
                     // photo picker.
                     if (uri != null) {
-                        validateUploadedImage(uri);
+                        uploadedUri = uri;
+                        validateUploadedImage();
 
 
-                        // Load the selected image into the ImageView using Glide
-                        // openai, 2024, chatgpt, how to display the image
-                        Glide.with(this)
-                                .load(uri)
-                                .into(ivCheckInQR);
-                        ivCheckInQR.setVisibility(View.VISIBLE);
+
                         Log.d("PhotoPicker", "Selected URI: " + uri);
                     } else {
                         Log.d("PhotoPicker", "No media selected");
@@ -330,7 +327,7 @@ public class CreateGenerateEventQR extends AppCompatActivity {
         else{
             checkInBitmap = bitmap;
         }
-        return new QRCode(QRCodeUri, null, unhashedContent);
+        return new QRCode(QRCodeUri, null, unhashedContent, true);
     }
 
     /**
@@ -411,16 +408,19 @@ public class CreateGenerateEventQR extends AppCompatActivity {
         }
     }
 
-    public void validateUploadedImage(Uri uri){
+    /**
+     * Checks if an uploaded Image is a valid code that can be used for a new Event's check-in QR code.
+     */
+    public void validateUploadedImage(){
         // Read the contents of the uploaded image
-        Image uploadedImage = new Image(uri.toString(), null);
+        Image uploadedImage = new Image(uploadedUri.toString(), null);
         ImageStorageManager storage = new ImageStorageManager(uploadedImage, "/QRCodes");
         ContentResolver contentResolver = getContentResolver();
         String readContent = storage.readUploadedImage(contentResolver);
         Log.d("READER UPLOAD", String.format("read in createEvent: %s", readContent));
 
         if (readContent != null){
-            // Uploaded image was a valid qr code, search if its already in use
+            // Uploaded image was a valid qr code, search if its already in use as a check-in code for some event
             queryCheckInQR(readContent);
         }
         else{
@@ -428,6 +428,10 @@ public class CreateGenerateEventQR extends AppCompatActivity {
         }
     }
 
+    /**
+     * Runs a query to see if an Event document exists with readContent as its checkInQRCode.hashedContent field
+     * @param readContent String of the hashedContent we are searching for
+     */
     public void queryCheckInQR(String readContent){
         EventDatabaseManager eventDb = new EventDatabaseManager();
         eventDb.getCollectionRef()
@@ -452,6 +456,10 @@ public class CreateGenerateEventQR extends AppCompatActivity {
                 });
     }
 
+    /**
+     * Runs a query to see if an Event document exists with readContent as its promoQRCode.hashedContent field
+     * @param readContent String of the hashedContent we are searching for
+     */
     public void queryPromoQR(String readContent){
         EventDatabaseManager eventDb = new EventDatabaseManager();
         eventDb.getCollectionRef()
@@ -466,6 +474,7 @@ public class CreateGenerateEventQR extends AppCompatActivity {
                                 Log.d("READER", "QR code is already in use as some event's PROMO qr code!");
                             }else{
                                 // we are free to use this uploaded qr code
+                                acceptUploadedQRCode(readContent);
                                 Log.d("READER", "good to go");
                             }
                         }
@@ -474,6 +483,19 @@ public class CreateGenerateEventQR extends AppCompatActivity {
                         }
                     }
                 });
+    }
+
+    /**
+     * Set the Event's checkInQRCode as the uploaded image and displays it
+     */
+    public void acceptUploadedQRCode(String readContent){
+        checkInQRCode = new QRCode(uploadedUri.toString(), null, readContent, false);
+        // Load the selected image into the ImageView using Glide
+        // openai, 2024, chatgpt, how to display the image
+        Glide.with(this)
+                .load(uploadedUri)
+                .into(ivCheckInQR);
+        ivCheckInQR.setVisibility(View.VISIBLE);
     }
 
 }
