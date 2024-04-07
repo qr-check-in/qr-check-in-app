@@ -28,22 +28,6 @@
           </targetsSelectedWithDialog>
         </State>
       </entry>
-      <entry key="testEventCheckIn()">
-        <State>
-          <targetSelectedWithDropDown>
-            <Target>
-              <type value="QUICK_BOOT_TARGET" />
-              <deviceKey>
-                <Key>
-                  <type value="VIRTUAL_DEVICE_PATH" />
-                  <value value="$USER_HOME$/.android/avd/Pixel_2_API_29.avd" />
-                </Key>
-              </deviceKey>
-            </Target>
-          </targetSelectedWithDropDown>
-          <timeTargetWasSelectedWithDropDown value="2024-04-06T00:04:02.139237Z" />
-        </State>
-      </entry>
       <entry key="testMainBarScan()">
         <State />
       </entry>

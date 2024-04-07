@@ -172,7 +172,7 @@ public class AttendeeDatabaseManager extends DatabaseManager {
     /**
      * Updates a string field in an Attendee's Profile in firestore
      * @param field String of the field to be updated in Profile
-     * @param value String of the new value the field is set to
+     * @param value Stråing of the new value the field is set to
      * @param imageView ImageView for cases where a profile name has been updated, we need to re-call displayImage() once
      *                  the new profile picture has been successfully uploaded. Null in other cases.
      */

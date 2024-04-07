@@ -72,10 +72,10 @@ dependencies {
 
     androidTestImplementation ("androidx.test.espresso:espresso-intents:3.5.1")
     androidTestImplementation ("org.mockito:mockito-android:4.0.0") //
-    androidTestImplementation ("androidx.test.espresso:espresso-core:3.3.0")
-    androidTestImplementation ("androidx.test:runner:1.3.0")
-    androidTestImplementation ("androidx.test:rules:1.3.0")
-    androidTestImplementation ("org.mockito:mockito-android:3.3.3")
+    androidTestImplementation ("androidx.test.espresso:espresso-core:3.5.1")
+    androidTestImplementation ("androidx.test:runner:1.5.2")
+    androidTestImplementation ("androidx.test:rules:1.5.0")
+    androidTestImplementation ("org.mockito:mockito-android:4.0.0")
 
     // If you need additional functionality, consider adding extensions
     // implementation "androidx.camera:camera-extensions:1.0.0-alpha24"
