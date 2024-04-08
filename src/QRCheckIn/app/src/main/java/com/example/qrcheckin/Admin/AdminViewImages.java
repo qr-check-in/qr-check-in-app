@@ -35,7 +35,6 @@ public class AdminViewImages extends AppCompatActivity implements ImageAdapter.O
     ImageButton profileButton;
     private ImageAdapter adapter;
     private FirebaseFirestore db;
-    // Maps Image objects to their corresponding folder paths in Firebase Storage.
     Map<Image, String> imageUriToFolderMap = new HashMap<>();
 
 
@@ -95,6 +94,7 @@ public class AdminViewImages extends AppCompatActivity implements ImageAdapter.O
                             .addOnFailureListener(e -> Log.e("AdminViewImages", "Error fetching images: " + e));
                 });
     }
+
     /**
      * Handles clicks on images displayed in the RecyclerView.
      *

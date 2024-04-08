@@ -92,6 +92,7 @@ public class AdminViewEvent extends AppCompatActivity {
         setUpRecyclerView();
 
     }
+
     /**
      * Configures the RecyclerView with a Firestore query for events, using FirestoreRecyclerAdapter for real-time updates.
      */
@@ -115,12 +116,19 @@ public class AdminViewEvent extends AppCompatActivity {
         });
         eventsRecyclerView.setAdapter(eventAdapter);
     }
+
+    /**
+     * Lifecycle method to start listening to Firestore query updates when the activity is started.
+     */
     @Override
     protected void onStart() {
         super.onStart();
         eventAdapter.startListening();
     }
 
+    /**
+     * Lifecycle method to stop listening to Firestore query updates when the activity is stopped.
+     */
     @Override
     protected void onStop() {
         super.onStop();

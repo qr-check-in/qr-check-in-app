@@ -101,10 +101,8 @@ public class CreateAddEventDetails extends AppCompatActivity implements SelectDa
         selectTimeButton = findViewById(R.id.eventTimePicker);
         selectDateButton = findViewById(R.id.eventDatePicker);
         numOfAttendees = findViewById(R.id.numOfAttendeeText);
-//        eventDateLayout = findViewById(R.id.eventDateLayout);
-//        eventTimeLayout = findViewById(R.id.eventTimeLayout);
 
-
+        checkInSwitch.setChecked(true);
         poster.setVisibility(View.GONE);
 
         // Listener to show a DatePicker fragment when selectDateButton is clicked
