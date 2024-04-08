@@ -209,7 +209,7 @@ public class AttendeeList extends AppCompatActivity {
                         getAllGeoPoints();
                         int size = 0;
                         size = Objects.requireNonNull(recyclerView.getAdapter()).getItemCount();
-                        header.setText("All Participants: " + size);
+                        header.setText("All Attendees");
                     }
                 } else {
                     Log.d("AttendeeList", "Document does not exist");
