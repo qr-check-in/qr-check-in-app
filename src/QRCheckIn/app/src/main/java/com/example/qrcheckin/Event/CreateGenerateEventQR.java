@@ -1,5 +1,6 @@
 package com.example.qrcheckin.Event;
 
+import android.content.ContentResolver;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
@@ -23,9 +24,13 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import com.bumptech.glide.Glide;
+import com.example.qrcheckin.Common.Image;
 import com.example.qrcheckin.Common.ImageStorageManager;
 import com.example.qrcheckin.Common.Utils;
 import com.example.qrcheckin.R;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.WriterException;
 import com.google.zxing.common.BitMatrix;
@@ -62,10 +67,7 @@ public class CreateGenerateEventQR extends AppCompatActivity {
     QRCode promoQRCode = null;
     Event incomingEvent;
     private String incomingPosterString;
-
-    // To save image in device
-    private Bitmap checkInBitmap;
-    private Bitmap promoBitmap;
+    private Uri uploadedUri;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -137,12 +139,11 @@ public class CreateGenerateEventQR extends AppCompatActivity {
                     // Callback is invoked after the user selects a media item or closes the
                     // photo picker.
                     if (uri != null) {
-                        // Load the selected image into the ImageView using Glide
-                        // openai, 2024, chatgpt, how to display the image
-                        Glide.with(this)
-                                .load(uri)
-                                .into(ivCheckInQR);
-                        ivCheckInQR.setVisibility(View.VISIBLE);
+                        uploadedUri = uri;
+                        validateUploadedImage();
+
+
+
                         Log.d("PhotoPicker", "Selected URI: " + uri);
                     } else {
                         Log.d("PhotoPicker", "No media selected");
@@ -191,24 +192,6 @@ public class CreateGenerateEventQR extends AppCompatActivity {
 
         });
 
-        // Listener for the check-in QR code ImageView
-        ivCheckInQR.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // Start QR code share activity
-                shareQRCode(checkInQRCode, checkInBitmap);
-            }
-        });
-
-        // Listener for the Check-in QR code ImageView
-        ivPromoQr.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // Start QR code share activity
-                shareQRCode(promoQRCode, promoBitmap);
-            }
-        });
-
         // Set listener to finish creating an event after generating it's QRCode(s)
         finishButton.setOnClickListener(new View.OnClickListener() {
             /**
@@ -241,6 +224,7 @@ public class CreateGenerateEventQR extends AppCompatActivity {
                     // Add the newEvent to the db
                     Event newEvent = new Event(organizerFcm, checkInQRCode, promoQRCode, inputEventPoster, inputEventName, inputEventDate, inputEventTime, inputEventLocation, inputEventDescription, incomingEvent.isCheckInStatus(), numOfAttends);
                     String eventId = db.storeEvent(newEvent);
+                    Log.d("CREATED EVENT", String.format("stored event doc ID %s", eventId));
                     EventDatabaseManager eventDb = new EventDatabaseManager(eventId);
 
                     eventDb.addToArrayField("attendee", organizerFcm);
@@ -300,29 +284,23 @@ public class CreateGenerateEventQR extends AppCompatActivity {
      * @param isPromo Boolean indicating if we are creating a promotional QR
      * @return QRCode to check-in/promote the Event being created
      */
-    public QRCode setQRCode(ImageView imageView, String unhashedContent, Boolean isPromo){
+    public QRCode setQRCode(ImageView imageView, String unhashedContent, Boolean isPromo) {
         // Create and set a check-in or promo QR code only if it doesn't exist yet
         // Generate a QR code bitmap using event details from previous page
         Log.d("generateQrCode", String.format("setQRCode called, making bitmap with %s", unhashedContent));
 
         Bitmap bitmap = generateQRCode(unhashedContent);
-        assert bitmap != null;
         //set the ImageView to the new QR code
         imageView.setImageBitmap(bitmap);
         imageView.setVisibility(View.VISIBLE);
 
         // Create the QR code object and
-        String filename = String.format("%s_%s_%d.jpg", inputEventName, inputEventDate, System.currentTimeMillis());
-        String QRCodeUri = saveBitmapImage(bitmap, filename).toString();
-
-        // set bitmap attributes
-        if (isPromo){
-            promoBitmap = bitmap;
+        String uriString = null;
+        if (bitmap != null) {
+            String filename = String.format("%s_%s_%d.jpg", inputEventName, inputEventDate, System.currentTimeMillis());
+            uriString = saveBitmapImage(bitmap, filename).toString();
         }
-        else{
-            checkInBitmap = bitmap;
-        }
-        return new QRCode(QRCodeUri, null, unhashedContent);
+        return new QRCode(uriString, null, unhashedContent, true);
     }
 
     /**
@@ -390,17 +368,93 @@ public class CreateGenerateEventQR extends AppCompatActivity {
     }
 
     /**
-     * Starts activity to share a QR Code
-     * @param qrCode QRCode to be shared
-     * @param bitmap bitmap of the QRCode to be shared
+     * Checks if an uploaded Image is a valid code that can be used for a new Event's check-in QR code.
      */
-    public void shareQRCode(QRCode qrCode, Bitmap bitmap){
-        if (qrCode != null) {
-            Intent activity = new Intent(getApplicationContext(), QrCodeImageView.class);
-            activity.putExtra("QRCodeBitmap", bitmap);
-            activity.putExtra("EventName&Date", inputEventName + "_" + inputEventDate);
-            startActivity(activity);
+    public void validateUploadedImage(){
+        // Read the contents of the uploaded image
+        Image uploadedImage = new Image(uploadedUri.toString(), null);
+        ImageStorageManager storage = new ImageStorageManager(uploadedImage, "/QRCodes");
+        ContentResolver contentResolver = getContentResolver();
+        String readContent = storage.readUploadedImage(contentResolver);
+        Log.d("READER UPLOAD", String.format("read in createEvent: %s", readContent));
+
+        if (readContent != null){
+            // Uploaded image was a valid qr code, search if its already in use as a check-in code for some event
+            queryCheckInQR(readContent);
         }
+        else{
+            // Uploaded image couldn't be read as a qr code
+            Toast.makeText(CreateGenerateEventQR.this, "Could not read QR code", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    /**
+     * Runs a query to see if an Event document exists with readContent as its checkInQRCode.hashedContent field
+     * @param readContent String of the hashedContent we are searching for
+     */
+    public void queryCheckInQR(String readContent){
+        EventDatabaseManager eventDb = new EventDatabaseManager();
+        eventDb.getCollectionRef()
+                .whereEqualTo("checkInQRCode.hashedContent", readContent)
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if(task.isSuccessful()){
+                            if(!task.getResult().isEmpty()){
+                                // QR code is already in use as some event's check-in qr code
+                                Toast.makeText(CreateGenerateEventQR.this, "QR Code is already in use", Toast.LENGTH_SHORT).show();
+                            }else{
+                                // Check promo qr codes.
+                                queryPromoQR(readContent);
+                            }
+                        }
+                        else{
+                            Log.e("READER", "event query failed");
+                        }
+                    }
+                });
+    }
+
+    /**
+     * Runs a query to see if an Event document exists with readContent as its promoQRCode.hashedContent field
+     * @param readContent String of the hashedContent we are searching for
+     */
+    public void queryPromoQR(String readContent){
+        EventDatabaseManager eventDb = new EventDatabaseManager();
+        eventDb.getCollectionRef()
+                .whereEqualTo("promoQRCode.hashedContent", readContent)
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if(task.isSuccessful()){
+                            if(!task.getResult().isEmpty()){
+                                // QR code is already in use as some event's promo qr code!
+                                Toast.makeText(CreateGenerateEventQR.this, "QR Code is already in use", Toast.LENGTH_SHORT).show();
+                            }else{
+                                // uploaded QR is not in use by any event, good to be used
+                                acceptUploadedQRCode(readContent);
+                            }
+                        }
+                        else{
+                            Log.e("READER", "event query failed");
+                        }
+                    }
+                });
+    }
+
+    /**
+     * Set the Event's checkInQRCode as the uploaded image and displays it
+     */
+    public void acceptUploadedQRCode(String readContent){
+        checkInQRCode = new QRCode(uploadedUri.toString(), null, readContent, false);
+        // Load the selected image into the ImageView using Glide
+        // openai, 2024, chatgpt, how to display the image
+        Glide.with(this)
+                .load(uploadedUri)
+                .into(ivCheckInQR);
+        ivCheckInQR.setVisibility(View.VISIBLE);
     }
 
 }

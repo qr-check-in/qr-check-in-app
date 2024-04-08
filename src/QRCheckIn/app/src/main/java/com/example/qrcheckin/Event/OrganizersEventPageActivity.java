@@ -4,12 +4,10 @@ import static android.content.ContentValues.TAG;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.content.ContentResolver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -38,22 +36,18 @@ import androidx.appcompat.widget.Toolbar;
 
 import com.example.qrcheckin.Attendee.AttendeeDatabaseManager;
 import com.example.qrcheckin.Attendee.ProfileActivity;
-import com.example.qrcheckin.Notifications.MyNotificationManager;
-import com.example.qrcheckin.Notifications.Notification;
 import com.example.qrcheckin.Common.ImageStorageManager;
 import com.example.qrcheckin.Common.MainActivity;
 import com.example.qrcheckin.Notifications.CreateNotification;
 import com.example.qrcheckin.Notifications.DialogRecyclerView;
+import com.example.qrcheckin.Notifications.Notification;
 import com.example.qrcheckin.Notifications.NotificationDatabaseManager;
 import com.example.qrcheckin.R;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestoreException;
-
-import org.json.JSONArray;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -255,7 +249,7 @@ public class OrganizersEventPageActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 // Call method to display acitivty to share the promotional QR code
-                shareQRCode(promoQRCode);
+                shareQRCode(promoQRCode, "Promotional QR Code");
             }
         });
 
@@ -405,7 +399,7 @@ public class OrganizersEventPageActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 // Call method to display acitivty to share the promotional QR code
-                shareQRCode(checkInQRCode);
+                shareQRCode(checkInQRCode, "Check-in QR Code");
             }
         });
 
@@ -522,16 +516,14 @@ public class OrganizersEventPageActivity extends AppCompatActivity {
      * Starts activity to share a QR code
      * @param qrCode QRCode to be shared
      */
-    public void shareQRCode(QRCode qrCode){
+    public void shareQRCode(QRCode qrCode, String headerText){
         if(qrCode != null){
-            // Get bitmap of the QR code to pass to new activity
-            ContentResolver contentResolver = getContentResolver();
-            ImageStorageManager storage = new ImageStorageManager(qrCode , "/QRCodes");
-            Bitmap bitmap = storage.convertToBitmap(contentResolver);
-            // Start new activity
+            // Pass QR code and text, start new activity
             Intent activity = new Intent(getApplicationContext(), QrCodeImageView.class);
-            activity.putExtra("QRCodeBitmap", bitmap);
-            activity.putExtra("EventName&Date", eventName + "_" + eventDate);
+            activity.putExtra("QRCode", qrCode);
+            activity.putExtra("headerText", headerText);
+            activity.putExtra("EventName", eventName);
+            activity.putExtra("EventDate", eventDate);
             startActivity(activity);
         }
     }

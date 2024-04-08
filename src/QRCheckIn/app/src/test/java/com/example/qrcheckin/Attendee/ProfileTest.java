@@ -1,4 +1,4 @@
-package com.example.qrcheckin;
+package com.example.qrcheckin.Attendee;
 
 import org.junit.Before;
 import org.junit.Test;
