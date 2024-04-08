@@ -230,7 +230,6 @@ public class CreateGenerateEventQR extends AppCompatActivity {
                     AttendeeDatabaseManager attendDb = new AttendeeDatabaseManager(organizerFcm);
 
                     eventDb.addToArrayField("attendee", organizerFcm);
-                    attendDb.incrementCheckInCount("attendedEvents", eventId);
 
                     Intent activity = new Intent(getApplicationContext(), EventListView.class);
                     startActivity(activity);
