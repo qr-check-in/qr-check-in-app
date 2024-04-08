@@ -30,10 +30,6 @@ public class AdminViewProfiles extends AppCompatActivity {
     private RecyclerView recyclerView;
     private AdminProfileAdapter adapter;
     private FirebaseFirestore db;
-    ImageButton qrButton;
-    ImageButton eventButton;
-    ImageButton addEventButton;
-    ImageButton profileButton;
     private List<String> documentIds = new ArrayList<>();
 
     Admin admin;
@@ -49,39 +45,8 @@ public class AdminViewProfiles extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         header.setText("Current User Profiles");
         setupRecyclerView();
-        qrButton = findViewById(R.id.qrButton);
-        eventButton = findViewById(R.id.calenderButton);
-        addEventButton = findViewById(R.id.addCalenderButton);
-        profileButton = findViewById(R.id.profileButton);
+
         admin = new Admin();
-
-        qrButton.setOnClickListener(v -> {
-            Intent event = new Intent(getApplicationContext(), MainActivity.class);
-            startActivity(event);
-        });
-
-        // Set the "Add event" toolbar button listener
-        addEventButton.setOnClickListener(v -> {
-            Intent event = new Intent(getApplicationContext(), CreateAddEventDetails.class);
-            startActivity(event);
-        });
-
-        // Set the "Profile" toolbar button listener
-        profileButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent event = new Intent(getApplicationContext(), ProfileActivity.class);
-                startActivity(event);
-
-            }
-        });
-        eventButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent event = new Intent(getApplicationContext(), EventListView.class);
-                startActivity(event);
-            }
-        });
 
         fetchProfilesAndSetupAdapter();
     }

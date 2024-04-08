@@ -142,7 +142,7 @@ public class AdminEventPage extends AppCompatActivity {
         signupLimitReached = findViewById(R.id.signup_limit_text);
         signupLimitReached.setVisibility(View.INVISIBLE);
         TextView header = findViewById(R.id.mainHeader);
-
+        admin = null;
         admin = new Admin();
         // Retrieve the event passed from the previous activity
         Intent intent = getIntent();
@@ -157,6 +157,7 @@ public class AdminEventPage extends AppCompatActivity {
         fcmToken = prefs.getString("token", "missing token");
         Log.d(TAG, "Document ID: " + documentId + ", FCM Token: " + fcmToken);
         eventDb = new EventDatabaseManager(documentId);
+        openBottomSheetBtn.setVisibility(View.GONE);
 
         eventDb.getDocRef().get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
@@ -208,7 +209,7 @@ public class AdminEventPage extends AppCompatActivity {
                         checkAttendeeMilestone();
                         // Set open Bottom Sheet Listner
                         openBottomSheetBtn.setOnClickListener(v -> {
-                            showBottomSheetDialog();
+                        showBottomSheetDialog();
                         });
                     }
 
@@ -223,10 +224,7 @@ public class AdminEventPage extends AppCompatActivity {
         removeEvent.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                admin.deleteEvent(documentId);
                 showDeleteConfirmationDialog();
-                Intent event = new Intent(getApplicationContext(), AdminViewEvent.class);
-                startActivity(event);
             }
         });
 
@@ -558,7 +556,7 @@ public class AdminEventPage extends AppCompatActivity {
                 List<String> signups = (List<String>) event.getSignups();
                 MyNotificationManager firebaseMessaging = new MyNotificationManager(getApplicationContext());
                 JSONArray regArray = new JSONArray(signups);
-                firebaseMessaging.sendMessageToClient(regArray, "Event Shutdown", "An event you have signed up for has been shut down", "");
+                firebaseMessaging.sendMessageToClient(regArray, "Event Shutdown: " + event.getEventName(), "An event you have signed up for has been shut down", "");
                 deleteEvent();
             }
         });
