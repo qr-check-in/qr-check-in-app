@@ -141,7 +141,7 @@ public class QRCodeScan extends AppCompatActivity {
 
 
     /**
-     * In order to get data embedded in the QR code
+     * Callback method to receive the result of the QR code scanning process.
      * @param resultCode An integer code that identifies the request
      * @param requestCode An integer result code returned by the child activity
      * @param data An Intent object that contains additional data returned by the child activity.
@@ -228,6 +228,11 @@ public class QRCodeScan extends AppCompatActivity {
         }
     }
 
+    /**
+     * Retrieve the last known location of the device.
+     * If location permission is granted, fetches the location and updates the Firestore database with it.
+     * If location permission is not granted, requests the permission.
+     */
     private void getLastLocation() {
         if (ContextCompat.checkSelfPermission(QRCodeScan.this, android.Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED){
             // Initialize Firestore
@@ -277,12 +282,20 @@ public class QRCodeScan extends AppCompatActivity {
         }
     }
 
+    /**
+     * Request the location permission from the user.
+     */
     private void askPermission(){
         ActivityCompat.requestPermissions(this, new String[]{
                 Manifest.permission.ACCESS_FINE_LOCATION
         }, REQUEST_CODE);
     }
 
+    /**
+     * Handle the result of the location permission request.
+     * If the permission is granted, updates the Firestore database with the user's geolocation.
+     * If the permission is denied, displays a toast message.
+     */
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
@@ -297,6 +310,12 @@ public class QRCodeScan extends AppCompatActivity {
         }
     }
 
+    /**
+     * Check if the scanned QR code is for adding an admin.
+     * If yes, adds the user as an admin and redirects to the MainActivity.
+     * @param scannedData The data scanned from the QR code.
+     * @return True if the QR code is for adding an admin, false otherwise.
+     */
     public Boolean checkAddAdminQR(String scannedData){
         // The hashed content of the unique QR code to add an admin
         String hashedAddAdminContent = "7743f40037ce1ee22e53c5e88f79f3b2b3a690458344d482bae6ab82cba1dd0c";

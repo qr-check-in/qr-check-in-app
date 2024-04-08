@@ -5,22 +5,16 @@ import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.Espresso.pressBack;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.action.ViewActions.swipeUp;
-import static androidx.test.espresso.assertion.ViewAssertions.doesNotExist;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.isDescendantOfA;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
-import static androidx.test.espresso.matcher.ViewMatchers.withEffectiveVisibility;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 
 import static org.hamcrest.CoreMatchers.allOf;
 
-import android.view.View;
-import android.widget.ImageButton;
-
 import androidx.test.espresso.action.ViewActions;
 import androidx.test.espresso.intent.Intents;
-import androidx.test.espresso.matcher.ViewMatchers;
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.filters.LargeTest;
@@ -40,7 +34,7 @@ public class ParticipantAndSignUpTest {
     @Rule
     public ActivityScenarioRule<CreateAddEventDetails> scenario = new ActivityScenarioRule<CreateAddEventDetails>(CreateAddEventDetails.class);
 
-    private CreateEventAndCheck createEventAndCheck;
+    private EventUITest createEventAndCheck;
     private String userName = "Morgan";
 
     @Before
@@ -50,7 +44,7 @@ public class ParticipantAndSignUpTest {
 
         // setup for testing notifications
         // creates a event to push notifications
-        createEventAndCheck = new CreateEventAndCheck();
+        createEventAndCheck = new EventUITest();
         createEventAndCheck.testMatchPosterDetails();
 
         // Change the profile name to "Morgan" so that it would be easy to verify at the time of signup

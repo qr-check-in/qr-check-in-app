@@ -12,7 +12,6 @@ import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.filters.LargeTest;
 
 import com.example.qrcheckin.Event.CreateAddEventDetails;
-import com.example.qrcheckin.Event.CreateGenerateEventQR;
 
 import org.junit.After;
 import org.junit.Before;
@@ -20,6 +19,10 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+
+/**
+ * This class contains UI tests for sharing QR codes in the QR Check-In application.
+ */
 @RunWith(AndroidJUnit4.class)
 @LargeTest
 public class ShareQrTest {
@@ -27,7 +30,7 @@ public class ShareQrTest {
     @Rule
     public ActivityScenarioRule<CreateAddEventDetails> scenario = new ActivityScenarioRule<CreateAddEventDetails>(CreateAddEventDetails.class);
 
-    private CreateEventAndCheck createEventAndCheck;
+    private EventUITest createEventAndCheck;
 
     @Before
     public void setUp() {
@@ -36,7 +39,7 @@ public class ShareQrTest {
 
         // setup for testing notifications
         // creates a event to push notifications
-        createEventAndCheck = new CreateEventAndCheck();
+        createEventAndCheck = new EventUITest();
         createEventAndCheck.testMatchPosterDetails();
     }
 
@@ -46,6 +49,15 @@ public class ShareQrTest {
         Intents.release();
     }
 
+    /**
+     * Test case to verify sharing QR code with other apps.
+     * Steps:
+     * 1. Checks if the activity (event poster) is displayed.
+     * 2. Opens the bottom sheet to access QR code.
+     * 3. Clicks to view the QR code.
+     * 4. Checks if the QR code image view is displayed.
+     * 5. Clicks to share the QR code.
+     */
     @Test
     public void testSharingQrWithApps() {
 

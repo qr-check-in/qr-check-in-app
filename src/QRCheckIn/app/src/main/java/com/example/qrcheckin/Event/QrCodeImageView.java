@@ -124,7 +124,11 @@ public class QrCodeImageView extends AppCompatActivity {
         }
     }
 
-
+    /**
+     * Shares the QR code image and associated text.
+     *
+     * @param bitmap The QR code image bitmap to be shared.
+     */
     private void shareImageAndText(Bitmap bitmap) {
 
         Intent intent = new Intent(Intent.ACTION_SEND);
@@ -142,6 +146,13 @@ public class QrCodeImageView extends AppCompatActivity {
 
     }
 
+    /**
+     * Generates a URI for the image to be shared.
+     *
+     * @param bitmap  The QR code image bitmap.
+     * @param context The context of the application.
+     * @return The URI for the shared image.
+     */
     private static Uri getImageToShare(Bitmap bitmap, Context context) {
         File folder = new File (context.getCacheDir(), "images");
         Uri uri = null;

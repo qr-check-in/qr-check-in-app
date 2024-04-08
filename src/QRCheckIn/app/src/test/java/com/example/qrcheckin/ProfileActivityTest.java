@@ -58,6 +58,7 @@ public class ProfileActivityTest{
             String value = invocation.getArgument(1);
             if ("name".equals(field)) {
                 nameInDatabase = value;
+                assertEquals(nameUpdated, nameInDatabase);
             }
             return null;
         }).when(mockAttendeeDatabaseManager).updateProfileString("name", nameUpdated, null);
@@ -68,6 +69,7 @@ public class ProfileActivityTest{
             String value = invocation.getArgument(1);
             if ("contact".equals(field)) {
                 contactInDatabase = value;
+                assertEquals(contactUpdated, contactInDatabase);
             }
             return null;
         }).when(mockAttendeeDatabaseManager).updateProfileString("contact", contactUpdated, null);
@@ -78,13 +80,11 @@ public class ProfileActivityTest{
             String value = invocation.getArgument(1);
             if ("homepage".equals(field)) {
                 homepageInDatabase = value;
+                assertEquals(homepageUpdated, homepageInDatabase);
             }
             return null;
         }).when(mockAttendeeDatabaseManager).updateProfileString("homepage", homepageUpdated, null);
 
-        assertEquals(nameUpdated, nameInDatabase);
-        assertEquals(contactUpdated, contactInDatabase);
-        assertEquals(homepageUpdated, homepageInDatabase);
     }
 }
 

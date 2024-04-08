@@ -31,7 +31,7 @@ public class NotificationTest {
     @Rule
     public ActivityScenarioRule<CreateAddEventDetails> scenario = new ActivityScenarioRule<CreateAddEventDetails>(CreateAddEventDetails.class);
 
-    private CreateEventAndCheck createEventAndCheck;
+    private EventUITest createEventAndCheck;
 
     @Before
     public void setUp() {
@@ -40,7 +40,7 @@ public class NotificationTest {
 
         // setup for testing notifications
         // creates a event to push notifications
-        createEventAndCheck = new CreateEventAndCheck();
+        createEventAndCheck = new EventUITest();
         createEventAndCheck.testMatchPosterDetails();
     }
 

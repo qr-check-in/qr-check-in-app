@@ -1,9 +1,7 @@
 package com.example.qrcheckin;
 
 import static androidx.test.espresso.Espresso.onView;
-import static androidx.test.espresso.Espresso.pressBack;
 import static androidx.test.espresso.action.ViewActions.click;
-import static androidx.test.espresso.action.ViewActions.scrollTo;
 import static androidx.test.espresso.assertion.ViewAssertions.doesNotExist;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.isDescendantOfA;
@@ -11,17 +9,8 @@ import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 
-import androidx.recyclerview.widget.RecyclerView;
-import androidx.test.espresso.Espresso;
-import androidx.test.espresso.NoMatchingViewException;
-import androidx.test.espresso.UiController;
-import androidx.test.espresso.ViewAction;
-import androidx.test.espresso.matcher.ViewMatchers;
 import static org.hamcrest.CoreMatchers.allOf;
 
-import android.view.View;
-
-import androidx.test.espresso.action.ViewActions;
 import androidx.test.espresso.intent.Intents;
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
@@ -29,13 +18,16 @@ import androidx.test.filters.LargeTest;
 
 import com.example.qrcheckin.Event.CreateAddEventDetails;
 
-import org.hamcrest.Matcher;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+
+/**
+ * This class contains UI tests for deleting an event in the QR Check-In application.
+ */
 @RunWith(AndroidJUnit4.class)
 @LargeTest
 public class DeleteEventTest {
@@ -43,7 +35,7 @@ public class DeleteEventTest {
     @Rule
     public ActivityScenarioRule<CreateAddEventDetails> scenario = new ActivityScenarioRule<CreateAddEventDetails>(CreateAddEventDetails.class);
 
-    private CreateEventAndCheck createEventAndCheck;
+    private EventUITest createEventAndCheck;
 
     @Before
     public void setUp() {
@@ -52,7 +44,7 @@ public class DeleteEventTest {
 
         // setup for testing notifications
         // creates a event to push notifications
-        createEventAndCheck = new CreateEventAndCheck();
+        createEventAndCheck = new EventUITest();
         createEventAndCheck.testMatchPosterDetails();
     }
 
@@ -62,6 +54,18 @@ public class DeleteEventTest {
         Intents.release();
     }
 
+    /**
+     * Test case to verify the functionality of deleting an event.
+     * Steps:
+     * 1. Checks if the organizer event poster is displayed.
+     * 2. Opens the bottom sheet menu by clicking on a button.
+     * 3. Clicks on the delete event option.
+     * 4. Clicks on the "Delete" button to confirm deletion.
+     * 5. Verifies if the EventListView is displayed after deletion.
+     * 6. Checks if the event with the specific name no longer exists.
+     * 7. Clicks on the upcoming events button to confirm the event deletion.
+     * 8. Verifies if the event with the specific name does not exist anymore.
+     */
     @Test
     public void testDeleteEvent() {
 

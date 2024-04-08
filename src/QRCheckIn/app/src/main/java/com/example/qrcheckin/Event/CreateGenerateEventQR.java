@@ -330,7 +330,7 @@ public class CreateGenerateEventQR extends AppCompatActivity {
      * @param unhashedContent   String to encode into QR code
      * @return                  Bitmap of the QR code image OR null (if generation failed)
      */
-    private Bitmap generateQRCode(String unhashedContent) {
+    public Bitmap generateQRCode(String unhashedContent) {
         try {
             // Get the hashed content of the qr code for the bitmap
             String hashedContent = Utils.hashString(unhashedContent);

@@ -17,7 +17,6 @@ import android.util.Log;
 import androidx.test.espresso.action.ViewActions;
 import androidx.test.espresso.intent.Intents;
 import androidx.test.espresso.intent.matcher.IntentMatchers;
-import androidx.test.espresso.matcher.ViewMatchers;
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.filters.LargeTest;
@@ -37,9 +36,14 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Locale;
 
+
+/**
+ * UI test class for creating an event, generating its QR code, and searching for it in the event list.
+ * Also includes tests to match the details on the event poster with the input details while creating the event.
+ */
 @RunWith(AndroidJUnit4.class)
 @LargeTest
-public class CreateEventAndCheck {
+public class EventUITest {
 
     String title = "ZZZ+ Annual Conference";
     String detail = "'ZZZ+ Annual Conference' is a premier event gathering professionals and experts from the field of Computer Science";
@@ -64,12 +68,11 @@ public class CreateEventAndCheck {
     }
 
     /**
-     * Tests the text boxes and buttons on the page
-     * Create a Event and generate QR Code for check-in
-     * Finally, check if the event exists
+     * Tests the input fields and buttons for creating an event.
+     * Creates an event with specified details and navigates to the QR code generation screen.
      */
     @Test
-    public void testCreateEventInputFields() {
+    public void testEventInputFields() {
 
         // Check if the activity is being displayed is correct
         onView(withId(R.id.createAddEventDetails)).check(matches(isDisplayed()));
@@ -135,11 +138,15 @@ public class CreateEventAndCheck {
 
     }
 
+    /**
+     * Tests the QR code generation process.
+     * Verifies that the QR code is generated successfully and navigates to the event list view.
+     */
     @Test
     public void testGenerateQrCode() {
 
         // First run this test to get event details
-        testCreateEventInputFields();
+        testEventInputFields();
 
         // Check that the intended activity is started
         intended(IntentMatchers.hasComponent(CreateGenerateEventQR.class.getName()));
@@ -162,6 +169,10 @@ public class CreateEventAndCheck {
 
     }
 
+    /**
+     * Tests searching for the created event in the event list.
+     * Verifies that the event is displayed in the list of user's events.
+     */
     @Test
     public void testSearchEventInList() {
 
@@ -185,9 +196,12 @@ public class CreateEventAndCheck {
         // Click on the event with text stored in title
         onView(withText(title)).perform(click());
 
-
     }
 
+    /**
+     * Tests matching the details on the event poster with the input details while creating the event.
+     * Verifies that the event details displayed on the poster match the input details.
+     */
     @Test
     public void testMatchPosterDetails() {
 

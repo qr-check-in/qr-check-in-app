@@ -55,7 +55,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(edmonton, 10)); // Zoom level can be adjusted as needed
 
         // Iterate over the locationArrayList up to its size
-        for (int i = 1; i < locationArrayList.size(); i++) {
+        for (int i = 0; i < locationArrayList.size(); i++) {
             mMap.addMarker(new MarkerOptions().position(locationArrayList.get(i)).title(locationArrayList.get(i).toString()));
             mMap.animateCamera(CameraUpdateFactory.zoomTo(18.0f));
             mMap.moveCamera(CameraUpdateFactory.newLatLng(locationArrayList.get(i)));

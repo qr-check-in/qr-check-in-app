@@ -97,6 +97,7 @@ public class AttendeeList extends AppCompatActivity {
                     if (!attendeeListGeoPoints.isEmpty()) {
                         Intent intent = new Intent(getApplicationContext(), MapsActivity.class);
                         intent.putExtra("AllGeoPoints", attendeeListGeoPoints);
+                        Log.d("AllGeoPoints", "onClick: " + attendeeListGeoPoints);
                         startActivity(intent);
                     } else {
                         Toast.makeText(AttendeeList.this, "No geolocation available!", Toast.LENGTH_SHORT).show();
@@ -170,7 +171,11 @@ public class AttendeeList extends AppCompatActivity {
         }
     }
 
-
+    /**
+     * Retrieves all attendees associated with the event from Firestore database
+     * and updates the attendeeList variable. Additionally, it checks the check-in
+     * status of the event and adjusts the visibility of the getMap button accordingly.
+     */
     private void getAllAttendees() {
         // Get a reference to the Firestore database
         db = FirebaseFirestore.getInstance();
@@ -217,6 +222,12 @@ public class AttendeeList extends AppCompatActivity {
         });
     }
 
+    /**
+     * Retrieves the geographical coordinates (GeoPoints) of all attendees from Firestore
+     * database and populates the attendeeListGeoPoints ArrayList. This method is called
+     * after getAllAttendees() and assumes that the attendeeList variable has already been
+     * populated with attendee IDs.
+     */
     private void getAllGeoPoints() {
         db = FirebaseFirestore.getInstance();
 

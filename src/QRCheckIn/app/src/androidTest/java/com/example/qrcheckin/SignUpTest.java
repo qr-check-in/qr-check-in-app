@@ -24,6 +24,10 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+/**
+ * UI test class for signing up for an event and verifying the signup process.
+ * Includes tests for checking in to an event, navigating back, and verifying signup status in the event list.
+ */
 @RunWith(AndroidJUnit4.class)
 @LargeTest
 public class SignUpTest {
@@ -44,6 +48,11 @@ public class SignUpTest {
         Intents.release();
     }
 
+    /**
+     * Tests the event check-in process.
+     * Verifies that the signup button is clickable, allows the user to navigate back,
+     * and displays the event details after signup.
+     */
     @Test
     public void testEventCheckIn(){
 

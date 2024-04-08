@@ -21,12 +21,27 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+/**
+ * This class contains UI tests for the main functionalities of the MainActivity in the QR Check-In application.
+ */
 @RunWith(AndroidJUnit4.class)
 @LargeTest
 public class MainActivityTest {
     @Rule
     public ActivityScenarioRule<MainActivity> scenario = new ActivityScenarioRule<>(MainActivity.class);
 
+    /**
+     * Test case to verify the functionality of main navigation bar buttons in MainActivity.
+     * Steps:
+     * 1. Clicks on the calendar button to view all events.
+     * 2. Verifies if the EventListView is displayed.
+     * 3. Clicks on the button to create a new event.
+     * 4. Verifies if the CreateAddEventDetails screen is displayed.
+     * 5. Clicks on the profile button to view user profile details.
+     * 6. Verifies if the ProfileActivity is displayed.
+     * 7. Clicks on the scan button to access the camera for QR code scanning.
+     * 8. Clicks on the button to open the camera.
+     */
     @Test
     public void testMainBarScan() {
 
@@ -89,7 +104,9 @@ public class MainActivityTest {
         }
     }
 
-    // To click 'Allow' on Notification pop up
+    /**
+     * Helper method to handle notification permission pop-up by clicking on 'Allow'.
+     */
     private void allowNotificationPermission() {
         UiDevice uiDevice = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation());
         UiObject allowButton = uiDevice.findObject(new UiSelector().text("Allow"));

@@ -12,8 +12,6 @@ import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.CoreMatchers.allOf;
 
-import android.content.SharedPreferences;
-
 import androidx.test.core.app.ActivityScenario;
 import androidx.test.espresso.action.ViewActions;
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
@@ -22,18 +20,27 @@ import androidx.test.filters.LargeTest;
 
 import com.example.qrcheckin.Attendee.ProfileActivity;
 
-import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+
+/**
+ * UI test for creating and updating user profiles in the ProfileActivity.
+ * This test verifies the functionality of editing profile information, enabling geolocation tracking,
+ * and updating user profile pictures.
+ */
 @RunWith(AndroidJUnit4.class)
 @LargeTest
-public class CreateAndUpdateProfile {
+public class ProfileUITest {
 
     @Rule
     public ActivityScenarioRule<ProfileActivity> activityScenarioRule = new ActivityScenarioRule<ProfileActivity>(ProfileActivity.class);
 
+    /**
+     * Tests the edit button functionality by entering new profile information,
+     * enabling geolocation tracking, and updating the profile picture.
+     */
     @Test
     public void testEditButton() {
 

@@ -228,6 +228,13 @@ public class CreateAddEventDetails extends AppCompatActivity implements SelectDa
         eventDate.setText(inputEventDate);
     }
 
+    /**
+     * Builds a time string based on the provided hour and minute values and sets it to
+     * the eventTime TextView. The time is formatted as "hour:minute".
+     *
+     * @param hour The hour value of the time.
+     * @param minute The minute value of the time.
+     */
     public void buildTime(int hour, int minute){
         StringBuilder timeBuilder = new StringBuilder()
                 .append(hour).append(":").append(minute);
