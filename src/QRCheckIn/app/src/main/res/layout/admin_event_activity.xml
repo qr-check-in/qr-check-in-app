@@ -1,0 +1,355 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <include
+        layout="@layout/event_toolbar"
+        android:id="@+id/organizer_eventScreen_toolbar"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+    <TextView
+        android:id="@+id/locationStatusTxt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/White"
+        android:textSize="16sp"
+        android:textStyle="italic"
+        android:text="Event is using your location"
+        android:gravity="center"
+        android:ellipsize="marquee"
+        android:fadingEdge="horizontal"
+        android:marqueeRepeatLimit="marquee_forever"
+        android:scrollHorizontally="true"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/organizer_eventScreen_toolbar"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        />
+
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:id="@+id/scrollOrganizerPage"
+        app:layout_constraintBottom_toTopOf="@+id/main_app_bar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/locationStatusTxt"
+        app:layout_constraintVertical_bias="1.0"
+        app:layout_constraintVertical_chainStyle="packed">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:id="@+id/image_event_poster"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:adjustViewBounds="true"
+                android:background="@drawable/rounded_image"
+                android:contentDescription="@string/description_event_poster"
+                android:maxWidth="300dp"
+                android:maxHeight="300dp"
+                android:scaleType="fitCenter"
+                android:src="@drawable/image"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_chainStyle="packed" />
+
+            <TextView
+                android:id="@+id/text_event_date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="8dp"
+                android:maxHeight="42dp"
+                android:text="@string/description_event_date"
+                app:layout_constraintEnd_toStartOf="@+id/text_event_location"
+                app:layout_constraintHorizontal_chainStyle="packed"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/image_event_poster"
+                app:layout_constraintVertical_chainStyle="packed" />
+
+            <TextView
+                android:id="@+id/text_event_location"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="16dp"
+                android:text="@string/description_event_location"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_chainStyle="packed"
+                app:layout_constraintStart_toEndOf="@+id/text_event_date"
+                app:layout_constraintTop_toBottomOf="@+id/image_event_poster"
+                app:layout_constraintVertical_chainStyle="packed" />
+
+            <TextView
+                android:id="@+id/text_event_description"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="@string/description_event_description"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/text_event_date"
+                app:layout_constraintVertical_chainStyle="packed" />
+
+            <ImageView
+                android:id="@+id/image_event_promo_qr"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:adjustViewBounds="true"
+                android:contentDescription="@string/description_promo_qrcode"
+                android:maxWidth="200dp"
+                android:maxHeight="200dp"
+                android:scaleType="fitCenter"
+                android:src="@drawable/qr2"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/text_event_description" />
+
+            <TextView
+                android:id="@+id/promo_qr_description"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="16dp"
+                android:text="@string/description_promo_qrcode"
+                app:layout_constraintBottom_toTopOf="@id/signup_button"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/image_event_promo_qr" />
+
+            <CheckBox
+                android:id="@+id/signup_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:buttonTint="@color/Tertiary"
+                android:textColor="#FFFFFF"
+                android:text="@string/signup_button_text"
+                android:layout_marginBottom="50dp"
+                android:layoutDirection="rtl"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/promo_qr_description" />
+
+            <TextView
+                android:id="@+id/signup_limit_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/signup_limit_text"
+                android:layout_marginBottom="50dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/promo_qr_description" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
+
+    <Button
+        android:id="@+id/btnRemoveEvent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Remove Event"
+        android:textStyle="bold"
+        android:layout_marginBottom="5dp"
+        app:layout_constraintBottom_toTopOf="@+id/openBottomSheetButton"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.95"
+        android:backgroundTint="@color/Red" />
+
+    <ImageButton
+        android:id="@+id/openBottomSheetButton"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:scaleType="fitCenter"
+        android:src="@drawable/baseline_keyboard_arrow_up_24"
+        android:layout_gravity="center_horizontal"
+        android:background="@drawable/event_bottom_sheet"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:tint="@color/White" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
+
+
+
+
+
+
+<!--<androidx.constraintlayout.widget.ConstraintLayout-->
+<!--    xmlns:android="http://schemas.android.com/apk/res/android"-->
+<!--    xmlns:app="http://schemas.android.com/apk/res-auto"-->
+<!--    android:layout_width="match_parent"-->
+<!--    android:layout_height="match_parent">-->
+
+
+<!--    <include-->
+<!--        layout="@layout/event_toolbar"-->
+<!--        android:id="@+id/event_page_toolbar"-->
+<!--        app:layout_constraintTop_toTopOf="parent"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"/>-->
+
+<!--    <ScrollView-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="0dp"-->
+<!--        app:layout_constraintBottom_toTopOf="@+id/main_app_bar"-->
+
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintHorizontal_bias="1.0"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toBottomOf="@+id/event_page_toolbar"-->
+<!--        app:layout_constraintVertical_bias="0.0"-->
+<!--        app:layout_constraintVertical_chainStyle="packed">-->
+
+<!--        <androidx.constraintlayout.widget.ConstraintLayout-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content">-->
+
+<!--            <ImageView-->
+<!--                android:id="@+id/image_event_poster"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_marginTop="16dp"-->
+<!--                android:adjustViewBounds="true"-->
+<!--                android:background="@drawable/rounded_image"-->
+<!--                android:contentDescription="@string/description_event_poster"-->
+<!--                android:maxWidth="300dp"-->
+<!--                android:maxHeight="300dp"-->
+<!--                android:scaleType="fitCenter"-->
+<!--                android:src="@drawable/image"-->
+<!--                app:layout_constraintEnd_toEndOf="parent"-->
+<!--                app:layout_constraintStart_toStartOf="parent"-->
+<!--                app:layout_constraintTop_toTopOf="parent"-->
+<!--                app:layout_constraintVertical_chainStyle="packed" />-->
+
+<!--            <TextView-->
+<!--                android:id="@+id/text_event_date"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_marginTop="16dp"-->
+<!--                android:layout_marginEnd="8dp"-->
+<!--                android:maxHeight="42dp"-->
+<!--                android:text="@string/description_event_date"-->
+<!--                app:layout_constraintEnd_toStartOf="@+id/text_event_location"-->
+<!--                app:layout_constraintHorizontal_chainStyle="packed"-->
+<!--                app:layout_constraintStart_toStartOf="parent"-->
+<!--                app:layout_constraintTop_toBottomOf="@+id/image_event_poster"-->
+<!--                app:layout_constraintVertical_chainStyle="packed" />-->
+
+<!--            <TextView-->
+<!--                android:id="@+id/text_event_location"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_marginStart="8dp"-->
+<!--                android:layout_marginTop="16dp"-->
+<!--                android:text="@string/description_event_location"-->
+<!--                app:layout_constraintEnd_toEndOf="parent"-->
+<!--                app:layout_constraintHorizontal_chainStyle="packed"-->
+<!--                app:layout_constraintStart_toEndOf="@+id/text_event_date"-->
+<!--                app:layout_constraintTop_toBottomOf="@+id/image_event_poster"-->
+<!--                app:layout_constraintVertical_chainStyle="packed" />-->
+
+<!--            <TextView-->
+<!--                android:id="@+id/text_event_description"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_marginTop="16dp"-->
+<!--                android:text="@string/description_event_description"-->
+<!--                app:layout_constraintEnd_toEndOf="parent"-->
+<!--                app:layout_constraintStart_toStartOf="parent"-->
+<!--                app:layout_constraintTop_toBottomOf="@+id/text_event_date"-->
+<!--                app:layout_constraintVertical_chainStyle="packed" />-->
+
+<!--            <ImageView-->
+<!--                android:id="@+id/image_event_promo_qr"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_marginTop="16dp"-->
+<!--                android:adjustViewBounds="true"-->
+<!--                android:maxWidth="200dp"-->
+<!--                android:maxHeight="200dp"-->
+<!--                android:scaleType="fitCenter"-->
+<!--                android:contentDescription="@string/description_promo_qrcode"-->
+<!--                android:src="@drawable/qr2"-->
+<!--                app:layout_constraintEnd_toEndOf="parent"-->
+<!--                app:layout_constraintStart_toStartOf="parent"-->
+<!--                app:layout_constraintTop_toBottomOf="@+id/text_event_description" />-->
+
+<!--            <TextView-->
+<!--                android:id="@+id/promo_qr_description"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_marginTop="8dp"-->
+<!--                android:layout_marginBottom="16dp"-->
+<!--                android:text="@string/description_promo_qrcode"-->
+<!--                app:layout_constraintBottom_toTopOf="@id/signup_button"-->
+<!--                app:layout_constraintEnd_toEndOf="parent"-->
+<!--                app:layout_constraintStart_toStartOf="parent"-->
+<!--                app:layout_constraintTop_toBottomOf="@+id/image_event_promo_qr" />-->
+
+<!--            <CheckBox-->
+<!--                android:id="@+id/signup_button"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:buttonTint="@color/NeonBlue"-->
+<!--                android:text="@string/signup_button_text"-->
+<!--                android:layoutDirection="rtl"-->
+<!--                app:layout_constraintBottom_toBottomOf="parent"-->
+<!--                app:layout_constraintEnd_toEndOf="parent"-->
+<!--                app:layout_constraintStart_toStartOf="parent"-->
+<!--                app:layout_constraintTop_toBottomOf="@id/event_page_toolbar" />-->
+
+<!--            <TextView-->
+<!--                android:id="@+id/signup_limit_text"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:text="@string/signup_limit_text"-->
+<!--                app:layout_constraintBottom_toBottomOf="parent"-->
+<!--                app:layout_constraintEnd_toEndOf="parent"-->
+<!--                app:layout_constraintStart_toStartOf="parent"-->
+<!--                app:layout_constraintTop_toBottomOf="@+id/promo_qr_description" />-->
+
+
+
+<!--        </androidx.constraintlayout.widget.ConstraintLayout>-->
+<!--    </ScrollView>-->
+
+<!--    <Button-->
+<!--        android:id="@+id/btnRemoveEvent"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:text="Remove Event"-->
+<!--        android:textStyle="bold"-->
+<!--        android:layout_marginBottom="5dp"-->
+<!--        app:layout_constraintBottom_toTopOf="@+id/main_app_bar"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        android:backgroundTint="@color/Red" />-->
+
+<!--    <include-->
+<!--        android:id="@+id/main_app_bar"-->
+<!--        layout="@layout/mainappbar"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="45dp"-->
+<!--        app:layout_constraintBottom_toBottomOf="parent"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintStart_toStartOf="parent" />-->
+<!--</androidx.constraintlayout.widget.ConstraintLayout>-->

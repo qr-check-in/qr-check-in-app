@@ -4,6 +4,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
+    android:id="@+id/attendeeListView"
     android:layout_height="match_parent">
 
     <include
@@ -19,42 +20,37 @@
         android:layout_width="300dp"
         android:layout_height="wrap_content"
         android:background="@drawable/round_button"
-        android:drawableEnd="@drawable/locationresize"
+        android:drawableEnd="@drawable/location_resize"
         android:drawableTint="#FFFFFF"
-        android:padding="10dp"
+        android:padding="12dp"
         android:text="@string/view_check_in_locations"
         android:textSize="20sp"
-        app:layout_constraintBottom_toTopOf="@id/main_app_bar"
+        android:visibility="visible"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/attendee_toolbar"
-        app:layout_constraintVertical_bias="0.050000012" />
+        app:layout_constraintVertical_bias="0.02"/>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
         app:layout_constraintTop_toBottomOf="@+id/mapLocation"
-        app:layout_constraintBottom_toTopOf="@id/main_app_bar"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        android:paddingTop="5dp"
         >
 
         <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recycler_view_attendee_check_ins"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            tools:listitem="@layout/participant_layout"/>
+            tools:listitem="@layout/list_item_attendee" />
 
 
     </LinearLayout>
 
-    <include
-        android:id="@+id/main_app_bar"
-        layout="@layout/mainappbar"
-        android:layout_width="match_parent"
-        android:layout_height="45dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

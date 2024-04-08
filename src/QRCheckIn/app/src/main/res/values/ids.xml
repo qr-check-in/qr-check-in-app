@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <item name="btn_admin_event" type="id" />
+    <item name="profile_admin_button" type="id" />
+    <item name="image_admin_button" type="id" />
+    <item name="addAdminTextView" type="id" />
+</resources>

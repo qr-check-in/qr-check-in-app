@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".CreateAddEventDetails">
+    android:id="@+id/genertaeQrCodeActivity"
+    tools:context=".Event.CreateAddEventDetails">
 
     <include
         android:id="@+id/addEventToolBar2"
@@ -40,7 +41,7 @@
             android:layout_width="200dp"
             android:layout_height="200dp"
             android:elevation="20dp"
-            app:cardBackgroundColor="@color/UranianBlue">
+            app:cardBackgroundColor="@color/SurfaceContainer">
 
             <ImageView
                 android:id="@+id/ivCheckInQR"
@@ -63,7 +64,7 @@
                 android:id="@+id/btnGenCheckInQR"
                 android:layout_width="165dp"
                 android:layout_height="wrap_content"
-                android:backgroundTint="@color/NeonBlue"
+                android:backgroundTint="@color/Secondary"
                 android:text="Generate check-in QRCode" />
 
             <TextView
@@ -78,7 +79,7 @@
                 android:id="@+id/btnUploadCheckInQR"
                 android:layout_width="165dp"
                 android:layout_height="wrap_content"
-                android:backgroundTint="@color/NeonBlue"
+                android:backgroundTint="@color/Secondary"
                 android:text="Upload from Camera Roll" />
         </LinearLayout>
 
@@ -87,13 +88,13 @@
             android:layout_width="200dp"
             android:layout_height="200dp"
             android:elevation="20dp"
-            app:cardBackgroundColor="@color/UranianBlue">
+            app:cardBackgroundColor="@color/SurfaceContainer">
 
             <ImageView
                 android:id="@+id/ivPromoQr"
                 android:layout_width="200dp"
                 android:layout_height="200dp"
-                android:scaleType="fitXY"></ImageView>
+                android:scaleType="fitXY" />
 
         </androidx.cardview.widget.CardView>
 
@@ -105,10 +106,11 @@
             android:layout_weight="1">
 
             <Button
-                android:id="@+id/image_event_promo_qr"
+                android:id="@+id/btnGenPromoQR"
                 android:layout_width="185dp"
                 android:layout_height="wrap_content"
-                android:backgroundTint="@color/NeonBlue"
+                android:backgroundTint="@color/Secondary"
+                android:textStyle="italic"
                 android:text="Generate Promotional QRCode" />
 
             <TextView
@@ -124,7 +126,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="16dp"
-        android:backgroundTint="@color/NeonBlue"
+        android:backgroundTint="@color/Secondary"
         android:drawableTint="@color/White"
         android:text="Finish"
         android:textStyle="bold"

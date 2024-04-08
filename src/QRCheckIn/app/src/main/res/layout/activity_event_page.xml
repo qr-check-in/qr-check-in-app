@@ -3,23 +3,23 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:id="@+id/eventPosterDetailsPresent">
 
 
-<!--    <TextView-->
-<!--        android:id="@+id/text_event_name"-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:layout_gravity="center"-->
-<!--        android:text="@string/header_event_details"-->
-<!--        android:textAlignment="center"-->
-<!--        android:textColor="@android:color/black"-->
-<!--        android:textSize="28sp"-->
-<!--        app:layout_constraintEnd_toEndOf="parent"-->
-<!--        app:layout_constraintStart_toStartOf="parent"-->
-<!--        app:layout_constraintTop_toTopOf="parent">-->
-<!--        -->
-<!--    </TextView>-->
+<!-- <TextView
+        android:id="@+id/text_event_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:text="@string/header_event_details"
+        android:textAlignment="center"
+        android:textColor="@color/OnSurface"
+        android:textSize="28sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+    </TextView> -->
 
     <include
         layout="@layout/event_toolbar"
@@ -31,10 +31,11 @@
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:id="@+id/eventPageScroll"
         app:layout_constraintBottom_toTopOf="@+id/main_app_bar"
 
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/event_page_toolbar"
         app:layout_constraintVertical_bias="0.0"
@@ -100,15 +101,15 @@
                 app:layout_constraintVertical_chainStyle="packed" />
 
             <ImageView
-                android:id="@+id/image_event_promo_qr"
+                android:id="@+id/btnGenPromoQR"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
                 android:adjustViewBounds="true"
+                android:contentDescription="@string/description_promo_qrcode"
                 android:maxWidth="200dp"
                 android:maxHeight="200dp"
                 android:scaleType="fitCenter"
-                android:contentDescription="@string/description_promo_qrcode"
                 android:src="@drawable/qr2"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -124,15 +125,15 @@
                 app:layout_constraintBottom_toTopOf="@id/signup_button"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/image_event_promo_qr" />
+                app:layout_constraintTop_toBottomOf="@+id/btnGenPromoQR" />
 
             <CheckBox
                 android:id="@+id/signup_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:buttonTint="@color/NeonBlue"
-                android:text="@string/signup_button_text"
                 android:layoutDirection="rtl"
+                android:text="@string/signup_button_text"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -147,7 +148,6 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/promo_qr_description" />
-
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>

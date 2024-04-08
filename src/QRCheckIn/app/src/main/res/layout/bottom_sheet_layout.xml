@@ -14,9 +14,9 @@
         android:layout_gravity="center_horizontal"
         android:textColor="@color/White"
         android:padding="15dp"/>
-    
+
     <LinearLayout
-        android:id="@+id/editEventDetails"
+        android:id="@+id/viewCheckInQRCode"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
@@ -24,17 +24,16 @@
 
         <TextView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Edit Event Details"
-            android:textSize="20dp"
-            android:textColor="@color/White"
-            android:drawableLeft="@drawable/baseline_edit_document_24"
-            android:drawableTint="@color/Black"
-            android:drawablePadding="25dp"
-            android:paddingStart="30dp"
-            android:paddingBottom="10dp"
+            android:layout_height="40dp"
             android:layout_gravity="center_horizontal"
-            />
+            android:drawableLeft="@drawable/qrresize"
+            android:drawablePadding="15dp"
+            android:drawableTint="@color/OnSurface"
+            android:paddingStart="20dp"
+            android:paddingBottom="10dp"
+            android:text="View Check-in QR Code"
+            android:textColor="@color/White"
+            android:textSize="20dp" />
     </LinearLayout>
 
     <LinearLayout
@@ -50,8 +49,8 @@
             android:text="Post New Notification"
             android:textSize="20dp"
             android:textColor="@color/White"
-            android:drawableLeft="@drawable/baseline_notification_add_24"
-            android:drawableTint="@color/Black"
+            android:drawableLeft="@drawable/ic_notification_new"
+            android:drawableTint="@color/OnSurface"
             android:drawablePadding="25dp"
             android:paddingStart="30dp"
             android:paddingBottom="10dp"
@@ -72,8 +71,7 @@
             android:text="View Signed Up"
             android:textSize="20dp"
             android:textColor="@color/White"
-            android:drawableLeft="@drawable/baseline_person_24"
-            android:drawableTint="@color/Black"
+            android:drawableLeft="@drawable/ic_person"
             android:drawablePadding="25dp"
             android:paddingStart="30dp"
             android:paddingBottom="10dp"
@@ -94,8 +92,31 @@
             android:text="View Participants"
             android:textSize="20dp"
             android:textColor="@color/White"
-            android:drawableLeft="@drawable/baseline_diversity_3_24"
-            android:drawableTint="@color/Black"
+            android:drawableLeft="@drawable/ic_check_ins"
+            android:drawableTint="@color/OnSurface"
+            android:drawablePadding="25dp"
+            android:paddingStart="30dp"
+            android:paddingBottom="20dp"
+            android:layout_gravity="center_horizontal"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/deleteEvent"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="5dp">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Delete Event"
+            android:textSize="20dp"
+            android:textColor="@color/Error"
+            android:textStyle="bold"
+            android:drawableLeft="@drawable/baseline_delete_forever_24"
+            android:drawableTint="@color/Error"
             android:drawablePadding="25dp"
             android:paddingStart="30dp"
             android:paddingBottom="20dp"

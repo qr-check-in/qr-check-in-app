@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".EventListView">
+    tools:context=".Event.EventListView"
+    android:id="@+id/eventListView">
 
     <include
         android:id="@+id/eventListToolbar"
@@ -32,6 +33,7 @@
         android:id="@+id/event_recycler_view"
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:scrollbars="vertical"
         app:layout_constraintBottom_toTopOf="@id/main_app_bar"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

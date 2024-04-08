@@ -15,14 +15,14 @@ import org.junit.runner.RunWith;
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
+import static androidx.test.espresso.contrib.RecyclerViewActions.actionOnItemAtPosition;
 import static androidx.test.espresso.intent.Intents.intended;
 import static androidx.test.espresso.intent.matcher.IntentMatchers.hasComponent;
 import static androidx.test.espresso.matcher.ViewMatchers.hasDescendant;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
+import static androidx.test.espresso.contrib.RecyclerViewActions.scrollToPosition;
 import static androidx.test.espresso.Espresso.onData;
-import static androidx.test.espresso.matcher.ViewMatchers.withText;
-
 import com.example.qrcheckin.Admin.AdminActivity;
 import com.example.qrcheckin.Admin.AdminViewImages;
 import static org.hamcrest.CoreMatchers.anything;
@@ -59,12 +59,21 @@ public class AdminDisplayImagesTest {
     public void testImageButtonOpensImageView() {
         onView(withId(R.id.image_admin_button)).perform(click());
         try {
-            Thread.sleep(1000); // Adjust the sleep duration as needed
+            Thread.sleep(5000); // Adjust the sleep duration as needed
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
         // Verify that AdminViewImages is opened
         intended(hasComponent(AdminViewImages.class.getName()));
+        onView(withId(R.id.image_recycler_view)).perform(actionOnItemAtPosition(0, click()));
+        onView(withId(R.id.delete_button)).perform(click());
+        try {
+            Thread.sleep(5000); // Adjust the sleep duration as needed
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        // Verifies that the RecyclerView is displayed again after an event is deleted
+        onView(withId(R.id.image_recycler_view)).check(matches(isDisplayed()));
 
     }
 }

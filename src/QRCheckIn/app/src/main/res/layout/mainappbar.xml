@@ -5,7 +5,7 @@
     android:orientation="horizontal"
     android:layout_width="match_parent"
     android:layout_height="45dp"
-    android:background="@color/JordyBlue">
+    android:background="@color/SurfaceContainer">
 
 
     <ImageButton
@@ -13,24 +13,27 @@
         android:layout_width="120dp"
         android:layout_height="match_parent"
         android:layout_weight="1"
-        android:background="@drawable/buttonselect"
+        android:clickable="true"
+        android:focusable="true"
+        android:background="@drawable/selected_button_background"
         android:paddingHorizontal="5dp"
         android:paddingVertical="5dp"
         android:scaleType="fitCenter"
-        android:tint="@android:color/black"
-        app:srcCompat="@drawable/qrcode" />
+        app:srcCompat="@drawable/qrcode"
+        app:tint="@color/OnSecondary" />
 
     <ImageButton
         android:id="@+id/calenderButton"
         android:layout_width="120dp"
         android:layout_height="match_parent"
         android:layout_weight="1"
-        android:scaleType="fitCenter"
-        android:background="@drawable/buttonselect"
+        android:clickable="true"
+        android:focusable="true"
+        android:background="@drawable/selected_button_background"
         android:paddingHorizontal="10dp"
         android:paddingVertical="10dp"
-        android:tint="@android:color/black"
-        app:srcCompat="@drawable/calender"
+        android:scaleType="fitCenter"
+        app:srcCompat="@drawable/ic_calendar"
         />
 
     <ImageButton
@@ -38,12 +41,13 @@
         android:layout_width="120dp"
         android:layout_height="match_parent"
         android:layout_weight="1"
-        android:scaleType="fitCenter"
+        android:clickable="true"
+        android:focusable="true"
+        android:background="@drawable/selected_button_background"
         android:paddingHorizontal="10dp"
         android:paddingVertical="10dp"
-        android:background="@drawable/buttonselect"
-        android:tint="@android:color/black"
-        app:srcCompat="@drawable/addcalender"
+        android:scaleType="fitCenter"
+        app:srcCompat="@drawable/ic_plus"
         />
 
     <ImageButton
@@ -54,9 +58,8 @@
         android:scaleType="fitCenter"
         android:paddingHorizontal="5dp"
         android:paddingVertical="5dp"
-        android:background="@drawable/buttonselect"
-        android:tint="@android:color/black"
-        app:srcCompat="@drawable/baseline_person_24"
+        android:background="@drawable/selected_button_background"
+        app:srcCompat="@drawable/ic_person"
         />
 
 </LinearLayout>

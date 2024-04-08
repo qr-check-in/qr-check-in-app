@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="Base.Theme.QRCheckIn" parent="Theme.Material3.DayNight.NoActionBar">
+        <item name="android:windowBackground">@color/Surface</item>
+        <item name="android:textColor">@color/OnSurface</item>
+        <item name="hintTextColor">@color/OnSurface</item>
+        <item name="android:textColorHint">@color/OnSurface</item>
+        <item name="android:windowAnimationStyle">@null</item>
+        <!-- Navigation bars -->
+        <item name="android:navigationBarColor">@color/SurfaceContainer</item>
+        <item name="android:statusBarColor">@color/SurfaceContainer</item>
+        <item name="android:windowLightNavigationBar">false</item>
+    </style>
+</resources>

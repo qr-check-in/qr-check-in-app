@@ -2,10 +2,10 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/main"
+    android:id="@+id/createNotification"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".CreateNotification">
+    tools:context=".Notifications.CreateNotification">
 
     <include
         layout="@layout/toolbar"
@@ -15,6 +15,20 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"/>
+    <TextView
+        android:id="@+id/notificationHeader"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Post An Annoucement"
+        android:textStyle="bold"
+        android:textSize="35dp"
+        android:textColor="@color/White"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/notificationToolbar"
+        android:padding="10dp"
+        android:layout_gravity="center_horizontal"
+        />
 
     <ScrollView
         android:layout_width="match_parent"
@@ -23,31 +37,19 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/notificationToolbar"
+        app:layout_constraintTop_toBottomOf="@+id/notificationHeader"
         app:layout_constraintVertical_bias="0.0">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="0dp">
-            <TextView
-                android:id="@+id/notificationHeader"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Post A Notification"
-                android:textStyle="bold"
-                android:textSize="40dp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/notificationToolbar"
-                android:padding="10dp"
-                android:layout_gravity="center_horizontal"
-                />
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/notificationTitleLayout"
                 android:layout_width="350dp"
                 android:layout_height="wrap_content"
                 app:boxCornerRadiusTopStart="15dp"
+                android:textColorHint="@color/White"
                 app:boxCornerRadiusTopEnd="15dp"
                 app:boxCornerRadiusBottomStart="15dp"
                 app:boxCornerRadiusBottomEnd="15dp"
@@ -61,12 +63,14 @@
                     android:id="@+id/notificationTitleText"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Notification Title"
-                    tools:layout_editor_absoluteX="30dp"
-                    tools:layout_editor_absoluteY="78dp"
                     android:drawableLeft="@drawable/arrowresized"
-                    android:gravity="center_horizontal">
-                </com.google.android.material.textfield.TextInputEditText>
+                    android:drawablePadding="35dp"
+                    android:drawableTint="@color/White"
+                    android:hint="Notification Title"
+                    android:textColor="@color/White"
+                    android:textColorHint="@color/White"
+                    tools:layout_editor_absoluteX="30dp"
+                    tools:layout_editor_absoluteY="78dp"></com.google.android.material.textfield.TextInputEditText>
             </com.google.android.material.textfield.TextInputLayout>
 
 
@@ -79,6 +83,7 @@
                     app:boxCornerRadiusTopEnd="15dp"
                     app:boxCornerRadiusBottomStart="15dp"
                     app:boxCornerRadiusBottomEnd="15dp"
+                    android:textColorHint="@color/White"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/notificationTitleLayout"
@@ -89,9 +94,12 @@
                         android:id="@+id/notificationDescriptionText"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:drawableLeft="@drawable/arrowresized"
+                        android:drawablePadding="35dp"
+                        android:drawableTint="@color/White"
                         android:hint="Notification Description"
-                        android:gravity="center_horizontal"
-                        android:drawableLeft="@drawable/arrowresized">
+                        android:textColor="@color/White"
+                        android:textColorHint="@color/White">
 
                     </com.google.android.material.textfield.TextInputEditText>
                 </com.google.android.material.textfield.TextInputLayout>
@@ -100,26 +108,19 @@
     </ScrollView>
 
     <Button
+        android:id="@+id/addNotification"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="24dp"
-        android:backgroundTint="@color/NeonBlue"
-        android:text="Post Notification"
-        app:layout_constraintBottom_toTopOf="@id/notificationMainBar"
+        android:layout_marginBottom="32dp"
+        android:backgroundTint="@color/Secondary"
+        android:text="Post Annoucement"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.95"
+        app:layout_constraintHorizontal_bias="0.90"
         app:layout_constraintStart_toStartOf="parent"
         android:drawableRight="@drawable/notification_bell_resize"
         android:drawableTint="@color/White"
         />
 
-    <include
-        layout="@layout/mainappbar"
-        android:id="@+id/notificationMainBar"
-        android:layout_height="45dp"
-        android:layout_width="wrap_content"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

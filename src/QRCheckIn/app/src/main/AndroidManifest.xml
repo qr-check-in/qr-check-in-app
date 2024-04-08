@@ -2,19 +2,24 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"
+        tools:ignore="CoarseFineLocation" />
     <uses-permission
         android:name="android.permission.WRITE_EXTERNAL_STORAGE"
         android:maxSdkVersion="28" />
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.INTERNET"/>
+
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
 
     <uses-feature
         android:name="android.hardware.camera"
         android:required="true" />
 
     <application
-        android:name=".OpenApp"
+        android:name=".Common.OpenApp"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
@@ -24,13 +29,30 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.QRCheckIn"
         tools:targetApi="31">
+
+        <!--
+             TODO: Before you run your application, you need a Google Maps API key.
+
+             To get one, follow the directions here:
+
+                https://developers.google.com/maps/documentation/android-sdk/get-api-key
+
+             Once you have your API key (it starts with "AIza"), define a new property in your
+             project's local.properties file (e.g. MAPS_API_KEY=Aiza...), and replace the
+             "YOUR_API_KEY" string in this file with "${MAPS_API_KEY}".
+        -->
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyDzkqgLOEGnrMdqqewk58XnYdw9SESZ6qU" />
+
         <activity
-            android:name=".ViewPostedNotificationActivity"
-            android:exported="false" />
-        <activity
-            android:name=".AttendeeList"
+            android:name=".Event.MapsActivity"
             android:exported="false"
-            android:parentActivityName=".OrganizersEventPage" />
+            android:label="@string/title_activity_maps" />
+        <activity
+            android:name=".Event.AttendeeList"
+            android:exported="false"
+            android:parentActivityName=".Event.OrganizersEventPageActivity"/>
         <activity
             android:name=".MyEventsActivity"
             android:exported="false" />
@@ -39,60 +61,87 @@
             android:exported="false"
             android:theme="@style/Theme.QRCheckIn" />
         <activity
-            android:name=".QrCodeImageView"
+            android:name=".Event.QrCodeImageView"
             android:exported="false" />
 
         <provider
             android:name="androidx.core.content.FileProvider"
-            android:authorities="${applicationId}.fileprovider"
+            android:authorities="${applicationId}.provider"
             android:exported="false"
             android:grantUriPermissions="true">
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
-                android:resource="@xml/file_paths" />
+                android:resource="@xml/provider_paths" />
         </provider>
 
         <activity
-            android:name=".EventPage"
-            android:exported="false" />
+            android:name=".Event.EventPage"
+            android:exported="false"
+            android:parentActivityName=".Event.EventListView"/>
         <activity
             android:name=".test"
             android:exported="false" />
+        <activity android:name=".Common.SharedViewModel"/>
         <activity
-            android:name=".CreateNotification"
+            android:name=".Notifications.CreateNotification"
             android:exported="false"
-            android:parentActivityName=".OrganizersEventPage" />
+            android:parentActivityName=".Event.OrganizersEventPageActivity"/>
         <activity
-            android:name=".CreateGenerateEventQR"
+            android:name=".Event.CreateGenerateEventQR"
             android:exported="false"
-            android:parentActivityName=".CreateAddEventDetails" />
+            android:parentActivityName=".Event.CreateAddEventDetails" />
         <activity
-            android:name=".CreateAddEventDetails"
+            android:name=".Event.CreateAddEventDetails"
             android:exported="false" />
+
         <activity
-            android:name=".ProfileActivity"
-            android:exported="false" />
+            android:name=".Admin.AdminViewEvent"
+            android:parentActivityName=".Admin.AdminActivity"/>
         <activity
-            android:name=".UpdatePictureFragment"
-            android:exported="false" />
-        <activity
-            android:name=".SharedViewModel"
-            android:exported="false" />
-        <activity
-            android:name=".EventListView"
-            android:exported="false" />
-        <activity
-            android:name=".QRCodeScan"
-            android:exported="false" />
-        <activity
-            android:name=".AdminActivity"
-            android:exported="false" />
-        <activity
-            android:name=".OrganizersEventPage"
+            android:name=".Admin.AdminEventPage"
             android:exported="false"
-            android:parentActivityName=".EventListView" />
+            android:parentActivityName=".Admin.AdminViewEvent"/>
         <activity
-            android:name=".MainActivity"
+            android:name=".Admin.AdminViewProfiles"
+            android:exported="false"
+            android:parentActivityName=".Admin.AdminActivity"/>
+        <activity
+            android:name=".Admin.AdminViewImages"
+            android:parentActivityName=".Admin.AdminActivity"/>
+        <activity
+            android:name=".Admin.AdminImagePage"
+            android:parentActivityName=".Admin.AdminViewImages"/>
+
+        <activity
+            android:name=".Attendee.ProfileActivity"
+            android:exported="false" />
+        <activity
+            android:name=".Attendee.UpdatePictureFragment"
+            android:exported="false" />
+        <activity
+            android:name=".Admin.AdminProfileActivity"
+            android:exported="false"
+            android:parentActivityName=".Admin.AdminViewProfiles"/>
+        <activity
+            android:name=".Event.EventListView"
+            android:exported="false" />
+        <activity
+            android:name=".Common.QRCodeScan"
+            android:exported="false" />
+<!--        https://stackoverflow.com/questions/34983201/change-qr-scanner-orientation-with-zxing-in-android-studio, 2024, how to change the orientation of the camera-->
+        <activity android:name=".Common.CaptureActivityProtrait"
+            android:screenOrientation="portrait"
+            android:stateNotNeeded="true"
+            android:theme="@style/zxing_CaptureTheme"/>
+        <activity
+            android:name=".Admin.AdminActivity"
+            android:exported="false" />
+        <activity
+            android:name=".Event.OrganizersEventPageActivity"
+            android:exported="false"
+            android:parentActivityName=".Event.EventListView" />
+        <activity
+            android:name=".Common.MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -102,12 +151,19 @@
         </activity>
 
         <service
-            android:name=".MyFirebaseMessagingService"
+            android:name=".Notifications.MyFirebaseMessagingService"
             android:exported="false">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
         </service>
+
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_icon"
+            android:resource="@drawable/app_icon_resize_24" />
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_color"
+            android:resource="@color/OnSurface" />
 
         <meta-data
             android:name="preloaded_fonts"

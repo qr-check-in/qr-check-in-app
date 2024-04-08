@@ -2,8 +2,13 @@
     <!-- Base application theme. -->
     <style name="Base.Theme.QRCheckIn" parent="Theme.Material3.DayNight.NoActionBar">
         <item name="android:windowBackground">@color/Surface</item>
-        <!-- Customize your light theme here. -->
-        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+        <item name="android:textColor">@color/OnSurface</item>
+        <item name="hintTextColor">@color/OnSurface</item>
+        <item name="android:textColorHint">@color/OnSurface</item>
+        <item name="android:windowAnimationStyle">@null</item>
+        <!-- Navigation bars -->
+        <item name="android:navigationBarColor">@color/SurfaceContainer</item>
+        <item name="android:statusBarColor">@color/SurfaceContainer</item>
     </style>
 
     <style name="Theme.QRCheckIn" parent="Base.Theme.QRCheckIn" />
