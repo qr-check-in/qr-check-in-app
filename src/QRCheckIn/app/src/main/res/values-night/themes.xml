@@ -6,6 +6,8 @@
         <item name="hintTextColor">@color/OnSurface</item>
         <item name="android:textColorHint">@color/OnSurface</item>
         <!-- Customize your dark theme here. -->
+        <item name="android:navigationBarColor">@color/SurfaceContainer</item>
+        <item name="android:statusBarColor">@color/SurfaceContainer</item>
         <!-- <item name="colorPrimary">@color/my_dark_primary</item> -->
     </style>
 </resources>
