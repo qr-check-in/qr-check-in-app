@@ -15,7 +15,6 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -45,6 +44,8 @@ import com.example.qrcheckin.Notifications.NotificationDatabaseManager;
 import com.example.qrcheckin.R;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.material.snackbar.Snackbar;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestoreException;
@@ -55,6 +56,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Locale;
 import java.util.Objects;
 
@@ -79,7 +81,7 @@ public class OrganizersEventPageActivity extends AppCompatActivity {
     private EventDatabaseManager eventDb;
     private String fcmToken;
     private String documentId;
-
+    private Event event;
     private String eventName;
     private String eventDate;
     private QRCode promoQRCode;
@@ -149,7 +151,7 @@ public class OrganizersEventPageActivity extends AppCompatActivity {
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
                 // Get and display event details
-                Event event = documentSnapshot.toObject(Event.class);
+                event = documentSnapshot.toObject(Event.class);
                 if (documentSnapshot != null && event != null) {
 
                     // set attributes that are used if user clicks QR code(s) to share it
@@ -190,9 +192,11 @@ public class OrganizersEventPageActivity extends AppCompatActivity {
                     // Check if current event is organized by this user
                     if (Objects.equals(event.getOrganizer(), fcmToken)) {
                         openBottomSheetBtn.setVisibility(View.VISIBLE);
+                        // Check milestones
+                        checkMilestone();
                         // Set open Bottom Sheet Listner
                         openBottomSheetBtn.setOnClickListener(v -> {
-                            showDialog();
+                            showBottomSheetDialog();
                         });
                     }
 
@@ -207,7 +211,8 @@ public class OrganizersEventPageActivity extends AppCompatActivity {
             }
         });
 
-        // Listen for updates to the event document, for cases where another user signs up for the event while this page is loaded
+
+        // Listennother user  for updates to the event document, for cases where asigns up for the event while this page is loaded
         eventDb.getDocRef().addSnapshotListener(new EventListener<DocumentSnapshot>() {
             @Override
             public void onEvent(@Nullable DocumentSnapshot value, @Nullable FirebaseFirestoreException error) {
@@ -226,6 +231,7 @@ public class OrganizersEventPageActivity extends AppCompatActivity {
                 }
             }
         });
+
 
         // Set listener for the signup CheckBox
         signupCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -257,28 +263,36 @@ public class OrganizersEventPageActivity extends AppCompatActivity {
         openNotifications.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Manually inflate and show the menu
-                PopupMenu popupMenu = new PopupMenu(OrganizersEventPageActivity.this, openNotifications);
-                popupMenu.getMenuInflater().inflate(R.menu.event_menu, popupMenu.getMenu());
+                if (Objects.equals(event.getOrganizer(), fcmToken)) {
 
-                // Set item click listener for the menu items
-                popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-                    @Override
-                    public boolean onMenuItemClick(MenuItem item) {
-                        int id = item.getItemId();
-                        if (id == R.id.notificationTab) {
-                            Toast.makeText(getApplicationContext(), "Notification tab was selected", Toast.LENGTH_SHORT).show();
-                            return true;
-                        } else if (id == R.id.milestoneTab) {
-                            Toast.makeText(getApplicationContext(), "Milestone tab was selected", Toast.LENGTH_SHORT).show();
-                            return true;
+                    // openai, 2024, chatgpt how to create a popupmenu
+                    // Manually inflate and show the menu
+                    PopupMenu popupMenu = new PopupMenu(OrganizersEventPageActivity.this, openNotifications);
+                    popupMenu.getMenuInflater().inflate(R.menu.event_menu, popupMenu.getMenu());
+
+                    // Set item click listener for the menu items
+                    popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                        @Override
+                        public boolean onMenuItemClick(MenuItem item) {
+                            int id = item.getItemId();
+                            if (id == R.id.notificationTab) {
+                                NotificationListDialog(); // show notifications
+                                return true;
+                            } else if (id == R.id.milestoneTab) {
+                                // show milestones
+                                MilestoneListDialog();
+                                return true;
+                            }
+                            return false;
                         }
-                        return false;
-                    }
-                });
-
-                // Show the popup menu
-                popupMenu.show();
+                    });
+                    // Show the popup menu
+                    popupMenu.show();
+                }
+                else{
+                    // if not organizer, then just show the notifications
+                    NotificationListDialog();
+                }
             }
         });
 
@@ -340,6 +354,7 @@ public class OrganizersEventPageActivity extends AppCompatActivity {
                         }
                     }
                 });
+
                 // Create dialog recycler view to display notifications
                 DialogRecyclerView listDialog = new DialogRecyclerView(
                         context, notifications) {
@@ -349,6 +364,49 @@ public class OrganizersEventPageActivity extends AppCompatActivity {
                     }
                 };
                 listDialog.show();
+        });
+    }
+
+    public void MilestoneListDialog(){
+        ArrayList<Notification> notifications = new ArrayList<>();
+        Context context = this;
+        NotificationDatabaseManager db = new NotificationDatabaseManager();
+        // Get all notifications
+        db.getCollectionRef().get().addOnSuccessListener(notificationSnapshots -> {
+            for(DocumentSnapshot snapshot : notificationSnapshots){
+                Notification notification = snapshot.toObject(Notification.class);
+                // If a notification belongs to this Event, add it to the list to be displayed
+                if(Objects.equals(notification.getEventID(), documentId)){
+                    notifications.add(notification);
+                }
+            }
+            // Sort notifications by dateTime field
+            // openai, 2024, chatgpt: how to sort the list based on date
+            Collections.sort(notifications, new Comparator<Notification>() {
+                @Override
+                public int compare(Notification n1, Notification n2) {
+                    // Parse dateTime strings to Date objects for comparison
+                    SimpleDateFormat dateFormat = new SimpleDateFormat("MMM, dd, yyyy; h:mm a", Locale.getDefault());
+                    try {
+                        Date date1 = dateFormat.parse(n1.getDateTime());
+                        Date date2 = dateFormat.parse(n2.getDateTime());
+                        // Compare Date objects in descending order
+                        return date2.compareTo(date1);
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                        return 0;
+                    }
+                }
+            });
+            // Create dialog recycler view to display notifications
+            DialogRecyclerView listDialog = new DialogRecyclerView(
+                    context, notifications) {
+                @Override
+                public void onCreate(Bundle savedInstanceState) {
+                    super.onCreate(savedInstanceState);
+                }
+            };
+            listDialog.show();
         });
     }
 
@@ -381,7 +439,7 @@ public class OrganizersEventPageActivity extends AppCompatActivity {
      * Opens the Bottom Sheet to access Organizer Options for their event
      * https://www.youtube.com/watch?v=sp9j0e-Kzc8&t=472s, 2024, how to implement a bottom sheet
      */
-    private void showDialog() {
+    private void showBottomSheetDialog() {
 
         final Dialog dialog = new Dialog(this);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -528,19 +586,57 @@ public class OrganizersEventPageActivity extends AppCompatActivity {
         }
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-        if (id == R.id.notificationTab) {
-            Toast.makeText(getApplicationContext(), "Notification tab was selected", Toast.LENGTH_SHORT).show();
-            NotificationListDialog();
-            return true;
-        } else if (id == R.id.milestoneTab) {
-            Toast.makeText(getApplicationContext(), "Milestone tab was selected", Toast.LENGTH_SHORT).show();
-            return true;
-        } else {
-            return super.onOptionsItemSelected(item);
+    public void checkMilestone(){
+        if (event != null) {
+            HashMap<String, Integer> milestones = event.getMilestones();
+            int currentAttendeeSize = event.getAttendee().size();
+
+            // Check if the current attendee size matches any milestone
+            for (String milestone : milestones.keySet()) {
+                int milestoneValue = Integer.parseInt(milestone);
+                if (currentAttendeeSize >= milestoneValue && milestones.get(milestone) == 0) {
+
+                    // Display a Snackbar message indicating the milestone reached
+//                    String message = "Congratulations, you have passed milestone " + milestoneValue + "attendees!";
+//                    Snackbar.make(findViewById(android.R.id.content), message, Snackbar.LENGTH_INDEFINITE).show();
+
+                    // Update the milestone status to indicate it has been achieved
+                    milestones.put(milestone, 1);
+                    event.setMilestones(milestones);
+
+                    DocumentReference eventDocRef = eventDb.getDocRef();
+
+                    // Update the document with the new event data
+                    eventDocRef.set(event)
+                            .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                @Override
+                                public void onSuccess(Void aVoid) {
+                                    // Document updated successfully
+                                    Log.d(TAG, "Event document updated successfully");
+                                    // Only show the Snackbar after successfully updating the document
+                                    runOnUiThread(() -> {
+                                        // Display a Snackbar message indicating the milestone reached
+                                        String message = "Congratulations, you have passed milestone " + milestoneValue + " attendees!";
+                                        Snackbar snackbar = Snackbar.make(findViewById(android.R.id.content), message, Snackbar.LENGTH_INDEFINITE);
+                                        snackbar.setAction("DISMISS", new View.OnClickListener() {
+                                            @Override
+                                            public void onClick(View v) {
+                                                snackbar.dismiss();
+                                            }
+                                        });
+                                        snackbar.show();
+                                    });
+                                }
+                            })
+                            .addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception e) {
+                                    // Failed to update document
+                                    Log.w(TAG, "Error updating event document", e);
+                                }
+                            });
+                }
+            }
         }
     }
-
 }

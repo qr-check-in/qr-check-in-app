@@ -2,6 +2,7 @@ package com.example.qrcheckin.Event;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 
 /**
@@ -11,8 +12,9 @@ public class Event implements Serializable {
     private ArrayList<String> attendee;
     private ArrayList<String> signups;
     private ArrayList<String> notifications;
-
     private ArrayList<String> eventMilestones;
+    private HashMap<String, Integer> milestones;
+
     private String organizer;
     private QRCode checkInQRCode;
     private QRCode promoQRCode;
@@ -65,6 +67,27 @@ public class Event implements Serializable {
         this.notifications = new ArrayList<String>();
         this.eventMilestones = new ArrayList<>();
         this.topicName = topicName;
+
+        this.milestones = new HashMap<String, Integer>();
+        this.milestones.put("1", 0);
+        this.milestones.put("10", 0);
+        this.milestones.put("20", 0);
+        this.milestones.put("30", 0);
+        this.milestones.put("40", 0);
+        this.milestones.put("50", 0);
+        this.milestones.put("75", 0);
+        this.milestones.put("100", 0);
+    }
+
+
+
+
+    public HashMap<String, Integer> getMilestones() {
+        return milestones;
+    }
+
+    public void setMilestones(HashMap<String, Integer> milestones) {
+        this.milestones = milestones;
     }
 
     public ArrayList<String> getEventMilestones() {
