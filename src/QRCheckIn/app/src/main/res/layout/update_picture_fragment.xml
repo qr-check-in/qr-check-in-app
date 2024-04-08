@@ -9,6 +9,7 @@
     android:gravity="center_horizontal">
 
     <androidx.cardview.widget.CardView
+        android:id="@+id/add_photo_fragment"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:cardElevation="8dp"

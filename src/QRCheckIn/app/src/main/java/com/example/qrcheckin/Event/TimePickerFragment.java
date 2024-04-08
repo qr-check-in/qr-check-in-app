@@ -10,6 +10,8 @@ import android.widget.TimePicker;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.DialogFragment;
 
+import com.example.qrcheckin.R;
+
 import java.util.Calendar;
 
 /**
@@ -58,7 +60,7 @@ public class TimePickerFragment extends DialogFragment implements TimePickerDial
         int minute = c.get(Calendar.MINUTE);
 
         // Create a new instance of TimePickerDialog and return it.
-        return new TimePickerDialog(getActivity(), this, hour, minute,
+        return new TimePickerDialog(getActivity(), R.style.CustomTimePickerStyle, this, hour, minute,
                 DateFormat.is24HourFormat(getActivity()));
     }
 
