@@ -516,54 +516,51 @@ public class OrganizersEventPageActivity extends AppCompatActivity {
             HashMap<String, Integer> milestones = event.getSignupMilestone();
             int currentAttendeeSize = event.getSignups().size();
 
-
             // Check if the current attendee size matches any milestone
             for (String milestone : milestones.keySet()) {
                 int milestoneValue = Integer.parseInt(milestone);
                 if (currentAttendeeSize >= milestoneValue && milestones.get(milestone) == 0) {
 
-                    // Update the milestone status to indicate it has been achieved
-                    milestones.put(milestone, 1);
-                    event.setSignupMilestone(milestones);
+                    // Display a Snackbar message indicating the milestone reached
+                    String message = "Congratulations, milestone achieved: " + milestoneValue + " sign-ups!";
+                    Snackbar snackbar = Snackbar.make(findViewById(android.R.id.content), message, Snackbar.LENGTH_INDEFINITE);
+                    snackbar.setAction("DISMISS", new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            // Dismiss Snackbar
+                            snackbar.dismiss();
+                            // Update the milestone status to indicate it has been achieved
+                            milestones.put(milestone, 1);
+                            event.setSignupMilestone(milestones);
 
-                    DocumentReference eventDocRef = eventDb.getDocRef();
+                            DocumentReference eventDocRef = eventDb.getDocRef();
 
-                    // Update the document with the new event data
-                    eventDocRef.set(event)
-                            .addOnSuccessListener(new OnSuccessListener<Void>() {
-                                @Override
-                                public void onSuccess(Void aVoid) {
-                                    // Document updated successfully
-                                    Log.d(TAG, "Event document updated successfully");
-                                    // Only show the Snackbar after successfully updating the document
-                                    runOnUiThread(() -> {
-                                        // Display a Snackbar message indicating the milestone reached
-                                        String message = "Congratulations, milestone achieved: " + milestoneValue + " sign-ups!";
-                                        Snackbar snackbar = Snackbar.make(findViewById(android.R.id.content), message, Snackbar.LENGTH_INDEFINITE);
-                                        snackbar.setAction("DISMISS", new View.OnClickListener() {
-                                            @Override
-                                            public void onClick(View v) {
-                                                snackbar.dismiss();
-                                            }
-                                        });
-                                        snackbar.show();
+                            // Update the document with the new event data
+                            eventDocRef.set(event)
+                                    .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                        @Override
+                                        public void onSuccess(Void aVoid) {
+                                            // Document updated successfully
+                                            Log.d(TAG, "Event document updated successfully");
+                                        }
+                                    })
+                                    .addOnFailureListener(new OnFailureListener() {
+                                        @Override
+                                        public void onFailure(@NonNull Exception e) {
+                                            // Failed to update document
+                                            Log.w(TAG, "Error updating event document", e);
+                                        }
                                     });
-                                }
-                            })
-                            .addOnFailureListener(new OnFailureListener() {
-                                @Override
-                                public void onFailure(@NonNull Exception e) {
-                                    // Failed to update document
-                                    Log.w(TAG, "Error updating event document", e);
-                                }
-                            });
+                        }
+                    });
+                    snackbar.show();
                 }
             }
         }
     }
 
     /**
-     *Checks for milestone achievements for attends
+     * Checks for milestone achievements for attends
      */
     public void checkAttendeeMilestone(){
         if (event != null) {
@@ -580,41 +577,39 @@ public class OrganizersEventPageActivity extends AppCompatActivity {
                 int milestoneValue = Integer.parseInt(milestone);
                 if (currentAttendeeSize >= milestoneValue && milestones.get(milestone) == 0) {
 
-                    // Update the milestone status to indicate it has been achieved
-                    milestones.put(milestone, 1);
-                    event.setAttendeeMilestone(milestones);
+                    // Display a Snackbar message indicating the milestone reached
+                    String message = "Congratulations, milestone achieved: " + milestoneValue + " attendees!";
+                    Snackbar snackbar = Snackbar.make(findViewById(android.R.id.content), message, Snackbar.LENGTH_INDEFINITE);
+                    snackbar.setAction("DISMISS", new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            // Dismiss Snackbar
+                            snackbar.dismiss();
+                            // Update the milestone status to indicate it has been achieved
+                            milestones.put(milestone, 1);
+                            event.setAttendeeMilestone(milestones);
 
-                    DocumentReference eventDocRef = eventDb.getDocRef();
+                            DocumentReference eventDocRef = eventDb.getDocRef();
 
-                    // Update the document with the new event data
-                    eventDocRef.set(event)
-                            .addOnSuccessListener(new OnSuccessListener<Void>() {
-                                @Override
-                                public void onSuccess(Void aVoid) {
-                                    // Document updated successfully
-                                    Log.d(TAG, "Event document updated successfully");
-                                    // Only show the Snackbar after successfully updating the document
-                                    runOnUiThread(() -> {
-                                        // Display a Snackbar message indicating the milestone reached
-                                        String message = "Congratulations, milestone achieved: " + milestoneValue + " attendees!";
-                                        Snackbar snackbar = Snackbar.make(findViewById(android.R.id.content), message, Snackbar.LENGTH_INDEFINITE);
-                                        snackbar.setAction("DISMISS", new View.OnClickListener() {
-                                            @Override
-                                            public void onClick(View v) {
-                                                snackbar.dismiss();
-                                            }
-                                        });
-                                        snackbar.show();
+                            // Update the document with the new event data
+                            eventDocRef.set(event)
+                                    .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                        @Override
+                                        public void onSuccess(Void aVoid) {
+                                            // Document updated successfully
+                                            Log.d(TAG, "Event document updated successfully");
+                                        }
+                                    })
+                                    .addOnFailureListener(new OnFailureListener() {
+                                        @Override
+                                        public void onFailure(@NonNull Exception e) {
+                                            // Failed to update document
+                                            Log.w(TAG, "Error updating event document", e);
+                                        }
                                     });
-                                }
-                            })
-                            .addOnFailureListener(new OnFailureListener() {
-                                @Override
-                                public void onFailure(@NonNull Exception e) {
-                                    // Failed to update document
-                                    Log.w(TAG, "Error updating event document", e);
-                                }
-                            });
+                        }
+                    });
+                    snackbar.show();
                 }
             }
         }
