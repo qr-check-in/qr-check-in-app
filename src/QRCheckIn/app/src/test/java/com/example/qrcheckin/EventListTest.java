@@ -42,15 +42,3 @@
 //        verify(mockEventDbManager, times(1)).getCollectionRef();
 //    }
 //}
-//public class MockEventDatabaseManager extends EventDatabaseManager {
-//    private Query mockQuery;
-//
-//    public MockEventDatabaseManager(Query query) {
-//        this.mockQuery = query;
-//    }
-//
-//    @Override
-//    public Query getCollectionRef() {
-//        return mockQuery;
-//    }
-//git }

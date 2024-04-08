@@ -1,4 +1,4 @@
-package com.example.qrcheckin.Attendee;
+package com.example.qrcheckin;
 
 
 import static org.junit.Assert.assertNotNull;
