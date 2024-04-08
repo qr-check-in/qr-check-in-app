@@ -25,7 +25,10 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-
+/**
+ * AdminViewProfiles is an activity class that displays a list of user profiles fetched from Firestore.
+ * It uses a RecyclerView to list profiles, allowing admins to view and potentially manage these profiles.
+ */
 public class AdminViewProfiles extends AppCompatActivity {
     private RecyclerView recyclerView;
     private AdminProfileAdapter adapter;
@@ -50,6 +53,9 @@ public class AdminViewProfiles extends AppCompatActivity {
 
         fetchProfilesAndSetupAdapter();
     }
+    /**
+     * Initializes the RecyclerView used to display the profiles.
+     */
     private void setupRecyclerView() {
         recyclerView = findViewById(R.id.profile_recycler_view);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -57,7 +63,11 @@ public class AdminViewProfiles extends AppCompatActivity {
         fetchProfilesAndSetupAdapter();
     }
 
-
+    /**
+     * Fetches profiles from Firestore and sets up the RecyclerView adapter with the fetched data.
+     * This method retrieves each profile document, constructs Profile objects from them,
+     * and updates the adapter for display.
+     */
     private void fetchProfilesAndSetupAdapter() {
         db.collection("Attendees").get().addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
