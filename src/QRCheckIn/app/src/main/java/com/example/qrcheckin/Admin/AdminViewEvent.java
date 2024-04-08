@@ -1,24 +1,21 @@
 
 package com.example.qrcheckin.Admin;
-import com.example.qrcheckin.Admin.AdminActivity;
-import com.example.qrcheckin.Admin.AdminEventAdapter;
-import com.example.qrcheckin.Admin.AdminEventPage;
-import com.example.qrcheckin.Event.Event;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.qrcheckin.Attendee.ProfileActivity;
+import com.example.qrcheckin.Common.LinearLayoutManagerWrapper;
 import com.example.qrcheckin.Common.MainActivity;
 import com.example.qrcheckin.Event.CreateAddEventDetails;
+import com.example.qrcheckin.Event.Event;
 import com.example.qrcheckin.Event.EventListView;
 import com.example.qrcheckin.R;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
@@ -54,7 +51,7 @@ public class AdminViewEvent extends AppCompatActivity {
         profileButton = findViewById(R.id.profileButton);
         db = FirebaseFirestore.getInstance();
         eventsRecyclerView = findViewById(R.id.event_recycler_view);
-        eventsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        eventsRecyclerView.setLayoutManager(new LinearLayoutManagerWrapper(this));
         qrButton.setOnClickListener(v -> {
             Intent event = new Intent(getApplicationContext(), MainActivity.class);
             startActivity(event);
