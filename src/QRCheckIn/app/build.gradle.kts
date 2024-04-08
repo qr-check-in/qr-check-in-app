@@ -68,12 +68,19 @@ dependencies {
     androidTestImplementation ("androidx.test.espresso:espresso-core:3.3.0")
     androidTestImplementation ("androidx.test:runner:1.3.0")
     androidTestImplementation ("androidx.test:rules:1.3.0")
-    androidTestImplementation ("org.mockito:mockito-android:3.3.3")
+    androidTestImplementation ("org.mockito:mockito-android:4.0.0")
     // If you need additional functionality, consider adding extensions
     // implementation "androidx.camera:camera-extensions:1.0.0-alpha24"
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
+    androidTestImplementation("androidx.test.espresso:espresso-contrib:3.4.0") {
+        exclude(group = "com.android.support", module = "appcompat")
+        exclude(group = "com.android.support", module = "support-v4")
+        exclude(module = "recyclerview-v7")
+        exclude(group = "com.google.protobuf", module = "protobuf-lite")
+    }
+
 
 
     // QRCode Scanner

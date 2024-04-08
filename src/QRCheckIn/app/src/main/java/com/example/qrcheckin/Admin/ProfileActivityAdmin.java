@@ -82,6 +82,7 @@ public class ProfileActivityAdmin extends AppCompatActivity {
         removeProfile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                deleteProfilePicture();
                 admin.deleteProfile(documentId);
                 Intent event = new Intent(getApplicationContext(), AdminViewProfiles.class);
                 startActivity(event);

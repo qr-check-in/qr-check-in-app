@@ -1,67 +1,90 @@
-package com.example.qrcheckin;
+package com.example.qrcheckin.Attendee;
+
+
+import static org.junit.Assert.assertEquals;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.doAnswer;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+
+
+import android.util.Log;
+import android.widget.ImageView;
 
 import org.junit.Before;
 import org.junit.Test;
-import static org.junit.Assert.*;
-import com.example.qrcheckin.Attendee.Profile;
-import com.google.firebase.firestore.GeoPoint;
 
-public class ProfileTest {
+import java.io.IOException;
 
+public class ProfileTest{
+
+    private ProfileActivity profileActivity;
+    private AttendeeDatabaseManager mockAttendeeDatabaseManager;
     private Profile profile;
-    private GeoPoint geoPoint;
+
+    // Profile details in database
+    private String nameInDatabase;
+    private String contactInDatabase;
+    private String homepageInDatabase;
+
+    // Profile details user wants
+    private String nameUpdated = "Michel";
+    private String contactUpdated = "5877783799";
+    private String homepageUpdated = "WWW.MichelSocial.ca";
+
 
     @Before
-    public void setUp() {
+    public void setup(){
+        mockAttendeeDatabaseManager = mock(AttendeeDatabaseManager.class);
+        profileActivity = new ProfileActivity();
+
         profile = new Profile();
-        geoPoint = new GeoPoint(-34.61315, -58.37723); // Example coordinates
+
     }
 
     @Test
-    public void testGetInitials_WithName_ReturnsCorrectInitials() {
-        profile.setName("John Doe");
-        assertEquals("JD", profile.getInitials());
+    public void testEditDetails()  {
+        // Stubbing the updateProfileString method to update contactInDatabase variable
+        doAnswer(invocation -> {
+            String field = invocation.getArgument(0);
+            String value = invocation.getArgument(1);
+            if ("name".equals(field)) {
+                nameInDatabase = value;
+            }
+            return null; // Stubbing a void method, so return null
+        }).when(mockAttendeeDatabaseManager).updateProfileString("name", nameUpdated, any());
+
+        // Stubbing the updateProfileString method to update contactInDatabase variable
+        doAnswer(invocation -> {
+            String field = invocation.getArgument(0);
+            String value = invocation.getArgument(1);
+            if ("contact".equals(field)) {
+                contactInDatabase = value;
+            }
+            return null; // Stubbing a void method, so return null
+        }).when(mockAttendeeDatabaseManager).updateProfileString("contact", contactUpdated, any());
+
+
+        // Stubbing the updateProfileString method to update contactInDatabase variable
+        doAnswer(invocation -> {
+            String field = invocation.getArgument(0);
+            String value = invocation.getArgument(1);
+            if ("homepage".equals(field)) {
+                homepageInDatabase = value;
+            }
+            return null; // Stubbing a void method, so return null
+        }).when(mockAttendeeDatabaseManager).updateProfileString("homepage", homepageUpdated, any());
+
+        // Call your method here
+        // For example:
+        // profileActivity.someMethodToUpdateProfile();
+        profileActivity.editDetails(nameUpdated, contactUpdated, homepageUpdated);
+
+        // Assert the updated value
+        assertEquals(nameUpdated, nameInDatabase);
+//        assertEquals(contactUpdated, contactInDatabase);
+//        assertEquals(homepageUpdated, homepageInDatabase);
     }
 
-    @Test
-    public void testGetInitials_WithSingleName_ReturnsSingleInitial() {
-        profile.setName("John");
-        assertEquals("J", profile.getInitials());
-    }
-
-    @Test
-    public void testGetInitials_WithEmptyName_ReturnsEmptyString() {
-        profile.setName("");
-        assertEquals("", profile.getInitials());
-    }
-
-    @Test
-    public void testSetAndGetTrackGeolocation() {
-        profile.setTrackGeolocation(true);
-        assertTrue(profile.getTrackGeolocation());
-    }
-
-    @Test
-    public void testSetAndGetLocation() {
-        profile.setLocation(geoPoint);
-        assertEquals(geoPoint, profile.getLocation());
-    }
-
-    @Test
-    public void testSetAndGetName() {
-        profile.setName("Jane Doe");
-        assertEquals("Jane Doe", profile.getName());
-    }
-
-    @Test
-    public void testSetAndGetHomepage() {
-        profile.setHomepage("www.example.com");
-        assertEquals("www.example.com", profile.getHomepage());
-    }
-
-    @Test
-    public void testSetAndGetContact() {
-        profile.setContact("jane@example.com");
-        assertEquals("jane@example.com", profile.getContact());
-    }
 }

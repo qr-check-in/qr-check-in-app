@@ -1,8 +1,14 @@
 package com.example.qrcheckin.Admin;
 
 import android.util.Log;
+
+import com.example.qrcheckin.Common.Image;
+import com.example.qrcheckin.Common.ImageStorageManager;
 import com.example.qrcheckin.Event.Event;
 import com.example.qrcheckin.Attendee.Attendee;
+import com.example.qrcheckin.Event.EventDatabaseManager;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldValue;
@@ -19,6 +25,8 @@ import java.util.Map;
 
 public class Admin extends Attendee {
     private final FirebaseFirestore db;
+    private EventDatabaseManager eventDb;
+
     public interface EventsCallback {
         void onEventsFetched(List<Event> events);
     }
@@ -64,8 +72,7 @@ public class Admin extends Attendee {
     public void deleteEvent(String eventId) {
         db.collection("events").document(eventId).delete()
                 .addOnSuccessListener(aVoid -> System.out.println("Event successfully deleted!"))
-                .addOnFailureListener(e -> System.out.println("Error deleting event: " + e));
-    }
+                .addOnFailureListener(e -> System.out.println("Error deleting event: " + e));   }
 
     /**
      * Retrieves and prints the details of a user profile.
@@ -187,6 +194,7 @@ public class Admin extends Attendee {
      * US 04.04.01
      */
     public void browseEvents(EventsCallback callback) {
+        String id = db.collection("events").getId();
         db.collection("events").get()
                 .addOnSuccessListener(queryDocumentSnapshots -> {
                     List<Event> events = new ArrayList<>();
@@ -277,6 +285,7 @@ public class Admin extends Attendee {
                 })
                 .addOnFailureListener(e -> System.out.println("Error fetching profile pictures: " + e));
     }
+
 
 
 }
