@@ -2,6 +2,7 @@ package com.example.qrcheckin.Admin;
 
 import static android.content.ContentValues.TAG;
 
+import com.example.qrcheckin.Common.Image;
 import com.example.qrcheckin.Event.AttendeeList;
 import com.example.qrcheckin.Event.Event;
 
@@ -293,6 +294,40 @@ public class AdminEventPage extends AppCompatActivity {
         }
 
     }
+    public void deleteEventPoster(String eventId) {
+        // Assuming dbManager is already configured to interact with Firestore
+        eventDb.getDocRef().get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                Event event = documentSnapshot.toObject(Event.class);
+                if (event == null) {
+                    Log.e("Firestore", "Event doc not found for ID: " + eventId);
+                } else {
+                    Image posterPath = event.getPoster();
+                    if (posterPath != null && posterPath.getUriString()!=null) {
+                        ImageStorageManager storage = new ImageStorageManager(posterPath, "/EventPosters");
+                        // Remove event poster from storage
+                        storage.deleteImage();
+                        // update event doc to remove poster path
+                        event.setPoster(null);
+
+                        // Push the updated event object back to Firestore
+                        eventDb.getDocRef().set(event)
+                                .addOnSuccessListener(aVoid -> Log.d("Firestore", "Event poster reference removed successfully."))
+                                .addOnFailureListener(e -> Log.e("Firestore", "Error updating event poster reference", e));
+                    } else {
+                        Log.d("Firestore", "No poster to delete for event ID: " + eventId);
+                    }
+                }
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@androidx.annotation.NonNull Exception e) {
+                Log.e("Firestore", "Failed to fetch event for poster deletion: " + e.getMessage());
+            }
+        });
+    }
+
 
     /**
      * Opens dialog with list of notifications/announcements for the event
