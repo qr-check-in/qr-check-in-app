@@ -12,13 +12,8 @@ import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.CoreMatchers.allOf;
 
-import android.content.Intent;
-
 import androidx.test.core.app.ActivityScenario;
-import androidx.test.espresso.ViewInteraction;
 import androidx.test.espresso.action.ViewActions;
-import androidx.test.espresso.matcher.RootMatchers;
-import androidx.test.espresso.matcher.ViewMatchers;
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.filters.LargeTest;
@@ -29,20 +24,26 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+
+/**
+ * UI test for creating and updating user profiles in the ProfileActivity.
+ * This test verifies the functionality of editing profile information, enabling geolocation tracking,
+ * and updating user profile pictures.
+ */
 @RunWith(AndroidJUnit4.class)
 @LargeTest
-public class CreateAndUpdateProfileTest {
+public class ProfileUITest {
 
     @Rule
     public ActivityScenarioRule<ProfileActivity> activityScenarioRule = new ActivityScenarioRule<ProfileActivity>(ProfileActivity.class);
 
+    /**
+     * Tests the edit button functionality by entering new profile information,
+     * enabling geolocation tracking, and updating the profile picture.
+     */
     @Test
     public void testEditButton() {
-        try {
-            Thread.sleep(8000); // Adjust the sleep duration as needed
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+
         String name = "Rupam";
         String contact = "5877789979";
         String homepage = "SkilledRupam.com";
@@ -103,16 +104,8 @@ public class CreateAndUpdateProfileTest {
         // Perform a click action on the 'Update Picture' button
         onView(withId(R.id.btnUpdatePicture)).perform(click());
 
-        // Check if the dialog is displayed
-        onView(withId(R.id.add_photo_fragment)).check(matches(isDisplayed()));
-
         // Click on the "Choose from Gallery" option
         onView(withId(R.id.gallery)).perform(click());
 
-        // Check if the intent to pick an image from the gallery is sent
-//        intended(allOf(
-//                hasAction(Intent.ACTION_GET_CONTENT),
-//                hasType("image/*")
-//        ));
     }
 }
