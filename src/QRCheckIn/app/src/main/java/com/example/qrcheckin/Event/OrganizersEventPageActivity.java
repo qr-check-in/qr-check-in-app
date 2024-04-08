@@ -14,8 +14,6 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.Gravity;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
@@ -24,7 +22,6 @@ import android.widget.CompoundButton;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -193,7 +190,8 @@ public class OrganizersEventPageActivity extends AppCompatActivity {
                     if (Objects.equals(event.getOrganizer(), fcmToken)) {
                         openBottomSheetBtn.setVisibility(View.VISIBLE);
                         // Check milestones
-                        checkMilestone();
+                        checkSignUpMilestone();
+                        checkAttendeeMilestone();
                         // Set open Bottom Sheet Listner
                         openBottomSheetBtn.setOnClickListener(v -> {
                             showBottomSheetDialog();
@@ -265,31 +263,31 @@ public class OrganizersEventPageActivity extends AppCompatActivity {
             public void onClick(View v) {
                 if (Objects.equals(event.getOrganizer(), fcmToken)) {
 
-                    // openai, 2024, chatgpt how to create a popupmenu
-                    // Manually inflate and show the menu
-                    PopupMenu popupMenu = new PopupMenu(OrganizersEventPageActivity.this, openNotifications);
-                    popupMenu.getMenuInflater().inflate(R.menu.event_menu, popupMenu.getMenu());
-
-                    // Set item click listener for the menu items
-                    popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-                        @Override
-                        public boolean onMenuItemClick(MenuItem item) {
-                            int id = item.getItemId();
-                            if (id == R.id.notificationTab) {
-                                NotificationListDialog(); // show notifications
-                                return true;
-                            } else if (id == R.id.milestoneTab) {
-                                // show milestones
-                                MilestoneListDialog();
-                                return true;
-                            }
-                            return false;
-                        }
-                    });
-                    // Show the popup menu
-                    popupMenu.show();
-                }
-                else{
+//                    // openai, 2024, chatgpt how to create a popupmenu
+//                    // Manually inflate and show the menu
+//                    PopupMenu popupMenu = new PopupMenu(OrganizersEventPageActivity.this, openNotifications);
+//                    popupMenu.getMenuInflater().inflate(R.menu.event_menu, popupMenu.getMenu());
+//
+//                    // Set item click listener for the menu items
+//                    popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+//                        @Override
+//                        public boolean onMenuItemClick(MenuItem item) {
+//                            int id = item.getItemId();
+//                            if (id == R.id.notificationTab) {
+//                                NotificationListDialog(); // show notifications
+//                                return true;
+//                            } else if (id == R.id.milestoneTab) {
+//                                // show milestones
+//                                MilestoneListDialog();
+//                                return true;
+//                            }
+//                            return false;
+//                        }
+//                    });
+//                    // Show the popup menu
+//                    popupMenu.show();
+//                }
+//                else{
                     // if not organizer, then just show the notifications
                     NotificationListDialog();
                 }
@@ -367,48 +365,48 @@ public class OrganizersEventPageActivity extends AppCompatActivity {
         });
     }
 
-    public void MilestoneListDialog(){
-        ArrayList<Notification> notifications = new ArrayList<>();
-        Context context = this;
-        NotificationDatabaseManager db = new NotificationDatabaseManager();
-        // Get all notifications
-        db.getCollectionRef().get().addOnSuccessListener(notificationSnapshots -> {
-            for(DocumentSnapshot snapshot : notificationSnapshots){
-                Notification notification = snapshot.toObject(Notification.class);
-                // If a notification belongs to this Event, add it to the list to be displayed
-                if(Objects.equals(notification.getEventID(), documentId)){
-                    notifications.add(notification);
-                }
-            }
-            // Sort notifications by dateTime field
-            // openai, 2024, chatgpt: how to sort the list based on date
-            Collections.sort(notifications, new Comparator<Notification>() {
-                @Override
-                public int compare(Notification n1, Notification n2) {
-                    // Parse dateTime strings to Date objects for comparison
-                    SimpleDateFormat dateFormat = new SimpleDateFormat("MMM, dd, yyyy; h:mm a", Locale.getDefault());
-                    try {
-                        Date date1 = dateFormat.parse(n1.getDateTime());
-                        Date date2 = dateFormat.parse(n2.getDateTime());
-                        // Compare Date objects in descending order
-                        return date2.compareTo(date1);
-                    } catch (ParseException e) {
-                        e.printStackTrace();
-                        return 0;
-                    }
-                }
-            });
-            // Create dialog recycler view to display notifications
-            DialogRecyclerView listDialog = new DialogRecyclerView(
-                    context, notifications) {
-                @Override
-                public void onCreate(Bundle savedInstanceState) {
-                    super.onCreate(savedInstanceState);
-                }
-            };
-            listDialog.show();
-        });
-    }
+//    public void MilestoneListDialog(){
+//        ArrayList<Notification> notifications = new ArrayList<>();
+//        Context context = this;
+//        NotificationDatabaseManager db = new NotificationDatabaseManager();
+//        // Get all notifications
+//        db.getCollectionRef().get().addOnSuccessListener(notificationSnapshots -> {
+//            for(DocumentSnapshot snapshot : notificationSnapshots){
+//                Notification notification = snapshot.toObject(Notification.class);
+//                // If a notification belongs to this Event, add it to the list to be displayed
+//                if(Objects.equals(notification.getEventID(), documentId)){
+//                    notifications.add(notification);
+//                }
+//            }
+//            // Sort notifications by dateTime field
+//            // openai, 2024, chatgpt: how to sort the list based on date
+//            Collections.sort(notifications, new Comparator<Notification>() {
+//                @Override
+//                public int compare(Notification n1, Notification n2) {
+//                    // Parse dateTime strings to Date objects for comparison
+//                    SimpleDateFormat dateFormat = new SimpleDateFormat("MMM, dd, yyyy; h:mm a", Locale.getDefault());
+//                    try {
+//                        Date date1 = dateFormat.parse(n1.getDateTime());
+//                        Date date2 = dateFormat.parse(n2.getDateTime());
+//                        // Compare Date objects in descending order
+//                        return date2.compareTo(date1);
+//                    } catch (ParseException e) {
+//                        e.printStackTrace();
+//                        return 0;
+//                    }
+//                }
+//            });
+//            // Create dialog recycler view to display notifications
+//            DialogRecyclerView listDialog = new DialogRecyclerView(
+//                    context, notifications) {
+//                @Override
+//                public void onCreate(Bundle savedInstanceState) {
+//                    super.onCreate(savedInstanceState);
+//                }
+//            };
+//            listDialog.show();
+//        });
+//    }
 
     /**
      * Displays either the CheckBox, allowing users to signup and un-signup for the event, or displays a TextView
@@ -586,9 +584,65 @@ public class OrganizersEventPageActivity extends AppCompatActivity {
         }
     }
 
-    public void checkMilestone(){
+    /**
+     *
+     */
+    public void checkSignUpMilestone(){
         if (event != null) {
-            HashMap<String, Integer> milestones = event.getMilestones();
+            HashMap<String, Integer> milestones = event.getSignupMilestone();
+            int currentAttendeeSize = event.getSignups().size();
+
+            // Check if the current attendee size matches any milestone
+            for (String milestone : milestones.keySet()) {
+                int milestoneValue = Integer.parseInt(milestone);
+                if (currentAttendeeSize >= milestoneValue && milestones.get(milestone) == 0) {
+
+                    // Update the milestone status to indicate it has been achieved
+                    milestones.put(milestone, 1);
+                    event.setSignupMilestone(milestones);
+
+                    DocumentReference eventDocRef = eventDb.getDocRef();
+
+                    // Update the document with the new event data
+                    eventDocRef.set(event)
+                            .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                @Override
+                                public void onSuccess(Void aVoid) {
+                                    // Document updated successfully
+                                    Log.d(TAG, "Event document updated successfully");
+                                    // Only show the Snackbar after successfully updating the document
+                                    runOnUiThread(() -> {
+                                        // Display a Snackbar message indicating the milestone reached
+                                        String message = "Congratulations, you have passed milestone " + milestoneValue + " sign-ups!";
+                                        Snackbar snackbar = Snackbar.make(findViewById(android.R.id.content), message, Snackbar.LENGTH_INDEFINITE);
+                                        snackbar.setAction("DISMISS", new View.OnClickListener() {
+                                            @Override
+                                            public void onClick(View v) {
+                                                snackbar.dismiss();
+                                            }
+                                        });
+                                        snackbar.show();
+                                    });
+                                }
+                            })
+                            .addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception e) {
+                                    // Failed to update document
+                                    Log.w(TAG, "Error updating event document", e);
+                                }
+                            });
+                }
+            }
+        }
+    }
+
+    /**
+     *
+     */
+    public void checkAttendeeMilestone(){
+        if (event != null) {
+            HashMap<String, Integer> milestones = event.getAttendeeMilestone();
             int currentAttendeeSize = event.getAttendee().size();
 
             // Check if the current attendee size matches any milestone
@@ -596,13 +650,9 @@ public class OrganizersEventPageActivity extends AppCompatActivity {
                 int milestoneValue = Integer.parseInt(milestone);
                 if (currentAttendeeSize >= milestoneValue && milestones.get(milestone) == 0) {
 
-                    // Display a Snackbar message indicating the milestone reached
-//                    String message = "Congratulations, you have passed milestone " + milestoneValue + "attendees!";
-//                    Snackbar.make(findViewById(android.R.id.content), message, Snackbar.LENGTH_INDEFINITE).show();
-
                     // Update the milestone status to indicate it has been achieved
                     milestones.put(milestone, 1);
-                    event.setMilestones(milestones);
+                    event.setAttendeeMilestone(milestones);
 
                     DocumentReference eventDocRef = eventDb.getDocRef();
 

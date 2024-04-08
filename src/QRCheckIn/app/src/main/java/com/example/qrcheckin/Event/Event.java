@@ -13,7 +13,8 @@ public class Event implements Serializable {
     private ArrayList<String> signups;
     private ArrayList<String> notifications;
     private ArrayList<String> eventMilestones;
-    private HashMap<String, Integer> milestones;
+    private HashMap<String, Integer> attendeeMilestone;
+    private HashMap<String, Integer> signupMilestone;
 
     private String organizer;
     private QRCode checkInQRCode;
@@ -68,26 +69,42 @@ public class Event implements Serializable {
         this.eventMilestones = new ArrayList<>();
         this.topicName = topicName;
 
-        this.milestones = new HashMap<String, Integer>();
-        this.milestones.put("1", 0);
-        this.milestones.put("10", 0);
-        this.milestones.put("20", 0);
-        this.milestones.put("30", 0);
-        this.milestones.put("40", 0);
-        this.milestones.put("50", 0);
-        this.milestones.put("75", 0);
-        this.milestones.put("100", 0);
+        this.attendeeMilestone = new HashMap<String, Integer>();
+        this.attendeeMilestone.put("1", 0);
+        this.attendeeMilestone.put("10", 0);
+        this.attendeeMilestone.put("20", 0);
+        this.attendeeMilestone.put("30", 0);
+        this.attendeeMilestone.put("40", 0);
+        this.attendeeMilestone.put("50", 0);
+        this.attendeeMilestone.put("75", 0);
+        this.attendeeMilestone.put("100", 0);
+
+        this.signupMilestoneMilestone = new HashMap<String, Integer>();
+        this.signupMilestoneMilestone.put("1", 0);
+        this.signupMilestoneMilestone.put("10", 0);
+        this.signupMilestoneMilestone.put("20", 0);
+        this.signupMilestoneMilestone.put("30", 0);
+        this.signupMilestoneMilestone.put("40", 0);
+        this.signupMilestoneMilestone.put("50", 0);
+        this.signupMilestoneMilestone.put("75", 0);
+        this.signupMilestoneMilestone.put("100", 0);
     }
 
 
-
-
-    public HashMap<String, Integer> getMilestones() {
-        return milestones;
+    public HashMap<String, Integer> getSignupMilestone() {
+        return signupMilestone;
     }
 
-    public void setMilestones(HashMap<String, Integer> milestones) {
-        this.milestones = milestones;
+    public void setSignupMilestone(HashMap<String, Integer> signupMilestone) {
+        this.signupMilestone = signupMilestone;
+    }
+
+    public HashMap<String, Integer> getAttendeeMilestone() {
+        return attendeeMilestone;
+    }
+
+    public void setAttendeeMilestone(HashMap<String, Integer> attendeeMilestone) {
+        this.attendeeMilestone = attendeeMilestone;
     }
 
     public ArrayList<String> getEventMilestones() {
