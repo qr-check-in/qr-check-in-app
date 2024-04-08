@@ -79,15 +79,15 @@ public class Event implements Serializable {
         this.attendeeMilestone.put("75", 0);
         this.attendeeMilestone.put("100", 0);
 
-        this.signupMilestoneMilestone = new HashMap<String, Integer>();
-        this.signupMilestoneMilestone.put("1", 0);
-        this.signupMilestoneMilestone.put("10", 0);
-        this.signupMilestoneMilestone.put("20", 0);
-        this.signupMilestoneMilestone.put("30", 0);
-        this.signupMilestoneMilestone.put("40", 0);
-        this.signupMilestoneMilestone.put("50", 0);
-        this.signupMilestoneMilestone.put("75", 0);
-        this.signupMilestoneMilestone.put("100", 0);
+        this.signupMilestone = new HashMap<String, Integer>();
+        this.signupMilestone.put("1", 0);
+        this.signupMilestone.put("10", 0);
+        this.signupMilestone.put("20", 0);
+        this.signupMilestone.put("30", 0);
+        this.signupMilestone.put("40", 0);
+        this.signupMilestone.put("50", 0);
+        this.signupMilestone.put("75", 0);
+        this.signupMilestone.put("100", 0);
     }
 
 
