@@ -8,7 +8,7 @@
             android:insetLeft="5dp"
             android:insetRight="5dp">
             <shape android:shape="rectangle">
-                <solid android:color="@color/SecondaryContainer"/> <!-- This should be the selected color -->
+                <solid android:color="@color/SurfaceContainerHigh"/> <!-- This should be the selected color -->
                 <corners android:radius="32dp" />
             </shape>
         </inset>

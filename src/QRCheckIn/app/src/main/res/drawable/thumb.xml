@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Used to select the "check-in location verification" switch when creating an event -->
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:state_checked="true">
+        <shape android:shape="oval">
+            <solid android:color="@color/Primary"/>
+            <size android:height="25dp" android:width="25dp"/>
+        </shape>
+    </item>
+    <item android:state_checked="false">
+        <shape android:shape="oval">
+            <solid android:color="@color/Secondary"/>
+            <size android:height="25dp" android:width="25dp"/>
+        </shape>
+    </item>
+</selector>
+

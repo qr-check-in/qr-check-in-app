@@ -76,5 +76,7 @@
     <string name="attendee_icon">Attendee icon</string>
     <string name="event_annoucements">Event Annoucements</string>
     <string name="no_promo_text">This event does not have a promotional QR code</string>
+    <string name="event_location">Event Location</string>
+    <string name="check_in_location_verification">Check-in Location Verification</string>
 
 </resources>

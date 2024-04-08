@@ -5,6 +5,12 @@
         <!-- Other style attributes -->
     </style>
 
+    <style name="TextInputLayoutStyle" parent="Widget.MaterialComponents.TextInputLayout.FilledBox">
+        <item name="hintTextColor">@color/OnSurface</item>
+        <item name="android:textColorHint">@color/OnSurface</item>
+        <item name="errorTextColor">@color/OnError</item>
+    </style>
+
     <!-- Define the dialog animation -->
     <style name="DialogAnimation">
         <item name="android:windowEnterAnimation">@anim/dialog_slide_in</item>
