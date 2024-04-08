@@ -41,10 +41,6 @@ public class AdminViewImages extends AppCompatActivity implements ImageAdapter.O
         getSupportActionBar().setDisplayShowTitleEnabled(false);
         TextView header = findViewById(R.id.mainHeader);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        ImageButton qrButton = findViewById(R.id.qrButton); // Make sure you have a correct ID here
-        ImageButton eventButton = findViewById(R.id.calenderButton); // Make sure you have a correct ID here
-        ImageButton addEventButton = findViewById(R.id.addCalenderButton); // This ID needs to be in your layout
-        ImageButton profileButton = findViewById(R.id.profileButton);
         header.setText("Images");
 
         imagesRecyclerView = findViewById(R.id.image_recycler_view);
@@ -53,35 +49,6 @@ public class AdminViewImages extends AppCompatActivity implements ImageAdapter.O
         imagesRecyclerView.setAdapter(adapter);
         db = FirebaseFirestore.getInstance();
         adapter.setOnImageClickListener(this);
-        // Toolbar button listeners
-        qrButton.setOnClickListener(v -> {
-            Intent event = new Intent(getApplicationContext(), MainActivity.class);
-            startActivity(event);
-        });
-
-        // Set the "Add event" toolbar button listener
-        addEventButton.setOnClickListener(v -> {
-            Intent event = new Intent(getApplicationContext(), CreateAddEventDetails.class);
-            startActivity(event);
-        });
-
-        // Set the "Profile" toolbar button listener
-        profileButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent event = new Intent(getApplicationContext(), ProfileActivity.class);
-                startActivity(event);
-
-            }
-        });
-        eventButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent event = new Intent(getApplicationContext(), EventListView.class);
-                startActivity(event);
-            }
-        });
-
         fetchAndDisplayImages();
 
     }
