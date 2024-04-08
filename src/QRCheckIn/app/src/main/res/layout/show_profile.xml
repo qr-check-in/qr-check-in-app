@@ -55,7 +55,7 @@
         android:id="@+id/btnUpdatePicture"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:backgroundTint="@color/NeonBlue"
+        android:backgroundTint="@color/Secondary"
         android:text="Update Picture"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.15"
@@ -67,7 +67,7 @@
         android:id="@+id/btnRemovePicture"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:backgroundTint="@color/NeonBlue"
+        android:backgroundTint="@color/Secondary"
         android:text="Remove Picture"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.85"
@@ -81,7 +81,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toTopOf="@+id/main_app_bar"
-        android:background="@color/ChefBlue"
+        android:background="@color/Surface"
         android:orientation="vertical"
         android:padding="15dp">
 
@@ -89,13 +89,15 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:elevation="50dp"
+            app:cardBackgroundColor="@color/SurfaceContainerHigh"
             app:cardCornerRadius="20dp"
             app:cardUseCompatPadding="true">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:id="@+id/userInfoView">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -260,12 +262,6 @@
                     </ScrollView>
                 </LinearLayout>
 
-<!--                <Button-->
-<!--                    android:id="@+id/userPreferencesBtn"-->
-<!--                    android:layout_width="wrap_content"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:text="User Preferences"-->
-<!--                    android:layout_gravity="center"/>-->
             </LinearLayout>
 
 

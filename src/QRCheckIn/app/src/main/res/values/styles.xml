@@ -2,8 +2,42 @@
 <!--openai, 2024, chatpgt: how to add animations to the bottom sheet-->
 <resources>
     <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
-        <!-- Other style attributes -->
+
     </style>
+
+    <!-- Text input boxes for creating an event -->
+    <style name="TextInputLayoutStyle" parent="Widget.MaterialComponents.TextInputLayout.FilledBox">
+        <item name="hintTextColor">@color/OnSurface</item>
+        <item name="android:textColorHint">@color/OnSurface</item>
+        <item name="errorTextColor">@color/OnError</item>
+    </style>
+
+    <!-- Alert dialogue for editing profile details  -->
+    <style name="EditProfileAlertDialogue" parent="Theme.AppCompat.Light.Dialog.Alert">
+        <item name="colorAccent">@color/Secondary</item> <!-- Button text & highlight color -->
+        <item name="android:textColorPrimary">@color/OnSurface</item> <!-- Title and button text color -->
+        <item name="android:background">@color/Surface</item> <!-- Background color of the title and button bars -->
+    </style>
+
+    <!-- Style for DatePickerDialog -->
+    <style name="CustomDatePickerStyle" parent="ThemeOverlay.MaterialComponents.Dialog">
+        <item name="colorPrimary">@color/Primary</item>
+        <item name="colorOnPrimary">@color/OnPrimary</item>
+        <item name="colorSurface">@color/Surface</item>
+        <item name="colorOnSurface">@color/OnSurface</item>
+        <item name="android:textColorPrimary">@color/OnSurface</item>
+        <item name="android:textColorSecondary">@color/OnSurface</item>
+<!--        <item name="android:windowBackground">@color/SurfaceContainer</item>-->
+    </style>
+
+    <!-- Style for TimePickerDialog -->
+    <style name="CustomTimePickerStyle" parent="ThemeOverlay.MaterialComponents.Dialog">
+        <item name="colorPrimary">@color/Primary</item>
+        <item name="colorOnPrimary">@color/OnPrimary</item>
+        <item name="colorSurface">@color/Surface</item>
+        <item name="android:windowBackground">@color/SurfaceContainer</item>
+    </style>
+
 
     <!-- Define the dialog animation -->
     <style name="DialogAnimation">

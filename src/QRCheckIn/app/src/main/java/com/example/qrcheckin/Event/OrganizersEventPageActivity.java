@@ -4,12 +4,10 @@ import static android.content.ContentValues.TAG;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.content.ContentResolver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -34,16 +32,17 @@ import androidx.appcompat.widget.Toolbar;
 
 import com.example.qrcheckin.Attendee.AttendeeDatabaseManager;
 import com.example.qrcheckin.Attendee.ProfileActivity;
-import com.example.qrcheckin.Notifications.MyNotificationManager;
-import com.example.qrcheckin.Notifications.Notification;
 import com.example.qrcheckin.Common.ImageStorageManager;
 import com.example.qrcheckin.Common.MainActivity;
 import com.example.qrcheckin.Notifications.CreateNotification;
 import com.example.qrcheckin.Notifications.DialogRecyclerView;
+import com.example.qrcheckin.Notifications.MyNotificationManager;
+import com.example.qrcheckin.Notifications.Notification;
 import com.example.qrcheckin.Notifications.NotificationDatabaseManager;
 import com.example.qrcheckin.R;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
@@ -57,6 +56,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
 
@@ -81,7 +82,7 @@ public class OrganizersEventPageActivity extends AppCompatActivity {
     private EventDatabaseManager eventDb;
     private String fcmToken;
     private String documentId;
-
+    private Event event;
     private String eventName;
     private String eventDate;
     private QRCode promoQRCode;
@@ -123,6 +124,7 @@ public class OrganizersEventPageActivity extends AppCompatActivity {
         TextView tvEventLocation = findViewById(R.id.text_event_location);
         TextView tvEventDescription = findViewById(R.id.text_event_description);
         ImageView ivEventPoster = findViewById(R.id.image_event_poster);
+
         //https://stackoverflow.com/questions/18826870/how-to-animate-the-textview-very-very-long-text-scroll-automatically-horizonta, 2024, how to get the horizontal scrolling text
         TextView locationsStatus = findViewById(R.id.locationStatusTxt);
         locationsStatus.setEllipsize(TextUtils.TruncateAt.MARQUEE);
@@ -150,7 +152,7 @@ public class OrganizersEventPageActivity extends AppCompatActivity {
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
                 // Get and display event details
-                Event event = documentSnapshot.toObject(Event.class);
+                event = documentSnapshot.toObject(Event.class);
                 if (documentSnapshot != null && event != null) {
 
                     // set attributes that are used if user clicks QR code(s) to share it
@@ -175,6 +177,9 @@ public class OrganizersEventPageActivity extends AppCompatActivity {
                         ImageStorageManager storagePoster = new ImageStorageManager(event.getPoster(), "/EventPosters");
                         storagePoster.displayImage(ivEventPoster);
                     }
+                    else{
+                        ivEventPoster.setImageResource(R.drawable.default_poster);
+                    }
                     // Set the ImageView for the Event's promotional QR code
                     if (promoQRCode != null) {
                         ImageStorageManager storageQr = new ImageStorageManager(promoQRCode, "/QRCodes");
@@ -188,14 +193,13 @@ public class OrganizersEventPageActivity extends AppCompatActivity {
                     // Check if current event is organized by this user
                     if (Objects.equals(event.getOrganizer(), fcmToken)) {
                         openBottomSheetBtn.setVisibility(View.VISIBLE);
+                        // Check milestones
+                        checkSignUpMilestone();
+                        checkAttendeeMilestone();
                         // Set open Bottom Sheet Listner
                         openBottomSheetBtn.setOnClickListener(v -> {
-                            showDialog();
+                            showBottomSheetDialog();
                         });
-                    }
-
-                    if (Objects.equals(event.getOrganizer(), fcmToken)) {
-
                     }
 
                 } else {
@@ -205,7 +209,8 @@ public class OrganizersEventPageActivity extends AppCompatActivity {
             }
         });
 
-        // Listen for updates to the event document, for cases where another user signs up for the event while this page is loaded
+
+        // Listennother user  for updates to the event document, for cases where asigns up for the event while this page is loaded
         eventDb.getDocRef().addSnapshotListener(new EventListener<DocumentSnapshot>() {
             @Override
             public void onEvent(@Nullable DocumentSnapshot value, @Nullable FirebaseFirestoreException error) {
@@ -219,11 +224,16 @@ public class OrganizersEventPageActivity extends AppCompatActivity {
                     assert event != null;
                     // Update the CheckBox upon a change in the event doc
                     setSignupCheckBox(event.getSignupLimit(), event.getSignups());
+                    if (Objects.equals(event.getOrganizer(), fcmToken)) {
+                        checkAttendeeMilestone();
+                        checkSignUpMilestone();
+                    }
                 } else {
                     Log.d(TAG, "Current data: null");
                 }
             }
         });
+
 
         // Set listener for the signup CheckBox
         signupCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -247,7 +257,7 @@ public class OrganizersEventPageActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 // Call method to display acitivty to share the promotional QR code
-                shareQRCode(promoQRCode);
+                shareQRCode(promoQRCode, "Promotional QR Code");
             }
         });
 
@@ -255,7 +265,6 @@ public class OrganizersEventPageActivity extends AppCompatActivity {
         openNotifications.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Call the NotificationListDialog method when the button is clicked
                 NotificationListDialog();
             }
         });
@@ -318,6 +327,7 @@ public class OrganizersEventPageActivity extends AppCompatActivity {
                         }
                     }
                 });
+
                 // Create dialog recycler view to display notifications
                 DialogRecyclerView listDialog = new DialogRecyclerView(
                         context, notifications) {
@@ -329,6 +339,7 @@ public class OrganizersEventPageActivity extends AppCompatActivity {
                 listDialog.show();
         });
     }
+
 
     /**
      * Displays either the CheckBox, allowing users to signup and un-signup for the event, or displays a TextView
@@ -359,14 +370,13 @@ public class OrganizersEventPageActivity extends AppCompatActivity {
      * Opens the Bottom Sheet to access Organizer Options for their event
      * https://www.youtube.com/watch?v=sp9j0e-Kzc8&t=472s, 2024, how to implement a bottom sheet
      */
-    private void showDialog() {
+    private void showBottomSheetDialog() {
 
         final Dialog dialog = new Dialog(this);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setContentView(R.layout.bottom_sheet_layout);
 
         LinearLayout viewCheckInQRCode = dialog.findViewById(R.id.viewCheckInQRCode);
-        LinearLayout editEventDetails = dialog.findViewById(R.id.editEventDetails);
         LinearLayout createEventNotification = dialog.findViewById(R.id.createEventNotification);
         LinearLayout viewEventSignups = dialog.findViewById(R.id.viewSignedUp);
         LinearLayout viewEventParticipants = dialog.findViewById(R.id.viewEventCheckin);
@@ -377,16 +387,7 @@ public class OrganizersEventPageActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 // Call method to display acitivty to share the promotional QR code
-                shareQRCode(checkInQRCode);
-            }
-        });
-
-        editEventDetails.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialog.dismiss();
-                Toast.makeText(getApplicationContext(),"Feature Coming Soon!",Toast.LENGTH_SHORT).show();
-
+                shareQRCode(checkInQRCode, "Check-in QR Code");
             }
         });
 
@@ -449,9 +450,10 @@ public class OrganizersEventPageActivity extends AppCompatActivity {
             public void onClick(DialogInterface dialogInterface, int i) {
                 // User clicked the Delete
                 // Alert those who have signed up for the event
-//                MyNotificationManager firebaseMessaging = new MyNotificationManager(getApplicationContext());
-//                JSONArray regArray = new JSONArray(get);
-//                firebaseMessaging.sendMessageToClient(, "Event Shutdown", "An event you have signed up for has been shut down", "");
+                List<String> signups = (List<String>) event.getSignups();
+                MyNotificationManager firebaseMessaging = new MyNotificationManager(getApplicationContext());
+                JSONArray regArray = new JSONArray(signups);
+                firebaseMessaging.sendMessageToClient(regArray, "Event Shutdown", "An event you have signed up for has been shut down", "");
                 deleteEvent();
             }
         });
@@ -494,18 +496,127 @@ public class OrganizersEventPageActivity extends AppCompatActivity {
      * Starts activity to share a QR code
      * @param qrCode QRCode to be shared
      */
-    public void shareQRCode(QRCode qrCode){
+    public void shareQRCode(QRCode qrCode, String headerText){
         if(qrCode != null){
-            // Get bitmap of the QR code to pass to new activity
-            ContentResolver contentResolver = getContentResolver();
-            ImageStorageManager storage = new ImageStorageManager(qrCode , "/QRCodes");
-            Bitmap bitmap = storage.convertToBitmap(contentResolver);
-            // Start new activity
+            // Pass QR code and text, start new activity
             Intent activity = new Intent(getApplicationContext(), QrCodeImageView.class);
-            activity.putExtra("QRCodeBitmap", bitmap);
-            activity.putExtra("EventName&Date", eventName + "_" + eventDate);
+            activity.putExtra("QRCode", qrCode);
+            activity.putExtra("headerText", headerText);
+            activity.putExtra("EventName", eventName);
+            activity.putExtra("EventDate", eventDate);
             startActivity(activity);
         }
     }
 
+    /**
+     * Checks for milestone achievements for signups
+     */
+    public void checkSignUpMilestone(){
+        if (event != null) {
+            HashMap<String, Integer> milestones = event.getSignupMilestone();
+            int currentAttendeeSize = event.getSignups().size();
+
+
+            // Check if the current attendee size matches any milestone
+            for (String milestone : milestones.keySet()) {
+                int milestoneValue = Integer.parseInt(milestone);
+                if (currentAttendeeSize >= milestoneValue && milestones.get(milestone) == 0) {
+
+                    // Update the milestone status to indicate it has been achieved
+                    milestones.put(milestone, 1);
+                    event.setSignupMilestone(milestones);
+
+                    DocumentReference eventDocRef = eventDb.getDocRef();
+
+                    // Update the document with the new event data
+                    eventDocRef.set(event)
+                            .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                @Override
+                                public void onSuccess(Void aVoid) {
+                                    // Document updated successfully
+                                    Log.d(TAG, "Event document updated successfully");
+                                    // Only show the Snackbar after successfully updating the document
+                                    runOnUiThread(() -> {
+                                        // Display a Snackbar message indicating the milestone reached
+                                        String message = "Congratulations, milestone achieved: " + milestoneValue + " sign-ups!";
+                                        Snackbar snackbar = Snackbar.make(findViewById(android.R.id.content), message, Snackbar.LENGTH_INDEFINITE);
+                                        snackbar.setAction("DISMISS", new View.OnClickListener() {
+                                            @Override
+                                            public void onClick(View v) {
+                                                snackbar.dismiss();
+                                            }
+                                        });
+                                        snackbar.show();
+                                    });
+                                }
+                            })
+                            .addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception e) {
+                                    // Failed to update document
+                                    Log.w(TAG, "Error updating event document", e);
+                                }
+                            });
+                }
+            }
+        }
+    }
+
+    /**
+     *Checks for milestone achievements for attends
+     */
+    public void checkAttendeeMilestone(){
+        if (event != null) {
+            HashMap<String, Integer> milestones = event.getAttendeeMilestone();
+            int currentAttendeeSize = event.getAttendee().size();
+
+            // Skip the milestone check if the only attendee is the organizer
+            if (currentAttendeeSize == 1 && event.getOrganizer().equals(event.getAttendee().get(0))) {
+                return; // Exit the method early
+            }
+
+            // Check if the current attendee size matches any milestone
+            for (String milestone : milestones.keySet()) {
+                int milestoneValue = Integer.parseInt(milestone);
+                if (currentAttendeeSize >= milestoneValue && milestones.get(milestone) == 0) {
+
+                    // Update the milestone status to indicate it has been achieved
+                    milestones.put(milestone, 1);
+                    event.setAttendeeMilestone(milestones);
+
+                    DocumentReference eventDocRef = eventDb.getDocRef();
+
+                    // Update the document with the new event data
+                    eventDocRef.set(event)
+                            .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                @Override
+                                public void onSuccess(Void aVoid) {
+                                    // Document updated successfully
+                                    Log.d(TAG, "Event document updated successfully");
+                                    // Only show the Snackbar after successfully updating the document
+                                    runOnUiThread(() -> {
+                                        // Display a Snackbar message indicating the milestone reached
+                                        String message = "Congratulations, milestone achieved: " + milestoneValue + " attendees!";
+                                        Snackbar snackbar = Snackbar.make(findViewById(android.R.id.content), message, Snackbar.LENGTH_INDEFINITE);
+                                        snackbar.setAction("DISMISS", new View.OnClickListener() {
+                                            @Override
+                                            public void onClick(View v) {
+                                                snackbar.dismiss();
+                                            }
+                                        });
+                                        snackbar.show();
+                                    });
+                                }
+                            })
+                            .addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception e) {
+                                    // Failed to update document
+                                    Log.w(TAG, "Error updating event document", e);
+                                }
+                            });
+                }
+            }
+        }
+    }
 }

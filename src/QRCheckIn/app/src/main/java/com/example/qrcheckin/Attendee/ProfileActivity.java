@@ -2,8 +2,10 @@ package com.example.qrcheckin.Attendee;
 
 import static com.example.qrcheckin.R.layout.show_profile;
 
+import android.Manifest;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
@@ -14,17 +16,21 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Switch;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.example.qrcheckin.R;
-import com.example.qrcheckin.Common.SharedViewModel;
 import com.example.qrcheckin.Common.ImageStorageManager;
 import com.example.qrcheckin.Common.MainActivity;
+import com.example.qrcheckin.Common.SharedViewModel;
 import com.example.qrcheckin.Event.CreateAddEventDetails;
 import com.example.qrcheckin.Event.EventListView;
+import com.example.qrcheckin.R;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentSnapshot;
 
@@ -61,9 +67,11 @@ public class ProfileActivity extends AppCompatActivity implements EditProfileFra
     TextView profileName;
     AttendeeDatabaseManager dbManager;
     private String fcmToken;
+    private static final int REQUEST_CODE = 100;
 
     /**
      * init profile activity sets UI components & loading user profile data.
+     *
      * @param savedInstanceState If activity re-initialized after previously being shut down,
      *                           most recent data saved.
      *                           Otherwise, it is null.
@@ -120,8 +128,20 @@ public class ProfileActivity extends AppCompatActivity implements EditProfileFra
         switchGeolocation.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                // updates the Attendee's geolocation attribute
-                dbManager.updateAttendeeBoolean("profile.trackGeolocation",isChecked);
+                if (isChecked) {
+                    // Check if permission is granted
+                    if (checkLocationPermission()) {
+                        // Permission already granted, proceed
+                        // Update the Attendee's geolocation attribute
+                        dbManager.updateAttendeeBoolean("profile.trackGeolocation", isChecked);
+                    } else {
+                        // Permission not granted, request it
+                        askPermission();
+                    }
+                } else {
+                    // Revoke the permission
+                    dbManager.updateAttendeeBoolean("profile.trackGeolocation", isChecked);
+                }
             }
         });
 
@@ -161,7 +181,7 @@ public class ProfileActivity extends AppCompatActivity implements EditProfileFra
                 dbManager.updateAttendeeBoolean("profile.profilePicture.generated", true);
                 dbManager.callGenerateProfilePicture(profileImageView);
 
-                }
+            }
         });
 
         // Listener for the edit profile button
@@ -188,12 +208,13 @@ public class ProfileActivity extends AppCompatActivity implements EditProfileFra
         });
 
     }
+
     /**
      * Callback when profile details are updated via EditProfileFragment.
      * Updates the displayed profile info.
      *
-     * @param nameUpdated The updated name of the user.
-     * @param contactUpdated The updated contact information of the user.
+     * @param nameUpdated     The updated name of the user.
+     * @param contactUpdated  The updated contact information of the user.
      * @param homepageUpdated The updated homepage URL of the user.
      */
     @Override
@@ -204,8 +225,10 @@ public class ProfileActivity extends AppCompatActivity implements EditProfileFra
         setProfileFields(false);
 
     }
+
     /**
      * Fetches user profile details from Firebase & updates the UI.
+     *
      * @param firstOpen Boolean indicating if the activity has just been opened and the method is being called from onCreate
      */
     public void setProfileFields(Boolean firstOpen) {
@@ -229,12 +252,41 @@ public class ProfileActivity extends AppCompatActivity implements EditProfileFra
                     switchGeolocation.setChecked(profile.getTrackGeolocation());
                     // Display profilePicutre if this method is being called from onCreate
                     // Prevents profileImageView from being updated twice in cases where a user updates their name and needs a new generated profile pic
-                    if(profile.getProfilePicture() != null && firstOpen){
-                        ImageStorageManager storage = new ImageStorageManager(profile.getProfilePicture(),"/ProfilePictures");
-                       storage.displayImage(profileImageView);
+                    if (profile.getProfilePicture() != null && firstOpen) {
+                        ImageStorageManager storage = new ImageStorageManager(profile.getProfilePicture(), "/ProfilePictures");
+                        storage.displayImage(profileImageView);
                     }
                 }
             }
         });
+    }
+
+    // Method to check if location permission is granted
+    private boolean checkLocationPermission() {
+        return ContextCompat.checkSelfPermission(ProfileActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED;
+    }
+
+    // Method to request location permission
+    private void askPermission() {
+        ActivityCompat.requestPermissions(this, new String[]{
+                Manifest.permission.ACCESS_FINE_LOCATION
+        }, REQUEST_CODE);
+    }
+
+    // Handle the permission request result
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == REQUEST_CODE) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                // Permission granted, update the Attendee's geolocation attribute
+                dbManager.updateAttendeeBoolean("profile.trackGeolocation", true);
+            } else {
+                // Permission denied, show a message or take appropriate action
+                Toast.makeText(this, "Location permission denied", Toast.LENGTH_SHORT).show();
+                // Revert the switch state
+                switchGeolocation.setChecked(false);
+            }
+        }
     }
 }

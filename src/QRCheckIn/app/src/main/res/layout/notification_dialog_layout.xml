@@ -6,13 +6,14 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/JordyBlue">
+    android:background="@color/Surface">
 
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:cardCornerRadius="10dp"
-        app:cardUseCompatPadding="true">
+        app:cardUseCompatPadding="true"
+        app:cardBackgroundColor="@color/Surface">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -36,8 +37,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="5dp"
                 android:layout_marginTop="10dp"
-
-                android:background="@color/ChryslerBlue" />
+                android:background="@color/SurfaceContainerLow" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/notificationRecyclerView"

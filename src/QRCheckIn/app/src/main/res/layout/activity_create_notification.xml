@@ -2,7 +2,7 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/main"
+    android:id="@+id/createNotification"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".Notifications.CreateNotification">
@@ -63,15 +63,14 @@
                     android:id="@+id/notificationTitleText"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textColorHint="@color/White"
-                    android:textColor="@color/White"
-                    android:hint="Notification Title"
-                    tools:layout_editor_absoluteX="30dp"
-                    tools:layout_editor_absoluteY="78dp"
-                    android:drawableTint="@color/White"
                     android:drawableLeft="@drawable/arrowresized"
-                    android:drawablePadding="35dp">
-                </com.google.android.material.textfield.TextInputEditText>
+                    android:drawablePadding="35dp"
+                    android:drawableTint="@color/White"
+                    android:hint="Notification Title"
+                    android:textColor="@color/White"
+                    android:textColorHint="@color/White"
+                    tools:layout_editor_absoluteX="30dp"
+                    tools:layout_editor_absoluteY="78dp"></com.google.android.material.textfield.TextInputEditText>
             </com.google.android.material.textfield.TextInputLayout>
 
 
@@ -95,12 +94,12 @@
                         android:id="@+id/notificationDescriptionText"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="Notification Description"
-                        android:drawablePadding="35dp"
-                        android:textColorHint="@color/White"
-                        android:textColor="@color/White"
                         android:drawableLeft="@drawable/arrowresized"
-                        android:drawableTint="@color/White">
+                        android:drawablePadding="35dp"
+                        android:drawableTint="@color/White"
+                        android:hint="Notification Description"
+                        android:textColor="@color/White"
+                        android:textColorHint="@color/White">
 
                     </com.google.android.material.textfield.TextInputEditText>
                 </com.google.android.material.textfield.TextInputLayout>
@@ -112,24 +111,16 @@
         android:id="@+id/addNotification"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="24dp"
-        android:backgroundTint="@color/NeonBlue"
+        android:layout_marginBottom="32dp"
+        android:backgroundTint="@color/Secondary"
         android:text="Post Annoucement"
-        app:layout_constraintBottom_toTopOf="@id/notificationMainBar"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.95"
+        app:layout_constraintHorizontal_bias="0.90"
         app:layout_constraintStart_toStartOf="parent"
         android:drawableRight="@drawable/notification_bell_resize"
         android:drawableTint="@color/White"
         />
 
-    <include
-        layout="@layout/mainappbar"
-        android:id="@+id/notificationMainBar"
-        android:layout_height="45dp"
-        android:layout_width="wrap_content"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

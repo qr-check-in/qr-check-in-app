@@ -1,14 +1,10 @@
+
 package com.example.qrcheckin.Event;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-import androidx.core.content.FileProvider;
-
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
@@ -17,10 +13,11 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.qrcheckin.R;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
-import java.io.File;
-import java.io.FileOutputStream;
+import com.example.qrcheckin.Common.ImageStorageManager;
+import com.example.qrcheckin.R;
 
 public class QrCodeImageView extends AppCompatActivity {
 
@@ -32,7 +29,10 @@ public class QrCodeImageView extends AppCompatActivity {
 
     ImageView qrCodeImage;
     ImageButton shareImage;
-    String eventText;
+    private QRCode qrCode;
+    String eventName;
+    String eventDate;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,16 +45,21 @@ public class QrCodeImageView extends AppCompatActivity {
         addEventButton = findViewById(R.id.addCalenderButton);
         profileButton = findViewById(R.id.profileButton);
 
-        qrCodeImage = findViewById(R.id.qrCodeImageView);
+        qrCodeImage = findViewById(R.id.eventPosterImageView);
         shareImage = findViewById(R.id.shareQR);
 
-        // Retrieve the QR code bitmap from the Intent extras
-        Bitmap qrCodeBitmap = getIntent().getParcelableExtra("QRCodeBitmap");
-        // Retrieve event name and date
-        eventText = getIntent().getStringExtra("eventName&Date");
-
+        // Retrieve the QR code from the Intent extras
+        Bundle extras = getIntent().getExtras();
+        if (extras != null){
+            qrCode = (QRCode) getIntent().getSerializableExtra("QRCode");
+        }
         // Display the QR code bitmap in an ImageView
-        qrCodeImage.setImageBitmap(qrCodeBitmap);
+        ImageStorageManager storage = new ImageStorageManager(qrCode, "/QRCodes");
+        storage.displayImage(qrCodeImage);
+        // Retrieve event name
+        eventName = getIntent().getStringExtra("EventName");
+        // Retrieve event date
+        eventDate = getIntent().getStringExtra("EventDate");
 
         // ToolBar
         Toolbar toolbar = findViewById(R.id.addEventToolBar2);
@@ -62,14 +67,15 @@ public class QrCodeImageView extends AppCompatActivity {
         getSupportActionBar().setDisplayShowTitleEnabled(false);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         TextView header = findViewById(R.id.mainHeader);
-        header.setText("Check-In QrCode");
+
+        // Retrieves the header text to show if the QR code is a check-in or promotional code
+        String headerText = getIntent().getStringExtra("headerText");
+        header.setText(headerText);
 
         shareImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                BitmapDrawable bitmapDrawable = (BitmapDrawable) qrCodeImage.getDrawable();
-                Bitmap bitmap = bitmapDrawable.getBitmap();
-                shareImageandText(bitmap);
+                shareImageAndText();
             }
         });
 
@@ -112,39 +118,25 @@ public class QrCodeImageView extends AppCompatActivity {
         }
     }
 
-    private void shareImageandText(Bitmap bitmap) {
-        Uri uri = getImageToShare(bitmap);
-
-        Intent intent = new Intent(Intent.ACTION_SEND);
-
+    /**
+     * Takes the image in the QR Code ImageView and start a share sheet activity to share
+     * a QR code on other apps.
+     */
+    private void shareImageAndText() {
+        // Get the image from the QR code ImageView
+        // https://stackoverflow.com/questions/44178771/how-can-i-share-an-image-from-firebase-to-whatsapp-instagram-etc-android-studi#comment75382216_44178771 , Amr, 2018
+        ImageView content = findViewById(R.id.eventPosterImageView);
+        content.setDrawingCacheEnabled(true);
+        Uri uri = Uri.parse(MediaStore.Images.Media.insertImage(getContentResolver(), content.getDrawingCache(), "title", "description"));
+        Log.d("SHARE", String.format("share uri %s", qrCode.getUriString()));
+        // Start new share activity to share an image
+        Intent intent = new Intent();
+        intent.setAction(Intent.ACTION_SEND);
         intent.putExtra(Intent.EXTRA_STREAM, uri);
-        intent.putExtra(Intent.EXTRA_TEXT, eventText);
-        intent.putExtra(Intent.EXTRA_SUBJECT, "Scan and Share this QR Code to attend an event.");
-        intent.setType("qrCode/*");
+        intent.setType("image/*");
+        intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+        intent.putExtra(Intent.EXTRA_TEXT, "Scan and Share QR Code for " + eventName);
+        intent.putExtra(Intent.EXTRA_SUBJECT, "Attend " + eventName + " on " + eventDate + ".");
         startActivity(Intent.createChooser(intent, "Share via"));
-
-    }
-
-    private Uri getImageToShare(Bitmap bitmap) {
-        File folder = new File (getCacheDir(), "images");
-        Uri uri = null;
-
-        try{
-            Log.d("folder", String.format("created: " + folder.mkdirs() ));
-
-            folder.mkdirs();
-            File file = new File(folder, "qrCode.jpg");
-            FileOutputStream fileOutputStream = new FileOutputStream(file);
-
-            bitmap.compress(Bitmap.CompressFormat.JPEG,90, fileOutputStream);
-            fileOutputStream.flush();
-            fileOutputStream.close();
-
-            uri = FileProvider.getUriForFile(this, "com.example.qrcheckin", file);
-        }
-        catch (Exception e){
-            e.printStackTrace();
-        }
-        return uri;
     }
 }

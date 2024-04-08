@@ -1,5 +1,5 @@
 package com.example.qrcheckin.Admin;
-import com.example.qrcheckin.Common.Image;
+
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,6 +9,7 @@ import android.widget.ImageView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.qrcheckin.Common.Image;
 import com.example.qrcheckin.Common.ImageStorageManager;
 import com.example.qrcheckin.R;
 
@@ -79,4 +80,27 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ViewHolder> 
         this.imageUriToFolderMap.putAll(newImageUriToFolderMap);
         notifyDataSetChanged();
     }
+
+    // https://stackoverflow.com/questions/36712704/why-is-my-item-image-in-custom-recyclerview-changing-while-scrolling, Fathima km, 2017
+    // Override getItemId and getItemViewType methods to prevent flickering of images while scrolling through the recycler view
+    /**
+     * Returns the position as the stable item ID
+     * @param position Adapter position to query
+     * @return position Int of the item's positon
+     */
+    @Override
+    public long getItemId(int position) {
+        return position;
+    }
+
+    /**
+     * Returns the position as the view type of the item
+     * @param position position to query
+     * @return position Int of the item's position
+     */
+    @Override
+    public int getItemViewType(int position) {
+        return position;
+    }
+
 }

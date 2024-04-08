@@ -3,54 +3,57 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    xmlns:tools="http://schemas.android.com/tools"
-    tools:context=".Attendee.UpdatePictureFragment"
-    android:id="@+id/updatePictureFragment">
-    <LinearLayout
+    android:layout_height="wrap_content"
+    android:padding="24dp"
+    android:background="@color/SurfaceContainer"
+    android:gravity="center_horizontal">
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/add_photo_fragment"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/DarkGray"
-        android:orientation="horizontal">
+        app:cardElevation="8dp"
+        app:cardCornerRadius="12dp"
+        app:cardBackgroundColor="@color/SurfaceContainer">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="70dp"
-            android:layout_marginStart="5dp"
-            android:layout_marginTop="20dp"
-            android:text="@string/add_photo"
-            android:textColor="@color/Black"
-            android:textSize="35sp" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp">
 
-        <ImageView
-            android:id="@+id/cancel"
-            android:layout_width="47dp"
-            android:layout_height="53dp"
-            android:layout_marginTop="20dp"
-            app:srcCompat="@android:drawable/ic_menu_close_clear_cancel"
-            app:tint="@color/Black" />
-    </LinearLayout>
+            <TextView
+                android:id="@+id/textViewAddPhoto"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/add_photo"
+                android:gravity="center"
+                android:textSize="20sp"
+                android:layout_marginBottom="16dp" />
 
-<!--    <TextView-->
-<!--        android:id="@+id/textView_takePhoto"-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:layout_marginStart="10dp"-->
-<!--        android:textColor="@color/MediumBlue"-->
-<!--        android:drawablePadding="5dp"-->
-<!--        android:drawableLeft="@android:drawable/ic_menu_camera"-->
-<!--        android:drawableTint="@color/Black"-->
-<!--        android:text="@string/take_photo"-->
-<!--        android:textSize="25sp"/>-->
-    <TextView
-        android:id="@+id/gallery"
-        android:layout_width="match_parent"
-        android:layout_height="52dp"
-        android:layout_marginStart="5dp"
-        android:drawableLeft="@drawable/imageresize"
-        android:drawablePadding="5dp"
-        android:text="@string/choose_from_photos"
-        android:textColor="@color/MediumBlue"
-        android:textSize="30sp" />
+            <Button
+                android:id="@+id/gallery"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/choose_from_photos"
+                android:padding="12dp"
+                android:textSize="16sp"
+                android:layout_marginBottom="14dp"
+                android:backgroundTint="@color/Primary"
+                android:textColor="@color/OnSurface"
+                android:minHeight="48dp" />
+
+            <Button
+                android:id="@+id/cancel"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/cancel"
+                android:textSize="14sp"
+                android:backgroundTint="@color/Secondary"
+                android:textColor="@color/OnSurface"
+                android:minHeight="48dp" />
+
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
 
 </LinearLayout>

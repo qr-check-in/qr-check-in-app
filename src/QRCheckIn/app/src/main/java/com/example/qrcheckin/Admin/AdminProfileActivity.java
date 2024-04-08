@@ -1,7 +1,7 @@
 package com.example.qrcheckin.Admin;
 
 import static com.example.qrcheckin.R.layout.show_profile_admin;
-import com.example.qrcheckin.Admin.Admin;
+
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -9,7 +9,6 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
-import com.example.qrcheckin.Admin.AdminViewProfiles;
 import com.example.qrcheckin.Common.Image;
 
 import android.widget.ImageView;
@@ -37,7 +36,7 @@ import java.util.Map;
  * Can toggle geolocation tracking .
  * Listens for updates from the EditProfileFragment dialog and updates the UI.
  */
-public class ProfileActivityAdmin extends AppCompatActivity {
+public class AdminProfileActivity extends AppCompatActivity {
     Admin admin;
     ImageView editProfile;
     private SharedViewModel sharedViewModel;
@@ -53,23 +52,27 @@ public class ProfileActivityAdmin extends AppCompatActivity {
 
         String documentId = getIntent().getStringExtra("DOCUMENT_ID");
         editProfile = findViewById(R.id.edit_profile);
+        editProfile.setVisibility(View.GONE);
 //        String name = getIntent().getStringExtra("name");
 //        String contact = getIntent().getStringExtra("contact");
 //        String homepage = getIntent().getStringExtra("homepage");
         profileImageView = findViewById(R.id.profile_image);
-        Button removePicture = findViewById(R.id.btnRemovePicture);
+
         // Find views and set data
         TextView nameTextView = findViewById(R.id.profileName);
         TextView nameTextView2 = findViewById(R.id.profileName1);
         TextView contactTextView = findViewById(R.id.contact1);
         TextView homepageTextView = findViewById(R.id.homepage1);
-        Button back = findViewById(R.id.btnBack);
         Button removeProfile = findViewById(R.id.btnRemoveProfile);
+
+        // Toolbar
         Toolbar toolbar = findViewById(R.id.profileToolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         TextView header = findViewById(R.id.mainHeader);
         header.setText("Profile");
+
         admin = new Admin();
         dbManager = new AttendeeDatabaseManager(documentId);
         sharedViewModel = new ViewModelProvider(this).get(SharedViewModel.class);
@@ -79,6 +82,7 @@ public class ProfileActivityAdmin extends AppCompatActivity {
                 profileImageView.setImageURI(uri);
             }
         });
+
         removeProfile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -86,14 +90,6 @@ public class ProfileActivityAdmin extends AppCompatActivity {
                 admin.deleteProfile(documentId);
                 Intent event = new Intent(getApplicationContext(), AdminViewProfiles.class);
                 startActivity(event);
-            }
-        });
-        removePicture.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // Call method to delete the file from firebase storage and update the attendee doc's field
-                deleteProfilePicture();
-                profileImageView.setImageResource(R.drawable.profile);
             }
         });
 
@@ -128,56 +124,6 @@ public class ProfileActivityAdmin extends AppCompatActivity {
                 Log.e("ProfileActivityAdmin", "Error fetching profile", e);
             }
         });
-        back.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent event = new Intent(getApplicationContext(), AdminViewProfiles.class);
-                startActivity(event);
-            }
-        });
-        editProfile.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // Create a new Bundle to hold the data
-                Bundle bundle = new Bundle();
 
-                // Put different types of data into the bundle
-                bundle.putString("name", name);
-                bundle.putString("contact", contact);
-                bundle.putString("homepage", homepage);
-
-                // Create a new instance of AddCityFragment
-                EditProfileFragment fragment = new EditProfileFragment();
-
-                // Set the bundle as arguments for the fragment
-                fragment.setArguments(bundle);
-
-                // Show the fragment
-                fragment.show(getSupportFragmentManager(), "Edit Profile");
-            }
-        });
-
-
-
-    }
-    public void deleteProfilePicture(){
-        dbManager.getDocRef().get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-            @Override
-            public void onSuccess(DocumentSnapshot documentSnapshot) {
-                Attendee attendee = documentSnapshot.toObject(Attendee.class);
-                if (attendee == null) {
-                    Log.e("Firestore", "Attendee doc not found");
-                } else {
-                    Profile profile = attendee.getProfile();
-                    if (profile.getProfilePicture() != null) {
-                        ImageStorageManager storage = new ImageStorageManager(profile.getProfilePicture(), "/ProfilePictures");
-                        // Remove profile picture from storage
-                        storage.deleteImage();
-                        // update attendee doc's field
-                        dbManager.updateProfilePicture(null);
-                    }
-                }
-            }
-        });
     }
 }

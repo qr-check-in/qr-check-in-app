@@ -30,11 +30,6 @@ import java.util.List;
 import java.util.Locale;
 
 public class CreateNotification extends AppCompatActivity {
-    // Main Bar buttons
-    ImageButton qrButton;
-    ImageButton eventButton;
-    ImageButton addEventButton;
-    ImageButton profileButton;
 
     // Widgets and text on the activity
     TextView notificationTitle;
@@ -70,32 +65,6 @@ public class CreateNotification extends AppCompatActivity {
         notificationTitle = findViewById(R.id.notificationTitleText);
         notificationDescription = findViewById(R.id.notificationDescriptionText);
         addNotificationBtn = findViewById(R.id.addNotification);
-
-        // Main Bar Widgets
-        qrButton = findViewById(R.id.qrButton);
-        eventButton = findViewById(R.id.calenderButton);
-        addEventButton = findViewById(R.id.addCalenderButton);
-        profileButton = findViewById(R.id.profileButton);
-
-        // Set up listeners for main app toolbar buttons
-        eventButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(getApplicationContext(), "Please Finish Creating an Annoucement", Toast.LENGTH_LONG).show();
-            }
-        });
-        qrButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(getApplicationContext(), "Please Finish Creating an Annoucement", Toast.LENGTH_LONG).show();
-            }
-        });
-        profileButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(getApplicationContext(), "Please Finish Creating an Annoucement", Toast.LENGTH_LONG).show();
-            }
-        });
 
         // Retrieve the event passed from the previous activity
         documentId = getIntent().getStringExtra("EVENT_DOC_ID");

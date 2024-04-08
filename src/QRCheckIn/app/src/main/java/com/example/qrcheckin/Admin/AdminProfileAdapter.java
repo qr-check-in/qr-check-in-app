@@ -15,12 +15,12 @@ import com.example.qrcheckin.R;
 
 import java.util.List;
 
-public class ProfileAdapter extends RecyclerView.Adapter<ProfileAdapter.ProfileViewHolder> {
+public class AdminProfileAdapter extends RecyclerView.Adapter<AdminProfileAdapter.ProfileViewHolder> {
     private List<Profile> profileList;
     private static OnItemClickListener listener;
 
     // Constructor
-    public ProfileAdapter(List<Profile> profileList) {
+    public AdminProfileAdapter(List<Profile> profileList) {
         this.profileList = profileList;
         //this.listener = listener;
     }
@@ -60,6 +60,27 @@ public class ProfileAdapter extends RecyclerView.Adapter<ProfileAdapter.ProfileV
             ImageStorageManager storage = new ImageStorageManager(pic, "/ProfilePictures");
             storage.displayImage(holder.photoImageView);}
 
+    }
+    // https://stackoverflow.com/questions/36712704/why-is-my-item-image-in-custom-recyclerview-changing-while-scrolling, Fathima km, 2017
+    // Override getItemId and getItemViewType methods to prevent flickering of images while scrolling through the recycler view
+    /**
+     * Returns the position as the stable item ID
+     * @param position Adapter position to query
+     * @return position Int of the item's positon
+     */
+    @Override
+    public long getItemId(int position) {
+        return position;
+    }
+
+    /**
+     * Returns the position as the view type of the item
+     * @param position position to query
+     * @return position Int of the item's position
+     */
+    @Override
+    public int getItemViewType(int position) {
+        return position;
     }
 
     @Override

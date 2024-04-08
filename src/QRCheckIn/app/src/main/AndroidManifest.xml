@@ -66,12 +66,12 @@
 
         <provider
             android:name="androidx.core.content.FileProvider"
-            android:authorities="${applicationId}.fileprovider"
+            android:authorities="${applicationId}.provider"
             android:exported="false"
             android:grantUriPermissions="true">
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
-                android:resource="@xml/file_paths" />
+                android:resource="@xml/provider_paths" />
         </provider>
 
         <activity
@@ -94,13 +94,24 @@
             android:name=".Event.CreateAddEventDetails"
             android:exported="false" />
 
-        <activity android:name=".Admin.AdminViewEvent"/>
-        <activity android:name=".Admin.AdminEventPage"
-            android:exported="false"/>
-        <activity android:name=".Admin.AdminViewProfiles"
-            android:exported="false"/>
-        <activity android:name=".Admin.AdminViewImages"/>
-        <activity android:name=".Admin.AdminImagePage"/>
+        <activity
+            android:name=".Admin.AdminViewEvent"
+            android:parentActivityName=".Admin.AdminActivity"/>
+        <activity
+            android:name=".Admin.AdminEventPage"
+            android:exported="false"
+            android:parentActivityName=".Admin.AdminViewEvent"/>
+        <activity
+            android:name=".Admin.AdminViewProfiles"
+            android:exported="false"
+            android:parentActivityName=".Admin.AdminActivity"/>
+        <activity
+            android:name=".Admin.AdminViewImages"
+            android:parentActivityName=".Admin.AdminActivity"/>
+        <activity
+            android:name=".Admin.AdminImagePage"
+            android:parentActivityName=".Admin.AdminViewImages"/>
+
         <activity
             android:name=".Attendee.ProfileActivity"
             android:exported="false" />
@@ -108,8 +119,9 @@
             android:name=".Attendee.UpdatePictureFragment"
             android:exported="false" />
         <activity
-            android:name=".Admin.ProfileActivityAdmin"
-            android:exported="false" />
+            android:name=".Admin.AdminProfileActivity"
+            android:exported="false"
+            android:parentActivityName=".Admin.AdminViewProfiles"/>
         <activity
             android:name=".Event.EventListView"
             android:exported="false" />

@@ -9,6 +9,8 @@ import android.widget.DatePicker;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.DialogFragment;
 
+import com.example.qrcheckin.R;
+
 import java.util.Calendar;
 
 /**
@@ -54,7 +56,7 @@ public class SelectDateFragment extends DialogFragment implements DatePickerDial
         int day = c.get(Calendar.DAY_OF_MONTH);
 
         // Create a new instance of DatePickerDialog and return it.
-        return new DatePickerDialog(requireContext(), this, year, month, day);
+        return new DatePickerDialog(requireContext(), R.style.CustomDatePickerStyle,this, year, month, day);
     }
 
     /**

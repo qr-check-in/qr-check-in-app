@@ -3,10 +3,12 @@ package com.example.qrcheckin.Common;
 import com.example.qrcheckin.Attendee.Attendee;
 import com.google.android.material.progressindicator.LinearProgressIndicator;
 
+import java.io.Serializable;
+
 /**
  * Represents an image associated with an event or attendee within the QR Code Event Check-In system.
  */
-public class Image{
+public class Image implements Serializable {
     //private File imageFile;
     private Attendee uploader;
     private String uriString;

@@ -1,17 +1,5 @@
 package com.example.qrcheckin.Attendee;
 
-
-import static org.junit.Assert.assertEquals;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.doAnswer;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
-
-
-import android.util.Log;
-import android.widget.ImageView;
-
 import org.junit.Before;
 import org.junit.Test;
 

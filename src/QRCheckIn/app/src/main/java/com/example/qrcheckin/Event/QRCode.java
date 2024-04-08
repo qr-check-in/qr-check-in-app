@@ -5,7 +5,9 @@ import com.example.qrcheckin.Attendee.Attendee;
 import com.example.qrcheckin.Common.Image;
 import com.example.qrcheckin.Common.Utils;
 
-public class QRCode extends Image {
+import java.io.Serializable;
+
+public class QRCode extends Image implements Serializable {
     private String hashedContent;
     private String unhashContent;
 
@@ -19,11 +21,19 @@ public class QRCode extends Image {
      * @param uriString String uri representation of an image
      * @param uploader  Attendee object that uploaded the image
      * @param unhashedContent Event details string in the form of [name][date][time][location]
+     * @param isGenerated Boolean indicating if the QRCode was generated (instead of uploaded by user)
      */
-    public QRCode(String uriString, Attendee uploader, String unhashedContent) {
+    public QRCode(String uriString, Attendee uploader, String unhashedContent, Boolean isGenerated) {
         super(uriString, uploader);
         this.unhashContent = unhashedContent;
-        this.hashedContent = Utils.hashString(unhashedContent);
+        if(isGenerated){
+            this.hashedContent = Utils.hashString(unhashedContent);
+        }
+        else{
+            // this QRCode represents an image uploaded by the user, do not hash the content read from the code
+            this.hashedContent = unhashedContent;
+        }
+
     }
 
     public String getUnhashContent() {

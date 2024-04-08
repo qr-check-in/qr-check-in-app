@@ -39,11 +39,15 @@ public class AdminViewEvent extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.browse_events_admin);
+
+        // Toolbar
         Toolbar toolbar = findViewById(R.id.events);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         TextView header = findViewById(R.id.mainHeader);
         header.setText("Current Events");
+
         qrButton = findViewById(R.id.qrButton); // Make sure you have a correct ID here
         eventButton = findViewById(R.id.calenderButton); // Make sure you have a correct ID here
         addEventButton = findViewById(R.id.addCalenderButton); // This ID needs to be in your layout
@@ -80,14 +84,6 @@ public class AdminViewEvent extends AppCompatActivity {
         });
         setUpRecyclerView();
 
-        Button back = findViewById(R.id.back_button);
-        back.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent event = new Intent(getApplicationContext(), AdminActivity.class);
-                startActivity(event);
-            }
-        });
     }
 
     private void setUpRecyclerView() {

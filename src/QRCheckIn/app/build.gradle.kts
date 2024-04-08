@@ -57,6 +57,9 @@ dependencies {
     implementation("com.google.firebase:firebase-storage:20.3.0")
     implementation("org.mockito:mockito-core:5.10.0")
     implementation("com.google.android.gms:play-services-maps:18.2.0")
+
+    implementation("androidx.test.uiautomator:uiautomator:2.3.0")
+
     implementation("androidx.navigation:navigation-fragment:2.7.7")
     implementation("androidx.navigation:navigation-ui:2.7.7")
 
@@ -65,10 +68,12 @@ dependencies {
 
     androidTestImplementation ("androidx.test.espresso:espresso-intents:3.5.1")
     androidTestImplementation ("org.mockito:mockito-android:4.0.0") //
-    androidTestImplementation ("androidx.test.espresso:espresso-core:3.3.0")
-    androidTestImplementation ("androidx.test:runner:1.3.0")
-    androidTestImplementation ("androidx.test:rules:1.3.0")
+
+    androidTestImplementation ("androidx.test.espresso:espresso-core:3.5.1")
+    androidTestImplementation ("androidx.test:runner:1.5.2")
+    androidTestImplementation ("androidx.test:rules:1.5.0")
     androidTestImplementation ("org.mockito:mockito-android:4.0.0")
+
     // If you need additional functionality, consider adding extensions
     // implementation "androidx.camera:camera-extensions:1.0.0-alpha24"
     testImplementation("junit:junit:4.13.2")
@@ -90,6 +95,10 @@ dependencies {
     androidTestImplementation("org.mockito:mockito-android:3.+")
     implementation ("com.github.bumptech.glide:glide:4.12.0")
     annotationProcessor ("com.github.bumptech.glide:compiler:4.12.0")
+
+    androidTestImplementation ("androidx.test.uiautomator:uiautomator:2.2.0")
+
+    // Notifications
     implementation ("com.android.volley:volley:1.2.1")
     // location
     implementation ("com.google.android.gms:play-services-location:21.2.0")
