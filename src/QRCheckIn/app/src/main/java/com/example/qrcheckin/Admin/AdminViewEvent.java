@@ -30,10 +30,6 @@ public class AdminViewEvent extends AppCompatActivity {
     private RecyclerView eventsRecyclerView;
     private FirebaseFirestore db;
     private AdminEventAdapter eventAdapter;
-    ImageButton qrButton;
-    ImageButton eventButton;
-    ImageButton addEventButton;
-    ImageButton profileButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,10 +44,10 @@ public class AdminViewEvent extends AppCompatActivity {
         TextView header = findViewById(R.id.mainHeader);
         header.setText("Current Events");
 
-        qrButton = findViewById(R.id.qrButton); // Make sure you have a correct ID here
-        eventButton = findViewById(R.id.calenderButton); // Make sure you have a correct ID here
-        addEventButton = findViewById(R.id.addCalenderButton); // This ID needs to be in your layout
-        profileButton = findViewById(R.id.profileButton);
+        ImageButton qrButton = findViewById(R.id.qrButton); // Make sure you have a correct ID here
+        ImageButton eventButton = findViewById(R.id.calenderButton); // Make sure you have a correct ID here
+        ImageButton addEventButton = findViewById(R.id.addCalenderButton); // This ID needs to be in your layout
+        ImageButton profileButton = findViewById(R.id.profileButton);
         db = FirebaseFirestore.getInstance();
         eventsRecyclerView = findViewById(R.id.event_recycler_view);
         eventsRecyclerView.setLayoutManager(new LinearLayoutManager(this));

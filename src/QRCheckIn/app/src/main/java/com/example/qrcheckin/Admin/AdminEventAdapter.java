@@ -20,7 +20,6 @@ public class AdminEventAdapter extends FirestoreRecyclerAdapter<Event, AdminEven
 
     public AdminEventAdapter(@NonNull FirestoreRecyclerOptions<Event> options) {
         super(options);
-
     }
 
     @NonNull

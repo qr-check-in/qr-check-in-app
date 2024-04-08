@@ -21,14 +21,8 @@ import com.example.qrcheckin.R;
 
 
 public class AdminImagePage extends AppCompatActivity {
-    ImageView imageView;
-    String imageUriString, folderName;
-    ImageButton qrButton;
-    ImageButton eventButton;
-    ImageButton addEventButton;
-    ImageButton profileButton;
+    private String imageUriString, folderName;
 
-    Admin admin;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -38,13 +32,13 @@ public class AdminImagePage extends AppCompatActivity {
         getSupportActionBar().setDisplayShowTitleEnabled(false);
         TextView header = findViewById(R.id.mainHeader);
         header.setText("Images");
-        imageView = findViewById(R.id.imageView);
+        ImageView imageView = findViewById(R.id.imageView);
         imageUriString = getIntent().getStringExtra("ImageUri");
         folderName = getIntent().getStringExtra("FolderName");
-        qrButton = findViewById(R.id.qrButton);
-        eventButton = findViewById(R.id.calenderButton);
-        addEventButton = findViewById(R.id.addCalenderButton);
-        profileButton = findViewById(R.id.profileButton);
+        ImageButton qrButton = findViewById(R.id.qrButton);
+        ImageButton eventButton = findViewById(R.id.calenderButton);
+        ImageButton addEventButton = findViewById(R.id.addCalenderButton);
+        ImageButton profileButton = findViewById(R.id.profileButton);
         qrButton.setOnClickListener(v -> {
             Intent event = new Intent(getApplicationContext(), MainActivity.class);
             startActivity(event);
@@ -75,7 +69,6 @@ public class AdminImagePage extends AppCompatActivity {
         // Display the image using Glide or Picasso
         ImageStorageManager storage = new ImageStorageManager(new Image(imageUriString, null), folderName);
         storage.displayImage(imageView);
-        admin = new Admin();
         Button deleteButton = findViewById(R.id.delete_button);
         deleteButton.setOnClickListener(new View.OnClickListener() {
             @Override

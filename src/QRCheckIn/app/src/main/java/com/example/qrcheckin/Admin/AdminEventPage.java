@@ -53,19 +53,11 @@ import java.util.Objects;
  * Provide users with information about event; name, date, location, description, images.
  */
 public class AdminEventPage extends AppCompatActivity {
-    private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private EventDatabaseManager eventDb;
-    ImageButton qrButton;
-    ImageButton eventButton;
-    ImageButton addEventButton;
-    ImageButton profileButton;
-    ImageButton openNotifications;
-    CheckBox signupCheckBox;
-    TextView signupLimitReached;
-    Admin admin;
-    private ImageView ivEventPoster, ivEventPromoQr;
+    private CheckBox signupCheckBox;
+    private TextView signupLimitReached;
+    private Admin admin;
     private String documentId;
-
     private String fcmToken;
     /**
      * Init activity, sets content view, and configures the toolbar with navigation buttons.
@@ -90,10 +82,10 @@ public class AdminEventPage extends AppCompatActivity {
         }
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        qrButton = findViewById(R.id.qrButton); // Make sure you have a correct ID here
-        eventButton = findViewById(R.id.calenderButton); // Make sure you have a correct ID here
-        addEventButton = findViewById(R.id.addCalenderButton); // This ID needs to be in your layout
-        profileButton = findViewById(R.id.profileButton);
+        ImageButton qrButton = findViewById(R.id.qrButton); // Make sure you have a correct ID here
+        ImageButton eventButton = findViewById(R.id.calenderButton); // Make sure you have a correct ID here
+        ImageButton addEventButton = findViewById(R.id.addCalenderButton); // This ID needs to be in your layout
+        ImageButton profileButton = findViewById(R.id.profileButton);
         //initializeViews();
         // Find the text views on the event page xml
         TextView tvEventDate = findViewById(R.id.text_event_date);
@@ -224,7 +216,7 @@ public class AdminEventPage extends AppCompatActivity {
             }
         });
 
-        openNotifications = findViewById(R.id.notificationIconBtn);
+        ImageButton openNotifications = findViewById(R.id.notificationIconBtn);
         // Handles click on event notification
         openNotifications.setOnClickListener(new View.OnClickListener() {
             @Override
