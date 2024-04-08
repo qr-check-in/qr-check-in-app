@@ -1,7 +1,7 @@
 package com.example.qrcheckin.Admin;
 
 import static com.example.qrcheckin.R.layout.show_profile_admin;
-import com.example.qrcheckin.Admin.Admin;
+
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -9,7 +9,6 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
-import com.example.qrcheckin.Admin.AdminViewProfiles;
 import com.example.qrcheckin.Common.Image;
 
 import android.widget.ImageView;
@@ -37,7 +36,7 @@ import java.util.Map;
  * Can toggle geolocation tracking .
  * Listens for updates from the EditProfileFragment dialog and updates the UI.
  */
-public class ProfileActivityAdmin extends AppCompatActivity {
+public class AdminProfileActivity extends AppCompatActivity {
     Admin admin;
     ImageView editProfile;
     private SharedViewModel sharedViewModel;

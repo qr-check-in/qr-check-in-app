@@ -100,7 +100,7 @@
         <activity
             android:name=".Admin.AdminEventPage"
             android:exported="false"
-            android:parentActivityName=".Admin.AdminActivity"/>
+            android:parentActivityName=".Admin.AdminViewEvent"/>
         <activity
             android:name=".Admin.AdminViewProfiles"
             android:exported="false"
@@ -110,7 +110,7 @@
             android:parentActivityName=".Admin.AdminActivity"/>
         <activity
             android:name=".Admin.AdminImagePage"
-            android:parentActivityName=".Admin.AdminActivity"/>
+            android:parentActivityName=".Admin.AdminViewImages"/>
 
         <activity
             android:name=".Attendee.ProfileActivity"
@@ -119,7 +119,7 @@
             android:name=".Attendee.UpdatePictureFragment"
             android:exported="false" />
         <activity
-            android:name=".Admin.ProfileActivityAdmin"
+            android:name=".Admin.AdminProfileActivity"
             android:exported="false" />
         <activity
             android:name=".Event.EventListView"

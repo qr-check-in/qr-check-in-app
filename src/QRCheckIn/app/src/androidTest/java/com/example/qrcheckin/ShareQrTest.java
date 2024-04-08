@@ -12,7 +12,6 @@ import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.filters.LargeTest;
 
 import com.example.qrcheckin.Event.CreateAddEventDetails;
-import com.example.qrcheckin.Event.CreateGenerateEventQR;
 
 import org.junit.After;
 import org.junit.Before;
@@ -66,7 +65,7 @@ public class ShareQrTest {
         onView(withId(R.id.viewCheckInQRCode)).perform(click());
 
         // Check if the activity is being displayed is correct
-        onView(withId(R.id.qrCodeImageView)).check(matches(isDisplayed()));
+        onView(withId(R.id.eventPosterImageView)).check(matches(isDisplayed()));
 
         // perform click on shareQR to generate QR Code
         onView(withId(R.id.shareQR)).perform(click());

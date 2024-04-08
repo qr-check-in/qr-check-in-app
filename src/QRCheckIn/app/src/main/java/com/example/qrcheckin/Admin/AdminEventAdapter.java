@@ -50,9 +50,9 @@ public class AdminEventAdapter extends FirestoreRecyclerAdapter<Event, AdminEven
         holder.eventLocationTextView.setText(model.getEventLocation());
         holder.eventTimeTextView.setText(model.getEventDate());
         if (model.getCheckInQRCode() != null){
-            //ImageStorageManager storage = new ImageStorageManager(model.getPoster(), "/EventPosters");
-            ImageStorageManager storageQr = new ImageStorageManager(model.getCheckInQRCode(), "/QRCodes");
-            storageQr.displayImage(holder.qrCodeImageView);
+            ImageStorageManager storage = new ImageStorageManager(model.getPoster(), "/EventPosters");
+//            ImageStorageManager storageQr = new ImageStorageManager(model.getPoster(), "/QRCodes");
+            storage.displayImage(holder.qrCodeImageView);
         }
 
     }
@@ -66,7 +66,7 @@ public class AdminEventAdapter extends FirestoreRecyclerAdapter<Event, AdminEven
             eventNameTextView = itemView.findViewById(R.id.eventNameTextView);
             eventLocationTextView = itemView.findViewById(R.id.eventLocationTextView);
             eventTimeTextView = itemView.findViewById(R.id.eventTimeTextView);
-            qrCodeImageView = itemView.findViewById(R.id.qrCodeImageView);
+            qrCodeImageView = itemView.findViewById(R.id.eventPosterImageView);
 
             itemView.setOnClickListener(view -> {
                 int position = getBindingAdapterPosition();

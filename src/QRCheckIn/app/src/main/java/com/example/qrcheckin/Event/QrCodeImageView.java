@@ -45,7 +45,7 @@ public class QrCodeImageView extends AppCompatActivity {
         addEventButton = findViewById(R.id.addCalenderButton);
         profileButton = findViewById(R.id.profileButton);
 
-        qrCodeImage = findViewById(R.id.qrCodeImageView);
+        qrCodeImage = findViewById(R.id.eventPosterImageView);
         shareImage = findViewById(R.id.shareQR);
 
         // Retrieve the QR code from the Intent extras
@@ -125,7 +125,7 @@ public class QrCodeImageView extends AppCompatActivity {
     private void shareImageAndText() {
         // Get the image from the QR code ImageView
         // https://stackoverflow.com/questions/44178771/how-can-i-share-an-image-from-firebase-to-whatsapp-instagram-etc-android-studi#comment75382216_44178771 , Amr, 2018
-        ImageView content = findViewById(R.id.qrCodeImageView);
+        ImageView content = findViewById(R.id.eventPosterImageView);
         content.setDrawingCacheEnabled(true);
         Uri uri = Uri.parse(MediaStore.Images.Media.insertImage(getContentResolver(), content.getDrawingCache(), "title", "description"));
         Log.d("SHARE", String.format("share uri %s", qrCode.getUriString()));

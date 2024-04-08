@@ -33,45 +33,21 @@ public class AdminImagePage extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.admin_image_activity);
+
+        // Toolbar
         Toolbar toolbar = findViewById(R.id.dashboard);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
         TextView header = findViewById(R.id.mainHeader);
         header.setText("Images");
+
+
         imageView = findViewById(R.id.imageView);
         imageUriString = getIntent().getStringExtra("ImageUri");
         folderName = getIntent().getStringExtra("FolderName");
-        qrButton = findViewById(R.id.qrButton);
-        eventButton = findViewById(R.id.calenderButton);
-        addEventButton = findViewById(R.id.addCalenderButton);
-        profileButton = findViewById(R.id.profileButton);
-        qrButton.setOnClickListener(v -> {
-            Intent event = new Intent(getApplicationContext(), MainActivity.class);
-            startActivity(event);
-        });
 
-        // Set the "Add event" toolbar button listener
-        addEventButton.setOnClickListener(v -> {
-            Intent event = new Intent(getApplicationContext(), CreateAddEventDetails.class);
-            startActivity(event);
-        });
-
-        // Set the "Profile" toolbar button listener
-        profileButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent event = new Intent(getApplicationContext(), ProfileActivity.class);
-                startActivity(event);
-
-            }
-        });
-        eventButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent event = new Intent(getApplicationContext(), EventListView.class);
-                startActivity(event);
-            }
-        });
         // Display the image using Glide or Picasso
         ImageStorageManager storage = new ImageStorageManager(new Image(imageUriString, null), folderName);
         storage.displayImage(imageView);
