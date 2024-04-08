@@ -22,7 +22,11 @@ import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
-
+/**
+ * Activity for admin users to view and manage current events.
+ * This activity displays a list of events fetched from Firestore in a RecyclerView.
+ * Admins can interact with events to view details or perform other actions.
+ */
 public class AdminViewEvent extends AppCompatActivity {
     private RecyclerView eventsRecyclerView;
     private FirebaseFirestore db;
@@ -31,7 +35,13 @@ public class AdminViewEvent extends AppCompatActivity {
     ImageButton eventButton;
     ImageButton addEventButton;
     ImageButton profileButton;
-
+    /**
+     * Initializes the activity, sets up the toolbar and its actions, and prepares the RecyclerView for displaying events.
+     *
+     * @param savedInstanceState If the activity is being re-initialized after previously being shut down,
+     *                           this Bundle contains the data it most recently supplied in onSaveInstanceState(Bundle).
+     *                           Note: Otherwise it is null.
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -82,7 +92,9 @@ public class AdminViewEvent extends AppCompatActivity {
         setUpRecyclerView();
 
     }
-
+    /**
+     * Configures the RecyclerView with a Firestore query for events, using FirestoreRecyclerAdapter for real-time updates.
+     */
     private void setUpRecyclerView() {
         Query query = db.collection("events").orderBy("eventName", Query.Direction.DESCENDING);
         FirestoreRecyclerOptions<Event> options = new FirestoreRecyclerOptions.Builder<Event>()

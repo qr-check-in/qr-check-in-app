@@ -225,11 +225,11 @@ public class AdminEventPage extends AppCompatActivity {
         removeEvent.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                admin.deleteEvent(documentId);
+                showDeleteConfirmationDialog();
+//                admin.deleteEvent(documentId);
                 Intent event = new Intent(getApplicationContext(), AdminViewEvent.class);
                 startActivity(event);
-                // showDeleteConfirmationDialog();
+
             }
         });
 

@@ -19,7 +19,13 @@ import com.example.qrcheckin.Event.CreateAddEventDetails;
 import com.example.qrcheckin.Event.EventListView;
 import com.example.qrcheckin.R;
 
-
+/**
+ * An activity for displaying a full-sized image in the admin section,
+ * with the option to delete the image from storage.
+ * <p>
+ * This page is intended for admin users to view and manage individual images,
+ * including profile pictures and event posters, directly from Firebase storage.
+ */
 public class AdminImagePage extends AppCompatActivity {
     ImageView imageView;
     String imageUriString, folderName;
@@ -29,6 +35,13 @@ public class AdminImagePage extends AppCompatActivity {
     ImageButton profileButton;
 
     Admin admin;
+    /**
+     * Initializes the activity, sets up the toolbar, and displays the selected image.
+     *
+     * @param savedInstanceState If the activity is being re-initialized after previously being shut down,
+     *                           this Bundle contains the data it most recently supplied in onSaveInstanceState(Bundle).
+     *                           Note: Otherwise it is null.
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
