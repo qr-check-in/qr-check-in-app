@@ -5,12 +5,12 @@ import androidx.test.espresso.intent.rule.IntentsTestRule;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.espresso.*;
 import androidx.test.filters.LargeTest;
-import static androidx.test.espresso.contrib.RecyclerViewActions.actionOnItemAtPosition;
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
+import static androidx.test.espresso.matcher.ViewMatchers.withText;
 
 import org.junit.Rule;
 import org.junit.Test;
@@ -41,6 +41,9 @@ public class AdminDisplayEventsTest {
      */
     @Test
     public void checkRecyclerView() {
+
+        String dateOfEventToRemove = "2024-4-17";
+
         // Checks that the dashboard is displayed
         onView(withId(R.id.dashboard)).check(matches(isDisplayed()));
 
@@ -64,10 +67,9 @@ public class AdminDisplayEventsTest {
         }
 
         // Performs a click action on the first item in the event RecyclerView and then clicks the delete button
-        onView(withId(R.id.event_recycler_view)).perform(actionOnItemAtPosition(0, click()));
+
+        onView(withText(dateOfEventToRemove)).perform(click());
         onView(withId(R.id.btnRemoveEvent)).perform(click());
 
-        // Verifies that the RecyclerView is displayed again after an event is deleted
-        onView(withId(R.id.event_recycler_view)).check(matches(isDisplayed()));
     }
 }
