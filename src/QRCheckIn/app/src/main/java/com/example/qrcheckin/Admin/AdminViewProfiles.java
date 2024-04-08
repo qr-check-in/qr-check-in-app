@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import androidx.appcompat.widget.Toolbar;
@@ -29,7 +28,7 @@ import java.util.Map;
 
 public class AdminViewProfiles extends AppCompatActivity {
     private RecyclerView recyclerView;
-    private ProfileAdapter adapter;
+    private AdminProfileAdapter adapter;
     private FirebaseFirestore db;
     ImageButton qrButton;
     ImageButton eventButton;
@@ -125,12 +124,12 @@ public class AdminViewProfiles extends AppCompatActivity {
                         }
                     }
                 }
-                adapter = new ProfileAdapter(profilesList);
+                adapter = new AdminProfileAdapter(profilesList);
                 adapter.setOnItemClickListener(position -> {
                     if (position >= 0 && position < documentIds.size()) {
                         String docId = documentIds.get(position);
                         // Intent to navigate to the ProfileActivityAdmin with the document ID
-                        Intent intent = new Intent(AdminViewProfiles.this, ProfileActivityAdmin.class);
+                        Intent intent = new Intent(AdminViewProfiles.this, AdminProfileActivity.class);
                         intent.putExtra("DOCUMENT_ID", docId);
                         startActivity(intent);
                     }

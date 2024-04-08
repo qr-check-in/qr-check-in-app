@@ -15,12 +15,12 @@ import com.example.qrcheckin.R;
 
 import java.util.List;
 
-public class ProfileAdapter extends RecyclerView.Adapter<ProfileAdapter.ProfileViewHolder> {
+public class AdminProfileAdapter extends RecyclerView.Adapter<AdminProfileAdapter.ProfileViewHolder> {
     private List<Profile> profileList;
     private static OnItemClickListener listener;
 
     // Constructor
-    public ProfileAdapter(List<Profile> profileList) {
+    public AdminProfileAdapter(List<Profile> profileList) {
         this.profileList = profileList;
         //this.listener = listener;
     }

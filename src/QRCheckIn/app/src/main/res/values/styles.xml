@@ -19,6 +19,26 @@
         <item name="android:background">@color/Surface</item> <!-- Background color of the title and button bars -->
     </style>
 
+    <!-- Style for DatePickerDialog -->
+    <style name="CustomDatePickerStyle" parent="ThemeOverlay.MaterialComponents.Dialog">
+        <item name="colorPrimary">@color/Primary</item>
+        <item name="colorOnPrimary">@color/OnPrimary</item>
+        <item name="colorSurface">@color/Surface</item>
+        <item name="colorOnSurface">@color/OnSurface</item>
+        <item name="android:textColorPrimary">@color/OnSurface</item>
+        <item name="android:textColorSecondary">@color/OnSurface</item>
+<!--        <item name="android:windowBackground">@color/SurfaceContainer</item>-->
+    </style>
+
+    <!-- Style for TimePickerDialog -->
+    <style name="CustomTimePickerStyle" parent="ThemeOverlay.MaterialComponents.Dialog">
+        <item name="colorPrimary">@color/Primary</item>
+        <item name="colorOnPrimary">@color/OnPrimary</item>
+        <item name="colorSurface">@color/Surface</item>
+        <item name="android:windowBackground">@color/SurfaceContainer</item>
+    </style>
+
+
     <!-- Define the dialog animation -->
     <style name="DialogAnimation">
         <item name="android:windowEnterAnimation">@anim/dialog_slide_in</item>

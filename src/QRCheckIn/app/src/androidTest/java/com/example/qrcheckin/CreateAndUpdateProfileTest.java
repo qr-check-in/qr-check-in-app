@@ -12,8 +12,6 @@ import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.CoreMatchers.allOf;
 
-import android.content.SharedPreferences;
-
 import androidx.test.core.app.ActivityScenario;
 import androidx.test.espresso.action.ViewActions;
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
@@ -22,14 +20,13 @@ import androidx.test.filters.LargeTest;
 
 import com.example.qrcheckin.Attendee.ProfileActivity;
 
-import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
 @RunWith(AndroidJUnit4.class)
 @LargeTest
-public class CreateAndUpdateProfile {
+public class CreateAndUpdateProfileTest {
 
     @Rule
     public ActivityScenarioRule<ProfileActivity> activityScenarioRule = new ActivityScenarioRule<ProfileActivity>(ProfileActivity.class);
@@ -98,7 +95,7 @@ public class CreateAndUpdateProfile {
         onView(withId(R.id.btnUpdatePicture)).perform(click());
 
         // Check if the dialog is displayed
-        onView(withId(R.id.updatePictureFragment)).check(matches(isDisplayed()));
+        onView(withId(R.id.add_photo_fragment)).check(matches(isDisplayed()));
 
         // Click on the "Choose from Gallery" option
         onView(withId(R.id.gallery)).perform(click());

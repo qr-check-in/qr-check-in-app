@@ -27,23 +27,15 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="60dp"
         android:id="@+id/delete_button"
-        android:backgroundTint="@color/ChryslerBlue"
+        android:backgroundTint="@color/Secondary"
+        android:textSize="24dp"
         android:text="Delete"
+        android:textStyle="bold"
+        android:textColor="@color/Red"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/imageView"
         tools:layout_editor_absoluteX="161dp" />
 
-    <include
-        android:id="@+id/include"
-        layout="@layout/mainappbar"
-        android:layout_width="match_parent"
-        android:layout_height="45dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="1.0" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
