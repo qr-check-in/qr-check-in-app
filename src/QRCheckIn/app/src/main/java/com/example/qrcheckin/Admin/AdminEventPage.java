@@ -126,7 +126,7 @@ public class AdminEventPage extends AppCompatActivity {
         TextView tvEventDate = findViewById(R.id.text_event_date);
         TextView tvEventLocation = findViewById(R.id.text_event_location);
         TextView tvEventDescription = findViewById(R.id.text_event_description);
-        ImageView ivEventPoster = findViewById(R.id.image_event_poster);
+        ivEventPoster = findViewById(R.id.image_event_poster);
         ImageView ivEventPromoQr = findViewById(R.id.image_event_promo_qr);
         Button removeEvent = findViewById(R.id.btnRemoveEvent);
         openBottomSheetBtn = findViewById(R.id.openBottomSheetButton);

@@ -120,7 +120,8 @@
             android:exported="false" />
         <activity
             android:name=".Admin.AdminProfileActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:parentActivityName=".Admin.AdminViewProfiles"/>
         <activity
             android:name=".Event.EventListView"
             android:exported="false" />
