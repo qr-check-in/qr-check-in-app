@@ -45,6 +45,7 @@ public class AdminProfileActivity extends AppCompatActivity {
     private String contact = "";
     private String homepage = "";
     private AttendeeDatabaseManager dbManager;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -93,24 +94,24 @@ public class AdminProfileActivity extends AppCompatActivity {
             }
         });
 
-         //Use the viewProfile method with the fetched document ID
+        //Use the viewProfile method with the fetched document ID
         admin.viewProfile(documentId, new Admin.ProfileCallback() {
             @Override
             public void onProfileFetched(Map<String, Object> profile, String profilePic) {
                 // Update UI with fetched profile data
-                if (profile != null&&profilePic != null) {
+                if (profile != null && profilePic != null) {
                     runOnUiThread(() -> {
                         nameTextView.setText((String) profile.get("name"));
                         nameTextView2.setText((String) profile.get("name"));
                         contactTextView.setText((String) profile.get("contact"));
                         homepageTextView.setText((String) profile.get("homepage"));
-                        if(profilePic != null){
-                            Log.d("profilePic1", "profilepic is:"+profilePic);
-                            ImageStorageManager storage = new ImageStorageManager(new Image(profilePic,null),"/ProfilePictures");
+                        if (profilePic != null) {
+                            Log.d("profilePic1", "profilepic is:" + profilePic);
+                            ImageStorageManager storage = new ImageStorageManager(new Image(profilePic, null), "/ProfilePictures");
                             storage.displayImage(profileImageView);
                         }
                     });
-                }else {
+                } else {
                     nameTextView.setText((String) profile.get("name"));
                     nameTextView2.setText((String) profile.get("name"));
                     contactTextView.setText((String) profile.get("contact"));
@@ -122,6 +123,28 @@ public class AdminProfileActivity extends AppCompatActivity {
             @Override
             public void onError(Exception e) {
                 Log.e("ProfileActivityAdmin", "Error fetching profile", e);
+            }
+        });
+
+    }
+
+    public void deleteProfilePicture() {
+        dbManager.getDocRef().get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                Attendee attendee = documentSnapshot.toObject(Attendee.class);
+                if (attendee == null) {
+                    Log.e("Firestore", "Attendee doc not found");
+                } else {
+                    Profile profile = attendee.getProfile();
+                    if (profile.getProfilePicture() != null) {
+                        ImageStorageManager storage = new ImageStorageManager(profile.getProfilePicture(), "/ProfilePictures");
+                        // Remove profile picture from storage
+                        storage.deleteImage();
+                        // update attendee doc's field
+                        dbManager.updateProfilePicture(null);
+                    }
+                }
             }
         });
 
