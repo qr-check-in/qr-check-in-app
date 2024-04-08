@@ -70,9 +70,6 @@ public class AttendeeList extends AppCompatActivity {
         documentId = getIntent().getStringExtra("EVENT_DOC_ID");
         fieldName = getIntent().getStringExtra("FIELD_NAME");
 
-        // get all the attendees in the event from Firestore
-        getAllAttendees();
-
         // Set up the recycler view of attendees to be displayed
         attendeeDb = new AttendeeDatabaseManager();
         assert documentId != null;
@@ -83,11 +80,19 @@ public class AttendeeList extends AppCompatActivity {
                     .whereArrayContains(fieldName, documentId);
             // Hide getMap button if we're viewing the signups
             getMap.setVisibility(View.GONE);
+            setUpRecyclerView(query, fieldName, documentId);
+            // get all the attendees in the event from Firestore
+            getAllAttendees();
+
         } else {
             // Set the search query
             String searchString = String.format("%s.%s", fieldName, documentId);
             query = attendeeDb.getCollectionRef()
                     .whereGreaterThan(searchString, 0);
+            setUpRecyclerView(query, fieldName, documentId);
+
+            // get all the attendees in the event from Firestore
+            getAllAttendees();
 
             // Set the map button listener
             getMap.setVisibility(View.VISIBLE);
@@ -105,7 +110,6 @@ public class AttendeeList extends AppCompatActivity {
             });
         }
 
-        setUpRecyclerView(query, fieldName, documentId);
     }
 
     /**
@@ -139,7 +143,7 @@ public class AttendeeList extends AppCompatActivity {
         });
 
         // Connect the recycler view to it's adapter and layout manager
-        RecyclerView recyclerView = findViewById(R.id.recycler_view_attendee_check_ins);
+        recyclerView = findViewById(R.id.recycler_view_attendee_check_ins);
         recyclerView.setHasFixedSize(true); // RecyclerView inside constraint layout, won't grow
         recyclerView.setItemAnimator(null); // ItemAnimator is buggy, keep this OFF if possible
         recyclerView.setLayoutManager(new LinearLayoutManagerWrapper(this));
@@ -203,7 +207,9 @@ public class AttendeeList extends AppCompatActivity {
                     } else {
                         // If attendees list is not null, proceed to get geo points
                         getAllGeoPoints();
-                        header.setText("Total Participants: " + attendeeList.size());
+                        int size = 0;
+                        size = Objects.requireNonNull(recyclerView.getAdapter()).getItemCount();
+                        header.setText("All Attendees");
                     }
                 } else {
                     Log.d("AttendeeList", "Document does not exist");

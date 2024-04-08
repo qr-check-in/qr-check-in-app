@@ -5,7 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     app:cardCornerRadius="20dp"
-    app:cardUseCompatPadding="true">
+    app:cardUseCompatPadding="true"
+    app:cardBackgroundColor="@color/SurfaceContainerHigh">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -35,7 +36,7 @@
                 android:text="Notification Title"
                 android:textSize="16sp"
                 android:textStyle="bold"
-                android:textColor="@android:color/black"
+                android:textColor="@color/OnSurface"
                 android:layout_marginBottom="4dp"/>
 
             <TextView

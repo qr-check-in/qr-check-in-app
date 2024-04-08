@@ -138,7 +138,7 @@
                 android:id="@+id/signup_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:buttonTint="@color/NeonBlue"
+                android:buttonTint="@color/Tertiary"
                 android:textColor="#FFFFFF"
                 android:text="@string/signup_button_text"
                 android:layout_marginBottom="50dp"
@@ -169,11 +169,11 @@
         android:scaleType="fitCenter"
         android:src="@drawable/baseline_keyboard_arrow_up_24"
         android:layout_gravity="center_horizontal"
-        android:tint="@color/White"
         android:background="@drawable/event_bottom_sheet"
         app:layout_constraintBottom_toTopOf="@id/main_app_bar"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
+        app:layout_constraintEnd_toEndOf="parent"
+        app:tint="@color/White" />
 
     <include
             android:id="@+id/main_app_bar"

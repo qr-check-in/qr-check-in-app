@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -86,7 +87,7 @@ public class UpdatePictureFragment extends DialogFragment {
     }
 
     private void setupViews(View view) {
-        ImageView cancelImageView = view.findViewById(R.id.cancel);
+        Button cancelImageView = view.findViewById(R.id.cancel);
         TextView chooseGallery = view.findViewById(R.id.gallery);
         //TextView takePhoto = view.findViewById(R.id.textView_takePhoto);
 

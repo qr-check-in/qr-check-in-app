@@ -54,7 +54,7 @@ public class EditProfileFragment extends DialogFragment {
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity(), R.style.EditProfileAlertDialogue);
         LayoutInflater inflater = requireActivity().getLayoutInflater();
         View view = inflater.inflate(R.layout.edit_profile_fragment, null);
         TextView personName = view.findViewById(R.id.edit_name);

@@ -52,6 +52,8 @@
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/eventNameLayout"
+                    android:textColorHint="@color/OnSurface"
+                    android:textColor="@color/OnSurface"
                     android:layout_width="350dp"
                     android:layout_height="wrap_content"
                     android:paddingTop="10dp"
@@ -66,6 +68,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="Event Name"
+                        android:textColor="@color/OnSurface"
                         tools:layout_editor_absoluteX="30dp"
                         tools:layout_editor_absoluteY="78dp"
                         android:drawableLeft="@drawable/arrowresized"
@@ -97,7 +100,7 @@
                             android:layout_marginEnd="5dp"
                             android:background="@drawable/button_background"
                             android:padding="10dp"
-                            app:srcCompat="@drawable/calenderresize" />
+                            app:srcCompat="@drawable/ic_calendar" />
 
                         <TextView
                             android:id="@+id/eventDateText"
@@ -105,8 +108,8 @@
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_vertical"
                             android:layout_weight="5"
-                            android:textColorHint="@color/White"
-                            android:textColor="@color/White"
+                            android:textColorHint="@color/OnSurface"
+                            android:textColor="@color/OnSurface"
                             android:gravity="center_horizontal"
                             android:hint="Event Date"
                             android:inputType="date" />
@@ -128,7 +131,8 @@
                             android:layout_marginEnd="5dp"
                             android:background="@drawable/button_background"
                             android:padding="10dp"
-                            app:srcCompat="@drawable/baseline_access_time_24"></ImageButton>
+                            app:srcCompat="@drawable/ic_clock">
+                        </ImageButton>
 
                         <TextView
                             android:id="@+id/eventTimeText"
@@ -146,6 +150,8 @@
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/eventLocationLayout"
+                    android:textColorHint="@color/OnSurface"
+                    android:textColor="@color/OnSurface"
                     android:layout_width="350dp"
                     android:layout_height="wrap_content"
                     android:paddingTop="10dp"
@@ -159,7 +165,8 @@
                         android:id="@+id/eventLocationText"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="Event Location"
+                        android:hint="@string/event_location"
+                        android:textColor="@color/OnSurface"
                         tools:layout_editor_absoluteX="30dp"
                         tools:layout_editor_absoluteY="78dp"
                         android:drawableLeft="@drawable/location_resize"
@@ -175,11 +182,12 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
                 android:switchPadding="20dp"
-                android:text="Check-in Location Verification"
-                android:textSize="20dp"
-                android:thumbTint="@color/ChryslerBlue"
-                android:trackTint="@drawable/buttonselect"
-                app:layout_constraintBottom_toTopOf="@+id/mainbar"
+                android:text="@string/check_in_location_verification"
+                android:textColor="@color/OnSurface"
+                android:textSize="20sp"
+                android:thumb="@drawable/thumb"
+                android:track="@drawable/track"
+                app:layout_constraintBottom_toTopOf="@+id/numOfAttendeeLayout"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/linear"
@@ -188,6 +196,8 @@
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/numOfAttendeeLayout"
+                android:textColorHint="@color/OnSurface"
+                android:textColor="@color/OnSurface"
                 android:layout_width="250dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
@@ -205,6 +215,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="Event size (leave blank for no limit)"
+                    android:textColor="@color/OnSurface"
                     android:textSize="13dp"
                     android:gravity="center_horizontal"
                     android:textStyle="italic"
@@ -219,7 +230,7 @@
                 android:layout_height="wrap_content"
                 android:elevation="25dp"
                 app:cardCornerRadius="15dp"
-                app:cardBackgroundColor="@color/UranianBlue"
+                app:cardBackgroundColor="@color/SurfaceContainer"
                 app:layout_constraintBottom_toTopOf="@+id/uploadPosterButton"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -230,7 +241,7 @@
                     android:layout_height="wrap_content"
                     android:paddingHorizontal="30dp"
                     android:paddingVertical="20dp"
-                    android:text="Create a poster to attract attendees">
+                    android:text="No poster uploaded">
                 </TextView>
 
                 <ImageView
@@ -246,7 +257,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"
-                android:backgroundTint="@color/NeonBlue"
+                android:backgroundTint="@color/Secondary"
                 android:drawableEnd="@drawable/imageresize"
                 android:drawableTint="@color/White"
                 android:text="Upload Poster"
@@ -258,6 +269,8 @@
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/eventDescription"
+                android:textColorHint="@color/OnSurface"
+                android:textColor="@color/OnSurface"
                 android:layout_width="350dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="32dp"
@@ -275,7 +288,9 @@
                     android:id="@+id/eventDescriptionText"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Event Description(Optional)"
+                    android:hint="Event Description (Optional)"
+                    android:textColor="@color/OnSurface"
+                    android:textStyle="italic"
                     android:gravity="center_horizontal"
                     android:textSize="15dp">
                 </com.google.android.material.textfield.TextInputEditText>
@@ -289,9 +304,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="16dp"
-        android:backgroundTint="@color/NeonBlue"
+        android:backgroundTint="@color/Secondary"
         android:drawableEnd="@drawable/arrowresized"
-        android:drawableTint="@color/White"
+        android:drawableTint="@color/OnSurface"
         android:text="Next"
         app:layout_constraintTop_toBottomOf="@+id/eventDescription"
         app:layout_constraintBottom_toTopOf="@+id/mainbar"
