@@ -2,10 +2,6 @@ package com.example.qrcheckin.Admin;
 
 import static android.content.ContentValues.TAG;
 
-import com.example.qrcheckin.Common.Image;
-import com.example.qrcheckin.Event.AttendeeList;
-import com.example.qrcheckin.Event.Event;
-
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
@@ -36,12 +32,11 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import com.example.qrcheckin.Attendee.AttendeeDatabaseManager;
-import com.example.qrcheckin.Attendee.ProfileActivity;
+import com.example.qrcheckin.Common.Image;
 import com.example.qrcheckin.Common.ImageStorageManager;
-import com.example.qrcheckin.Common.MainActivity;
-import com.example.qrcheckin.Event.CreateAddEventDetails;
+import com.example.qrcheckin.Event.AttendeeList;
+import com.example.qrcheckin.Event.Event;
 import com.example.qrcheckin.Event.EventDatabaseManager;
-import com.example.qrcheckin.Event.EventListView;
 import com.example.qrcheckin.Event.QRCode;
 import com.example.qrcheckin.Event.QrCodeImageView;
 import com.example.qrcheckin.Notifications.CreateNotification;
@@ -225,11 +220,7 @@ public class AdminEventPage extends AppCompatActivity {
         removeEvent.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                admin.deleteEvent(documentId);
-                Intent event = new Intent(getApplicationContext(), AdminViewEvent.class);
-                startActivity(event);
-                // showDeleteConfirmationDialog();
+                showDeleteConfirmationDialog();
             }
         });
 
@@ -597,6 +588,8 @@ public class AdminEventPage extends AppCompatActivity {
                 JSONArray regArray = new JSONArray(signups);
                 firebaseMessaging.sendMessageToClient(regArray, "Event Shutdown: "+ event.getEventName(), "An event you have signed up for has been shut down", "");
                 admin.deleteEvent(documentId);
+                Intent event = new Intent(getApplicationContext(), AdminViewEvent.class);
+                startActivity(event);
                 finish();
             }
         });
