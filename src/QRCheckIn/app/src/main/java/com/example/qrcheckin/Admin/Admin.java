@@ -70,6 +70,28 @@ public class Admin extends Attendee {
      * @param eventId the ID of the event to delete.
      */
     public void deleteEvent(String eventId) {
+        db.collection("events").document(eventId).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                if (documentSnapshot.exists()) {
+                    // Convert the documentSnapshot to an Event object
+                    Event event = documentSnapshot.toObject(Event.class);
+                    Image poster = event.getPoster();
+                    if (event != null && poster!=null) {
+                        // Use your Event object here
+                        ImageStorageManager storage = new ImageStorageManager(poster, "/EventPosters");
+                        storage.deleteImage();
+                    }
+                } else {
+                    Log.d("Firestore", "No such document");
+                }
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@android.support.annotation.NonNull Exception e) {
+                Log.d("Firestore", "Failed to fetch document: ", e);
+            }
+        });
         db.collection("events").document(eventId).delete()
                 .addOnSuccessListener(aVoid -> System.out.println("Event successfully deleted!"))
                 .addOnFailureListener(e -> System.out.println("Error deleting event: " + e));   }

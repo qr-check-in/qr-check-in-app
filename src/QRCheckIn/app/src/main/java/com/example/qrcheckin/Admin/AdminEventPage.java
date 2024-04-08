@@ -224,8 +224,8 @@ public class AdminEventPage extends AppCompatActivity {
         removeEvent.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                admin.deleteEvent(documentId);
-                showDeleteConfirmationDialog();
+                admin.deleteEvent(documentId);
+//                showDeleteConfirmationDialog();
                 Intent event = new Intent(getApplicationContext(), AdminViewEvent.class);
                 startActivity(event);
             }
@@ -594,7 +594,7 @@ public class AdminEventPage extends AppCompatActivity {
                 MyNotificationManager firebaseMessaging = new MyNotificationManager(getApplicationContext());
                 JSONArray regArray = new JSONArray(signups);
                 firebaseMessaging.sendMessageToClient(regArray, "Event Shutdown", "An event you have signed up for has been shut down", "");
-                deleteEvent();
+                admin.deleteEvent(documentId);
             }
         });
         builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
