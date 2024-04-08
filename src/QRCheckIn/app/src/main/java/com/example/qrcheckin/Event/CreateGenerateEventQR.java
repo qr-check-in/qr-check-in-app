@@ -24,6 +24,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import com.bumptech.glide.Glide;
+import com.example.qrcheckin.Attendee.AttendeeDatabaseManager;
 import com.example.qrcheckin.Common.Image;
 import com.example.qrcheckin.Common.ImageStorageManager;
 import com.example.qrcheckin.Common.Utils;
@@ -226,8 +227,10 @@ public class CreateGenerateEventQR extends AppCompatActivity {
                     String eventId = db.storeEvent(newEvent);
                     Log.d("CREATED EVENT", String.format("stored event doc ID %s", eventId));
                     EventDatabaseManager eventDb = new EventDatabaseManager(eventId);
+                    AttendeeDatabaseManager attendDb = new AttendeeDatabaseManager(organizerFcm);
 
                     eventDb.addToArrayField("attendee", organizerFcm);
+                    attendDb.addToArrayField("attendedEvents", eventId);
 
                     Intent activity = new Intent(getApplicationContext(), EventListView.class);
                     startActivity(activity);

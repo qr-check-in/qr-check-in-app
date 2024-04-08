@@ -202,10 +202,6 @@ public class OrganizersEventPageActivity extends AppCompatActivity {
                         });
                     }
 
-                    if (Objects.equals(event.getOrganizer(), fcmToken)) {
-
-                    }
-
                 } else {
                     Log.d("Firestore", String.format("No such document with id %s", documentId));
                 }
@@ -228,6 +224,10 @@ public class OrganizersEventPageActivity extends AppCompatActivity {
                     assert event != null;
                     // Update the CheckBox upon a change in the event doc
                     setSignupCheckBox(event.getSignupLimit(), event.getSignups());
+                    if (Objects.equals(event.getOrganizer(), fcmToken)) {
+                        checkAttendeeMilestone();
+                        checkSignUpMilestone();
+                    }
                 } else {
                     Log.d(TAG, "Current data: null");
                 }
@@ -377,7 +377,6 @@ public class OrganizersEventPageActivity extends AppCompatActivity {
         dialog.setContentView(R.layout.bottom_sheet_layout);
 
         LinearLayout viewCheckInQRCode = dialog.findViewById(R.id.viewCheckInQRCode);
-        LinearLayout editEventDetails = dialog.findViewById(R.id.editEventDetails);
         LinearLayout createEventNotification = dialog.findViewById(R.id.createEventNotification);
         LinearLayout viewEventSignups = dialog.findViewById(R.id.viewSignedUp);
         LinearLayout viewEventParticipants = dialog.findViewById(R.id.viewEventCheckin);
@@ -389,15 +388,6 @@ public class OrganizersEventPageActivity extends AppCompatActivity {
             public void onClick(View v) {
                 // Call method to display acitivty to share the promotional QR code
                 shareQRCode(checkInQRCode, "Check-in QR Code");
-            }
-        });
-
-        editEventDetails.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialog.dismiss();
-                Toast.makeText(getApplicationContext(),"Feature Coming Soon!",Toast.LENGTH_SHORT).show();
-
             }
         });
 
@@ -526,6 +516,7 @@ public class OrganizersEventPageActivity extends AppCompatActivity {
             HashMap<String, Integer> milestones = event.getSignupMilestone();
             int currentAttendeeSize = event.getSignups().size();
 
+
             // Check if the current attendee size matches any milestone
             for (String milestone : milestones.keySet()) {
                 int milestoneValue = Integer.parseInt(milestone);
@@ -547,7 +538,7 @@ public class OrganizersEventPageActivity extends AppCompatActivity {
                                     // Only show the Snackbar after successfully updating the document
                                     runOnUiThread(() -> {
                                         // Display a Snackbar message indicating the milestone reached
-                                        String message = "Congratulations, you have passed milestone " + milestoneValue + " sign-ups!";
+                                        String message = "Congratulations, milestone achieved: " + milestoneValue + " sign-ups!";
                                         Snackbar snackbar = Snackbar.make(findViewById(android.R.id.content), message, Snackbar.LENGTH_INDEFINITE);
                                         snackbar.setAction("DISMISS", new View.OnClickListener() {
                                             @Override
@@ -579,6 +570,11 @@ public class OrganizersEventPageActivity extends AppCompatActivity {
             HashMap<String, Integer> milestones = event.getAttendeeMilestone();
             int currentAttendeeSize = event.getAttendee().size();
 
+            // Skip the milestone check if the only attendee is the organizer
+            if (currentAttendeeSize == 1 && event.getOrganizer().equals(event.getAttendee().get(0))) {
+                return; // Exit the method early
+            }
+
             // Check if the current attendee size matches any milestone
             for (String milestone : milestones.keySet()) {
                 int milestoneValue = Integer.parseInt(milestone);
@@ -600,7 +596,7 @@ public class OrganizersEventPageActivity extends AppCompatActivity {
                                     // Only show the Snackbar after successfully updating the document
                                     runOnUiThread(() -> {
                                         // Display a Snackbar message indicating the milestone reached
-                                        String message = "Congratulations, you have passed milestone " + milestoneValue + " attendees!";
+                                        String message = "Congratulations, milestone achieved: " + milestoneValue + " attendees!";
                                         Snackbar snackbar = Snackbar.make(findViewById(android.R.id.content), message, Snackbar.LENGTH_INDEFINITE);
                                         snackbar.setAction("DISMISS", new View.OnClickListener() {
                                             @Override

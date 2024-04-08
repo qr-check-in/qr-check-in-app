@@ -94,13 +94,24 @@
             android:name=".Event.CreateAddEventDetails"
             android:exported="false" />
 
-        <activity android:name=".Admin.AdminViewEvent"/>
-        <activity android:name=".Admin.AdminEventPage"
-            android:exported="false"/>
-        <activity android:name=".Admin.AdminViewProfiles"
-            android:exported="false"/>
-        <activity android:name=".Admin.AdminViewImages"/>
-        <activity android:name=".Admin.AdminImagePage"/>
+        <activity
+            android:name=".Admin.AdminViewEvent"
+            android:parentActivityName=".Admin.AdminActivity"/>
+        <activity
+            android:name=".Admin.AdminEventPage"
+            android:exported="false"
+            android:parentActivityName=".Admin.AdminActivity"/>
+        <activity
+            android:name=".Admin.AdminViewProfiles"
+            android:exported="false"
+            android:parentActivityName=".Admin.AdminActivity"/>
+        <activity
+            android:name=".Admin.AdminViewImages"
+            android:parentActivityName=".Admin.AdminActivity"/>
+        <activity
+            android:name=".Admin.AdminImagePage"
+            android:parentActivityName=".Admin.AdminActivity"/>
+
         <activity
             android:name=".Attendee.ProfileActivity"
             android:exported="false" />

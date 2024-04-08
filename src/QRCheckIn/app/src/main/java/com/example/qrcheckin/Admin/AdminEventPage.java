@@ -4,6 +4,7 @@ import static android.content.ContentValues.TAG;
 
 import com.example.qrcheckin.Event.Event;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -27,6 +28,9 @@ import com.example.qrcheckin.Common.MainActivity;
 import com.example.qrcheckin.Event.CreateAddEventDetails;
 import com.example.qrcheckin.Event.EventDatabaseManager;
 import com.example.qrcheckin.Event.EventListView;
+import com.example.qrcheckin.Notifications.DialogRecyclerView;
+import com.example.qrcheckin.Notifications.Notification;
+import com.example.qrcheckin.Notifications.NotificationDatabaseManager;
 import com.example.qrcheckin.R;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -34,7 +38,13 @@ import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Date;
+import java.util.Locale;
 import java.util.Objects;
 
 /**
@@ -49,10 +59,12 @@ public class AdminEventPage extends AppCompatActivity {
     ImageButton eventButton;
     ImageButton addEventButton;
     ImageButton profileButton;
+    ImageButton openNotifications;
     CheckBox signupCheckBox;
     TextView signupLimitReached;
     Admin admin;
     private ImageView ivEventPoster, ivEventPromoQr;
+    private String documentId;
 
     private String fcmToken;
     /**
@@ -71,11 +83,13 @@ public class AdminEventPage extends AppCompatActivity {
         // Set and display the main bar
 
 
-        Toolbar toolbar = findViewById(R.id.Toolbar);
+        Toolbar toolbar = findViewById(R.id.event_page_toolbar);
         setSupportActionBar(toolbar);
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayShowTitleEnabled(false);
         }
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
         qrButton = findViewById(R.id.qrButton); // Make sure you have a correct ID here
         eventButton = findViewById(R.id.calenderButton); // Make sure you have a correct ID here
         addEventButton = findViewById(R.id.addCalenderButton); // This ID needs to be in your layout
@@ -88,7 +102,7 @@ public class AdminEventPage extends AppCompatActivity {
         ImageView ivEventPoster = findViewById(R.id.image_event_poster);
         ImageView ivEventPromoQr = findViewById(R.id.image_event_promo_qr);
         Button removeEvent = findViewById(R.id.btnRemoveEvent);
-        Button back = findViewById(R.id.back_button);
+
         signupCheckBox = findViewById(R.id.signup_button);
         signupLimitReached = findViewById(R.id.signup_limit_text);
         signupLimitReached.setVisibility(View.INVISIBLE);
@@ -123,7 +137,7 @@ public class AdminEventPage extends AppCompatActivity {
         admin = new Admin();
         // Retrieve the event passed from the previous activity
         Intent intent = getIntent();
-        String documentId = intent.getStringExtra("DOCUMENT_ID");
+        documentId = intent.getStringExtra("DOCUMENT_ID");
         if(documentId == null) {
             Log.e(TAG, "Document ID is null");
             // Handle the error, maybe finish the activity
@@ -157,13 +171,7 @@ public class AdminEventPage extends AppCompatActivity {
                 startActivity(event);
             }
         });
-        back.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent event = new Intent(getApplicationContext(), AdminViewEvent.class);
-                startActivity(event);
-            }
-        });
+
         //documentId = getIntent().getStringExtra("DOCUMENT_ID");
 
         eventDb = new EventDatabaseManager(documentId);
@@ -215,6 +223,15 @@ public class AdminEventPage extends AppCompatActivity {
                 }
             }
         });
+
+        openNotifications = findViewById(R.id.notificationIconBtn);
+        // Handles click on event notification
+        openNotifications.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                NotificationListDialog();
+            }
+        });
     }
     public void setSignupCheckBox(int signupLimit, ArrayList<String> signups){
         // Set status of the checkbox
@@ -236,4 +253,50 @@ public class AdminEventPage extends AppCompatActivity {
 
     }
 
+    /**
+     * Opens dialog with list of notifications/announcements for the event
+     */
+    public void NotificationListDialog(){
+        ArrayList<Notification> notifications = new ArrayList<>();
+        Context context = this;
+        NotificationDatabaseManager db = new NotificationDatabaseManager();
+        // Get all notifications
+        db.getCollectionRef().get().addOnSuccessListener(notificationSnapshots -> {
+            for(DocumentSnapshot snapshot : notificationSnapshots){
+                Notification notification = snapshot.toObject(Notification.class);
+                // If a notification belongs to this Event, add it to the list to be displayed
+                if(Objects.equals(notification.getEventID(), documentId)){
+                    notifications.add(notification);
+                }
+            }
+            // Sort notifications by dateTime field
+            // openai, 2024, chatgpt: how to sort the list based on date
+            Collections.sort(notifications, new Comparator<Notification>() {
+                @Override
+                public int compare(Notification n1, Notification n2) {
+                    // Parse dateTime strings to Date objects for comparison
+                    SimpleDateFormat dateFormat = new SimpleDateFormat("MMM, dd, yyyy; h:mm a", Locale.getDefault());
+                    try {
+                        Date date1 = dateFormat.parse(n1.getDateTime());
+                        Date date2 = dateFormat.parse(n2.getDateTime());
+                        // Compare Date objects in descending order
+                        return date2.compareTo(date1);
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                        return 0;
+                    }
+                }
+            });
+
+            // Create dialog recycler view to display notifications
+            DialogRecyclerView listDialog = new DialogRecyclerView(
+                    context, notifications) {
+                @Override
+                public void onCreate(Bundle savedInstanceState) {
+                    super.onCreate(savedInstanceState);
+                }
+            };
+            listDialog.show();
+        });
+    }
 }

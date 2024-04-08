@@ -20,14 +20,7 @@
         app:layout_constraintTop_toBottomOf="@+id/events"
         app:layout_constraintBottom_toTopOf="@+id/main_app_bar"
         tools:listitem="@layout/admin_events_list"/>
-    <Button
-        android:id="@+id/back_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="BACK"
-        app:layout_constraintBottom_toTopOf="@+id/main_app_bar"
-        android:backgroundTint="@color/ChryslerBlue"
-        app:layout_constraintEnd_toEndOf="parent"/>
+
     <include
         android:id="@+id/main_app_bar"
         layout="@layout/mainappbar"

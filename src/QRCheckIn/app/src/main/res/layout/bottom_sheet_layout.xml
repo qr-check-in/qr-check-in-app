@@ -36,27 +36,27 @@
             android:textSize="20dp" />
     </LinearLayout>
     
-    <LinearLayout
-        android:id="@+id/editEventDetails"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:padding="5dp">
+<!--    <LinearLayout-->
+<!--        android:id="@+id/editEventDetails"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:orientation="horizontal"-->
+<!--        android:padding="5dp">-->
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Edit Event Details"
-            android:textSize="20dp"
-            android:textColor="@color/White"
-            android:drawableLeft="@drawable/baseline_edit_document_24"
-            android:drawableTint="@color/Black"
-            android:drawablePadding="25dp"
-            android:paddingStart="30dp"
-            android:paddingBottom="10dp"
-            android:layout_gravity="center_horizontal"
-            />
-    </LinearLayout>
+<!--        <TextView-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:text="Edit Event Details"-->
+<!--            android:textSize="20dp"-->
+<!--            android:textColor="@color/White"-->
+<!--            android:drawableLeft="@drawable/baseline_edit_document_24"-->
+<!--            android:drawableTint="@color/Black"-->
+<!--            android:drawablePadding="25dp"-->
+<!--            android:paddingStart="30dp"-->
+<!--            android:paddingBottom="10dp"-->
+<!--            android:layout_gravity="center_horizontal"-->
+<!--            />-->
+<!--    </LinearLayout>-->
 
     <LinearLayout
         android:id="@+id/createEventNotification"

@@ -33,7 +33,7 @@ public class AdminViewImages extends AppCompatActivity implements ImageAdapter.O
     private ImageAdapter adapter;
     private FirebaseFirestore db;
     Map<Image, String> imageUriToFolderMap = new HashMap<>();
-    Button back;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,6 +44,7 @@ public class AdminViewImages extends AppCompatActivity implements ImageAdapter.O
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
         TextView header = findViewById(R.id.mainHeader);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         header.setText("Images");
 
         imagesRecyclerView = findViewById(R.id.image_recycler_view);
@@ -53,45 +54,7 @@ public class AdminViewImages extends AppCompatActivity implements ImageAdapter.O
         db = FirebaseFirestore.getInstance();
         adapter.setOnImageClickListener(this);
         fetchAndDisplayImages();
-        qrButton = findViewById(R.id.qrButton);
-        eventButton = findViewById(R.id.calenderButton);
-        addEventButton = findViewById(R.id.addCalenderButton);
-        profileButton = findViewById(R.id.profileButton);
-        qrButton.setOnClickListener(v -> {
-            Intent event = new Intent(getApplicationContext(), MainActivity.class);
-            startActivity(event);
-        });
 
-        // Set the "Add event" toolbar button listener
-        addEventButton.setOnClickListener(v -> {
-            Intent event = new Intent(getApplicationContext(), CreateAddEventDetails.class);
-            startActivity(event);
-        });
-
-        // Set the "Profile" toolbar button listener
-        profileButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent event = new Intent(getApplicationContext(), ProfileActivity.class);
-                startActivity(event);
-
-            }
-        });
-        eventButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent event = new Intent(getApplicationContext(), EventListView.class);
-                startActivity(event);
-            }
-        });
-        back = findViewById(R.id.back_button);
-        back.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent event = new Intent(getApplicationContext(), AdminActivity.class);
-                startActivity(event);
-            }
-            });
     }
 
     private void fetchAndDisplayImages() {

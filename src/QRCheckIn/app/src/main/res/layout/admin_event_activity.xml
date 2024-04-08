@@ -6,21 +6,6 @@
     android:layout_height="match_parent">
 
 
-    <!--    <TextView-->
-    <!--        android:id="@+id/text_event_name"-->
-    <!--        android:layout_width="match_parent"-->
-    <!--        android:layout_height="wrap_content"-->
-    <!--        android:layout_gravity="center"-->
-    <!--        android:text="@string/header_event_details"-->
-    <!--        android:textAlignment="center"-->
-    <!--        android:textColor="@android:color/black"-->
-    <!--        android:textSize="28sp"-->
-    <!--        app:layout_constraintEnd_toEndOf="parent"-->
-    <!--        app:layout_constraintStart_toStartOf="parent"-->
-    <!--        app:layout_constraintTop_toTopOf="parent">-->
-    <!--        -->
-    <!--    </TextView>-->
-
     <include
         layout="@layout/event_toolbar"
         android:id="@+id/event_page_toolbar"
@@ -152,22 +137,18 @@
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
-    <Button
-        android:id="@+id/back_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="BACK"
-        app:layout_constraintBottom_toTopOf="@+id/main_app_bar"
-        android:backgroundTint="@color/ChryslerBlue"
-        app:layout_constraintEnd_toEndOf="parent"/>
+
     <Button
         android:id="@+id/btnRemoveEvent"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Remove Event"
+        android:textStyle="bold"
+        android:layout_marginBottom="5dp"
         app:layout_constraintBottom_toTopOf="@+id/main_app_bar"
         app:layout_constraintStart_toStartOf="parent"
-        android:backgroundTint="@color/ChryslerBlue" />
+        app:layout_constraintEnd_toEndOf="parent"
+        android:backgroundTint="@color/Red" />
 
     <include
         android:id="@+id/main_app_bar"

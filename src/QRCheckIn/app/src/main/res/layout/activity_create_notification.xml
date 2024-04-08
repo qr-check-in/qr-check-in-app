@@ -111,24 +111,16 @@
         android:id="@+id/addNotification"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="24dp"
+        android:layout_marginBottom="32dp"
         android:backgroundTint="@color/NeonBlue"
         android:text="Post Annoucement"
-        app:layout_constraintBottom_toTopOf="@id/notificationMainBar"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.95"
+        app:layout_constraintHorizontal_bias="0.90"
         app:layout_constraintStart_toStartOf="parent"
         android:drawableRight="@drawable/notification_bell_resize"
         android:drawableTint="@color/White"
         />
 
-    <include
-        layout="@layout/mainappbar"
-        android:id="@+id/notificationMainBar"
-        android:layout_height="45dp"
-        android:layout_width="wrap_content"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -20,15 +20,5 @@
             app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
             tools:listitem="@layout/image_list" />
 
-    <Button
-        android:id="@+id/back_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/images"
-        android:layout_marginTop="622dp"
-        android:layout_centerHorizontal="true"
-        android:backgroundTint="@color/ChryslerBlue"
-        android:text="Back"
-        tools:layout_editor_absoluteX="173dp" />
 
 </RelativeLayout>

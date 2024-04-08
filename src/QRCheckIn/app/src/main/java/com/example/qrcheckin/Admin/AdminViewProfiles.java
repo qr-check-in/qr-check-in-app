@@ -47,6 +47,7 @@ public class AdminViewProfiles extends AppCompatActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
         TextView header = findViewById(R.id.mainHeader);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         header.setText("Current User Profiles");
         setupRecyclerView();
         qrButton = findViewById(R.id.qrButton);
@@ -54,14 +55,7 @@ public class AdminViewProfiles extends AppCompatActivity {
         addEventButton = findViewById(R.id.addCalenderButton);
         profileButton = findViewById(R.id.profileButton);
         admin = new Admin();
-        Button backButton = findViewById(R.id.back_button);
-        backButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent event = new Intent(getApplicationContext(), AdminActivity.class);
-                startActivity(event);
-            }
-        });
+
         qrButton.setOnClickListener(v -> {
             Intent event = new Intent(getApplicationContext(), MainActivity.class);
             startActivity(event);
