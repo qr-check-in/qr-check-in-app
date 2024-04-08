@@ -16,6 +16,9 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
@@ -24,6 +27,7 @@ import android.widget.CompoundButton;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -259,8 +263,28 @@ public class OrganizersEventPageActivity extends AppCompatActivity {
         openNotifications.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Call the NotificationListDialog method when the button is clicked
-                NotificationListDialog();
+                // Manually inflate and show the menu
+                PopupMenu popupMenu = new PopupMenu(OrganizersEventPageActivity.this, openNotifications);
+                popupMenu.getMenuInflater().inflate(R.menu.event_menu, popupMenu.getMenu());
+
+                // Set item click listener for the menu items
+                popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                    @Override
+                    public boolean onMenuItemClick(MenuItem item) {
+                        int id = item.getItemId();
+                        if (id == R.id.notificationTab) {
+                            Toast.makeText(getApplicationContext(), "Notification tab was selected", Toast.LENGTH_SHORT).show();
+                            return true;
+                        } else if (id == R.id.milestoneTab) {
+                            Toast.makeText(getApplicationContext(), "Milestone tab was selected", Toast.LENGTH_SHORT).show();
+                            return true;
+                        }
+                        return false;
+                    }
+                });
+
+                // Show the popup menu
+                popupMenu.show();
             }
         });
 
@@ -509,6 +533,21 @@ public class OrganizersEventPageActivity extends AppCompatActivity {
             activity.putExtra("QRCodeBitmap", bitmap);
             activity.putExtra("EventName&Date", eventName + "_" + eventDate);
             startActivity(activity);
+        }
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        if (id == R.id.notificationTab) {
+            Toast.makeText(getApplicationContext(), "Notification tab was selected", Toast.LENGTH_SHORT).show();
+            NotificationListDialog();
+            return true;
+        } else if (id == R.id.milestoneTab) {
+            Toast.makeText(getApplicationContext(), "Milestone tab was selected", Toast.LENGTH_SHORT).show();
+            return true;
+        } else {
+            return super.onOptionsItemSelected(item);
         }
     }
 

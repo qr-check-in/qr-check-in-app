@@ -11,6 +11,8 @@ public class Event implements Serializable {
     private ArrayList<String> attendee;
     private ArrayList<String> signups;
     private ArrayList<String> notifications;
+
+    private ArrayList<String> eventMilestones;
     private String organizer;
     private QRCode checkInQRCode;
     private QRCode promoQRCode;
@@ -61,7 +63,16 @@ public class Event implements Serializable {
         this.attendee = new ArrayList<String>();
         this.signups = new ArrayList<String>();
         this.notifications = new ArrayList<String>();
+        this.eventMilestones = new ArrayList<>();
         this.topicName = topicName;
+    }
+
+    public ArrayList<String> getEventMilestones() {
+        return eventMilestones;
+    }
+
+    public void setEventMilestones(ArrayList<String> eventMilestones) {
+        this.eventMilestones = eventMilestones;
     }
 
     /**
