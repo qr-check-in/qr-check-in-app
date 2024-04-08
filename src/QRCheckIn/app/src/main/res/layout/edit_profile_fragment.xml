@@ -2,7 +2,8 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    style="EditProfileAlertDialogue">
 
     <EditText
         android:id="@+id/edit_name"
@@ -12,7 +13,9 @@
         android:layout_marginBottom="10dp"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
-        android:hint="Name" />
+        android:hint="Name"
+        android:textColorHint="@color/OnSurface"
+        android:textColor="@color/OnSurface"/>
 
     <EditText
         android:id="@+id/edit_contact"
@@ -21,7 +24,9 @@
         android:layout_marginBottom="10dp"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
-        android:hint="Contact" />
+        android:hint="Contact"
+        android:textColorHint="@color/OnSurface"
+        android:textColor="@color/OnSurface"/>
 
     <EditText
         android:id="@+id/edit_homepage"
@@ -30,6 +35,8 @@
         android:layout_marginBottom="10dp"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
-        android:hint="Homepage"/>
+        android:hint="Homepage"
+        android:textColorHint="@color/OnSurface"
+        android:textColor="@color/OnSurface"/>
 
 </LinearLayout>
