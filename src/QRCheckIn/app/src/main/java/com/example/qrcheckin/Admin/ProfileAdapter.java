@@ -61,6 +61,27 @@ public class ProfileAdapter extends RecyclerView.Adapter<ProfileAdapter.ProfileV
             storage.displayImage(holder.photoImageView);}
 
     }
+    // https://stackoverflow.com/questions/36712704/why-is-my-item-image-in-custom-recyclerview-changing-while-scrolling, Fathima km, 2017
+    // Override getItemId and getItemViewType methods to prevent flickering of images while scrolling through the recycler view
+    /**
+     * Returns the position as the stable item ID
+     * @param position Adapter position to query
+     * @return position Int of the item's positon
+     */
+    @Override
+    public long getItemId(int position) {
+        return position;
+    }
+
+    /**
+     * Returns the position as the view type of the item
+     * @param position position to query
+     * @return position Int of the item's position
+     */
+    @Override
+    public int getItemViewType(int position) {
+        return position;
+    }
 
     @Override
     public int getItemCount() {
