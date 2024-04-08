@@ -2,25 +2,10 @@
 <project version="4">
   <component name="deploymentTargetDropDown">
     <value>
-      <entry key="AdminDisplayEventsTest">
-        <State />
-      </entry>
-      <entry key="AdminDisplayProfilesTest">
-        <State />
-      </entry>
-      <entry key="EventTest">
-        <State />
-      </entry>
-      <entry key="ImageStorageManagerTest">
-        <State />
-      </entry>
-      <entry key="QRCodeGeneratorTest">
-        <State />
-      </entry>
       <entry key="app">
-      <entry key="CreateAndUpdateProfileTest">
         <State>
-          <runningDeviceTargetSelectedWithDropDown>
+          <multipleDevicesSelectedInDropDown value="true" />
+          <runningDeviceTargetsSelectedWithDialog>
             <Target>
               <type value="RUNNING_DEVICE_TARGET" />
               <deviceKey>
@@ -30,25 +15,16 @@
                 </Key>
               </deviceKey>
             </Target>
-          </runningDeviceTargetSelectedWithDropDown>
-          <timeTargetWasSelectedWithDropDown value="2024-04-08T15:46:40.069978600Z" />
-        </State>
-      </entry>
-      <entry key="app">
-        <State>
-          <targetSelectedWithDropDown>
             <Target>
-              <type value="QUICK_BOOT_TARGET" />
+              <type value="RUNNING_DEVICE_TARGET" />
               <deviceKey>
                 <Key>
                   <type value="VIRTUAL_DEVICE_PATH" />
-                  <value value="C:\Users\sakib\.android\avd\Pixel_6_API_34.avd" />
+                  <value value="C:\Users\Daniel Thai\.android\avd\Pixel_6_API_34.avd" />
                 </Key>
               </deviceKey>
             </Target>
-          </targetSelectedWithDropDown>
-          <timeTargetWasSelectedWithDropDown value="2024-04-08T07:33:59.618569Z" />
-          <multipleDevicesSelectedInDropDown value="true" />
+          </runningDeviceTargetsSelectedWithDialog>
           <targetsSelectedWithDialog>
             <Target>
               <type value="QUICK_BOOT_TARGET" />
@@ -70,9 +46,6 @@
             </Target>
           </targetsSelectedWithDialog>
         </State>
-      </entry>
-      <entry key="testEditButton()">
-        <State />
       </entry>
     </value>
   </component>

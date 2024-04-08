@@ -597,6 +597,7 @@ public class AdminEventPage extends AppCompatActivity {
                 JSONArray regArray = new JSONArray(signups);
                 firebaseMessaging.sendMessageToClient(regArray, "Event Shutdown: "+ event.getEventName(), "An event you have signed up for has been shut down", "");
                 admin.deleteEvent(documentId);
+                finish();
             }
         });
         builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
